@@ -97,3 +97,20 @@ Create the first runnable repository skeleton around the existing `Data` tree wi
 - Initialized Git at the project root.
 - Ran `00_master.do` successfully in Stata.
 - Confirmed that `01_setup.do` created the starter folder structure and that `code/05_checks/01_repo_checks.do` passed.
+
+## 2026-04-06 - Initial Git commit on main
+
+### Objective
+
+Put the scaffolded repository under version control on `main` and keep the root `.docx` tracked.
+
+### Key decisions
+
+- Kept `Analytics - trade and jobs - Cameroon.docx` under version control rather than ignoring it.
+- Switched the unborn default branch reference to `main`.
+- Created the first local commit with message `Initial repository scaffolding`.
+
+### Remaining blocker
+
+- The local repository is ready to push, but no GitHub repository named for this project exists yet under `renamorado`.
+- The clean GitHub-safe slug based on the folder suffix is `cemac-jobs-analytics`.
