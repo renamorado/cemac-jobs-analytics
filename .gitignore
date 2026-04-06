@@ -1,0 +1,54 @@
+# OS and editor artifacts
+desktop.ini
+Thumbs.db
+.DS_Store
+
+# Stata artifacts
+*.smcl
+*.stpr
+*.tmp
+*.bak
+*.ster
+
+# Logs
+logs/*
+!logs/.gitkeep
+
+# Generated outputs
+output/tables/*
+!output/tables/.gitkeep
+output/figures/*
+!output/figures/.gitkeep
+output/slides/*
+!output/slides/.gitkeep
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+
+# Large or proprietary data files
+Data/**/*.csv
+Data/**/*.dta
+Data/**/*.gz
+Data/**/*.pdf
+Data/**/*.rar
+Data/**/*.sav
+Data/**/*.xls
+Data/**/*.xlsb
+Data/**/*.xlsx
+Data/**/*.zip
+Data/**/*.7z
+
