@@ -112,5 +112,21 @@ Put the scaffolded repository under version control on `main` and keep the root 
 
 ### Remaining blocker
 
-- The local repository is ready to push, but no GitHub repository named for this project exists yet under `renamorado`.
-- The clean GitHub-safe slug based on the folder suffix is `cemac-jobs-analytics`.
+- Resolved later the same day by creating and pushing to `renamorado/cemac-jobs-analytics`.
+
+## 2026-04-06 - Initial GitHub publish
+
+### Objective
+
+Connect the local repository to GitHub and publish `main`.
+
+### Key decisions
+
+- Used the GitHub repository name `cemac-jobs-analytics`, derived from the folder suffix rather than the full OneDrive parent path.
+- Kept the local folder name unchanged; GitHub repository naming and local folder naming were treated as separate concerns.
+- Pushed the tracked root `.docx` together with the repository scaffold because that file was intentionally kept under version control.
+
+### Verification
+
+- Added `origin` pointing to `https://github.com/renamorado/cemac-jobs-analytics.git`.
+- Pushed local `main` to `origin/main`.
