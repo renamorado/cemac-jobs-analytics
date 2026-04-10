@@ -1,0 +1,44 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{float}
+
+\title{Cameroon BDF Data Cleaning Note}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Purpose}
+
+This note documents two reproducible cleaning steps for \texttt{Data/Cameroon/Clean/CMR\_BDF.dta}: the firm-year duplicate rule used to build the cleaned analysis file and the NACAM-to-ISIC crosswalk used to standardize observed legacy sector codes.
+
+\section{Firm-Year Duplicate Cleaning}
+
+The cleaning script treats \texttt{firmid} $\times$ \texttt{fin\_yr} as the working key. When repeated firm-years are perfect duplicates across the full row, it keeps one record using original row order as the deterministic tie-breaker. When repeated firm-years contain conflicting values, it drops the full firm-year from the cleaned analysis file.
+
+\begin{table}[H]
+\centering
+\caption{Duplicate-cleaning summary}
+\label{tab:duplicate-cleaning}
+\begin{tabular}{lr}
+\input{../output/tables/cmr_bdf_cleaning_note_duplicate_summary.tex}
+\end{tabular}
+\end{table}
+
+\section{NACAM-to-ISIC Crosswalk}
+
+The crosswalk process begins by auditing the distinct observed \texttt{nacam} codes in \texttt{CMR\_BDF.dta}. The script then manually encodes the official mapping from the INS Cameroon \texttt{Nomenclature des activites et des produits du Cameroun (NACAM rev.1)} PDF, using Tables III.1 and III.2 on pages 8 to 15. It populates \texttt{isic\_rev4\_division} only when a legacy NACAM branch maps cleanly to a single ISIC Rev.4 division. When a legacy branch spans multiple divisions or sections, the division field is left blank and \texttt{manual\_review\_flag = 1}. The exported crosswalk is then checked with a final one-to-one coverage merge against the observed legacy codes before it is saved.
+
+\begin{table}[H]
+\centering
+\caption{NACAM-to-ISIC crosswalk summary}
+\label{tab:crosswalk-summary}
+\begin{tabular}{lr}
+\input{../output/tables/cmr_bdf_cleaning_note_crosswalk_summary.tex}
+\end{tabular}
+\end{table}
+
+\end{document}

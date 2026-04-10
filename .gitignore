@@ -3,6 +3,10 @@ desktop.ini
 Thumbs.db
 .DS_Store
 
+# Agent scratch directories
+.codex_tmp/
+.codex_tmp_docx/
+
 # Stata artifacts
 *.smcl
 *.stpr
@@ -51,4 +55,3 @@ Data/**/*.xlsb
 Data/**/*.xlsx
 Data/**/*.zip
 Data/**/*.7z
-

@@ -27,8 +27,11 @@ global OUTPUTDIR    "${PROJECT_ROOT}/output"
 global LOGDIR       "${PROJECT_ROOT}/logs"
 global MANUSCRIPTDIR "${PROJECT_ROOT}/manuscript"
 global SLIDESDIR    "${PROJECT_ROOT}/slides"
-global SLEEP_MS     750
 
+*Seting up sleep to avoid problems with onedrive
+global SLEEP_MS     750 
+
+*Setup folder structure if it doesn't exist.
 foreach dir in ///
     "${CODEDIR}" ///
     "${CODEDIR}/01_data_prep" ///
