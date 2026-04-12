@@ -58,10 +58,15 @@ save "`observed_nacam'"
 
     Source:
         Institut National de la Statistique du Cameroun,
+        Recensement General des Entreprises (RGE): document de nomenclatures,
+        nomenclature des activites, pp. 13-34, for the legacy branch labels.
+        Institut National de la Statistique du Cameroun,
         Nomenclature des activites et des produits du Cameroun (NACAM rev.1),
         Tables III.1 and III.2, pp. 8-15.
 
     Rule:
+        nacam_label is the official legacy branch label from the older INS
+        nomenclature used in survey and enterprise documents.
         isic_rev4_division is populated only when one legacy NACAM branch maps
         cleanly to a single ISIC Rev.4 division. Otherwise it remains blank and
         manual_review_flag = 1.
@@ -77,12 +82,12 @@ input ///
     str8 isic_rev4_division ///
     str180 isic_rev4_detail ///
     byte manual_review_flag
-1  "AGRICULTURE"                                                                                                     "001"         "01"                                      "A"         "01" "011-013;016"                                                                          0
-2  "AGRICULTURE"                                                                                                     "001"         "01"                                      "A"         "01" "011-013;016"                                                                          0
+1  "AGRICULTURE VIVRIERE"                                                                                            "001"         "01"                                      "A"         "01" "011-013;016"                                                                          0
+2  "AGRICULTURE INDUSTRIELLE ET D'EXPORTATION"                                                                       "001"         "01"                                      "A"         "01" "011-013;016"                                                                          0
 3  "ELEVAGE ET CHASSE"                                                                                               "002"         "01.4,01.6,01.7"                          "A"         "01" "014;016;017"                                                                          0
-5  "PECHE ET AQUACULTURE"                                                                                            "004"         "03"                                      "A"         "03" "031,0311,032"                                                                         0
-6  "EXTRACTION DES PRODUITS DES HYDROCARBURES ET D'AUTRES PRODUITS ENERGETIQUES"                                    "005"         "05,06,09"                                "B"         ""   "061-062;091;099"                                                                     1
-7  "EXTRACTION DES MINERAIS"                                                                                         "006"         "07,08,09"                                "B"         ""   "071;081;089;099"                                                                     1
+5  "PECHE ET PISCICULTURE"                                                                                           "004"         "03"                                      "A"         "03" "031,0311,032"                                                                         0
+6  "EXTRACTION D'HYDROCARBURES ET DE PRODUITS ENERGETIQUES"                                                          "005"         "05,06,09"                                "B"         ""   "061-062;091;099"                                                                     1
+7  "AUTRES ACTIVITES EXTRACTIVES"                                                                                    "006"         "07,08,09"                                "B"         ""   "071;081;089;099"                                                                     1
 8  "INDUSTRIE DE LA VIANDE ET DU POISSON"                                                                            "007"         "10.1,10.2"                               "C"         "10" "101,102"                                                                              0
 9  "TRAVAIL DES GRAINS ET FABRICATION DES PRODUITS AMYLACES"                                                         "008"         "10.6"                                    "C"         "10" "1061,1062,107"                                                                        0
 10 "INDUSTRIE DU CACAO, DU CAFE, DU THE ET DU SUCRE"                                                                 "009"         "10.9"                                    "C"         "10" "1072,1073,1079"                                                                       0
@@ -93,7 +98,7 @@ input ///
 16 "INDUSTRIES DU TEXTILE ET DE LA CONFECTION"                                                                       "015"         "13,14"                                   "C"         ""   "131x;139;141-143"                                                                     1
 17 "INDUSTRIES DU CUIR ET FABRICATION DES CHAUSSURES"                                                                "016"         "15"                                      "C"         "15" "151,152"                                                                              0
 18 "INDUSTRIES DU BOIS SAUF FABRICATION DES MEUBLES"                                                                 "017"         "16"                                      "C"         "16" "161;1621-1623;1629"                                                                   0
-19 "FABRICATION DE PAPIER, CARTON ET D'ARTICLES EN PAPIER OU EN CARTON; IMPRIMERIE ET REPRODUCTION"                "018"         "17,18"                                   "C"         ""   "170,181"                                                                              1
+19 "FABRICATION DE PAPIER ET D'ARTICLES EN PAPIER; IMPRIMERIE ET EDITION"                                           "018"         "17,18"                                   "C"         ""   "170,181"                                                                              1
 20 "RAFFINAGE DU PETROLE ET COKEFACTION"                                                                             "019"         "19"                                      "C"         "19" "1910,1920"                                                                            0
 21 "FABRICATION DE PRODUITS CHIMIQUES ET PHARMACEUTIQUES"                                                            "020"         "20,21"                                   "C"         ""   "201;202;2029;21"                                                                      1
 22 "PRODUCTION DE CAOUTCHOUC ET FABRICATION D'ARTICLES EN CAOUTCHOUC ET EN MATIERES PLASTIQUES"                    "021"         "01.16,22"                                "A,C"       ""   "0116,221,222"                                                                         1
@@ -119,12 +124,18 @@ end
 generate str160 nacam_label_en = ""
 generate str40 nacam_label_short_en = ""
 
-replace nacam_label_en = "Agriculture" if nacam == 1
-replace nacam_label_en = "Agriculture" if nacam == 2
+/*
+    The legacy branch labels come from the older INS RGE nomenclature document.
+    The NACAM rev.1 PDF is used here for the old-to-rev.1 and ISIC mapping, not
+    as the main source for the legacy branch names themselves.
+*/
+
+replace nacam_label_en = "Food-crop agriculture" if nacam == 1
+replace nacam_label_en = "Industrial and export agriculture" if nacam == 2
 replace nacam_label_en = "Livestock and hunting" if nacam == 3
-replace nacam_label_en = "Fishing and aquaculture" if nacam == 5
-replace nacam_label_en = "Extraction of hydrocarbons and other energy products" if nacam == 6
-replace nacam_label_en = "Mining" if nacam == 7
+replace nacam_label_en = "Fishing and fish farming" if nacam == 5
+replace nacam_label_en = "Extraction of hydrocarbons and energy products" if nacam == 6
+replace nacam_label_en = "Other extractive activities" if nacam == 7
 replace nacam_label_en = "Meat and fish processing" if nacam == 8
 replace nacam_label_en = "Grain milling and starch products" if nacam == 9
 replace nacam_label_en = "Cocoa, coffee, tea, and sugar processing" if nacam == 10
@@ -135,7 +146,7 @@ replace nacam_label_en = "Tobacco products" if nacam == 15
 replace nacam_label_en = "Textiles and apparel" if nacam == 16
 replace nacam_label_en = "Leather and footwear" if nacam == 17
 replace nacam_label_en = "Wood products excluding furniture" if nacam == 18
-replace nacam_label_en = "Paper, paperboard, printing, and reproduction" if nacam == 19
+replace nacam_label_en = "Paper and paper products, printing, and publishing" if nacam == 19
 replace nacam_label_en = "Petroleum refining and coke" if nacam == 20
 replace nacam_label_en = "Chemicals and pharmaceuticals" if nacam == 21
 replace nacam_label_en = "Rubber and plastics" if nacam == 22
@@ -157,12 +168,12 @@ replace nacam_label_en = "Education" if nacam == 40
 replace nacam_label_en = "Health and social work" if nacam == 41
 replace nacam_label_en = "Community, social, personal, and collective services" if nacam == 42
 
-replace nacam_label_short_en = "Agriculture" if nacam == 1
-replace nacam_label_short_en = "Agriculture" if nacam == 2
+replace nacam_label_short_en = "Food-crop ag." if nacam == 1
+replace nacam_label_short_en = "Export ag." if nacam == 2
 replace nacam_label_short_en = "Livestock" if nacam == 3
-replace nacam_label_short_en = "Fishing" if nacam == 5
+replace nacam_label_short_en = "Fishing & fish farms" if nacam == 5
 replace nacam_label_short_en = "Hydrocarbons" if nacam == 6
-replace nacam_label_short_en = "Mining" if nacam == 7
+replace nacam_label_short_en = "Other extractives" if nacam == 7
 replace nacam_label_short_en = "Meat & fish" if nacam == 8
 replace nacam_label_short_en = "Grains & starch" if nacam == 9
 replace nacam_label_short_en = "Cocoa/coffee/sugar" if nacam == 10
@@ -173,7 +184,7 @@ replace nacam_label_short_en = "Tobacco" if nacam == 15
 replace nacam_label_short_en = "Textiles & apparel" if nacam == 16
 replace nacam_label_short_en = "Leather & footwear" if nacam == 17
 replace nacam_label_short_en = "Wood products" if nacam == 18
-replace nacam_label_short_en = "Paper & printing" if nacam == 19
+replace nacam_label_short_en = "Paper & publishing" if nacam == 19
 replace nacam_label_short_en = "Petroleum refining" if nacam == 20
 replace nacam_label_short_en = "Chemicals & pharma" if nacam == 21
 replace nacam_label_short_en = "Rubber & plastics" if nacam == 22
@@ -199,10 +210,11 @@ assert !missing(nacam_label_en)
 assert !missing(nacam_label_short_en)
 
 generate str120 mapping_source = "INS Cameroon NACAM Rev.1 PDF, Tables III.1-III.2 (pp. 8-15)"
+generate str120 legacy_label_source = "INS Cameroon RGE nomenclatures, activites (pp. 13-34)"
 generate str20 mapping_quality = cond(manual_review_flag == 1, "manual_review", "division_exact")
 
 order nacam nacam_label nacam_label_en nacam_label_short_en ///
-    nacam_rev1 naema_rev1 isic_rev4_section ///
+    legacy_label_source nacam_rev1 naema_rev1 isic_rev4_section ///
     isic_rev4_division isic_rev4_detail mapping_source ///
     mapping_quality manual_review_flag
 sort nacam
@@ -211,6 +223,7 @@ label variable nacam "Legacy NACAM branch code observed in CMR_BDF.dta"
 label variable nacam_label "Legacy NACAM branch label"
 label variable nacam_label_en "Legacy NACAM branch label in English"
 label variable nacam_label_short_en "Abbreviated English NACAM branch label"
+label variable legacy_label_source "Official source for the legacy branch label"
 label variable nacam_rev1 "Mapped NACAM rev.1 branch code(s)"
 label variable naema_rev1 "Mapped NAEMA rev.1 / ISIC rev.4 division reference"
 label variable isic_rev4_section "Mapped ISIC rev.4 section(s)"

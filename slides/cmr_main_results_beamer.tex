@@ -22,10 +22,10 @@
 
 \section{BDF Cleaning Results}
 
-\begin{frame}{Why Cleaning Choices Matter}
+\begin{frame}{Data cleaning overview}
     \begin{itemize}
         \item The working panel is organized at the firm-year level, so duplicate handling changes both sample size and identification.
-        \item Sector harmonization matters because the elasticity analysis is estimated separately across observed NACAM branches.
+        \item Economic sector is based on the NACAM variable, which according to documentation its based on a Regional harmonized classifier linked to ISIC.
         \item The cleaning note isolates the two steps that most affect downstream interpretation: duplicate resolution and the NACAM-to-ISIC crosswalk.
     \end{itemize}
 \end{frame}
@@ -35,7 +35,7 @@
     \begin{itemize}
         \item Working key: \texttt{firmid} $\times$ \texttt{fin\_yr}
         \item Perfect duplicates would be collapsed with original row order as the tie-breaker.
-        \item Conflicting duplicate firm-years are fully removed from the cleaned analysis file.
+        \item Conflicting duplicate firm-years are fully removed from the cleaned analysis file, while we figure out the best approach for handling them.
     \end{itemize}
 
     \vspace{0.2cm}
@@ -51,8 +51,10 @@
     \small
     \begin{itemize}
         \item Observed legacy NACAM codes are audited directly from the Cameroon BDF file.
+        \item Legacy branch labels are recovered from the INS RGE nomenclature document, while the mapping to \texttt{NACAM rev.1} and ISIC comes from the official \texttt{NACAM rev.1} passage tables.
         \item ISIC Rev.4 divisions are assigned only when the official mapping is one-to-one.
         \item Ambiguous branches remain flagged for manual review rather than being forced into a noisy division code.
+        \item Since the NACAM is already based on the ISIC structure, the analysis file retains the original NACAM variable for elasticity estimation and reporting, while the ISIC variable is used for sectoral aggregation and cross-country comparisons.
     \end{itemize}
 
     \vspace{0.4cm}
@@ -66,9 +68,10 @@
 
 \begin{frame}{Cleaning Takeaways}
     \begin{itemize}
-        \item The cleaned panel falls from 9,325 to 9,068 observations after removing conflicting duplicate firm-years.
-        \item There are 127 conflicting firm-years, accounting for 257 dropped rows. Those observations are excluded rather than resolved ad hoc.
-        \item The crosswalk covers 37 observed legacy NACAM codes, but only 17 map cleanly to a single ISIC Rev.4 division.
+        \item The cleaned panel falls from 9,325 to 9,068 observations after removing duplicate firm-years.
+        \item There are 127 conflicting firm-years, accounting for 257 dropped obs. Those observations are excluded rather than resolved ad hoc.
+        \item The crosswalk covers 37 observed legacy NACAM codes, but only 17 map cleanly to a single ISIC Rev.4 division. 
+        \item To avoid introducing noise we keep the analysis using NACAM structure.
         \item The remaining 20 codes are explicitly flagged for manual review, which keeps sector harmonization transparent before pooled industry comparisons.
     \end{itemize}
 \end{frame}
@@ -77,29 +80,36 @@
 
 \begin{frame}{Specification and Sample}
     \small
+    \begin{equation}
+        \ln(E_{it}) = \alpha_i + \delta_{st} + \sum_s \beta_s \left( \ln(X_{it}) \times D_{is} \right) + \varepsilon_{it}
+    \end{equation}
+
     \begin{itemize}
-        \item Unit of observation: firm-year in \texttt{Data/Analysis/CMR\_BDF\_cleaned.dta}
-        \item Outcomes: log employment regressed on log value added and log total revenue in separate specifications.
-        \item Sector heterogeneity: each model interacts the elasticity term with observed NACAM codes.
-        \item Controls: firm fixed effects and NACAM-by-year effects.
-        \item Inference: standard errors clustered at the firm level.
+        \item The unit of observation is a firm-year $(i,t)$.
+        \item $E_{it}$ is employment for firm $i$ in year $t$.
+        \item $X_{it}$ is either value added or total revenue, estimated in separate regressions.
+        \item $D_{is}$ equals 1 if firm $i$ belongs to NACAM sector $s$, and 0 otherwise.
+        \item Sector is treated as a firm characteristic, so each firm contributes to one NACAM interaction term.
+        \item $\alpha_i$ are firm fixed effects and $\delta_{st}$ are sector-by-year effects.
+        \item $\beta_s$ is the elasticity for firms in sector $s$, identified through the interaction between $\ln(X_{it})$ and the sector indicator $D_{is}$.
+        \item Standard errors clustered at the firm level.
         \item Inclusion rule for reported sectors: at least 30 observations and 10 firms in both outcome samples.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Employment Distribution by Fiscal Year}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_ln_emp_density_by_year.png}
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_doc_labels_ln_emp_density_by_year.png}
 \end{frame}
 
 \begin{frame}{Main Elasticity Estimates Across NACAM Sectors}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_coefficients.png}
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_doc_labels_coefficients.png}
 \end{frame}
 
 \begin{frame}{Cross-Model Consistency}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_scatter.png}
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_doc_labels_scatter.png}
 \end{frame}
 
 \begin{frame}{Selected Sectors From the VA Ranking}
@@ -113,7 +123,7 @@
     \centering
     \resizebox{\textwidth}{!}{
         \begin{tabular}{lrrrr}
-            \input{../output/tables/cmr_nacam_results_highlights.tex}
+            \input{../output/tables/cmr_nacam_results_doc_labels_highlights.tex}
         \end{tabular}
     }
 \end{frame}
