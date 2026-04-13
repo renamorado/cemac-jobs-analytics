@@ -27,9 +27,16 @@ global OUTPUTDIR    "${PROJECT_ROOT}/output"
 global LOGDIR       "${PROJECT_ROOT}/logs"
 global MANUSCRIPTDIR "${PROJECT_ROOT}/manuscript"
 global SLIDESDIR    "${PROJECT_ROOT}/slides"
+global SCRATCHDIR   "${PROJECT_ROOT}/scratch"
 
-*Seting up sleep to avoid problems with onedrive
-global SLEEP_MS     750 
+* Keep a small retry pause for transient Windows file and viewer locks.
+global SLEEP_MS     750
+
+* Optional machine-specific overrides belong in an untracked local file.
+capture confirm file "config_local_paths.do"
+if !_rc {
+    do "config_local_paths.do"
+}
 
 *Setup folder structure if it doesn't exist.
 foreach dir in ///
@@ -47,6 +54,7 @@ foreach dir in ///
     "${OUTPUTDIR}/figures" ///
     "${OUTPUTDIR}/slides" ///
     "${LOGDIR}" ///
+    "${SCRATCHDIR}" ///
     "${MANUSCRIPTDIR}" ///
     "${SLIDESDIR}" {
     capture mkdir "`dir'"
@@ -77,14 +85,15 @@ if _rc {
 
 if !direxists("${DATADIR}/Cameroon/Raw") {
     display as error "Expected folder missing: ${DATADIR}/Cameroon/Raw"
+    display as error "Copy the Cameroon raw data from the OneDrive backup into the active local repo before running the pipeline."
     error 693
 }
 
 if !direxists("${DATADIR}/Cameroon/Clean") {
     display as error "Expected folder missing: ${DATADIR}/Cameroon/Clean"
+    display as error "Copy the Cameroon cleaned data from the OneDrive backup into the active local repo before running the pipeline."
     error 693
 }
 
 display as text "Project root set to ${PROJECT_ROOT}"
 display as text "Starter folder structure verified."
-

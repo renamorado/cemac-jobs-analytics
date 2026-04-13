@@ -1,3 +1,6 @@
+version 18.0
+set more off
+
 
 ************************************************
 ************************************************
@@ -14,24 +17,25 @@
    Number of firms : 1639	
 */
 
-	*Marina
-if c(username)=="wb603585" {
-		global onedrive = "\Users\wb603585\OneDrive - WBG\Documents\Projects\CAMEROON\CEM - FCI contribution"	
-		global shareddrive = "C:\Users\wb603585\WBG\Francis Ghislain Ngomba Bodi - Cameroon Country Economic Memorandum\CEM Cameroon Data and Documents\Databases\ECOFIN\"	
-		global ecofin "$onedrive\Datasets\Firms\Ecofine 2015 - 2022"
-	
-		}	
-		
-	*Johanne
-if c(username)=="wb416159" {
-		global onedrive = "\Users\wb416159\OneDrive - WBG\CEM - FCI contribution"	
-		global shareddrive = "C:\Users\wb416159\OneDrive - WBG\CEM Cameroon Data and Documents\Databases\ECOFIN\"	
-		global ecofin "$onedrive\Datasets\Firms\Ecofine 2015 - 2022"
-	
-		}	
-		
-		
-use "$ecofin\ecofin15_22_clean_panel.dta", clear
+local project_root = subinstr(c(pwd), "\", "/", .)
+
+if !fileexists("`project_root'/AGENTS.md") {
+    if fileexists("`project_root'/../../AGENTS.md") {
+        local project_root "`project_root'/../.."
+    }
+}
+
+capture noisily cd "`project_root'"
+if _rc | !fileexists("AGENTS.md") {
+    display as error "Run this legacy file from the repo root or from Data/Cameroon/More files."
+    exit 601
+}
+
+do "01_setup.do"
+
+global ecofin "${PROJECT_ROOT}/Data/Cameroon/More files"
+
+use "${ecofin}/ecofin15_22_clean_panel.dta", clear
 xtset id year
 
 ** Recheck concistency of employment, value added, revenue and wagebill variables particularly for the agriculture and textile industries
@@ -361,5 +365,4 @@ foreach var in revenues wagebill va va_comp ebe inv cap cmat emp {
 	drop if CODE2 =="ECOFIN1129"
 */
 	
-save "$ecofin\ecofin15_22_clean_panel_new5.dta", replace
-
+save "${ecofin}/ecofin15_22_clean_panel_new5.dta", replace

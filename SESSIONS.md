@@ -504,3 +504,39 @@ Replace the rev.1-derived placeholder labels in the legacy NACAM crosswalk with 
 
 - Rebuild the crosswalk and cleaned analysis dataset so the revised legacy labels flow into downstream outputs.
 - Rerun the NACAM elasticity pipeline and recompile the Beamer deck.
+
+## 2026-04-12 - Switched the working repo to a local-first path workflow
+
+### Objective
+
+Move the active working copy outside OneDrive and refactor the project entry points so the local clone is the default execution root.
+
+### Files modified
+
+- `01_setup.do`
+- `code/03_analysis/01_cmr_nacam_elasticity.do`
+- `Data/Cameroon/More files/FCI_DataAnalysis_ECOFIN15_22.do`
+- `Data/Cameroon/More files/FCI_DataCleaning_ECOFIN15_22_additional adjustment.do`
+- `.gitignore`
+- `config_local_paths_template.do`
+- `backup_to_onedrive.bat`
+- `.vscode/tasks.json`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Kept `01_setup.do` as the single source of truth for repo paths and added optional support for an untracked `config_local_paths.do` file for machine-specific extras such as DSF inputs.
+- Removed the hardcoded OneDrive root from `code/03_analysis/01_cmr_nacam_elasticity.do` and made it bootstrap from the repo root or `code/03_analysis` with one simple relative-path check.
+- Repointed the two legacy Ecofin scripts away from user-specific OneDrive paths and toward repo-local defaults, while leaving `dsf` as an explicit local override because that input is not stored in Git.
+- Added a conservative `backup_to_onedrive.bat` script so the local repo can be copied back to the OneDrive archive on demand instead of writing live outputs directly into OneDrive.
+
+### Important assumptions
+
+- The active working repo is now `C:/Users/wb648862/Documents/Projects/CEMAC`.
+- The OneDrive copy remains a manual backup/archive destination rather than a live working directory.
+- The local clone still needs the ignored `Data/Cameroon/Raw` and `Data/Cameroon/Clean` folders copied over from the OneDrive backup before the main pipeline can run.
+
+### Next steps
+
+- Copy the ignored Cameroon raw and clean data folders from the old OneDrive repo into the new local working repo.
+- Run `00_master.do` or the NACAM batch from the local repo to confirm the path refactor behaves as intended.

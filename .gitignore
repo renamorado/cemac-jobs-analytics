@@ -1,4 +1,4 @@
-# OS and editor artifacts
+﻿# OS and editor artifacts
 desktop.ini
 Thumbs.db
 .DS_Store
@@ -6,6 +6,8 @@ Thumbs.db
 # Agent scratch directories
 .codex_tmp/
 .codex_tmp_docx/
+scratch/
+tmp/
 
 # Stata artifacts
 *.smcl
@@ -13,6 +15,8 @@ Thumbs.db
 *.tmp
 *.bak
 *.ster
+*.done
+*.failed
 
 # Logs
 logs/*
@@ -55,3 +59,6 @@ Data/**/*.xlsb
 Data/**/*.xlsx
 Data/**/*.zip
 Data/**/*.7z
+
+# Local machine overrides
+config_local_paths.do

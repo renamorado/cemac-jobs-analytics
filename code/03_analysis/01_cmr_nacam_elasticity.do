@@ -22,40 +22,36 @@ set more off
         output/figures/cmr_nacam_results_scatter.png
 
     Notes:
-        This file is intentionally standalone. It does not call 00_master.do or
-        01_setup.do, does not create folders, and does not run upstream checks.
+        This file is intentionally standalone, but it still bootstraps
+        01_setup.do from the repository root so path handling stays local-first.
 *******************************************************************************/
 
 /*******************************************************************************
-    Project root for standalone use
-    - This file is meant to run on its own, so it sets the root path locally.
-    - Update the username block below if another machine needs to run it.
+    Bootstrap repository paths
+    - Run from the repo root when possible.
+    - If the current working directory is this script's folder, step back to the
+      repository root and reuse 01_setup.do.
 *******************************************************************************/
-global root ""
+local root = subinstr(c(pwd), "\", "/", .)
 
-if c(username) == "wb648862" {
-    global root "c:/Users/wb648862/OneDrive - WBG/Marina Ngoma Mavungu's files - CEMAC jobs analytics"
+if !fileexists("`root'/AGENTS.md") {
+    if fileexists("`root'/../../AGENTS.md") {
+        local root "`root'/../.."
+    }
 }
 
-if c(username) == "your_username_here" {
-    global root ""
+capture noisily cd "`root'"
+if _rc | !fileexists("AGENTS.md") {
+    display as error "Run code/03_analysis/01_cmr_nacam_elasticity.do from the repo root or from code/03_analysis."
+    exit 601
 }
 
-if "${root}" == "" {
-    display as error "Set your username and root path at the top of code/03_analysis/01_cmr_nacam_elasticity.do."
-    exit 198
-}
-
-cd "${root}"
-
-
-
-
+do "01_setup.do"
 /*******************************************************************************
     Analysis thresholds and temporary output paths
     - The thresholds determine which sectors are retained in both models.
     - Tables and figures are first written to the temp directory, then copied to
-      the project folders with a retry helper to avoid OneDrive write conflicts.
+      the project folders with a retry helper to avoid transient file locks.
 *******************************************************************************/
 local min_sector_obs 30
 local min_sector_firms 10
@@ -79,7 +75,7 @@ local scatter_png_tmp "`tmpdir'/`output_stub'_scatter.png"
 
 /*******************************************************************************
     Helper: write with retries
-    - OneDrive can briefly lock files during sync.
+    - Windows viewers or sync tools can briefly lock files during overwrite.
     - This program retries a copy-replace before failing loudly.
 *******************************************************************************/
 capture program drop safe_copy_replace
@@ -115,7 +111,7 @@ end
     - The unit of observation is a firm-year.
     - Keep only the variables needed for the elasticity exercise.
 *******************************************************************************/
-use "Data/Analysis/CMR_BDF_cleaned.dta", clear
+use "${DATADIR}/Analysis/CMR_BDF_cleaned.dta", clear
 
 keep firmid fin_yr nacam nacam_label totemp va tot_rev
 
