@@ -1,14 +1,14 @@
-﻿{
+{
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Stata: Run 00_master.do",
+      "label": "Stata: Run code/00_master.do",
       "type": "shell",
       "command": "stata-mp",
       "args": [
         "/e",
         "do",
-        "00_master.do"
+        "code/00_master.do"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -31,3 +31,4 @@
     }
   ]
 }
+

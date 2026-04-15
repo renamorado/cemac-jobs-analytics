@@ -540,3 +540,406 @@ Move the active working copy outside OneDrive and refactor the project entry poi
 
 - Copy the ignored Cameroon raw and clean data folders from the old OneDrive repo into the new local working repo.
 - Run `00_master.do` or the NACAM batch from the local repo to confirm the path refactor behaves as intended.
+
+## 2026-04-13 - Simplified NACAM direct exports and refreshed local-repo guidance
+
+### Objective
+
+Remove the temporary export-copy layer from the standalone NACAM elasticity workflow now that the active repo is no longer running from OneDrive, while keeping downstream artifact names unchanged.
+
+### Files modified
+
+- `code/03_analysis/01_cmr_nacam_elasticity.do`
+- `AGENTS.md`
+- `01_setup.do`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Kept the existing output prefix `cmr_nacam_results_doc_labels_*` so the Beamer deck and other downstream references do not need to change.
+- Simplified the NACAM do-file to export tables and figures directly into `output/tables/` and `output/figures/` instead of writing to `tmpdir` and then copying files back into the repo.
+- Updated repository guidance to treat `C:/Users/wb648862/Documents/Projects/CEMAC` as the default working copy and the old OneDrive location as a backup/archive source rather than the live execution environment.
+- Narrowed the setup warnings so missing data instructions now point to the archived OneDrive copy as a source for restoring ignored inputs into the local repo.
+
+### Important assumptions
+
+- Direct overwrite of the local `output/` targets is now the normal expected workflow for this standalone NACAM script.
+- Other scripts that still keep a small `sleep` or retry pattern were left unchanged unless they were directly involved in the local-repo wording cleanup.
+
+### Verification
+
+- Reviewed the NACAM do-file to confirm `tmpdir`-based export locals and `safe_copy_replace` were removed.
+- Confirmed the script still uses the same `cmr_nacam_results_doc_labels_*` filenames referenced by `slides/cmr_main_results_beamer.tex`.
+
+
+## 2026-04-13 - Updated NACAM employment density palette and year span
+
+### Objective
+
+Revise the standalone NACAM employment density figure to show fiscal years 2015 through 2022 using a single navy gradient from light to dark.
+
+### Files modified
+
+- `code/03_analysis/01_cmr_nacam_elasticity.do`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Expanded the density plot from 4 years to 8 years so the figure now covers 2015 through 2022.
+- Replaced the mixed-color palette with a monotone navy gradient, with 2015 as the lightest shade and 2022 as the darkest shade.
+- Switched the legend to two rows so the longer year span remains readable in the exported figure.
+
+### Important assumptions
+
+- The analysis panel includes observations in each fiscal year from 2015 through 2022.
+- Direct RGB color specifications are acceptable in this Stata workflow for keeping the gradient explicit and reproducible.
+
+### Verification
+
+- Updated the `twoway kdensity` block and legend labels in the standalone NACAM elasticity do-file.
+
+## 2026-04-14 - Restyled Beamer deck around Paul Goldsmith-Pinkham presentation tips
+
+### Objective
+
+Refit the Cameroon seminar deck to follow Paul Goldsmith-Pinkham's Beamer guidance for economist presentations, with cleaner slide density, stronger figure-first layout, clearer section transitions, and backup slides instead of overloading the main talk.
+
+### Files modified
+
+- `slides/cmr_main_results_beamer.tex`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Replaced the old theme-driven look with a lighter custom Beamer setup using Goldsmith-Pinkham's colorblind-safe blue/red/yellow/green palette, frame numbers, hidden navigation symbols, and section transition slides.
+- Reduced text density in the main deck by splitting the story into cleaning, design, and results sections with shorter economist-style headlines and more space for figures and tables.
+- Added a backup appendix with full value-added and total-revenue elasticity tables so detailed material stays available without crowding the main seminar flow.
+- Kept the deck tied to the existing Stata-generated `output/tables/` and `output/figures/` artifacts rather than introducing hand-maintained slide content.
+
+### Important assumptions
+
+- The existing `cmr_nacam_results_doc_labels_*` tables and figures remain the authoritative generated inputs for the slide deck.
+- The local MiKTeX setup may not have optional sans-serif font packages such as Lato installed, so the deck now uses them only when available and otherwise falls back to the default Beamer fonts.
+
+### Verification
+
+- Recompiled `slides/cmr_main_results_beamer.tex` with `pdflatex --output-directory=../output/slides -interaction=nonstopmode -halt-on-error cmr_main_results_beamer.tex`.
+- Produced an updated `output/slides/cmr_main_results_beamer.pdf` successfully.
+
+## 2026-04-14 - Removed yellow section slides and restored original deck wording
+
+### Objective
+
+Keep the Beamer styling improvements but remove the yellow section transition slides and restore the original slide text verbatim.
+
+### Files modified
+
+- `slides/cmr_main_results_beamer.tex`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Removed the custom yellow section-transition TOC frames entirely.
+- Restored the original deck title, subtitle, slide headings, and body text rather than keeping the rewritten seminar phrasing.
+- Kept only light presentation styling changes such as frame numbers, simplified color settings, and the optional Lato font when available.
+
+### Verification
+
+- Recompiled `slides/cmr_main_results_beamer.tex` successfully with `pdflatex --output-directory=../output/slides -interaction=nonstopmode -halt-on-error cmr_main_results_beamer.tex`.
+- Produced an updated `output/slides/cmr_main_results_beamer.pdf`.
+
+## 2026-04-14 - Destringed numeric fields in cleaned Cameroon BDF dataset
+
+### Objective
+
+Ensure that `Data/Analysis/CMR_BDF_cleaned.dta` carries numeric variables as numeric Stata types rather than leaving balance-sheet and flow fields as strings.
+
+### Files modified
+
+- `code/05_checks/02_cmr_bdf_cleaning.do`
+- `code/03_analysis/01_cmr_nacam_elasticity.do`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Added a cleaning-step pass that standardizes numeric-string artifacts before duplicate checks: trims whitespace, removes embedded spaces and line breaks, maps placeholder values such as `NA` and `-` to missing, and strips trailing minus signs from malformed zero-style entries.
+- Destringed every string variable except `firmid` inside `code/05_checks/02_cmr_bdf_cleaning.do`, so the saved analysis dataset is numeric by construction rather than relying on downstream ad hoc conversion.
+- Logged genuinely corrupted residual values and coerced them to missing with `destring, force` only after the explicit cleanup pass, so the pipeline stays reproducible and auditable.
+- Updated `code/03_analysis/01_cmr_nacam_elasticity.do` to use numeric `totemp` directly when the cleaned dataset has already been rebuilt, while keeping a fallback `destring` path for older copies.
+
+### Verification
+
+- Ran `00_master.do` successfully on April 14, 2026, which rebuilt `Data/Analysis/CMR_BDF_cleaned.dta`.
+- Verified in Stata that the cleaned dataset now keeps only `firmid`, `nacam_label`, `nacam_label_en`, and `nacam_label_short_en` as string variables.
+- Confirmed representative formerly string numeric fields such as `totemp`, `share_k`, `ia_gross`, `land_dep`, `nca_gross`, `tcce_net`, and `sog` are now stored as numeric types in `CMR_BDF_cleaned.dta`.
+- The cleaning log recorded 9 corrupted values coerced to missing across `land_dep`, `ofceq_dep`, `nca_gross`, `othrcvbls_net1`, `tcce_net`, `erd_net`, and `sog`.
+
+## 2026-04-15 - Switched NACAM analysis outputs to corrected English labels
+
+### Objective
+
+Take the corrected NACAM legacy labels now carried in the cleaned Cameroon analysis dataset, translate them consistently into English, add concise English abbreviations, and use those newer English labels in the standalone NACAM elasticity outputs.
+
+### Files modified
+
+- `code/02_construct/01_nacam_isic_crosswalk.do`
+- `code/03_analysis/01_cmr_nacam_elasticity.do`
+- `slides/cmr_main_results_beamer.tex`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Revised `nacam_label_en` and `nacam_label_short_en` so they map directly to the corrected legacy French labels rather than the earlier placeholder wording.
+- Kept the observed three-digit NACAM code as a prefix in the analysis displays so repeated branch families remain distinguishable in English outputs as well.
+- Used full English labels for table row labels and abbreviated English labels for figure axes and marker labels to keep plots readable.
+- Moved the generated artifact prefix from `cmr_nacam_results_doc_labels_*` to `cmr_nacam_results_en_labels_*` so the output names now match the labeling scheme.
+
+### Important assumptions
+
+- `Data/Analysis/CMR_BDF_cleaned.dta` will be regenerated from the updated crosswalk so the refreshed English label fields are available to the standalone analysis script.
+
+### Next steps
+
+- Run `00_master.do` to rebuild the crosswalk and cleaned analysis dataset with the updated English label fields.
+- Rerun `code/03_analysis/99_run_cmr_nacam_elasticity_batch.do` to regenerate the English-labeled tables and figures.
+- Recompile `slides/cmr_main_results_beamer.tex` after the new figures and tables are in place.
+
+## 2026-04-15 - Standardized all NACAM analysis outputs on abbreviated English labels
+
+### Objective
+
+Ensure that every exported table and figure from the standalone NACAM elasticity analysis uses the abbreviated English NACAM labels rather than mixing abbreviated figures with full-label tables.
+
+### Files modified
+
+- `code/03_analysis/01_cmr_nacam_elasticity.do`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Switched all table row-label builders in the standalone NACAM elasticity script from `nacam_label_display` to `nacam_label_short_display`.
+- Kept the same abbreviated code-prefixed label convention already used in the coefficient plot and scatter, so all analysis outputs now share one display standard.
+- Left the output filenames unchanged because only the label text inside the generated artifacts changed.
+
+### Next steps
+
+- Rerun `code/03_analysis/99_run_cmr_nacam_elasticity_batch.do` so the exported `.tex`, `.png`, and `.pdf` artifacts all reflect the abbreviated labels.
+
+## 2026-04-15 - Escaped abbreviated NACAM table labels for LaTeX export
+
+### Objective
+
+Keep the new abbreviated English NACAM labels in all analysis outputs while making sure LaTeX table fragments still compile when labels contain ampersands.
+
+### Files modified
+
+- `code/03_analysis/01_cmr_nacam_elasticity.do`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Escaped `&` in the table row-label locals built from `nacam_label_short_display` before passing them to `esttab`.
+- Left the graph labels unescaped so Stata figures continue to show the natural abbreviated text.
+
+## 2026-04-15 - Moved NACAM display-label preparation into cleaned data output
+
+### Objective
+
+Keep the standalone NACAM elasticity script focused on estimation by preparing downstream display labels in the cleaned analysis dataset instead of rebuilding them inside the analysis do-file.
+
+### Files modified
+
+- `code/05_checks/02_cmr_bdf_cleaning.do`
+- `code/03_analysis/01_cmr_nacam_elasticity.do`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Added `nacam_label_display` and `nacam_label_short_display` directly to `Data/Analysis/CMR_BDF_cleaned.dta` during the existing cleaning step.
+- Dropped the analysis-stage relabeling block so `code/03_analysis/01_cmr_nacam_elasticity.do` now only reads the prepared display fields.
+- Removed the numeric NACAM code prefix from those display labels because the agro duplication issue has already been resolved upstream in the corrected label fields.
+
+### Next steps
+
+- Rerun `00_master.do` or at least `code/05_checks/02_cmr_bdf_cleaning.do` before the next elasticity run so the refreshed display-label variables are present in `Data/Analysis/CMR_BDF_cleaned.dta`.
+- Rerun `code/03_analysis/99_run_cmr_nacam_elasticity_batch.do` to regenerate the tables and figures from the updated cleaned dataset.
+
+## 2026-04-15 - Moved canonical master and setup entry points under code
+
+### Objective
+
+Make `code/00_master.do` and `code/01_setup.do` the canonical pipeline entry points, simplify the repo to a Cameroon-first workflow for now, and remove redundant downstream setup guards from routine pipeline stages.
+
+### Files created or modified
+
+- `code/00_master.do`
+- `code/01_setup.do`
+- `00_master.do`
+- `01_setup.do`
+- `code/02_construct/01_nacam_isic_crosswalk.do`
+- `code/03_analysis/01_cmr_nacam_elasticity.do`
+- `code/05_checks/01_repo_checks.do`
+- `code/05_checks/02_cmr_bdf_cleaning.do`
+- `Data/Cameroon/More files/FCI_DataAnalysis_ECOFIN15_22.do`
+- `Data/Cameroon/More files/FCI_DataCleaning_ECOFIN15_22_additional adjustment.do`
+- `.vscode/tasks.json`
+- `README.md`
+- `AGENTS.md`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Moved the canonical pipeline entry logic into `code/00_master.do` and `code/01_setup.do` so the `code/` folder now contains the real orchestration layer.
+- Kept lightweight root-level wrappers in `00_master.do` and `01_setup.do` for compatibility with existing habits, tasks, and external references.
+- Added `${CAMEROONDIR}` in setup and used it in core Cameroon checks so the current repo reads as Cameroon-first rather than multi-country by default.
+- Removed the explicit setup and `esttab` guard block from `code/05_checks/02_cmr_bdf_cleaning.do`; that stage now assumes setup has already been run upstream.
+- Removed the auto-setup fallback from `code/02_construct/01_nacam_isic_crosswalk.do` for the same reason, while keeping the standalone bootstrap inside `code/03_analysis/01_cmr_nacam_elasticity.do` because that file is still intentionally runnable on its own.
+
+### Important assumptions
+
+- For now, the working scope of this repository is Cameroon, even if the folder name remains `CEMAC`.
+- The root wrapper files are transitional compatibility shims; future automation should prefer `code/00_master.do` and `code/01_setup.do` directly.
+
+### Next steps
+
+- Rerun the Cameroon pipeline from `code/00_master.do` and confirm downstream artifacts still refresh cleanly.
+- If the repo later expands beyond Cameroon again, decide deliberately whether to keep `${CAMEROONDIR}` as a first-country convenience or re-generalize the setup layer.
+
+## 2026-04-15 - Restored employment construction in standalone NACAM analysis
+
+### Objective
+
+Make sure `code/03_analysis/01_cmr_nacam_elasticity.do` runs cleanly after the standalone path refactor.
+
+### Files modified
+
+- `code/03_analysis/01_cmr_nacam_elasticity.do`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Restored the explicit step that creates `employment` from `totemp` before building `ln_emp`, so the standalone analysis no longer depends on a variable that has not yet been generated.
+- Kept the standalone script's direct local repo path bootstrap and left the rest of the analysis workflow unchanged.
+
+### Verification
+
+- Ran `stata-mp /e do code/03_analysis/99_run_cmr_nacam_elasticity_batch.do verify_20260415b` successfully.
+- Confirmed the success marker `logs/cmr_nacam_elasticity_verify_20260415b.done` was written.
+- Confirmed refreshed output files under `output/tables/` and `output/figures/` with timestamps from April 15, 2026 around 3:02 PM.
+
+## 2026-04-15 - Added Cameroon trade-analysis scaffold
+
+### Objective
+
+Create a standalone Phase II trade-analysis do-file that lays out the intended export, import, GVC, and elasticity workflow even before the trade variables are fully identified.
+
+### Files created or modified
+
+- `code/03_analysis/02_cmr_trade_analysis_template.do`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Added a new standalone scaffold, `code/03_analysis/02_cmr_trade_analysis_template.do`, rather than wiring unfinished trade analysis into the master pipeline.
+- Kept the file runnable in audit-only mode so it already produces a slide-ready variable-audit table while the trade mappings remain blank.
+- Structured the scaffold into separate sections for revenue decomposition, extensive margin, intensive margin, GVC status, and employment elasticities by trade group.
+- Left placeholder locals at the top of the file for `export_status_var`, `export_value_var`, `domestic_sales_var`, `local_sales_var`, `import_status_var`, and `import_value_var`.
+- Used the currently observed cleaned-data sales variables (`sog`, `sls_prod`, `sls_svcs`, `purch_gds`) as candidate inputs for the early descriptive blocks.
+
+### Important assumptions
+
+- The cleaned analysis file still does not contain confirmed export or import fields, so the downstream trade sections remain switched off by default.
+- The immediate useful output is the variable-audit table at `output/tables/cmr_trade_template_variable_audit.tex`.
+- Once the trade mappings are known, the file can be expanded incrementally by turning on one analytical block at a time.
+
+### Verification
+
+- Ran `stata-mp /e do code/03_analysis/02_cmr_trade_analysis_template.do` successfully.
+- Confirmed the output file `output/tables/cmr_trade_template_variable_audit.tex` was written.
+
+## 2026-04-15 - Simplified trade scaffold to a cleaned-data template
+
+### Objective
+
+Turn the Cameroon trade-analysis scaffold into a pure template for the cleaned panel, without variable-audit machinery or setup-time variable checks.
+
+### Files modified
+
+- `code/03_analysis/02_cmr_trade_analysis_template.do`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Removed the variable-audit section and its current-output table from the trade scaffold.
+- Replaced the blank trade locals with commented placeholder names that can be swapped directly for the actual cleaned-data variable names.
+- Dropped the explicit `confirm variable` block for the core cleaned-panel variables and treated the file as a planning template built on `Data/Analysis/CMR_BDF_cleaned.dta`.
+- Kept the analysis sections switched off by default and expanded the comments so each section now serves as a clearer implementation guide for later work and slide production.
+
+### Verification
+
+- Ran `stata-mp /e do code/03_analysis/02_cmr_trade_analysis_template.do` successfully after the simplification.
+
+## 2026-04-15 - Reworked trade scaffold around direct rename instructions
+
+### Objective
+
+Align the Cameroon trade-analysis scaffold with a more direct template style that assumes the cleaned variables exist and uses explicit rename guidance instead of trade-variable locals.
+
+### Files modified
+
+- `code/03_analysis/02_cmr_trade_analysis_template.do`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Removed the remaining section-toggle `if` wrappers and the associated display messages from the trade scaffold.
+- Replaced trade-variable locals with a commented rename block that maps source cleaned-data variables directly onto standardized working names such as `export_status`, `export_value`, `domestic_sales`, `import_status`, and `import_value`.
+- Kept the core structure as commented analysis blocks so the file remains a readable implementation template for later activation.
+- Left the shared panel variables (`firmid`, `fin_yr`, `nacam`, `totemp`, `tot_rev`, `va`) referenced directly throughout the scaffold.
+
+### Verification
+
+- Ran `stata-mp /e do code/03_analysis/02_cmr_trade_analysis_template.do` successfully after the rewrite.
+
+## 2026-04-15 - Filled trade scaffold with runnable table and graph code
+
+### Objective
+
+Replace placeholder `esttab`, graph, and export lines in the Cameroon trade-analysis scaffold with concrete Stata code that can run once the cleaned trade variables are mapped.
+
+### Files modified
+
+- `code/03_analysis/02_cmr_trade_analysis_template.do`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Added concrete LaTeX-table exports and graph exports for revenue decomposition, extensive margin, intensive margin, and GVC descriptive sections.
+- Structured each descriptive block to collapse to sector-year outcomes, export a latest-year slide-ready table, and export a latest-year figure.
+- Added a compact trade-group elasticity export that posts sector-specific revenue elasticities by trade category and writes them to `output/tables/cmr_trade_template_trade_elasticities.tex`.
+- Kept the direct `rename` placeholders at the top of the file, so any failure before the variables are mapped should come from those unresolved source names rather than from missing placeholder code later in the script.
+
+### Verification
+
+- Did not run the file end to end after this change because the active `rename replace_with_cleaned_* ...` lines are intentionally expected to fail until the real cleaned-data variable names are inserted.
+
+## 2026-04-15 - Restored lighter comment style in trade scaffold
+
+### Objective
+
+Restore the Cameroon trade-analysis scaffold to the prior runnable-template structure after an overly heavy comment edit, while keeping a few short intention comments on key lines.
+
+### Files modified
+
+- `code/03_analysis/02_cmr_trade_analysis_template.do`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Restored the full trade-analysis scaffold structure after the file was temporarily reduced to comment-only content during comment editing.
+- Kept the concrete table and figure code added earlier for the descriptive trade sections and the trade-group elasticity table export.
+- Replaced the heavier narrative comment pass in the trade-elasticity block with a lighter set of short comments explaining the purpose of the key grouping, screening, estimation, and posting steps.
+
+### Verification
+
+- Did not rerun the file after restoration because the active `rename replace_with_cleaned_* ...` lines are still intentionally unresolved placeholders.

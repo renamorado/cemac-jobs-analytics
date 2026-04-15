@@ -1,9 +1,34 @@
 \documentclass[aspectratio=169]{beamer}
-\usetheme{Madrid}
-\setbeamertemplate{navigation symbols}{}
 
+\usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{graphicx}
+\usepackage{xcolor}
+
+\IfFileExists{lato.sty}{
+    \usepackage[default]{lato}
+}{}
+
+\definecolor{pgpblue}{RGB}{0,114,178}
+\definecolor{pgpred}{RGB}{213,94,0}
+\definecolor{pgpgreen}{RGB}{0,158,115}
+\definecolor{pgpbackground}{RGB}{255,255,255}
+
+\setbeamercolor{background canvas}{bg=pgpbackground}
+\setbeamercolor{normal text}{fg=black,bg=pgpbackground}
+\setbeamercolor{structure}{fg=pgpblue}
+\setbeamercolor{frametitle}{fg=pgpblue,bg=pgpbackground}
+\setbeamercolor{title}{fg=black}
+\setbeamercolor{itemize item}{fg=pgpblue}
+\setbeamercolor{itemize subitem}{fg=pgpblue}
+\setbeamercolor{enumerate item}{fg=pgpblue}
+
+\setbeamerfont{title}{series=\bfseries,size=\Large}
+\setbeamerfont{frametitle}{series=\bfseries,size=\large}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{section in toc}[sections numbered]
 
 \title{Cameroon Main Results}
 \subtitle{Cleaning diagnostics and NACAM employment elasticities}
@@ -12,7 +37,7 @@
 
 \begin{document}
 
-\begin{frame}
+\begin{frame}[plain]
     \titlepage
 \end{frame}
 
@@ -99,17 +124,17 @@
 
 \begin{frame}{Employment Distribution by Fiscal Year}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_doc_labels_ln_emp_density_by_year.png}
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_ln_emp_density_by_year.png}
 \end{frame}
 
 \begin{frame}{Main Elasticity Estimates Across NACAM Sectors}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_doc_labels_coefficients.png}
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_coefficients.png}
 \end{frame}
 
 \begin{frame}{Cross-Model Consistency}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_doc_labels_scatter.png}
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_scatter.png}
 \end{frame}
 
 \begin{frame}{Selected Sectors From the VA Ranking}
@@ -123,7 +148,7 @@
     \centering
     \resizebox{\textwidth}{!}{
         \begin{tabular}{lrrrr}
-            \input{../output/tables/cmr_nacam_results_doc_labels_highlights.tex}
+            \input{../output/tables/cmr_nacam_results_en_labels_highlights.tex}
         \end{tabular}
     }
 \end{frame}
@@ -138,3 +163,4 @@
 \end{frame}
 
 \end{document}
+

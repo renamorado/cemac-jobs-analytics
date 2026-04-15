@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This repository is for Stata-first empirical research on job creation and employment multipliers in CEMAC and related corridor-country settings. Future agents should optimize for reproducibility, auditability, and readable empirical workflows that another researcher or research assistant can continue with minimal hand-holding.
+This repository is for Stata-first empirical research on job creation and employment multipliers in Cameroon, with room for later expansion if explicitly requested. Future agents should optimize for reproducibility, auditability, and readable empirical workflows that another researcher or research assistant can continue with minimal hand-holding.
 
 This is not a Python-first repository. Do not import Python/R habits when a clear Stata-native solution exists.
 
@@ -34,12 +34,12 @@ Observed repository contents at setup:
 - `Data/Cameroon/Do files/` exists but is currently empty.
 - `Data/World Bank Enterprise Survey/` contains WBES-related materials, including manuals and large data files.
 - The repo root contains `Analytics - trade and jobs - Cameroon.docx`, which appears to be narrative/project material rather than generated pipeline output.
-- The repo now includes a starter Stata scaffold with `00_master.do`, `01_setup.do`, `code/`, `output/`, `logs/`, `manuscript/`, `slides/`, `README.md`, and `.gitignore`.
+- The repo now includes a starter Stata scaffold with `code/00_master.do`, `code/01_setup.do`, `code/`, `output/`, `logs/`, `manuscript/`, `slides/`, `README.md`, and `.gitignore`.
 - Git is initialized at the project root.
 
 Agents must preserve useful existing Cameroon work and standardize around it rather than pretending the project starts from zero.
 
-This repository lives in OneDrive-synced storage, so agents must expect occasional file-locking and sync-delay behavior when replacing, modifying, or erasing files.
+The active working repository is the local clone at `C:/Users/wb648862/Documents/Projects/CEMAC`. Treat the older OneDrive copy as a backup/archive source for ignored data and manual recovery, not as the live execution environment. For now, treat this repo as Cameroon-only and avoid introducing cross-country abstractions unless the user explicitly asks for them.
 
 ## Core Working Standard
 
@@ -57,19 +57,15 @@ Required principles:
 - Comments should explain logic and assumptions, not syntax.
 - User-written Stata commands should be installed in a controlled setup/master script rather than ad hoc.
 
-## OneDrive File Handling
+## Local Working Copy and Archive Data
 
-Because this repository is stored in OneDrive, file writes can fail transiently with errors such as "cannot be modified or erased" or apparent read-only behavior during sync.
+Normal reproducible workflow should run against the local clone and write outputs directly to the repo's `output/`, `logs/`, and data subfolders without extra copy-back helpers.
 
-Agents should account for this when writing reproducible code:
+Archive guidance:
 
-- When a script saves over, replaces, exports, or erases files in quick succession, include a short `sleep` before retrying sensitive file operations.
-- Be especially careful around `save, replace`, `graph export, replace`, log replacement, file deletion, and any workflow that overwrites an existing artifact.
-- Prefer simple, explicit write logic over brittle chained file operations.
-- If a file operation fails and the likely cause is OneDrive locking or sync lag, retry cleanly rather than rewriting the workflow in a more opaque way.
-- Do not interpret transient OneDrive file locks as a reason to weaken reproducibility or skip output generation.
-
-In Stata, use short pauses only where they solve a real sync problem and keep the logic readable.
+- If required inputs are missing from the local clone, copy them in deliberately from the older OneDrive backup or another documented source.
+- Do not treat the OneDrive copy as the default place to run analysis or regenerate outputs.
+- Keep write logic simple and explicit; only add retry or `sleep` handling when you have a concrete local file-lock problem to solve.
 
 ## Stata-First Workflow Rules
 
@@ -104,8 +100,8 @@ Avoid:
 
 The repo should grow from the current Cameroon work into a scalable multi-country structure. Do not force a disruptive reorganization before the pipeline exists, but move toward a structure like:
 
-- `00_master.do`
-- `01_setup.do`
+- `code/00_master.do`
+- `code/01_setup.do`
 - `code/`
 - `code/01_data_prep/`
 - `code/02_construct/`
@@ -155,8 +151,8 @@ Migration guidance:
 
 The repository should eventually have:
 
-- `00_master.do`: orchestrates the full pipeline in sequence
-- `01_setup.do`: sets the root, creates expected output/log folders if needed, installs required user-written commands in a controlled way, and defines stable project globals only where justified
+- `code/00_master.do`: orchestrates the full pipeline in sequence
+- `code/01_setup.do`: sets the root, creates expected output/log folders if needed, installs required user-written commands in a controlled way, and defines stable project globals only where justified
 
 The master script should:
 
@@ -329,3 +325,5 @@ Whenever an agent makes meaningful changes, update `SESSIONS.md` with:
 - warnings or next steps
 
 Keep entries concise, factual, and safe for version control. Do not store sensitive data or bulky logs there.
+
+

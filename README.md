@@ -1,10 +1,10 @@
 # CEMAC Jobs Analytics
 
-Stata-first empirical research repository for job creation and employment multiplier work in CEMAC and related corridor-country settings.
+Stata-first empirical research repository for job creation and employment multiplier work in Cameroon. The current working assumption is Cameroon-only unless a later task deliberately expands the scope.
 
 ## Current Scope
 
-- Cameroon is the first active country module.
+- Cameroon is the active country scope for the current pipeline.
 - Existing Cameroon inputs live in `Data/Cameroon/Raw/`.
 - Existing cleaned Cameroon datasets live in `Data/Cameroon/Clean/`.
 - World Bank Enterprise Survey materials currently live in `Data/World Bank Enterprise Survey/`.
@@ -13,8 +13,8 @@ Stata-first empirical research repository for job creation and employment multip
 
 - `AGENTS.md`: repo-wide workflow rules for future coding agents.
 - `SESSIONS.md`: cumulative project memory across sessions.
-- `00_master.do`: entry point for the Stata pipeline.
-- `01_setup.do`: path setup, folder creation, and package installation.
+- `code/00_master.do`: canonical entry point for the Stata pipeline.
+- `code/01_setup.do`: canonical path setup, folder creation, and package installation.
 - `code/`: modular Stata scripts by stage.
 - `docs/reference/`: official reference PDFs used for reproducible harmonization work.
 - `output/`: generated tables, figures, and slide-ready artifacts.
@@ -27,10 +27,10 @@ Stata-first empirical research repository for job creation and employment multip
 From the repository root, run:
 
 ```stata
-do "00_master.do"
+do "code/00_master.do"
 ```
 
-At this stage, the repository is scaffolded but the Cameroon processing do-files still need to be recovered or written. The current master script sets paths, verifies the starter structure, installs core packages, and runs a repository check script.
+At this stage, the repository is scaffolded but the Cameroon processing do-files still need to be recovered or written. The current Cameroon master script sets paths, verifies the starter structure, installs core packages, and runs the upstream crosswalk and cleaning checks.
 
 To compile the seminar deck after generating the required tables and figures, run:
 
@@ -52,3 +52,4 @@ Run that command from `slides/`.
 
 - `docs/reference/nacam-rev1-ins-cameroon.pdf` is the authoritative local
   reference for NACAM harmonization work in this repository.
+

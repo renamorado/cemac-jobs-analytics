@@ -7,7 +7,7 @@ set more off
         current Cameroon data folders are reachable from the project root.
 
     Inputs:
-        Globals created by 01_setup.do.
+        Globals created by code/01_setup.do.
 
     Outputs:
         Console checks only.
@@ -21,8 +21,8 @@ foreach dir in ///
     "${CODEDIR}/03_analysis" ///
     "${CODEDIR}/04_output" ///
     "${CODEDIR}/05_checks" ///
-    "${DATADIR}/Cameroon/Raw" ///
-    "${DATADIR}/Cameroon/Clean" ///
+    "${CAMEROONDIR}/Raw" ///
+    "${CAMEROONDIR}/Clean" ///
     "${DATADIR}/WBES_manual" ///
     "${OUTPUTDIR}/tables" ///
     "${OUTPUTDIR}/figures" ///
@@ -34,4 +34,5 @@ foreach dir in ///
 }
 
 display as result "Repository directories verified."
+
 

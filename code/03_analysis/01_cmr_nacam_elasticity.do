@@ -10,101 +10,46 @@ set more off
         Data/Analysis/CMR_BDF_cleaned.dta
 
     Outputs:
-        output/tables/cmr_nacam_results_va_elasticity.tex
-        output/tables/cmr_nacam_results_tot_rev_elasticity.tex
-        output/tables/cmr_nacam_results_ranking.tex
-        output/tables/cmr_nacam_results_highlights.tex
-        output/figures/cmr_nacam_results_ln_emp_density_by_year.pdf
-        output/figures/cmr_nacam_results_ln_emp_density_by_year.png
-        output/figures/cmr_nacam_results_coefficients.pdf
-        output/figures/cmr_nacam_results_coefficients.png
-        output/figures/cmr_nacam_results_scatter.pdf
-        output/figures/cmr_nacam_results_scatter.png
+        output/tables/cmr_nacam_results_en_labels_va_elasticity.tex
+        output/tables/cmr_nacam_results_en_labels_tot_rev_elasticity.tex
+        output/tables/cmr_nacam_results_en_labels_ranking.tex
+        output/tables/cmr_nacam_results_en_labels_highlights.tex
+        output/figures/cmr_nacam_results_en_labels_ln_emp_density_by_year.pdf
+        output/figures/cmr_nacam_results_en_labels_ln_emp_density_by_year.png
+        output/figures/cmr_nacam_results_en_labels_coefficients.pdf
+        output/figures/cmr_nacam_results_en_labels_coefficients.png
+        output/figures/cmr_nacam_results_en_labels_scatter.pdf
+        output/figures/cmr_nacam_results_en_labels_scatter.png
 
     Notes:
         This file is intentionally standalone, but it still bootstraps
-        01_setup.do from the repository root so path handling stays local-first.
+        code/01_setup.do so path handling stays local-first.
 *******************************************************************************/
 
-/*******************************************************************************
-    Bootstrap repository paths
-    - Run from the repo root when possible.
-    - If the current working directory is this script's folder, step back to the
-      repository root and reuse 01_setup.do.
-*******************************************************************************/
-local root = subinstr(c(pwd), "\", "/", .)
-
-if !fileexists("`root'/AGENTS.md") {
-    if fileexists("`root'/../../AGENTS.md") {
-        local root "`root'/../.."
-    }
-}
-
-capture noisily cd "`root'"
-if _rc | !fileexists("AGENTS.md") {
-    display as error "Run code/03_analysis/01_cmr_nacam_elasticity.do from the repo root or from code/03_analysis."
+* Use the current local repo path directly for this standalone run.
+local project_root "C:/Users/wb648862/Documents/Projects/CEMAC"
+capture noisily cd "`project_root'"
+if _rc {
+    display as error "Expected project root not found: `project_root'"
     exit 601
 }
 
-do "01_setup.do"
+* Import locals from the master setup file to ensure paths and project root are defined.
+do "code/01_setup.do"
 /*******************************************************************************
-    Analysis thresholds and temporary output paths
+    Analysis thresholds and output prefix
     - The thresholds determine which sectors are retained in both models.
-    - Tables and figures are first written to the temp directory, then copied to
-      the project folders with a retry helper to avoid transient file locks.
+    - Keep a shared output stub so tables, figures, and slide references stay in
+      sync without duplicating the full prefix throughout the file.
 *******************************************************************************/
 local min_sector_obs 30
 local min_sector_firms 10
-local tmpdir = subinstr(c(tmpdir), "\", "/", .)
-local output_stub "cmr_nacam_results_doc_labels"
-local va_tex_tmp "`tmpdir'/`output_stub'_va_elasticity.tex"
-local tot_rev_tex_tmp "`tmpdir'/`output_stub'_tot_rev_elasticity.tex"
-local ranking_tex_tmp "`tmpdir'/`output_stub'_ranking.tex"
-local highlights_tex_tmp "`tmpdir'/`output_stub'_highlights.tex"
-local density_pdf_tmp "`tmpdir'/`output_stub'_ln_emp_density_by_year.pdf"
-local density_png_tmp "`tmpdir'/`output_stub'_ln_emp_density_by_year.png"
-local coeff_pdf_tmp "`tmpdir'/`output_stub'_coefficients.pdf"
-local coeff_png_tmp "`tmpdir'/`output_stub'_coefficients.png"
-local scatter_pdf_tmp "`tmpdir'/`output_stub'_scatter.pdf"
-local scatter_png_tmp "`tmpdir'/`output_stub'_scatter.png"
+local output_stub "cmr_nacam_results_en_labels"
 
 ***# Some descriptive stats
 *Table with number of firms and by NACAM sector.
 
-*Create a more aggregated NACAM 
 
-/*******************************************************************************
-    Helper: write with retries
-    - Windows viewers or sync tools can briefly lock files during overwrite.
-    - This program retries a copy-replace before failing loudly.
-*******************************************************************************/
-capture program drop safe_copy_replace
-program define safe_copy_replace
-    version 18.0
-    syntax , Source(string) Target(string) [Softfail]
-    local retry_sleep 1500
-    local write_rc = .
-
-    forvalues attempt = 1/12 {
-        capture copy "`source'" "`target'", replace
-        local write_rc = _rc
-
-        if `write_rc' == 0 {
-            continue, break
-        }
-
-        sleep `retry_sleep'
-    }
-
-    if `write_rc' != 0 {
-        if "`softfail'" != "" {
-            display as error "Warning: failed to write `target' after retry; continuing."
-            exit 0
-        }
-        display as error "Failed to write `target' after retry."
-        exit `write_rc'
-    }
-end
 
 /*******************************************************************************
     Load the cleaned analysis panel
@@ -113,31 +58,18 @@ end
 *******************************************************************************/
 use "${DATADIR}/Analysis/CMR_BDF_cleaned.dta", clear
 
-keep firmid fin_yr nacam nacam_label totemp va tot_rev
-
-/*
-    Build display labels directly from the official NACAM documentation label and
-    prefix the observed three-digit legacy code. This keeps repeated official
-    labels such as 001/002 AGRICULTURE distinguishable without inventing a split
-    that is not documented in the source passage table.
-*/
-generate str3 nacam_code = ""
-replace nacam_code = string(nacam, "%03.0f") if !missing(nacam)
-
-generate str180 nacam_label_display = ""
-replace nacam_label_display = nacam_code + " " + nacam_label if !missing(nacam)
-assert !missing(nacam_label_display) if !missing(nacam)
+keep firmid fin_yr nacam nacam_label_display nacam_label_short_display totemp va tot_rev
 
 tempfile sector_labels
 preserve
-keep nacam nacam_label_display
+keep nacam nacam_label_display nacam_label_short_display
 drop if missing(nacam)
 bysort nacam (nacam_label_display): assert nacam_label_display == nacam_label_display[1]
+bysort nacam (nacam_label_short_display): assert nacam_label_short_display == nacam_label_short_display[1]
 by nacam: keep if _n == 1
 isid nacam
 save "`sector_labels'"
 restore
-drop nacam_code
 
 /*******************************************************************************
     Build analysis variables
@@ -147,45 +79,80 @@ drop nacam_code
 *******************************************************************************/
 encode firmid, generate(firm_fe)
 
-destring totemp, generate(employment) ignore(",")
+capture confirm numeric variable totemp
+if !_rc {
+    generate double employment = totemp
+}
+else {
+    destring totemp, generate(employment) ignore(",")
+}
 
 *log of employment
 gen double ln_emp = .
 replace ln_emp = ln(employment) if employment > 0
 
+
+**Simple scatter plot of aggregate employment and value added and total revenue. One plot for each (va, tot_rev).
+*Create a panel of latest year (2022) employment and value added and total revenue by nacam sector.
+preserve
+    gen n_firms =  1 
+    *cross sector totals by nacam - year
+    collapse (sum) employment va tot_rev n_firms, by(nacam nacam_label_short_display fin_yr)
+    *create total employment value added and total revenue by year
+    foreach outcome of varlist employment va tot_rev n_firms {
+        gen total_`outcome' = .
+        by fin_yr: replace total_`outcome' = sum(`outcome')
+    }
+    *calculate share of each sector in total employment, value added and total revenue by year
+    foreach outcome of varlist employment va tot_rev {
+        gen share_`outcome' = `outcome' / total_`outcome'
+    }
+
+
+twoway (scatter employment va, mcolor(dknavy*0.5) msymbol(circle))  ///
+    
+
+
+*** Plot the distribution of log employment by year to check for outliers and changes over time.
 twoway ///
+    (kdensity ln_emp if fin_yr == 2015 & !missing(ln_emp), ///
+        lcolor("214 225 240") lwidth(medthick)) ///
     (kdensity ln_emp if fin_yr == 2016 & !missing(ln_emp), ///
-        lcolor(navy) lwidth(medthick)) ///
+        lcolor("191 210 232") lwidth(medthick)) ///
     (kdensity ln_emp if fin_yr == 2017 & !missing(ln_emp), ///
-        lcolor(maroon) lwidth(medthick)) ///
+        lcolor("166 191 221") lwidth(medthick)) ///
     (kdensity ln_emp if fin_yr == 2018 & !missing(ln_emp), ///
-        lcolor(forest_green) lwidth(medthick)) ///
+        lcolor("135 167 206") lwidth(medthick)) ///
     (kdensity ln_emp if fin_yr == 2019 & !missing(ln_emp), ///
-        lcolor(dkorange) lwidth(medthick)), ///
-    legend(order(1 "2016" 2 "2017" 3 "2018" 4 "2019") rows(1)) ///
+        lcolor("105 142 191") lwidth(medthick)) ///
+    (kdensity ln_emp if fin_yr == 2020 & !missing(ln_emp), ///
+        lcolor("73 114 168") lwidth(medthick)) ///
+    (kdensity ln_emp if fin_yr == 2021 & !missing(ln_emp), ///
+        lcolor("42 83 140") lwidth(medthick)) ///
+    (kdensity ln_emp if fin_yr == 2022 & !missing(ln_emp), ///
+        lcolor("18 52 86") lwidth(medthick)), ///
+    legend(order(1 "2015" 8 "2022") cols(2) pos(6)) ///
     xtitle("Log employment") ///
     ytitle("Density") ///
     title("Log employment distribution by fiscal year")
 
-graph export "`density_pdf_tmp'", replace
-safe_copy_replace, ///
-    source("`density_pdf_tmp'") ///
-    target("output/figures/`output_stub'_ln_emp_density_by_year.pdf") ///
-    softfail
+    graph export "output/figures/`output_stub'_ln_emp_density_by_year.pdf", replace
+    graph export "output/figures/`output_stub'_ln_emp_density_by_year.png", replace
 
-graph export "`density_png_tmp'", replace
-safe_copy_replace, ///
-    source("`density_png_tmp'") ///
-    target("output/figures/`output_stub'_ln_emp_density_by_year.png")
-
+*Prepare log regressors and outcomes for both models, ensuring that we only take logs of positive values.
+*log of value added
 generate double ln_va = .
 replace ln_va = ln(va) if va > 0
 
+*log of total revenue
 generate double ln_tot_rev = .
 replace ln_tot_rev = ln(tot_rev) if tot_rev > 0
 
+
 generate byte sample_va = employment > 0 & va > 0 & !missing(firm_fe, fin_yr, nacam)
 generate byte sample_tot_rev = employment > 0 & tot_rev > 0 & !missing(firm_fe, fin_yr, nacam)
+
+
 
 /*******************************************************************************
     Count usable observations and firms by NACAM sector
@@ -293,6 +260,7 @@ merge m:1 nacam using "`sector_labels'", nogen keep(match)
 keep if include_sector == 1
 sort nacam
 assert !missing(nacam_label_display)
+assert !missing(nacam_label_short_display)
 
 generate str16 rowname = "nacam_" + string(nacam)
 
@@ -306,17 +274,15 @@ quietly count
 local va_n = r(N)
 forvalues i = 1/`va_n' {
     local code = nacam[`i']
-    local va_label = subinstr(nacam_label_display[`i'], char(34), "'", .)
+    local va_label = subinstr(nacam_label_short_display[`i'], "&", "\&", .)
+    local va_label = subinstr("`va_label'", char(34), "'", .)
     local va_rowlabels `va_rowlabels' nacam_`code' "`va_label'"
 }
 
 esttab matrix(va_table, fmt(%9.3f %9.3f %9.3f %9.3f %9.0fc %9.0fc)) ///
-    using "`va_tex_tmp'", ///
+    using "output/tables/`output_stub'_va_elasticity.tex", ///
     replace booktabs fragment nomtitles nonumbers ///
     varlabels(`va_rowlabels')
-safe_copy_replace, ///
-    source("`va_tex_tmp'") ///
-    target("output/tables/`output_stub'_va_elasticity.tex")
 
 * Save a compact copy so it can later be merged with the revenue results.
 tempfile va_table_data
@@ -332,6 +298,7 @@ merge m:1 nacam using "`sector_labels'", nogen keep(match)
 keep if include_sector == 1
 sort nacam
 assert !missing(nacam_label_display)
+assert !missing(nacam_label_short_display)
 
 generate str16 rowname = "nacam_" + string(nacam)
 
@@ -344,17 +311,15 @@ quietly count
 local tot_rev_n = r(N)
 forvalues i = 1/`tot_rev_n' {
     local code = nacam[`i']
-    local tot_rev_label = subinstr(nacam_label_display[`i'], char(34), "'", .)
+    local tot_rev_label = subinstr(nacam_label_short_display[`i'], "&", "\&", .)
+    local tot_rev_label = subinstr("`tot_rev_label'", char(34), "'", .)
     local tot_rev_rowlabels `tot_rev_rowlabels' nacam_`code' "`tot_rev_label'"
 }
 
 esttab matrix(tot_rev_table, fmt(%9.3f %9.3f %9.3f %9.3f %9.0fc %9.0fc)) ///
-    using "`tot_rev_tex_tmp'", ///
+    using "output/tables/`output_stub'_tot_rev_elasticity.tex", ///
     replace booktabs fragment nomtitles nonumbers ///
     varlabels(`tot_rev_rowlabels')
-safe_copy_replace, ///
-    source("`tot_rev_tex_tmp'") ///
-    target("output/tables/`output_stub'_tot_rev_elasticity.tex")
 
 /*******************************************************************************
     Combine both models into a ranking table
@@ -363,6 +328,7 @@ safe_copy_replace, ///
 merge 1:1 nacam using "`va_table_data'", nogen
 merge m:1 nacam using "`sector_labels'", nogen keep(match)
 assert !missing(nacam_label_display)
+assert !missing(nacam_label_short_display)
 
 generate double sort_value = va_elasticity
 replace sort_value = -1e10 if missing(sort_value)
@@ -380,17 +346,15 @@ quietly count
 local ranking_n = r(N)
 forvalues i = 1/`ranking_n' {
     local code = nacam[`i']
-    local ranking_label = subinstr(nacam_label_display[`i'], char(34), "'", .)
+    local ranking_label = subinstr(nacam_label_short_display[`i'], "&", "\&", .)
+    local ranking_label = subinstr("`ranking_label'", char(34), "'", .)
     local ranking_rowlabels `ranking_rowlabels' nacam_`code' "`ranking_label'"
 }
 
 esttab matrix(ranking_table, fmt(%9.3f %9.3f %9.0fc %9.3f %9.3f %9.0fc)) ///
-    using "`ranking_tex_tmp'", ///
+    using "output/tables/`output_stub'_ranking.tex", ///
     replace booktabs fragment nomtitles nonumbers ///
     varlabels(`ranking_rowlabels')
-safe_copy_replace, ///
-    source("`ranking_tex_tmp'") ///
-    target("output/tables/`output_stub'_ranking.tex")
 
 /*******************************************************************************
     Export a small highlights table
@@ -415,17 +379,15 @@ quietly count
 local highlight_n = r(N)
 forvalues i = 1/`highlight_n' {
     local code = nacam[`i']
-    local highlight_label = subinstr(nacam_label_display[`i'], char(34), "'", .)
+    local highlight_label = subinstr(nacam_label_short_display[`i'], "&", "\&", .)
+    local highlight_label = subinstr("`highlight_label'", char(34), "'", .)
     local highlight_rowlabels `highlight_rowlabels' nacam_`code' "`highlight_label'"
 }
 
 esttab matrix(highlight_table, fmt(%9.3f %9.3f %9.0fc %9.0fc)) ///
-    using "`highlights_tex_tmp'", ///
+    using "output/tables/`output_stub'_highlights.tex", ///
     replace booktabs fragment nomtitles nonumbers ///
     varlabels(`highlight_rowlabels')
-safe_copy_replace, ///
-    source("`highlights_tex_tmp'") ///
-    target("output/tables/`output_stub'_highlights.tex")
 restore
 
 /*******************************************************************************
@@ -440,7 +402,7 @@ quietly count
 local plot_n = r(N)
 
 forvalues i = 1/`plot_n' {
-    local sector_label = subinstr(nacam_label_display[`i'], char(34), "'", .)
+    local sector_label = subinstr(nacam_label_short_display[`i'], char(34), "'", .)
 
     if `i' == 1 {
         label define nacam_sector_plot `i' `"`sector_label'"'
@@ -466,16 +428,8 @@ twoway ///
     title("Sectoral employment elasticities wrt Revenue") ///
     note("Sectors shown meet the minimum firm and  observation thresholds in both models.")
 
-graph export "`coeff_pdf_tmp'", replace
-safe_copy_replace, ///
-    source("`coeff_pdf_tmp'") ///
-    target("output/figures/`output_stub'_coefficients.pdf") ///
-    softfail
-
-graph export "`coeff_png_tmp'", replace
-safe_copy_replace, ///
-    source("`coeff_png_tmp'") ///
-    target("output/figures/`output_stub'_coefficients.png")
+graph export "output/figures/`output_stub'_coefficients.pdf", replace
+graph export "output/figures/`output_stub'_coefficients.png", replace
 
 /*******************************************************************************
     Cross-model scatter plot
@@ -497,7 +451,7 @@ twoway ///
     (function y = x, range(`diagonal_min' `diagonal_max') lpattern(dash) lcolor(gs10)) ///
     (scatter tot_rev_elasticity va_elasticity, ///
         msymbol(circle) mcolor(navy%45) ///
-        mlabcolor(black) mlabel(nacam_label_display) mlabsize(vsmall)), ///
+        mlabcolor(black) mlabel(nacam_label_short_display) mlabsize(vsmall)), ///
     xline(0, lpattern(dash) lcolor(gs10)) ///
     yline(0, lpattern(dash) lcolor(gs10)) ///
     xtitle("Value added elasticity") ///
@@ -505,13 +459,10 @@ twoway ///
     title("Cross-sector consistency in employment elasticities") ///
     legend(off)
 
-graph export "`scatter_pdf_tmp'", replace
-safe_copy_replace, ///
-    source("`scatter_pdf_tmp'") ///
-    target("output/figures/`output_stub'_scatter.pdf") ///
-    softfail
+graph export "output/figures/`output_stub'_scatter.pdf", replace
+graph export "output/figures/`output_stub'_scatter.png", replace
 
-graph export "`scatter_png_tmp'", replace
-safe_copy_replace, ///
-    source("`scatter_png_tmp'") ///
-    target("output/figures/`output_stub'_scatter.png")
+
+
+
+

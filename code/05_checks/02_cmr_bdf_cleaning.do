@@ -9,7 +9,7 @@ set more off
         NACAM-to-ISIC crosswalk summary.
 
     Inputs:
-        Run after 01_setup.do from the repository root.
+        Globals and packages created by code/01_setup.do.
         Data/Cameroon/Clean/CMR_BDF.dta
         Data/Intermediate/cmr_bdf_nacam_isic_crosswalk.dta
 
@@ -20,16 +20,8 @@ set more off
         logs/02_cmr_bdf_cleaning_*.log
 *******************************************************************************/
 
-* Stop early if setup has not already defined the project globals.
-local setup_missing = "${PROJECT_ROOT}" == "" | "${LOGDIR}" == "" | "${OUTPUTDIR}" == ""
-if `setup_missing' display as error "Setup is not loaded. Run 00_master.do or 01_setup.do from the repository root first."
-if `setup_missing' exit 197
-
-* esttab should already be available from 01_setup.do.
-capture which esttab
-local missing_esttab = _rc
-if `missing_esttab' display as error "esttab is not available. Run 01_setup.do from the repository root first."
-if `missing_esttab' exit 199
+* This stage assumes code/01_setup.do has already defined project globals and
+* installed esttab.
 
 local sleep_ms = real("${SLEEP_MS}")
 local log_stamp = subinstr(c(current_time), ":", "", .)
@@ -52,8 +44,55 @@ if _rc {
 }
 
 * Load the working Cameroon BDF file from the repository.
-confirm file "Data/Cameroon/Clean/CMR_BDF.dta"
-use "Data/Cameroon/Clean/CMR_BDF.dta", clear
+confirm file "${CAMEROONDIR}/Clean/CMR_BDF.dta"
+use "${CAMEROONDIR}/Clean/CMR_BDF.dta", clear
+
+* Destring numeric fields before duplicate checks so formatting noise does not
+* create fake conflicts across otherwise identical firm-year records.
+ds, has(type string)
+local string_vars `r(varlist)'
+local id_string_vars firmid
+local numeric_string_vars : list string_vars - id_string_vars
+
+local forced_missing_vars
+local forced_missing_total 0
+
+foreach var of local numeric_string_vars {
+    replace `var' = ustrtrim(`var')
+    replace `var' = subinstr(`var', char(13), "", .)
+    replace `var' = subinstr(`var', char(10), "", .)
+    replace `var' = subinstr(`var', char(9), "", .)
+    replace `var' = subinstr(`var', char(160), "", .)
+    replace `var' = subinstr(`var', " ", "", .)
+    replace `var' = "" if inlist(upper(`var'), "", "NA", "-")
+    replace `var' = substr(`var', 1, length(`var') - 1) if regexm(`var', "^[0-9.]+-$")
+
+    quietly count if !missing(`var') & missing(real(subinstr(`var', ",", "", .)))
+    local forced_missing_here = r(N)
+
+    if `forced_missing_here' > 0 {
+        local forced_missing_total = `forced_missing_total' + `forced_missing_here'
+        local forced_missing_vars `forced_missing_vars' `var'
+        display as text "Coercing `forced_missing_here' corrupted values in `var' to missing during destring."
+    }
+
+    destring `var', replace ignore(",") force
+}
+
+ds, has(type string)
+local remaining_string_vars `r(varlist)'
+local unexpected_string_vars : list remaining_string_vars - id_string_vars
+
+if "`unexpected_string_vars'" != "" {
+    display as error "Unexpected string variables remain after numeric destringing: `unexpected_string_vars'"
+    error 459
+}
+
+display as result "Destringed numeric string variables in Cameroon BDF source data."
+if `forced_missing_total' > 0 {
+    display as text "Total corrupted numeric-string values coerced to missing: `forced_missing_total'"
+    display as text "Affected variables: `forced_missing_vars'"
+}
 
 * Record the starting file size before any cleaning.
 quietly count
@@ -130,7 +169,7 @@ matrix duplicate_cleaning = ( ///
 matrix colnames duplicate_cleaning = Value
 matrix rownames duplicate_cleaning = original_obs exact_dup_groups exact_dup_drop conflict_dup_groups conflict_dup_drop final_obs
 
-esttab matrix(duplicate_cleaning, fmt(%12.0fc)) using "output/tables/cmr_bdf_cleaning_note_duplicate_summary.tex", ///
+esttab matrix(duplicate_cleaning, fmt(%12.0fc)) using "${OUTPUTDIR}/tables/cmr_bdf_cleaning_note_duplicate_summary.tex", ///
     replace booktabs fragment nomtitles nonumbers ///
     varlabels( ///
         original_obs "Original observations" ///
@@ -142,35 +181,44 @@ esttab matrix(duplicate_cleaning, fmt(%12.0fc)) using "output/tables/cmr_bdf_cle
     )
 
 * Attach NACAM labels for downstream analysis figures and tables.
-confirm file "Data/Intermediate/cmr_bdf_nacam_isic_crosswalk.dta"
-merge m:1 nacam using "Data/Intermediate/cmr_bdf_nacam_isic_crosswalk.dta", ///
+confirm file "${DATADIR}/Intermediate/cmr_bdf_nacam_isic_crosswalk.dta"
+merge m:1 nacam using "${DATADIR}/Intermediate/cmr_bdf_nacam_isic_crosswalk.dta", ///
     keep(master match) keepusing(nacam_label nacam_label_en nacam_label_short_en)
 assert _merge == 3 if !missing(nacam)
 drop _merge
 assert !missing(nacam_label, nacam_label_en, nacam_label_short_en) if !missing(nacam)
 
+* Build display labels here so downstream analysis only reads prepared fields.
+generate str180 nacam_label_display = ""
+replace nacam_label_display = nacam_label_en if !missing(nacam)
+assert !missing(nacam_label_display) if !missing(nacam)
+
+generate str60 nacam_label_short_display = ""
+replace nacam_label_short_display = nacam_label_short_en if !missing(nacam)
+assert !missing(nacam_label_short_display) if !missing(nacam)
+
 * Remove helper variables before saving the cleaned analysis file.
 drop original_order firmyear_n tag_firmyear tag_full_record distinct_record_profiles duplicate_class keep_first_exact
 
 * Save the cleaned file with a small retry for OneDrive sync delays.
-capture save "Data/Analysis/CMR_BDF_cleaned.dta", replace
+capture save "${DATADIR}/Analysis/CMR_BDF_cleaned.dta", replace
 if _rc {
     sleep `sleep_ms'
-    capture save "Data/Analysis/CMR_BDF_cleaned.dta", replace
+    capture save "${DATADIR}/Analysis/CMR_BDF_cleaned.dta", replace
 }
 if _rc {
-    display as error "Unable to save Data/Analysis/CMR_BDF_cleaned.dta after retry."
+    display as error "Unable to save ${DATADIR}/Analysis/CMR_BDF_cleaned.dta after retry."
     error _rc
 }
 
-display as result "Saved cleaned file to Data/Analysis/CMR_BDF_cleaned.dta"
+display as result "Saved cleaned file to ${DATADIR}/Analysis/CMR_BDF_cleaned.dta"
 
 /*******************************************************************************
     2. Export a short NACAM-to-ISIC crosswalk summary for the cleaning note
 *******************************************************************************/
 
-confirm file "Data/Intermediate/cmr_bdf_nacam_isic_crosswalk.dta"
-use "Data/Intermediate/cmr_bdf_nacam_isic_crosswalk.dta", clear
+confirm file "${DATADIR}/Intermediate/cmr_bdf_nacam_isic_crosswalk.dta"
+use "${DATADIR}/Intermediate/cmr_bdf_nacam_isic_crosswalk.dta", clear
 
 isid nacam
 
@@ -195,7 +243,7 @@ matrix crosswalk_summary = ( ///
 matrix colnames crosswalk_summary = Value
 matrix rownames crosswalk_summary = observed_codes exact_division_codes manual_review_codes
 
-esttab matrix(crosswalk_summary, fmt(%12.0fc)) using "output/tables/cmr_bdf_cleaning_note_crosswalk_summary.tex", ///
+esttab matrix(crosswalk_summary, fmt(%12.0fc)) using "${OUTPUTDIR}/tables/cmr_bdf_cleaning_note_crosswalk_summary.tex", ///
     replace booktabs fragment nomtitles nonumbers ///
     varlabels( ///
         observed_codes "Observed legacy NACAM codes covered" ///
@@ -203,6 +251,7 @@ esttab matrix(crosswalk_summary, fmt(%12.0fc)) using "output/tables/cmr_bdf_clea
         manual_review_codes "Codes flagged for manual review" ///
     )
 
-display as result "Saved crosswalk summary to output/tables/cmr_bdf_cleaning_note_crosswalk_summary.tex"
+display as result "Saved crosswalk summary to ${OUTPUTDIR}/tables/cmr_bdf_cleaning_note_crosswalk_summary.tex"
 
 log close cmrdiag
+

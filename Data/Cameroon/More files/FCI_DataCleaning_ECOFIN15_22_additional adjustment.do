@@ -31,7 +31,7 @@ if _rc | !fileexists("AGENTS.md") {
     exit 601
 }
 
-do "01_setup.do"
+do "code/01_setup.do"
 
 global ecofin "${PROJECT_ROOT}/Data/Cameroon/More files"
 

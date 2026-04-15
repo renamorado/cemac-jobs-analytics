@@ -7,7 +7,7 @@ set more off
         branch codes observed in CMR_BDF.dta.
 
     Inputs:
-        Globals created by 01_setup.do
+        Globals created by code/01_setup.do
         Data/Cameroon/Clean/CMR_BDF.dta
         docs/reference/nacam-rev1-ins-cameroon.pdf
 
@@ -15,11 +15,7 @@ set more off
         Data/Intermediate/cmr_bdf_nacam_isic_crosswalk.dta
 *******************************************************************************/
 
-if "${PROJECT_ROOT}" == "" {
-    do "01_setup.do"
-}
-
-local clean_file "${DATADIR}/Cameroon/Clean/CMR_BDF.dta"
+local clean_file "${CAMEROONDIR}/Clean/CMR_BDF.dta"
 local source_pdf "${PROJECT_ROOT}/docs/reference/nacam-rev1-ins-cameroon.pdf"
 local out_file "${DATADIR}/Intermediate/cmr_bdf_nacam_isic_crosswalk.dta"
 local sleep_ms = real("${SLEEP_MS}")
@@ -130,31 +126,31 @@ generate str40 nacam_label_short_en = ""
     as the main source for the legacy branch names themselves.
 */
 
-replace nacam_label_en = "Food-crop agriculture" if nacam == 1
+replace nacam_label_en = "Food crop agriculture" if nacam == 1
 replace nacam_label_en = "Industrial and export agriculture" if nacam == 2
 replace nacam_label_en = "Livestock and hunting" if nacam == 3
-replace nacam_label_en = "Fishing and fish farming" if nacam == 5
-replace nacam_label_en = "Extraction of hydrocarbons and energy products" if nacam == 6
+replace nacam_label_en = "Fishing and aquaculture" if nacam == 5
+replace nacam_label_en = "Hydrocarbon and energy-product extraction" if nacam == 6
 replace nacam_label_en = "Other extractive activities" if nacam == 7
 replace nacam_label_en = "Meat and fish processing" if nacam == 8
-replace nacam_label_en = "Grain milling and starch products" if nacam == 9
+replace nacam_label_en = "Grain processing and starch products" if nacam == 9
 replace nacam_label_en = "Cocoa, coffee, tea, and sugar processing" if nacam == 10
 replace nacam_label_en = "Oilseed processing and animal feed" if nacam == 11
 replace nacam_label_en = "Cereal-based products" if nacam == 12
 replace nacam_label_en = "Dairy, fruit and vegetable, and other food products" if nacam == 13
-replace nacam_label_en = "Tobacco products" if nacam == 15
+replace nacam_label_en = "Tobacco manufacturing" if nacam == 15
 replace nacam_label_en = "Textiles and apparel" if nacam == 16
-replace nacam_label_en = "Leather and footwear" if nacam == 17
-replace nacam_label_en = "Wood products excluding furniture" if nacam == 18
-replace nacam_label_en = "Paper and paper products, printing, and publishing" if nacam == 19
-replace nacam_label_en = "Petroleum refining and coke" if nacam == 20
-replace nacam_label_en = "Chemicals and pharmaceuticals" if nacam == 21
-replace nacam_label_en = "Rubber and plastics" if nacam == 22
+replace nacam_label_en = "Leather industries and footwear" if nacam == 17
+replace nacam_label_en = "Wood industries excluding furniture" if nacam == 18
+replace nacam_label_en = "Paper products, printing, and publishing" if nacam == 19
+replace nacam_label_en = "Petroleum refining and coke production" if nacam == 20
+replace nacam_label_en = "Chemical and pharmaceutical products" if nacam == 21
+replace nacam_label_en = "Rubber and plastic products" if nacam == 22
 replace nacam_label_en = "Non-metallic mineral products" if nacam == 23
-replace nacam_label_en = "Basic metals and fabricated metal products" if nacam == 24
-replace nacam_label_en = "Transport equipment" if nacam == 27
+replace nacam_label_en = "Basic metallurgy and fabricated metal products" if nacam == 24
+replace nacam_label_en = "Transport equipment manufacturing" if nacam == 27
 replace nacam_label_en = "Furniture, other manufacturing, and recovery/waste" if nacam == 28
-replace nacam_label_en = "Electricity and water supply" if nacam == 29
+replace nacam_label_en = "Electricity and water supply in the legacy nomenclature" if nacam == 29
 replace nacam_label_en = "Construction" if nacam == 30
 replace nacam_label_en = "Trade" if nacam == 31
 replace nacam_label_en = "Repair services" if nacam == 32
@@ -163,36 +159,36 @@ replace nacam_label_en = "Transport and warehousing" if nacam == 34
 replace nacam_label_en = "Postal services and telecommunications" if nacam == 35
 replace nacam_label_en = "Financial and insurance activities" if nacam == 36
 replace nacam_label_en = "Real estate activities" if nacam == 37
-replace nacam_label_en = "Business services" if nacam == 38
+replace nacam_label_en = "Activities provided mainly to enterprises" if nacam == 38
 replace nacam_label_en = "Education" if nacam == 40
-replace nacam_label_en = "Health and social work" if nacam == 41
-replace nacam_label_en = "Community, social, personal, and collective services" if nacam == 42
+replace nacam_label_en = "Human health and social work" if nacam == 41
+replace nacam_label_en = "Other community, social, and personal activities" if nacam == 42
 
 replace nacam_label_short_en = "Food-crop ag." if nacam == 1
 replace nacam_label_short_en = "Export ag." if nacam == 2
-replace nacam_label_short_en = "Livestock" if nacam == 3
-replace nacam_label_short_en = "Fishing & fish farms" if nacam == 5
-replace nacam_label_short_en = "Hydrocarbons" if nacam == 6
+replace nacam_label_short_en = "Livestock & hunting" if nacam == 3
+replace nacam_label_short_en = "Fishing & aquaculture" if nacam == 5
+replace nacam_label_short_en = "Hydrocarbon extraction" if nacam == 6
 replace nacam_label_short_en = "Other extractives" if nacam == 7
-replace nacam_label_short_en = "Meat & fish" if nacam == 8
+replace nacam_label_short_en = "Meat & fish processing" if nacam == 8
 replace nacam_label_short_en = "Grains & starch" if nacam == 9
-replace nacam_label_short_en = "Cocoa/coffee/sugar" if nacam == 10
+replace nacam_label_short_en = "Cocoa/coffee/tea/sugar" if nacam == 10
 replace nacam_label_short_en = "Oilseeds & feed" if nacam == 11
 replace nacam_label_short_en = "Cereal products" if nacam == 12
-replace nacam_label_short_en = "Other food" if nacam == 13
+replace nacam_label_short_en = "Dairy/fruit/other food" if nacam == 13
 replace nacam_label_short_en = "Tobacco" if nacam == 15
 replace nacam_label_short_en = "Textiles & apparel" if nacam == 16
 replace nacam_label_short_en = "Leather & footwear" if nacam == 17
 replace nacam_label_short_en = "Wood products" if nacam == 18
-replace nacam_label_short_en = "Paper & publishing" if nacam == 19
+replace nacam_label_short_en = "Paper, print & pub." if nacam == 19
 replace nacam_label_short_en = "Petroleum refining" if nacam == 20
 replace nacam_label_short_en = "Chemicals & pharma" if nacam == 21
 replace nacam_label_short_en = "Rubber & plastics" if nacam == 22
 replace nacam_label_short_en = "Non-metallic minerals" if nacam == 23
-replace nacam_label_short_en = "Metals" if nacam == 24
+replace nacam_label_short_en = "Metals & metal products" if nacam == 24
 replace nacam_label_short_en = "Transport equipment" if nacam == 27
-replace nacam_label_short_en = "Furniture & other mfg" if nacam == 28
-replace nacam_label_short_en = "Utilities" if nacam == 29
+replace nacam_label_short_en = "Furniture & other mfg." if nacam == 28
+replace nacam_label_short_en = "Legacy utilities" if nacam == 29
 replace nacam_label_short_en = "Construction" if nacam == 30
 replace nacam_label_short_en = "Trade" if nacam == 31
 replace nacam_label_short_en = "Repairs" if nacam == 32
@@ -205,6 +201,7 @@ replace nacam_label_short_en = "Business services" if nacam == 38
 replace nacam_label_short_en = "Education" if nacam == 40
 replace nacam_label_short_en = "Health & social work" if nacam == 41
 replace nacam_label_short_en = "Other services" if nacam == 42
+
 
 assert !missing(nacam_label_en)
 assert !missing(nacam_label_short_en)
@@ -280,3 +277,4 @@ if _rc {
 }
 
 display as result "Saved crosswalk to `out_file'"
+
