@@ -1,4 +1,4 @@
-version 18.0
+version 17.0
 set more off
 
 /*******************************************************************************
@@ -16,8 +16,10 @@ set more off
         output/tables/cmr_nacam_results_en_labels_highlights.tex
         output/figures/cmr_nacam_results_en_labels_ln_emp_density_by_year.pdf
         output/figures/cmr_nacam_results_en_labels_ln_emp_density_by_year.png
-        output/figures/cmr_nacam_results_en_labels_coefficients.pdf
-        output/figures/cmr_nacam_results_en_labels_coefficients.png
+        output/figures/cmr_nacam_results_en_labels_va_coefficients.pdf
+        output/figures/cmr_nacam_results_en_labels_va_coefficients.png
+        output/figures/cmr_nacam_results_en_labels_tot_rev_coefficients.pdf
+        output/figures/cmr_nacam_results_en_labels_tot_rev_coefficients.png
         output/figures/cmr_nacam_results_en_labels_scatter.pdf
         output/figures/cmr_nacam_results_en_labels_scatter.png
 
@@ -26,10 +28,18 @@ set more off
         code/01_setup.do so path handling stays local-first.
 *******************************************************************************/
 
-* Use the current local repo path directly for this standalone run.
-local project_root "C:/Users/wb648862/Documents/Projects/CEMAC"
+* Resolve the repository root from the current directory for standalone runs.
+local project_root = subinstr(c(pwd), "\", "/", .)
+if !fileexists("`project_root'/AGENTS.md") {
+    if fileexists("`project_root'/../../AGENTS.md") {
+        local project_root "`project_root'/../.."
+    }
+    else if fileexists("`project_root'/../AGENTS.md") {
+        local project_root "`project_root'/.."
+    }
+}
 capture noisily cd "`project_root'"
-if _rc {
+if _rc | !fileexists("AGENTS.md") {
     display as error "Expected project root not found: `project_root'"
     exit 601
 }
@@ -58,14 +68,15 @@ local output_stub "cmr_nacam_results_en_labels"
 *******************************************************************************/
 use "${DATADIR}/Analysis/CMR_BDF_cleaned.dta", clear
 
-keep firmid fin_yr nacam nacam_label_display nacam_label_short_display totemp va tot_rev
+keep firmid fin_yr nacam nacam_label_display nacam_label_short_display data_export totemp va tot_rev
 
 tempfile sector_labels
 preserve
-keep nacam nacam_label_display nacam_label_short_display
+keep nacam nacam_label_display nacam_label_short_display data_export
 drop if missing(nacam)
 bysort nacam (nacam_label_display): assert nacam_label_display == nacam_label_display[1]
 bysort nacam (nacam_label_short_display): assert nacam_label_short_display == nacam_label_short_display[1]
+bysort nacam (data_export): assert data_export == data_export[1]
 by nacam: keep if _n == 1
 isid nacam
 save "`sector_labels'"
@@ -91,50 +102,34 @@ else {
 gen double ln_emp = .
 replace ln_emp = ln(employment) if employment > 0
 
-
-**Simple scatter plot of aggregate employment and value added and total revenue. One plot for each (va, tot_rev).
-*Create a panel of latest year (2022) employment and value added and total revenue by nacam sector.
-preserve
-    gen n_firms =  1 
-    *cross sector totals by nacam - year
-    collapse (sum) employment va tot_rev n_firms, by(nacam nacam_label_short_display fin_yr)
-    *create total employment value added and total revenue by year
-    foreach outcome of varlist employment va tot_rev n_firms {
-        gen total_`outcome' = .
-        by fin_yr: replace total_`outcome' = sum(`outcome')
-    }
-    *calculate share of each sector in total employment, value added and total revenue by year
-    foreach outcome of varlist employment va tot_rev {
-        gen share_`outcome' = `outcome' / total_`outcome'
-    }
-
-
-twoway (scatter employment va, mcolor(dknavy*0.5) msymbol(circle))  ///
-    
-
-
 *** Plot the distribution of log employment by year to check for outliers and changes over time.
 twoway ///
     (kdensity ln_emp if fin_yr == 2015 & !missing(ln_emp), ///
-        lcolor("214 225 240") lwidth(medthick)) ///
+        lcolor("27 158 119") lwidth(medthick)) ///
     (kdensity ln_emp if fin_yr == 2016 & !missing(ln_emp), ///
-        lcolor("191 210 232") lwidth(medthick)) ///
+        lcolor("217 95 2") lwidth(medthick)) ///
     (kdensity ln_emp if fin_yr == 2017 & !missing(ln_emp), ///
-        lcolor("166 191 221") lwidth(medthick)) ///
+        lcolor("117 112 179") lwidth(medthick)) ///
     (kdensity ln_emp if fin_yr == 2018 & !missing(ln_emp), ///
-        lcolor("135 167 206") lwidth(medthick)) ///
+        lcolor("231 41 138") lwidth(medthick)) ///
     (kdensity ln_emp if fin_yr == 2019 & !missing(ln_emp), ///
-        lcolor("105 142 191") lwidth(medthick)) ///
+        lcolor("102 166 30") lwidth(medthick)) ///
     (kdensity ln_emp if fin_yr == 2020 & !missing(ln_emp), ///
-        lcolor("73 114 168") lwidth(medthick)) ///
+        lcolor("230 171 2") lwidth(medthick)) ///
     (kdensity ln_emp if fin_yr == 2021 & !missing(ln_emp), ///
-        lcolor("42 83 140") lwidth(medthick)) ///
+        lcolor("166 118 29") lwidth(medthick)) ///
     (kdensity ln_emp if fin_yr == 2022 & !missing(ln_emp), ///
-        lcolor("18 52 86") lwidth(medthick)), ///
-    legend(order(1 "2015" 8 "2022") cols(2) pos(6)) ///
-    xtitle("Log employment") ///
-    ytitle("Density") ///
-    title("Log employment distribution by fiscal year")
+        lcolor("102 102 102") lwidth(medthick)), ///
+    legend(order(1 "2015" 2 "2016" 3 "2017" 4 "2018" ///
+        5 "2019" 6 "2020" 7 "2021" 8 "2022") ///
+        rows(2) pos(6) size(small) region(lcolor(none) fcolor(none))) ///
+    xlabel(, grid glpattern(dash) glcolor(gs13)) ///
+    ylabel(, grid glpattern(dash) glcolor(gs13)) ///
+    xtitle("Log employment", size(small)) ///
+    ytitle("Density", size(small)) ///
+    title("Log employment distribution by fiscal year", size(medsmall)) ///
+    plotregion(color(white)) graphregion(color(white)) ///
+    bgcolor(white) xsize(7.5) ysize(4.8)
 
     graph export "output/figures/`output_stub'_ln_emp_density_by_year.pdf", replace
     graph export "output/figures/`output_stub'_ln_emp_density_by_year.png", replace
@@ -391,10 +386,13 @@ esttab matrix(highlight_table, fmt(%9.3f %9.3f %9.0fc %9.0fc)) ///
 restore
 
 /*******************************************************************************
-    Coefficient plot across sectors
-    - Plot point estimates and 95% confidence intervals for both models on the
-      same horizontal chart.
+    Coefficient plots across sectors
+    - Plot point estimates and 95% confidence intervals separately for value
+      added and total revenue.
+    - Colors identify the label-based data_export aggregate sector group.
 *******************************************************************************/
+preserve
+gsort -va_elasticity nacam
 generate int plot_order = _n
 
 capture label drop nacam_sector_plot
@@ -415,21 +413,105 @@ forvalues i = 1/`plot_n' {
 label values plot_order nacam_sector_plot
 
 twoway ///
-    (rcap va_lb va_ub plot_order, horizontal lcolor(navy%45)) ///
-    (scatter plot_order va_elasticity, msymbol(circle) mcolor(navy)) ///
-    (rcap tot_rev_lb tot_rev_ub plot_order, horizontal lcolor(maroon%45)) ///
-    (scatter plot_order tot_rev_elasticity, msymbol(diamond) mcolor(maroon)), ///
-    ylabel(1(1)`plot_n', valuelabel angle(0) labsize(small)) ///
+    (rcap va_lb va_ub plot_order if data_export == "A – Agriculture, Forestry and Fishing", horizontal lcolor("102 194 165")) ///
+    (scatter plot_order va_elasticity if data_export == "A – Agriculture, Forestry and Fishing", msymbol(circle) mcolor("27 158 119")) ///
+    (rcap va_lb va_ub plot_order if data_export == "B – Mining and Quarrying", horizontal lcolor("190 174 212")) ///
+    (scatter plot_order va_elasticity if data_export == "B – Mining and Quarrying", msymbol(diamond) mcolor("117 112 179")) ///
+    (rcap va_lb va_ub plot_order if data_export == "C – Manufacturing", horizontal lcolor("141 160 203")) ///
+    (scatter plot_order va_elasticity if data_export == "C – Manufacturing", msymbol(square) mcolor("44 123 182")) ///
+    (rcap va_lb va_ub plot_order if data_export == "Utilities", horizontal lcolor("252 217 142")) ///
+    (scatter plot_order va_elasticity if data_export == "Utilities", msymbol(triangle) mcolor("230 171 2")) ///
+    (rcap va_lb va_ub plot_order if data_export == "F – Construction", horizontal lcolor("231 138 195")) ///
+    (scatter plot_order va_elasticity if data_export == "F – Construction", msymbol(Oh) mcolor("208 28 139")) ///
+    (rcap va_lb va_ub plot_order if data_export == "G – Wholesale and Retail Trade; Repair of Motor Vehicles", horizontal lcolor("247 194 145")) ///
+    (scatter plot_order va_elasticity if data_export == "G – Wholesale and Retail Trade; Repair of Motor Vehicles", msymbol(Th) mcolor("217 95 2")) ///
+    (rcap va_lb va_ub plot_order if data_export == "H – Transportation and Storage", horizontal lcolor("179 222 105")) ///
+    (scatter plot_order va_elasticity if data_export == "H – Transportation and Storage", msymbol(Sh) mcolor("102 166 30")) ///
+    (rcap va_lb va_ub plot_order if data_export == "J – Information and Communication", horizontal lcolor("166 216 84")) ///
+    (scatter plot_order va_elasticity if data_export == "J – Information and Communication", msymbol(plus) mcolor("102 166 30")) ///
+    (rcap va_lb va_ub plot_order if data_export == "K – Financial and Insurance Activities", horizontal lcolor("188 128 189")) ///
+    (scatter plot_order va_elasticity if data_export == "K – Financial and Insurance Activities", msymbol(x) mcolor("117 112 179")) ///
+    (rcap va_lb va_ub plot_order if data_export == "Other services", horizontal lcolor("190 190 190")) ///
+    (scatter plot_order va_elasticity if data_export == "Other services", msymbol(Dh) mcolor("102 102 102")), ///
+    ylabel(1(1)`plot_n', valuelabel angle(0) labsize(tiny) nogrid) ///
+    xlabel(, grid glpattern(dash) glcolor(gs13)) ///
     yscale(reverse) ///
-    xline(0, lpattern(dash) lcolor(gs10)) ///
-    legend(order(2 "Value added" 4 "Total revenue") row(2)) ///
-    ytitle("NACAM sector") ///
-    xtitle("Employment elasticity") ///
-    title("Sectoral employment elasticities wrt Revenue") ///
-    note("Sectors shown meet the minimum firm and  observation thresholds in both models.")
+    xline(0, lpattern(dash) lcolor(black)) ///
+    legend(order(2 "Agriculture" 4 "Mining" 6 "Manufacturing" 8 "Utilities" ///
+        10 "Construction" 12 "Trade/repair" 14 "Transport" 16 "ICT" ///
+        18 "Finance" 20 "Other services") cols(1) pos(3) ring(1) size(tiny) ///
+        region(lcolor(none) fcolor(none))) ///
+    ytitle("") ///
+    xtitle("Employment elasticity", size(small)) ///
+    title("Employment elasticities with respect to value added", size(medsmall)) ///
+    plotregion(color(white)) graphregion(color(white)) ///
+    bgcolor(white) xsize(7.5) ysize(5.5)
 
-graph export "output/figures/`output_stub'_coefficients.pdf", replace
-graph export "output/figures/`output_stub'_coefficients.png", replace
+graph export "output/figures/`output_stub'_va_coefficients.pdf", replace
+graph export "output/figures/`output_stub'_va_coefficients.png", replace
+
+restore
+
+preserve
+gsort -tot_rev_elasticity nacam
+generate int plot_order = _n
+
+capture label drop nacam_sector_plot
+quietly count
+local plot_n = r(N)
+
+forvalues i = 1/`plot_n' {
+    local sector_label = subinstr(nacam_label_short_display[`i'], char(34), "'", .)
+
+    if `i' == 1 {
+        label define nacam_sector_plot `i' `"`sector_label'"'
+    }
+    else {
+        label define nacam_sector_plot `i' `"`sector_label'"', modify
+    }
+}
+
+label values plot_order nacam_sector_plot
+
+twoway ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "A – Agriculture, Forestry and Fishing", horizontal lcolor("102 194 165")) ///
+    (scatter plot_order tot_rev_elasticity if data_export == "A – Agriculture, Forestry and Fishing", msymbol(circle) mcolor("27 158 119")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "B – Mining and Quarrying", horizontal lcolor("190 174 212")) ///
+    (scatter plot_order tot_rev_elasticity if data_export == "B – Mining and Quarrying", msymbol(diamond) mcolor("117 112 179")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "C – Manufacturing", horizontal lcolor("141 160 203")) ///
+    (scatter plot_order tot_rev_elasticity if data_export == "C – Manufacturing", msymbol(square) mcolor("44 123 182")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "Utilities", horizontal lcolor("252 217 142")) ///
+    (scatter plot_order tot_rev_elasticity if data_export == "Utilities", msymbol(triangle) mcolor("230 171 2")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "F – Construction", horizontal lcolor("231 138 195")) ///
+    (scatter plot_order tot_rev_elasticity if data_export == "F – Construction", msymbol(Oh) mcolor("208 28 139")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "G – Wholesale and Retail Trade; Repair of Motor Vehicles", horizontal lcolor("247 194 145")) ///
+    (scatter plot_order tot_rev_elasticity if data_export == "G – Wholesale and Retail Trade; Repair of Motor Vehicles", msymbol(Th) mcolor("217 95 2")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "H – Transportation and Storage", horizontal lcolor("179 222 105")) ///
+    (scatter plot_order tot_rev_elasticity if data_export == "H – Transportation and Storage", msymbol(Sh) mcolor("102 166 30")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "J – Information and Communication", horizontal lcolor("166 216 84")) ///
+    (scatter plot_order tot_rev_elasticity if data_export == "J – Information and Communication", msymbol(plus) mcolor("102 166 30")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "K – Financial and Insurance Activities", horizontal lcolor("188 128 189")) ///
+    (scatter plot_order tot_rev_elasticity if data_export == "K – Financial and Insurance Activities", msymbol(x) mcolor("117 112 179")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "Other services", horizontal lcolor("190 190 190")) ///
+    (scatter plot_order tot_rev_elasticity if data_export == "Other services", msymbol(Dh) mcolor("102 102 102")), ///
+    ylabel(1(1)`plot_n', valuelabel angle(0) labsize(tiny) nogrid) ///
+    xlabel(, grid glpattern(dash) glcolor(gs13)) ///
+    yscale(reverse) ///
+    xline(0, lpattern(dash) lcolor(black)) ///
+    legend(order(2 "Agriculture" 4 "Mining" 6 "Manufacturing" 8 "Utilities" ///
+        10 "Construction" 12 "Trade/repair" 14 "Transport" 16 "ICT" ///
+        18 "Finance" 20 "Other services") cols(1) pos(3) ring(1) size(tiny) ///
+        region(lcolor(none) fcolor(none))) ///
+    ytitle("") ///
+    xtitle("Employment elasticity", size(small)) ///
+    title("Employment elasticities with respect to total revenue", size(medsmall)) ///
+    plotregion(color(white)) graphregion(color(white)) ///
+    bgcolor(white) xsize(7.5) ysize(5.5)
+
+graph export "output/figures/`output_stub'_tot_rev_coefficients.pdf", replace
+graph export "output/figures/`output_stub'_tot_rev_coefficients.png", replace
+
+restore
 
 /*******************************************************************************
     Cross-model scatter plot
@@ -448,16 +530,50 @@ local diagonal_min = min(`x_min', `y_min')
 local diagonal_max = max(`x_max', `y_max')
 
 twoway ///
-    (function y = x, range(`diagonal_min' `diagonal_max') lpattern(dash) lcolor(gs10)) ///
-    (scatter tot_rev_elasticity va_elasticity, ///
-        msymbol(circle) mcolor(navy%45) ///
-        mlabcolor(black) mlabel(nacam_label_short_display) mlabsize(vsmall)), ///
-    xline(0, lpattern(dash) lcolor(gs10)) ///
-    yline(0, lpattern(dash) lcolor(gs10)) ///
-    xtitle("Value added elasticity") ///
-    ytitle("Total revenue elasticity") ///
-    title("Cross-sector consistency in employment elasticities") ///
-    legend(off)
+    (function y = x, range(`diagonal_min' `diagonal_max') lpattern(dash) lcolor(gs8)) ///
+    (scatter tot_rev_elasticity va_elasticity if data_export == "A – Agriculture, Forestry and Fishing", ///
+        msymbol(circle) mcolor("27 158 119") mlabcolor(black) ///
+        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
+    (scatter tot_rev_elasticity va_elasticity if data_export == "B – Mining and Quarrying", ///
+        msymbol(diamond) mcolor("117 112 179") mlabcolor(black) ///
+        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
+    (scatter tot_rev_elasticity va_elasticity if data_export == "C – Manufacturing", ///
+        msymbol(square) mcolor("44 123 182") mlabcolor(black) ///
+        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
+    (scatter tot_rev_elasticity va_elasticity if data_export == "Utilities", ///
+        msymbol(triangle) mcolor("230 171 2") mlabcolor(black) ///
+        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
+    (scatter tot_rev_elasticity va_elasticity if data_export == "F – Construction", ///
+        msymbol(Oh) mcolor("208 28 139") mlabcolor(black) ///
+        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
+    (scatter tot_rev_elasticity va_elasticity if data_export == "G – Wholesale and Retail Trade; Repair of Motor Vehicles", ///
+        msymbol(Th) mcolor("217 95 2") mlabcolor(black) ///
+        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
+    (scatter tot_rev_elasticity va_elasticity if data_export == "H – Transportation and Storage", ///
+        msymbol(Sh) mcolor("102 166 30") mlabcolor(black) ///
+        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
+    (scatter tot_rev_elasticity va_elasticity if data_export == "J – Information and Communication", ///
+        msymbol(plus) mcolor("102 166 30") mlabcolor(black) ///
+        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
+    (scatter tot_rev_elasticity va_elasticity if data_export == "K – Financial and Insurance Activities", ///
+        msymbol(x) mcolor("117 112 179") mlabcolor(black) ///
+        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
+    (scatter tot_rev_elasticity va_elasticity if data_export == "Other services", ///
+        msymbol(Dh) mcolor("102 102 102") mlabcolor(black) ///
+        mlabel(nacam_label_short_display) mlabsize(vsmall)), ///
+    xline(0, lpattern(dash) lcolor(black)) ///
+    yline(0, lpattern(dash) lcolor(black)) ///
+    xlabel(, grid glpattern(dash) glcolor(gs13)) ///
+    ylabel(, grid glpattern(dash) glcolor(gs13)) ///
+    xtitle("Value added elasticity", size(small)) ///
+    ytitle("Total revenue elasticity", size(small)) ///
+    title("Cross-sector consistency in employment elasticities", size(medsmall)) ///
+    legend(order(2 "Agriculture" 3 "Mining" 4 "Manufacturing" 5 "Utilities" ///
+        6 "Construction" 7 "Trade/repair" 8 "Transport" 9 "ICT" ///
+        10 "Finance" 11 "Other services") cols(1) pos(3) ring(1) size(tiny) ///
+        region(lcolor(none) fcolor(none))) ///
+    plotregion(color(white)) graphregion(color(white)) ///
+    bgcolor(white) xsize(7.5) ysize(5.5)
 
 graph export "output/figures/`output_stub'_scatter.pdf", replace
 graph export "output/figures/`output_stub'_scatter.png", replace

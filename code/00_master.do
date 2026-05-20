@@ -1,4 +1,4 @@
-version 18.0
+version 17.0
 clear all
 set more off
 
@@ -34,6 +34,7 @@ display as text "Current stage: NACAM crosswalk construction, repository validat
 
 * 2. Variable construction
 do "${CODEDIR}/02_construct/01_nacam_isic_crosswalk.do"
+do "${CODEDIR}/02_construct/02_nacam_data_export_mapping.do"
 
 * 3. Analysis
 * do "${CODEDIR}/03_analysis/..."

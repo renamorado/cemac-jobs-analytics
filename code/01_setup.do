@@ -1,4 +1,4 @@
-version 18.0
+version 17.0
 set more off
 
 /*******************************************************************************
@@ -94,17 +94,23 @@ if _rc {
     Baseline data checks
 *******************************************************************************/
 
-if !direxists("${CAMEROONDIR}/Raw") {
+local current_dir = c(pwd)
+
+capture noisily cd "${CAMEROONDIR}/Raw"
+if _rc {
     display as error "Expected folder missing: ${CAMEROONDIR}/Raw"
     display as error "Copy the Cameroon raw data from the archived OneDrive backup into this local repo before running the pipeline."
     error 693
 }
+quietly cd "`current_dir'"
 
-if !direxists("${CAMEROONDIR}/Clean") {
+capture noisily cd "${CAMEROONDIR}/Clean"
+if _rc {
     display as error "Expected folder missing: ${CAMEROONDIR}/Clean"
     display as error "Copy the Cameroon cleaned data from the archived OneDrive backup into this local repo before running the pipeline."
     error 693
 }
+quietly cd "`current_dir'"
 
 display as text "Project root set to ${PROJECT_ROOT}"
 display as text "Cameroon folder structure verified."

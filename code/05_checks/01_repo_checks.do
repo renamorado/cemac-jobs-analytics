@@ -1,4 +1,4 @@
-version 18.0
+version 17.0
 set more off
 
 /*******************************************************************************
@@ -15,6 +15,8 @@ set more off
 
 display as text "Running repository structure checks..."
 
+local current_dir = c(pwd)
+
 foreach dir in ///
     "${CODEDIR}/01_data_prep" ///
     "${CODEDIR}/02_construct" ///
@@ -30,7 +32,12 @@ foreach dir in ///
     "${LOGDIR}" ///
     "${MANUSCRIPTDIR}" ///
     "${SLIDESDIR}" {
-    assert direxists("`dir'")
+    capture noisily cd "`dir'"
+    if _rc {
+        display as error "Expected directory missing: `dir'"
+        error 693
+    }
+    quietly cd "`current_dir'"
 }
 
 display as result "Repository directories verified."

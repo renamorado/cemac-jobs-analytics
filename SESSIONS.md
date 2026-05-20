@@ -1,5 +1,209 @@
 # SESSIONS.md
 
+## 2026-05-19 - Split NACAM elasticity coefficient plots by outcome proxy
+
+### Objective
+
+Separate the standalone NACAM elasticity coefficient plots into value-added and total-revenue figures, using a documented NACAM-label-based `data_export` grouping for plot colors.
+
+### Files created or modified
+
+- `code/02_construct/02_nacam_data_export_mapping.do`
+- `code/00_master.do`
+- `code/01_setup.do`
+- `code/02_construct/01_nacam_isic_crosswalk.do`
+- `code/03_analysis/01_cmr_nacam_elasticity.do`
+- `code/03_analysis/99_run_cmr_nacam_elasticity_batch.do`
+- `code/05_checks/01_repo_checks.do`
+- `code/05_checks/02_cmr_bdf_cleaning.do`
+- `slides/cmr_main_results_beamer.tex`
+- `slides/cmr_main_results_beamer.pdf`
+- `Data/Intermediate/cmr_nacam_data_export_mapping.dta`
+- `Data/Intermediate/cmr_nacam_data_export_mapping.xlsx`
+- `Data/Analysis/CMR_BDF_cleaned.dta`
+- `output/figures/cmr_nacam_results_en_labels_va_coefficients.{pdf,png}`
+- `output/figures/cmr_nacam_results_en_labels_tot_rev_coefficients.{pdf,png}`
+- `tasks/2026-05-19_marina_meeting_tasks.md`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Made `code/02_construct/02_nacam_data_export_mapping.do` the source of truth for `data_export`; the Excel workbook is generated as a review/audit artifact.
+- Assigned `data_export` from the legacy NACAM label rather than mechanically from the ISIC crosswalk, because several NACAM branches span multiple ISIC divisions.
+- Validated the assigned group names against `Data/Intermediate/data_export.xlsx`.
+- Split the former combined coefficient figure into explicit `va_coefficients` and `tot_rev_coefficients` outputs and updated the Beamer deck to reference both.
+- Lowered active pipeline do-file declarations from `version 18.0` to `version 17.0` and replaced `direxists()` checks so the project runs with the installed local Stata 17 runtime.
+
+### Verification
+
+- Ran `code/00_master.do` successfully with Stata 17; it regenerated the crosswalk, `data_export` mapping, and `Data/Analysis/CMR_BDF_cleaned.dta`.
+- Confirmed `data_export` is nonmissing for all nonmissing NACAM observations in the cleaned analysis dataset.
+- Ran `code/03_analysis/99_run_cmr_nacam_elasticity_batch.do verify_20260519_split_polished` successfully.
+- Confirmed the new value-added and total-revenue coefficient PNG/PDF files were written under `output/figures/`.
+- Recompiled `slides/cmr_main_results_beamer.pdf` with Tectonic after refreshing the figures.
+
+### Warnings and next steps
+
+- `output/slides/cmr_main_results_beamer.pdf` could not be overwritten because Acrobat appears to hold a lock on that file; `slides/cmr_main_results_beamer.pdf` was refreshed successfully.
+- Tectonic required a fresh cache under `C:/Users/User/Documents/Codex/tectonic-cache-cemac-fresh` because the default local cache was inaccessible in the sandbox.
+
+## 2026-05-19 - Updated split elasticity plots toward Stata 19 style
+
+### Objective
+
+Make the newly split value-added and total-revenue coefficient plots visually closer to Stata 19's default `stcolor` graph style while keeping the pipeline runnable in local Stata 17.
+
+### Files modified
+
+- `code/03_analysis/01_cmr_nacam_elasticity.do`
+- `output/figures/cmr_nacam_results_en_labels_va_coefficients.{pdf,png}`
+- `output/figures/cmr_nacam_results_en_labels_tot_rev_coefficients.{pdf,png}`
+- `slides/cmr_main_results_beamer.pdf`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Mimicked the Stata 19 look with explicit Stata 17 graph options: white graph and plot regions, dashed major x-grid lines, black zero reference line, compact horizontal y labels, smaller markers, and a right-side one-column legend.
+- Kept the existing label-based `data_export` colors and split `va` / `tot_rev` figure names unchanged.
+
+### Verification
+
+- Ran `code/03_analysis/99_run_cmr_nacam_elasticity_batch.do verify_20260519_stata19_style` successfully.
+- Viewed both refreshed coefficient PNGs to confirm the plot labels, legend, and confidence intervals are readable.
+- Recompiled `slides/cmr_main_results_beamer.pdf` with the refreshed figures.
+
+## 2026-05-20 - Switched split elasticity plots to colorblind-safe colors and symbols
+
+### Objective
+
+Make the `data_export` groups distinguishable by both color and marker shape in the split value-added and total-revenue coefficient plots.
+
+### Files modified
+
+- `code/03_analysis/01_cmr_nacam_elasticity.do`
+- `output/figures/cmr_nacam_results_en_labels_va_coefficients.{pdf,png}`
+- `output/figures/cmr_nacam_results_en_labels_tot_rev_coefficients.{pdf,png}`
+- `slides/cmr_main_results_beamer.pdf`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Replaced the previous color set with a colorblind-safer ColorBrewer-style palette.
+- Assigned distinct marker symbols to each aggregate `data_export` group so the legend and plotted points remain interpretable without relying only on color.
+- Kept the Stata 19-style white background, dashed x-grid, black zero line, and right-side legend.
+
+### Verification
+
+- Ran `code/03_analysis/99_run_cmr_nacam_elasticity_batch.do verify_20260519_cb_symbols` successfully on May 20, 2026.
+- Viewed both refreshed coefficient PNGs and confirmed that colors and symbols are distinguishable.
+- Recompiled `slides/cmr_main_results_beamer.pdf`; `output/slides/cmr_main_results_beamer.pdf` remained locked and could not be overwritten.
+
+## 2026-05-20 - Sorted split elasticity plots by their own outcome measure
+
+### Objective
+
+Order each split NACAM coefficient figure by the elasticity measure shown in that figure, rather than reusing one common sector ordering across value added and total revenue.
+
+### Files modified
+
+- `code/03_analysis/01_cmr_nacam_elasticity.do`
+- `output/figures/cmr_nacam_results_en_labels_va_coefficients.{pdf,png}`
+- `output/figures/cmr_nacam_results_en_labels_tot_rev_coefficients.{pdf,png}`
+- `slides/cmr_main_results_beamer.pdf`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Sorted the value-added coefficient figure by `va_elasticity`.
+- Sorted the total-revenue coefficient figure by `tot_rev_elasticity`.
+- Kept `nacam` as the deterministic tie-breaker for both figures.
+- Preserved the colorblind-safe colors, marker symbols, and Stata 19-style graph formatting from the prior update.
+
+### Verification
+
+- Ran `code/03_analysis/99_run_cmr_nacam_elasticity_batch.do verify_20260520_measure_sort` successfully.
+- Viewed both refreshed coefficient PNGs and confirmed that the sector order differs where the two measures imply different rankings.
+- Recompiled `slides/cmr_main_results_beamer.pdf`; `output/slides/cmr_main_results_beamer.pdf` remained locked and could not be overwritten.
+
+### Follow-up
+
+- Recompiled the Beamer deck again on May 20, 2026 with Tectonic.
+- Refreshed both `slides/cmr_main_results_beamer.pdf` and `output/slides/cmr_main_results_beamer.pdf`; the output copy was no longer locked.
+
+## 2026-05-20 - Applied Stata 19-style formatting to all NACAM plots
+
+### Objective
+
+Bring the remaining NACAM figures into the same Stata 19-like visual style already used for the split coefficient plots.
+
+### Files modified
+
+- `code/03_analysis/01_cmr_nacam_elasticity.do`
+- `output/figures/cmr_nacam_results_en_labels_ln_emp_density_by_year.{pdf,png}`
+- `output/figures/cmr_nacam_results_en_labels_scatter.{pdf,png}`
+- `output/figures/cmr_nacam_results_en_labels_va_coefficients.{pdf,png}`
+- `output/figures/cmr_nacam_results_en_labels_tot_rev_coefficients.{pdf,png}`
+- `slides/cmr_main_results_beamer.pdf`
+- `output/slides/cmr_main_results_beamer.pdf`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Updated the log-employment density plot with a white background, dashed grid lines, cleaner legend, and colorblind-safe year colors.
+- Updated the cross-model scatter with the same white-background/dashed-grid treatment and the aggregate-sector colors and marker symbols used in the coefficient plots.
+- Kept the sector labels in the cross-model scatter for continuity with the existing figure.
+
+### Verification
+
+- Ran `code/03_analysis/99_run_cmr_nacam_elasticity_batch.do verify_20260520_all_stata19_style` successfully.
+- Viewed all four refreshed PNG figures to confirm they render and share the updated visual style.
+- Recompiled the Beamer deck with Tectonic and refreshed both slide PDF copies.
+
+## 2026-05-19 - Added Marina meeting task register
+
+### Objective
+
+Create a dedicated tasks folder and capture the follow-up implementation tasks from a recent meeting with Marina.
+
+### Files created or modified
+
+- `tasks/2026-05-19_marina_meeting_tasks.md`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Created a dated meeting-task note under `tasks/` rather than modifying the existing root `TASKS.md`.
+- Recorded the output-tracking item as a future Git policy task instead of immediately changing `.gitignore`.
+- Kept the task language tied to the current Stata-first Cameroon/CEMAC workflow, including duplicate robustness checks, separated revenue/value-added elasticity plots, WBES/CEMAC trade scaffold adaptation, and total-revenue elasticity decile tables.
+
+### Next steps
+
+- Prioritize which Marina task should be implemented first.
+- If output tracking is selected, update `.gitignore` deliberately and choose the exact generated table/figure/PDF set to track.
+
+## 2026-05-19 - Revised generated-output tracking policy
+
+### Objective
+
+Allow selected generated outputs needed for review and presentation to appear in Git instead of hiding the full `output/` tree.
+
+### Files modified
+
+- `.gitignore`
+- `README.md`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Chose a curated tracking policy rather than tracking every generated artifact.
+- Allowed LaTeX table fragments under `output/tables/`, plus PDF and PNG files anywhere under `output/`, because those are the review and presentation formats currently used by the Stata and Beamer workflow.
+- Continued ignoring LaTeX build byproducts, logs, temporary files, generated data, and `_codex_write_test.*` files.
+
+### Verification
+
+- Confirmed before the change that current output tables, figures, and the Beamer PDF were hidden by `.gitignore`.
+- Confirmed after the change that table `.tex`, output `.pdf`, and output `.png` files appear as untracked candidates, while LaTeX build byproducts and `_codex_write_test.*` files remain ignored.
+
 ## 2026-04-06 - Repository guidance setup
 
 ### Objective

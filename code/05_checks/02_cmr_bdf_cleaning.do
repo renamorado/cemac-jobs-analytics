@@ -1,4 +1,4 @@
-version 18.0
+version 17.0
 set more off
 
 /*******************************************************************************
@@ -187,6 +187,14 @@ merge m:1 nacam using "${DATADIR}/Intermediate/cmr_bdf_nacam_isic_crosswalk.dta"
 assert _merge == 3 if !missing(nacam)
 drop _merge
 assert !missing(nacam_label, nacam_label_en, nacam_label_short_en) if !missing(nacam)
+
+* Attach the label-based aggregate sector group used for figure colors.
+confirm file "${DATADIR}/Intermediate/cmr_nacam_data_export_mapping.dta"
+merge m:1 nacam using "${DATADIR}/Intermediate/cmr_nacam_data_export_mapping.dta", ///
+    keep(master match) keepusing(data_export)
+assert _merge == 3 if !missing(nacam)
+drop _merge
+assert !missing(data_export) if !missing(nacam)
 
 * Build display labels here so downstream analysis only reads prepared fields.
 generate str180 nacam_label_display = ""
