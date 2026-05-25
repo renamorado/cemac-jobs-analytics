@@ -387,31 +387,119 @@ isid nacam
 
 save "`diagnostics_out'", replace
 
-graph hbar firms, ///
-    over(nacam_label_short_display, sort(firms) descending label(labsize(vsmall))) ///
-    ytitle("Headquarters firms", size(small)) ///
-    title("Census firm counts by NACAM sector", size(medsmall)) ///
-    bar(1, color("44 123 182")) ///
-    plotregion(color(white)) graphregion(color(white)) bgcolor(white) ///
-    ysize(6.2) xsize(7.5)
+capture program drop cmr_census_colored_dotplot
+program define cmr_census_colored_dotplot
+    version 17.0
+    syntax varname(numeric) [if], Title(string asis) XTitle(string asis) ///
+        Name(name) [LABSZ(string) TITLESZ(string) XDIM(string) ///
+        YDIM(string) LEGENDOFF]
+
+    marksample touse
+
+    if "`labsz'" == "" {
+        local labsz "vsmall"
+    }
+    if "`titlesz'" == "" {
+        local titlesz "medsmall"
+    }
+    if "`xdim'" == "" {
+        local xdim "7.5"
+    }
+    if "`ydim'" == "" {
+        local ydim "6.2"
+    }
+
+    if "`legendoff'" == "legendoff" {
+        local legend_options legend(off)
+    }
+    else {
+        local legend_options ///
+            legend(order(1 "Agriculture" 2 "Mining" 3 "Manufacturing" ///
+                4 "Utilities" 5 "Construction" 6 "Wholesale/Retail" ///
+                7 "Transport" 8 "Information" 9 "Finance" ///
+                10 "Other services") cols(1) pos(3) ring(1) size(tiny) ///
+                region(lcolor(none) fcolor(none)))
+    }
+
+    preserve
+    keep if `touse'
+    keep if !missing(`varlist')
+    count
+    if r(N) == 0 {
+        display as error "No nonmissing observations for `varlist'."
+        exit 2000
+    }
+
+    gsort -`varlist' nacam
+    generate int plot_order = _n
+
+    capture label drop census_sector_plot
+    forvalues i = 1/`=_N' {
+        local sector_label = subinstr(nacam_label_short_display[`i'], char(34), "'", .)
+        if `i' == 1 {
+            label define census_sector_plot `i' `"`sector_label'"'
+        }
+        else {
+            label define census_sector_plot `i' `"`sector_label'"', modify
+        }
+    }
+    label values plot_order census_sector_plot
+
+    local last_order = _N
+
+    twoway ///
+        (scatter plot_order `varlist' if data_export == "A – Agriculture, Forestry and Fishing", ///
+            msymbol(circle) mcolor("27 158 119") msize(medlarge)) ///
+        (scatter plot_order `varlist' if data_export == "B – Mining and Quarrying", ///
+            msymbol(diamond) mcolor("117 112 179") msize(medlarge)) ///
+        (scatter plot_order `varlist' if data_export == "C – Manufacturing", ///
+            msymbol(square) mcolor("44 123 182") msize(medlarge)) ///
+        (scatter plot_order `varlist' if data_export == "Utilities", ///
+            msymbol(triangle) mcolor("230 171 2") msize(medlarge)) ///
+        (scatter plot_order `varlist' if data_export == "F – Construction", ///
+            msymbol(Oh) mcolor("208 28 139") msize(medlarge)) ///
+        (scatter plot_order `varlist' if data_export == "G – Wholesale and Retail Trade; Repair of Motor Vehicles", ///
+            msymbol(Th) mcolor("217 95 2") msize(medlarge)) ///
+        (scatter plot_order `varlist' if data_export == "H – Transportation and Storage", ///
+            msymbol(Sh) mcolor("102 166 30") msize(medlarge)) ///
+        (scatter plot_order `varlist' if data_export == "J – Information and Communication", ///
+            msymbol(plus) mcolor("102 166 30") msize(medlarge)) ///
+        (scatter plot_order `varlist' if data_export == "K – Financial and Insurance Activities", ///
+            msymbol(x) mcolor("117 112 179") msize(medlarge)) ///
+        (scatter plot_order `varlist' if data_export == "Other services", ///
+            msymbol(Dh) mcolor("102 102 102") msize(medlarge)), ///
+        ylabel(1(1)`last_order', valuelabel angle(horizontal) ///
+            labsize(`labsz') noticks) ///
+        yscale(reverse) ///
+        xlabel(, grid glpattern(dash) glcolor(gs13)) ///
+        xtitle(`xtitle', size(small)) ///
+        ytitle("") ///
+        title(`title', size(`titlesz')) ///
+        `legend_options' ///
+        plotregion(color(white)) graphregion(color(white)) bgcolor(white) ///
+        ysize(`ydim') xsize(`xdim') name(`name', replace)
+    restore
+end
+
+cmr_census_colored_dotplot firms, ///
+    title("Census firm counts by NACAM sector") ///
+    xtitle("Headquarters firms") ///
+    name(census_firms) labsz(tiny) titlesz(medsmall) ///
+    ydim(6.2) xdim(7.5)
 graph export "${OUTPUTDIR}/figures/cmr_census_firm_count_by_nacam.pdf", replace
 graph export "${OUTPUTDIR}/figures/cmr_census_firm_count_by_nacam.png", replace
 
-graph hbar log_total_employment if !missing(log_total_employment), ///
-    over(nacam_label_short_display, sort(log_total_employment) descending label(labsize(tiny))) ///
-    ytitle("Log total employment", size(vsmall)) ///
-    title("Aggregate sector total", size(small)) ///
-    bar(1, color("27 158 119")) ///
-    plotregion(color(white)) graphregion(color(white)) bgcolor(white) ///
-    ysize(6.2) xsize(4.2) name(census_emp_total, replace)
+cmr_census_colored_dotplot log_total_employment if !missing(log_total_employment), ///
+    title("Aggregate sector total") ///
+    xtitle("Log total employment") ///
+    name(census_emp_total) labsz(tiny) titlesz(small) ///
+    ydim(6.2) xdim(4.2) legendoff
 
-graph hbar log_average_employment if !missing(log_average_employment), ///
-    over(nacam_label_short_display, sort(log_average_employment) descending label(labsize(tiny))) ///
-    ytitle("Log average firm employment", size(vsmall)) ///
-    title("Sector firm average", size(small)) ///
-    bar(1, color("27 158 119")) ///
-    plotregion(color(white)) graphregion(color(white)) bgcolor(white) ///
-    ysize(6.2) xsize(4.2) name(census_emp_average, replace)
+cmr_census_colored_dotplot log_average_employment if !missing(log_average_employment), ///
+    title("Sector firm average") ///
+    xtitle("Log average firm employment") ///
+    name(census_emp_average) labsz(tiny) titlesz(small) ///
+    ydim(6.2) xdim(4.2) legendoff
 
 graph combine census_emp_total census_emp_average, ///
     cols(2) title("Census log employment by NACAM sector", size(medsmall)) ///
@@ -421,21 +509,17 @@ graph display census_emp_combined
 graph export "${OUTPUTDIR}/figures/cmr_census_total_employment_by_nacam.pdf", replace
 graph export "${OUTPUTDIR}/figures/cmr_census_total_employment_by_nacam.png", replace
 
-graph hbar log_total_revenue if !missing(log_total_revenue), ///
-    over(nacam_label_short_display, sort(log_total_revenue) descending label(labsize(tiny))) ///
-    ytitle("Log total annual revenue", size(vsmall)) ///
-    title("Aggregate sector total", size(small)) ///
-    bar(1, color("117 112 179")) ///
-    plotregion(color(white)) graphregion(color(white)) bgcolor(white) ///
-    ysize(6.2) xsize(4.2) name(census_rev_total, replace)
+cmr_census_colored_dotplot log_total_revenue if !missing(log_total_revenue), ///
+    title("Aggregate sector total") ///
+    xtitle("Log total annual revenue") ///
+    name(census_rev_total) labsz(tiny) titlesz(small) ///
+    ydim(6.2) xdim(4.2) legendoff
 
-graph hbar log_average_revenue if !missing(log_average_revenue), ///
-    over(nacam_label_short_display, sort(log_average_revenue) descending label(labsize(tiny))) ///
-    ytitle("Log average firm annual revenue", size(vsmall)) ///
-    title("Sector firm average", size(small)) ///
-    bar(1, color("117 112 179")) ///
-    plotregion(color(white)) graphregion(color(white)) bgcolor(white) ///
-    ysize(6.2) xsize(4.2) name(census_rev_average, replace)
+cmr_census_colored_dotplot log_average_revenue if !missing(log_average_revenue), ///
+    title("Sector firm average") ///
+    xtitle("Log average firm annual revenue") ///
+    name(census_rev_average) labsz(tiny) titlesz(small) ///
+    ydim(6.2) xdim(4.2) legendoff
 
 graph combine census_rev_total census_rev_average, ///
     cols(2) title("Census log annual revenue by NACAM sector", size(medsmall)) ///
@@ -445,32 +529,27 @@ graph display census_rev_combined
 graph export "${OUTPUTDIR}/figures/cmr_census_total_revenue_by_nacam.pdf", replace
 graph export "${OUTPUTDIR}/figures/cmr_census_total_revenue_by_nacam.png", replace
 
-graph hbar average_employment, ///
-    over(nacam_label_short_display, sort(average_employment) descending label(labsize(vsmall))) ///
-    ytitle("Average employment", size(small)) ///
-    title("Census average employment by NACAM sector", size(medsmall)) ///
-    bar(1, color("217 95 2")) ///
-    plotregion(color(white)) graphregion(color(white)) bgcolor(white) ///
-    ysize(6.2) xsize(7.5)
+cmr_census_colored_dotplot average_employment, ///
+    title("Census average employment by NACAM sector") ///
+    xtitle("Average employment") ///
+    name(census_avg_emp) labsz(tiny) titlesz(medsmall) ///
+    ydim(6.2) xdim(7.5)
 graph export "${OUTPUTDIR}/figures/cmr_census_average_employment_by_nacam.pdf", replace
 graph export "${OUTPUTDIR}/figures/cmr_census_average_employment_by_nacam.png", replace
 
-graph hbar log_turnover_per_worker if !missing(log_turnover_per_worker), ///
-    over(nacam_label_short_display, sort(log_turnover_per_worker) descending label(labsize(tiny))) ///
-    ytitle("Log annual revenue per worker", size(vsmall)) ///
-    title("Aggregate sector ratio", size(small)) ///
-    bar(1, color("231 41 138")) ///
-    plotregion(color(white)) graphregion(color(white)) bgcolor(white) ///
-    ysize(6.2) xsize(4.2) name(census_rpw_total, replace)
+cmr_census_colored_dotplot log_turnover_per_worker ///
+    if !missing(log_turnover_per_worker), ///
+    title("Aggregate sector ratio") ///
+    xtitle("Log annual revenue per worker") ///
+    name(census_rpw_total) labsz(tiny) titlesz(small) ///
+    ydim(6.2) xdim(4.2) legendoff
 
-graph hbar log_average_turnover_per_worker ///
+cmr_census_colored_dotplot log_average_turnover_per_worker ///
     if !missing(log_average_turnover_per_worker), ///
-    over(nacam_label_short_display, sort(log_average_turnover_per_worker) descending label(labsize(tiny))) ///
-    ytitle("Log average annual revenue per worker", size(vsmall)) ///
-    title("Sector firm average", size(small)) ///
-    bar(1, color("231 41 138")) ///
-    plotregion(color(white)) graphregion(color(white)) bgcolor(white) ///
-    ysize(6.2) xsize(4.2) name(census_rpw_average, replace)
+    title("Sector firm average") ///
+    xtitle("Log average annual revenue per worker") ///
+    name(census_rpw_average) labsz(tiny) titlesz(small) ///
+    ydim(6.2) xdim(4.2) legendoff
 
 graph combine census_rpw_total census_rpw_average, ///
     cols(2) title("Census log annual revenue per worker by NACAM sector", size(medsmall)) ///
