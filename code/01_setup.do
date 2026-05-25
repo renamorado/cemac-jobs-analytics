@@ -14,17 +14,26 @@ set more off
         Project globals, expected folders, and installed Stata packages.
 *******************************************************************************/
 
-local project_root = subinstr(c(pwd), "\", "/", .)
+local username = lower("`c(username)'")
 
-if !fileexists("`project_root'/AGENTS.md") {
-    if fileexists("`project_root'/../AGENTS.md") {
-        local project_root "`project_root'/.."
-    }
+if "`username'" == "user" {
+    global project_root "C:/Users/User/Documents/Projects/cemac-jobs-analytics"
+}
+else if "`username'" == "wb648862" {
+    global project_root "C:/Users/wb648862/Documents/Projects/CEMAC"
+}
+else if fileexists("AGENTS.md") {
+    global project_root "`=subinstr(c(pwd), "\", "/", .)'"
+}
+else {
+    display as error "No project_root path is configured for Windows user `c(username)'."
+    display as error "Add this user to the bootstrap block in code/01_setup.do."
+    exit 601
 }
 
-capture noisily cd "`project_root'"
+capture noisily cd "${project_root}"
 if _rc | !fileexists("AGENTS.md") {
-    display as error "Run code/01_setup.do from the repository root or from code/."
+    display as error "Configured project_root is not a valid repo root: ${project_root}"
     exit 601
 }
 
@@ -34,6 +43,8 @@ global PROJECT_ROOT   "`root'"
 global DATADIR        "${PROJECT_ROOT}/Data"
 global CAMEROONDIR    "${DATADIR}/Cameroon"
 global CODEDIR        "${PROJECT_ROOT}/code"
+global ELASTICITY_CAMEROUN_CODEDIR "${CODEDIR}/elasticity_cameroun"
+global WBES_TRADE_CODEDIR "${CODEDIR}/WBES_trade"
 global OUTPUTDIR      "${PROJECT_ROOT}/output"
 global LOGDIR         "${PROJECT_ROOT}/logs"
 global MANUSCRIPTDIR  "${PROJECT_ROOT}/manuscript"
@@ -52,11 +63,8 @@ if !_rc {
 * Set up the forward-looking folder structure.
 foreach dir in ///
     "${CODEDIR}" ///
-    "${CODEDIR}/01_data_prep" ///
-    "${CODEDIR}/02_construct" ///
-    "${CODEDIR}/03_analysis" ///
-    "${CODEDIR}/04_output" ///
-    "${CODEDIR}/05_checks" ///
+    "${ELASTICITY_CAMEROUN_CODEDIR}" ///
+    "${WBES_TRADE_CODEDIR}" ///
     "${DATADIR}/Intermediate" ///
     "${DATADIR}/Analysis" ///
     "${DATADIR}/WBES_manual" ///

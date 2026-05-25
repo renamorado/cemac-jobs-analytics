@@ -2,6 +2,7 @@
 desktop.ini
 Thumbs.db
 .DS_Store
+Microsoft/Windows/PowerShell/ModuleAnalysisCache
 
 # Agent scratch directories
 .codex_tmp/
@@ -23,12 +24,16 @@ logs/*
 !logs/.gitkeep
 
 # Generated outputs
-output/tables/*
-!output/tables/.gitkeep
-output/figures/*
-!output/figures/.gitkeep
-output/slides/*
-!output/slides/.gitkeep
+# Track only review-ready generated artifacts: LaTeX table fragments plus
+# PDF/PNG outputs used in manuscript and slide review. Keep build byproducts,
+# scratch outputs, and unsupported generated formats out of Git.
+output/**
+!output/**/
+!output/**/.gitkeep
+!output/tables/**/*.tex
+!output/**/*.pdf
+!output/**/*.png
+output/**/_codex_write_test.*
 
 # LaTeX build artifacts
 *.aux

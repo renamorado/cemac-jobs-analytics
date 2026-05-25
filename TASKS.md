@@ -6,6 +6,7 @@ Working list for the current Cameroon-first Phase I agenda from `Analytics - tra
 
 - [x] Lock the current task scope to Cameroon Phase I: sub-sector employment elasticities.
 - [x] Read the narrative framing in `Analytics - trade and jobs - Cameroon.docx` and align the task list with that Phase I objective.
+- [x] Finish Marina task 1 by adding harmonized census sector employment and revenue bar graphs to the active presentation.
 - [ ] Keep later phases on heterogeneity, constraints, and the reform roadmap out of the active implementation queue until the Cameroon Phase I workflow is stable.
 
 ## Data understanding and provenance
@@ -23,7 +24,7 @@ Working list for the current Cameroon-first Phase I agenda from `Analytics - tra
 
 - [ ] Treat `nacam` as the starting sector code for the Cameroon elasticity workflow and document what classification level it represents.
 - [ ] Look in the web for nacam to isic rev 4 crosss walk 
-- [ ] Write `code/02_construct/01_cmr_sector_crosswalk.do` to create and validate the sector mapping.
+- [ ] Write `code/elasticity_cameroun/01_cmr_sector_crosswalk.do` to create and validate the sector mapping.
 - [ ] Report mapping coverage overall and by year, with an explicit list of any unmapped or ambiguous sector codes.
 - [ ] Decide how to handle sparse sectors before estimation: aggregate further, flag, or exclude with justification.
 
@@ -32,7 +33,7 @@ Working list for the current Cameroon-first Phase I agenda from `Analytics - tra
 - [ ] Convert employment and financial fields to clean numeric analysis variables where needed, starting with `totemp`.
 - [ ] Decide the preferred firm identifier to carry into the analysis file and whether any cleaned `uin` version should be derived from `firmid`.
 - [ ] Build a one-row-per-firm-year Cameroon analysis panel after duplicate resolution and sample checks.
-- [ ] Write `code/02_construct/02_cmr_elasticity_panel.do` to generate the regression-ready file with firm ID, year, mapped ISIC sector, employment, output proxy candidates, and sample flags.
+- [ ] Write `code/elasticity_cameroun/02_cmr_elasticity_panel.do` to generate the regression-ready file with firm ID, year, mapped ISIC sector, employment, output proxy candidates, and sample flags.
 - [ ] Produce a transparent sample-flow diagnostic from `CMR_BDF.dta` to the final estimation sample.
 - [ ] Decide whether the Phase I analysis file should stay under `Data/Cameroon/Clean/` for now or be saved to a more explicit analysis location.
 
@@ -41,8 +42,8 @@ Working list for the current Cameroon-first Phase I agenda from `Analytics - tra
 - [ ] Compare the leading output candidates for Phase I elasticity work: `tot_rev` versus `va`.
 - [ ] Decide how to treat zero and negative values in employment and output measures before log-based estimation.
 - [ ] Decide whether the first Cameroon estimates should be pooled with sector fixed effects, estimated sector by sector, or produced both ways for comparison.
-- [ ] Write `code/03_analysis/01_cmr_elasticity_specs.do` to compare candidate employment-elasticity specifications without overcommitting too early.
-- [ ] Write `code/04_output/01_cmr_elasticity_tables.do` to export the first Cameroon sub-sector elasticity tables through `esttab` or `estout`.
+- [ ] Write `code/elasticity_cameroun/01_cmr_elasticity_specs.do` to compare candidate employment-elasticity specifications without overcommitting too early.
+- [ ] Write `code/elasticity_cameroun/01_cmr_elasticity_tables.do` to export the first Cameroon sub-sector elasticity tables through `esttab` or `estout`.
 - [ ] Define the first Phase I output package: a regression table, a sector ranking table, and a short diagnostic note on coverage and sample restrictions.
 
 ## Future phases

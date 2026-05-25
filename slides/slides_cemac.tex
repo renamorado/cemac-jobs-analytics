@@ -1,0 +1,481 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+\IfFileExists{lato.sty}{
+    \usepackage[default]{lato}
+}{}
+
+\definecolor{pgpblue}{RGB}{0,114,178}
+\definecolor{pgpred}{RGB}{213,94,0}
+\definecolor{pgpgreen}{RGB}{0,158,115}
+\definecolor{pgpbackground}{RGB}{255,255,255}
+
+\setbeamercolor{background canvas}{bg=pgpbackground}
+\setbeamercolor{normal text}{fg=black,bg=pgpbackground}
+\setbeamercolor{structure}{fg=pgpblue}
+\setbeamercolor{frametitle}{fg=pgpblue,bg=pgpbackground}
+\setbeamercolor{title}{fg=black}
+\setbeamercolor{itemize item}{fg=pgpblue}
+\setbeamercolor{itemize subitem}{fg=pgpblue}
+\setbeamercolor{enumerate item}{fg=pgpblue}
+
+\setbeamerfont{title}{series=\bfseries,size=\Large}
+\setbeamerfont{frametitle}{series=\bfseries,size=\large}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{section in toc}[sections numbered]
+
+\title{CEMAC Jobs Analytics}
+\subtitle{Cameroon elasticities and WBES trade diagnostics}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+\begin{frame}{Roadmap}
+    \tableofcontents
+\end{frame}
+
+\section{BDF Cleaning Results}
+
+\begin{frame}{Data cleaning overview}
+    \begin{itemize}
+        \item The working panel is organized at the firm-year level, so duplicate handling changes both sample size and identification.
+        \item Economic sector is based on the NACAM variable, which according to documentation its based on a Regional harmonized classifier linked to ISIC.
+        \item The cleaning note isolates the two steps that most affect downstream interpretation: duplicate resolution and the NACAM-to-ISIC crosswalk.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Firm-Year Duplicate Cleaning}
+    \footnotesize
+    \begin{itemize}
+        \item Working key: \texttt{firmid} $\times$ \texttt{fin\_yr}
+        \item Perfect duplicates would be collapsed with original row order as the tie-breaker.
+        \item Conflicting duplicate firm-years are fully removed from the cleaned analysis file, while we figure out the best approach for handling them.
+    \end{itemize}
+
+    \vspace{0.2cm}
+    \centering
+    \resizebox{0.76\textwidth}{!}{
+        \begin{tabular}{lr}
+            \input{../output/tables/cmr_bdf_cleaning_note_duplicate_summary.tex}
+        \end{tabular}
+    }
+\end{frame}
+\begin{comment} 
+    % Lets confirm this but I think that we are not using the ISIC codes for the elasticity analysis, so we can skip this slide if we want to save time.
+    % We can also move it to the appendix if we want to keep it for reference but not spend time on it in the main presentation.
+\begin{frame}{NACAM-to-ISIC Crosswalk}
+    \small
+    \begin{itemize}
+        \item Observed legacy NACAM codes are audited directly from the Cameroon BDF file.
+        \item Legacy branch labels are recovered from the INS RGE nomenclature document, while the mapping to \texttt{NACAM rev.1} and ISIC comes from the official \texttt{NACAM rev.1} passage tables.
+        \item ISIC Rev.4 divisions are assigned only when the official mapping is one-to-one.
+        \item Ambiguous branches remain flagged for manual review rather than being forced into a noisy division code.
+        \item Since the NACAM is already based on the ISIC structure, the analysis file retains the original NACAM variable for elasticity estimation and reporting, while the ISIC variable is used for sectoral aggregation and cross-country comparisons.
+    \end{itemize}
+
+    \vspace{0.4cm}
+    \centering
+    \resizebox{0.75\textwidth}{!}{
+        \begin{tabular}{lr}
+            \input{../output/tables/cmr_bdf_cleaning_note_crosswalk_summary.tex}
+        \end{tabular}
+    }
+\end{frame}
+\end{comment}
+
+\begin{frame}{Cleaning Takeaways}
+    \begin{itemize}
+        \item The cleaned panel resizes the sample from 9,325 to 9,068 observations after removing duplicate firm-years.
+        \item There are 127 conflicting firm-years, accounting for 257 dropped obs. Those observations are excluded rather than resolved ad hoc.
+        %\item The crosswalk covers 37 observed legacy NACAM codes, but only 17 map cleanly to a single ISIC Rev.4 division. 
+        \item To avoid introducing unwanted noise we keep the analysis using NACAM classification and link it to ISIC aggregates when possible.
+        %\item The remaining 20 codes are explicitly flagged for manual review, which keeps sector harmonization transparent before pooled industry comparisons.
+    \end{itemize}
+\end{frame}
+
+\section{Cameroun Census data on firm counts, employment, and revenue}
+
+\begin{frame}{Cameroun Census Context}
+    \begin{itemize}
+        \item The 2024 RGE census gives a whole-economy snapshot of establishments in Cameroon.
+        \item Census activity labels are harmonized to the same NACAM sectors used in the administrative elasticity analysis.
+        \item The next slides use headquarter-level data to show sector scale in firm counts, log employment, log annual revenue, and log revenue per worker.
+        \item After this economy-wide view, the administrative tax panel focuses on formal firms observed over time, using the administrative data.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Census Firm Counts by Harmonized NACAM Sector}
+    \centering
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_census_firm_count_by_nacam.png}
+\end{frame}
+
+\begin{frame}{Census Log Employment by Harmonized NACAM Sector}
+    \centering
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_census_total_employment_by_nacam.png}
+\end{frame}
+
+\begin{frame}{Census Log Revenue by Harmonized NACAM Sector}
+    \centering
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_census_total_revenue_by_nacam.png}
+\end{frame}
+
+\begin{frame}{Census Log Revenue per Worker by Harmonized NACAM Sector}
+    \centering
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_per_worker_by_nacam.png}
+\end{frame}
+
+\section{Cameroun Sectoral Elasticities}
+
+\begin{frame}{Specification and Sample}
+    \small
+    \begin{equation}
+        \ln(E_{it}) = \alpha_i + \delta_{st} + \sum_s \beta_s \left( \ln(X_{it}) \times D_{is} \right) + \varepsilon_{it}
+    \end{equation}
+
+    \begin{itemize}
+        \item The unit of observation is a firm-year $(i,t)$.
+        \item $E_{it}$ is employment for firm $i$ in year $t$.
+        \item $X_{it}$ is either value added or total revenue, estimated in separate regressions.
+        \item $D_{is}$ equals 1 if firm $i$ belongs to NACAM sector $s$, and 0 otherwise.
+        \item Sector is treated as a firm characteristic, so each firm contributes to one NACAM interaction term.
+        \item $\alpha_i$ are firm fixed effects and $\delta_{st}$ are sector-by-year effects.
+        \item $\beta_s$ is the elasticity for firms in sector $s$, identified through the interaction between $\ln(X_{it})$ and the sector indicator $D_{is}$.
+        \item Standard errors clustered at the firm level.
+        \item Inclusion rule for reported sectors: at least 30 observations and 10 firms in both outcome samples.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Employment Distribution by Fiscal Year}
+    \centering
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_ln_emp_density_by_year.png}
+\end{frame}
+
+\begin{frame}{Value-Added Elasticity Specification}
+    \small
+    \begin{equation}
+        \ln(E_{it}) = \alpha_i + \delta_{st} + \sum_s \beta^{VA}_s \left( \ln(VA_{it}) \times D_{is} \right) + \varepsilon_{it}
+    \end{equation}
+
+    \begin{itemize}
+        \item Estimates use the Cameroon administrative firm-year panel.
+        \item Firm fixed effects absorb time-invariant firm differences.
+        \item Sector-by-year effects absorb shocks common to a NACAM sector in a fiscal year.
+        \item The plotted point for each sector is $\beta^{VA}_s$ with a firm-clustered 95 percent interval.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Value-Added Elasticities Across NACAM Sectors}
+    \centering
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_va_coefficients.png}
+\end{frame}
+
+\begin{frame}{Total-Revenue Elasticity Specification}
+    \small
+    \begin{equation}
+        \ln(E_{it}) = \alpha_i + \delta_{st} + \sum_s \beta^{R}_s \left( \ln(R_{it}) \times D_{is} \right) + \varepsilon_{it}
+    \end{equation}
+
+    \begin{itemize}
+        \item $R_{it}$ is total revenue, estimated in a separate regression from value added.
+        \item The sample rule remains at least 30 observations and 10 firms in both reported outcome samples.
+        \item The plotted point for each sector is $\beta^{R}_s$ with standard errors clustered at the firm level.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Total-Revenue Elasticities Across NACAM Sectors}
+    \centering
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_tot_rev_coefficients.png}
+\end{frame}
+
+\begin{frame}{Cross-Model Comparison}
+    \begin{itemize}
+        \item The next plot compares the sector-specific value-added and total-revenue elasticities.
+        \item Each point is one NACAM sector retained by the common inclusion rule.
+        \item Points near the 45-degree line indicate sectors where both revenue proxies give similar employment responses.
+        \item Large gaps flag sectors where value added and gross revenue tell different stories.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Cross-Model Consistency}
+    \centering
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_scatter.png}
+\end{frame}
+
+\begin{frame}{Elasticity and Scale Comparison}
+    \begin{itemize}
+        \item The next scatter plots reuse the same estimated sector elasticities.
+        \item Sector scale is calculated from the common valid sample before plotting.
+        \item Employment scale uses average firm log employment within sector.
+        \item Revenue scale uses average firm log total revenue within sector.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Elasticities and Employment Scale}
+    \centering
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_elasticities_vs_avg_log_employment.png}
+\end{frame}
+
+\begin{frame}{Elasticity and Revenue Scale Comparison}
+    \begin{itemize}
+        \item This plot asks whether high-elasticity sectors are also large-revenue sectors.
+        \item Sector labels and included sectors match the administrative elasticity outputs.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Elasticities and Revenue Scale}
+    \centering
+    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_elasticities_vs_avg_log_revenue.png}
+\end{frame}
+
+\begin{frame}{Revenue-Elasticity Sector Deciles}
+    \vspace{-0.35cm}
+    \centering
+    \tiny
+    \resizebox{\textwidth}{0.38\textheight}{
+        \begin{tabular}{lrrrrr}
+            \input{../output/tables/cmr_nacam_results_en_labels_tot_rev_decile_ranking.tex}
+        \end{tabular}
+    }
+    \vspace{0.03cm}
+
+    {\scriptsize Decile 10 is highest; decile 1 is lowest.}
+\end{frame}
+
+\begin{frame}{Main Takeaways}
+    \begin{itemize}
+        \item Elasticities vary meaningfully across sectors rather than lining up around a single Cameroon-wide coefficient.
+        %\item Several sectors show positive employment responses under both value added and total revenue, with NACAM 17 standing out most clearly.
+        \item Negative or weak value-added elasticities remain concentrated in a small set of sectors, which is useful for prioritizing follow-up diagnostics.
+        %\item The cleaning and harmonization steps are not bookkeeping only; they determine which firm-years and sector codes enter the elasticity analysis.
+    \end{itemize}
+\end{frame}
+
+\section{CEMAC WBES Trade Analysis}
+
+\begin{frame}{Phase 3: WBES Trade Diagnostics}
+    \begin{itemize}
+        \item Phase 3 uses the latest available World Bank Enterprise Survey wave for CEMAC countries.
+        \item The first step is a cleaning and availability audit for sales, employment, sector, export, import, and input-origin variables.
+        \item Gabon is not retained in the main descriptive panels because its latest available WBES wave is 2009 and has no ISIC Rev.4 coverage.
+        \item The WBES formal-sector sampling frame covers non-agricultural private firms, so sector rows use eligible activity aggregates rather than agriculture.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[plain]
+    \centering
+    {\small\bfseries WBES Descriptive Statistics}
+
+    \vspace{0.03cm}
+    \centering
+    \tiny
+    \resizebox{0.96\textwidth}{0.46\textheight}{
+        \begin{tabular}{lccccccc}
+            \input{../output/tables/cemac_wbes_trade_descriptive_stats_deck.tex}
+        \end{tabular}
+    }
+
+    \vspace{0.03cm}
+    {\tiny Sales use fiscal-year official exchange rates. Brackets report standard errors.}
+\end{frame}
+
+\begin{frame}{WBES Country Coverage}
+    \footnotesize
+    \centering
+    \resizebox{0.88\textwidth}{!}{
+        \begin{tabular}{lrrrrr}
+            \input{../output/tables/cemac_wbes_trade_country_coverage.tex}
+        \end{tabular}
+    }
+
+    \vspace{0.25cm}
+    {\scriptsize Retained excludes Gabon from the main descriptive panels because its latest available wave is 2009 and lacks ISIC Rev.4.}
+\end{frame}
+
+\begin{frame}{Core Variable Availability}
+    \vspace{-0.2cm}
+    \centering
+    \tiny
+    \resizebox{\textwidth}{!}{
+        \begin{tabular}{lrrrrrrrrrrr}
+            \input{../output/tables/cemac_wbes_trade_variable_availability.tex}
+        \end{tabular}
+    }
+
+    \vspace{0.2cm}
+    {\scriptsize Counts are unweighted establishments in retained CEMAC latest-wave surveys.}
+\end{frame}
+
+\begin{frame}{Negative Special-Code Audit}
+    \vspace{-0.2cm}
+    \centering
+    \tiny
+    \resizebox{\textwidth}{!}{
+        \begin{tabular}{lrrrrrrrrrrr}
+            \input{../output/tables/cemac_wbes_trade_negative_values.tex}
+        \end{tabular}
+    }
+
+    \vspace{0.2cm}
+    {\scriptsize Negative WBES special codes are audited before being recoded to missing for nonnegative levels, percentages, and binary responses.}
+\end{frame}
+
+\begin{frame}{Winsorization Cutoffs}
+    \footnotesize
+    \centering
+    \resizebox{0.88\textwidth}{!}{
+        \begin{tabular}{lrrrr}
+            \input{../output/tables/cemac_wbes_trade_winsor_cutoffs.tex}
+        \end{tabular}
+    }
+
+    \vspace{0.25cm}
+    {\scriptsize Sales and input costs are winsorized at the 5th and 95th percentiles within each country wave.}
+\end{frame}
+
+\begin{frame}{Exporter Participation}
+    \centering
+    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_exporter_share.png}
+\end{frame}
+
+\begin{frame}{Export Intensity Among Exporters}
+    \centering
+    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_export_intensity.png}
+\end{frame}
+
+\begin{frame}{Import and Foreign-Input Participation}
+    \centering
+    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_import_participation.png}
+\end{frame}
+
+\begin{frame}{Two-Way Trader Status}
+    \centering
+    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_two_way_trader.png}
+\end{frame}
+
+\begin{frame}{WBES Trade-Employment Association}
+    \small
+    \begin{equation}
+        \ln(E_i) = \alpha + \beta \ln(X_i^+) + \gamma Exporter_i + \varepsilon_i
+    \end{equation}
+
+    \begin{itemize}
+        \item Latest-wave WBES estimates are weighted cross-sectional associations.
+        \item $X_i^+$ is export value, with log export value set to zero for non-exporters in the all-firm model.
+        \item The exporter dummy separates the extensive margin from the positive-export-value slope.
+        \item Rows with fewer than 30 observations are suppressed; benchmark rows are equal-country averages.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{WBES Country Trade-Employment Estimates}
+    \vspace{-0.2cm}
+    \centering
+    \tiny
+    \resizebox{\textwidth}{!}{
+        \begin{tabular}{lrrrrrrrr}
+            \input{../output/tables/cemac_wbes_trade_elasticity_country.tex}
+        \end{tabular}
+    }
+
+    \vspace{0.15cm}
+    {\scriptsize Slopes are weighted cross-sectional log employment/log export-value associations.}
+\end{frame}
+
+\begin{frame}{WBES Country Specification: All Firms}
+    \small
+    \begin{equation}
+        \ln(E_i) = \alpha_c + \beta_c \ln(X_i^+) + \gamma_c Exporter_i + \varepsilon_i
+    \end{equation}
+
+    \begin{itemize}
+        \item Estimated separately by country using WBES weights.
+        \item Non-exporters stay in the sample with $\ln(X_i^+) = 0$.
+        \item The plotted coefficient is $\beta_c$; it is descriptive, not causal.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{WBES Country Associations: All Firms}
+    \centering
+    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_country_all_firms.png}
+\end{frame}
+
+\begin{frame}{WBES Country Specification: Exporters Only}
+    \small
+    \begin{equation}
+        \ln(E_i) = \alpha_c + \beta_c \ln(X_i) + \varepsilon_i,\quad X_i > 0
+    \end{equation}
+
+    \begin{itemize}
+        \item Estimated separately by country among firms with positive export value.
+        \item This is the intensive-margin association within exporters.
+        \item Countries with fewer than 30 exporters are suppressed in the plot.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{WBES Country Associations: Exporters Only}
+    \centering
+    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_country_exporters_only.png}
+\end{frame}
+
+\begin{frame}{Cameroon WBES Activity Estimates}
+    \vspace{-0.2cm}
+    \centering
+    \tiny
+    \resizebox{0.96\textwidth}{!}{
+        \begin{tabular}{lrrrrrrr}
+            \input{../output/tables/cemac_wbes_trade_elasticity_cameroon_activity.tex}
+        \end{tabular}
+    }
+
+    \vspace{0.15cm}
+    {\scriptsize Activity groups use WBES-ISIC aggregates}
+\end{frame}
+
+\begin{frame}{Cameroon Activity Specification: All Firms}
+    \small
+    \begin{equation}
+        \ln(E_i) = \alpha_a + \beta_a \ln(X_i^+) + \gamma_a Exporter_i + \varepsilon_i
+    \end{equation}
+
+    \begin{itemize}
+        \item Estimated within Cameroon WBES activity groups.
+        \item This is a diagnostic adaptation of the elasticity idea to cross-sectional survey data.
+        \item Activity rows pass the all-firm sample threshold, but exporter-only rows may be suppressed.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Cameroon Activity Associations: All Firms}
+    \centering
+    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_cameroon_activity_all_firms.png}
+\end{frame}
+
+\begin{frame}{Cameroon Activity Specification: Exporters Only}
+    \small
+    \begin{equation}
+        \ln(E_i) = \alpha_a + \beta_a \ln(X_i) + \varepsilon_i,\quad X_i > 0
+    \end{equation}
+
+    \begin{itemize}
+        \item Estimated among Cameroon exporters within WBES activity groups.
+        \item Rows are shown only when at least 30 exporter observations are available.
+        \item These results are best read as sample diagnostics for follow-up, not sector multipliers.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Cameroon Activity Associations: Exporters Only}
+    \centering
+    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_cameroon_activity_exporters_only.png}
+\end{frame}
+
+\end{document}

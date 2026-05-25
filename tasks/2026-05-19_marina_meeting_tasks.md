@@ -18,7 +18,7 @@ Purpose: Backlog of follow-up tasks for the Cameroon/CEMAC jobs analytics workfl
   - Use colors to identify aggregated sectors.
   - Keep table and figure names explicit about whether they refer to `tot_rev` or `va`.
 
-- [ ] Track generated outputs in Git
+- [x] Track generated outputs in Git
   - Revise the current ignore policy so Codex/Git does not ignore selected generated outputs needed for review and presentation.
   - Candidate tracked outputs include LaTeX table fragments in `output/tables/`, PDFs, and PNGs in the `output/` tree.
   - Decide whether to track all generated artifacts or only a curated publication/presentation set.
@@ -28,7 +28,7 @@ Purpose: Backlog of follow-up tasks for the Cameroon/CEMAC jobs analytics workfl
   - Identify the relevant WBES variables for exports, imports, domestic sales, total sales/revenue, value added, employment, sector, country, and survey year.
   - Document variable harmonization decisions before running pooled or cross-country comparisons.
 
-- [ ] Revenue-elasticity deciles and ordered sector table
+- [x] Revenue-elasticity deciles and ordered sector table
   - Create deciles of total-revenue employment elasticities.
   - Build an ordered sector-level table based on these deciles.
   - Replace or complement the current sector ranking table with the decile-based ordering once the construction is validated.

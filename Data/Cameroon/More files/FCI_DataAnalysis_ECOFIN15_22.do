@@ -1,6 +1,3 @@
-version 18.0
-set more off
-
 ************************************************
 ************************************************
 *     Analysis using Cameroon Ecofin dataset      *
@@ -16,29 +13,7 @@ set more off
    Number of firms : 1561	
 */
 
-local project_root = subinstr(c(pwd), "\", "/", .)
-
-if !fileexists("`project_root'/AGENTS.md") {
-    if fileexists("`project_root'/../../AGENTS.md") {
-        local project_root "`project_root'/../.."
-    }
-}
-
-capture noisily cd "`project_root'"
-if _rc | !fileexists("AGENTS.md") {
-    display as error "Run this legacy file from the repo root or from Data/Cameroon/More files."
-    exit 601
-}
-
-do "code/01_setup.do"
-
-global ecofin "${PROJECT_ROOT}/Data/Cameroon/More files"
-global output "${OUTPUTDIR}/legacy_ecofin"
-global tfp_employment_file "${DATADIR}/Analysis/tfp_employment.dta"
-
-capture mkdir "${output}"
-
-use "${ecofin}/ecofin15_22_clean_panel.dta", replace
+use "C:\Users\wb416159\OneDrive - WBG\CEM - FCI contribution\Datasets\Firms\Ecofine 2015 - 2022\ecofin15_22_clean_panel.dta", replace
 
 **------------------------- Settings for graphs -----------------------------** 
 grstyle clear
@@ -293,20 +268,20 @@ gen tfp_ols=exp(ltfp_ols)
 
 ****** TFP Growth and employment growth // Labor productivity growth and employment growth
 
-use "${tfp_employment_file}", clear
+use "C:\Users\wb603585\OneDrive - WBG\Documents\Projects\CAMEROON\CEM - FCI contribution\Datasets\Firms\Final outputs\tfp_employment.dta", clear
 
 scatter emp tfp, mlabel(sector)
 set scheme s1mono
 scatter emp tfp, mlabel(sector)
 set scheme s2mono
 scatter emp tfp, mlabel(sector)
-save "${tfp_employment_file}"
+save "C:\Users\wb603585\OneDrive - WBG\Documents\Projects\CAMEROON\CEM - FCI contribution\Datasets\Firms\Final outputs\tfp_employment.dta"
 la var tfp "Total factor productivity growth"
 la var lp "Labor productivity growth"
 la var tfp "Total factor productivity compound annual growth (2015-2022)"
 la var lp "Labor productivity compound annual growth (2015-2022)"
 la var emp "Employment compound annual growth (2015-2022)"
-save "${tfp_employment_file}", replace
+save "C:\Users\wb603585\OneDrive - WBG\Documents\Projects\CAMEROON\CEM - FCI contribution\Datasets\Firms\Final outputs\tfp_employment.dta", replace
 sum tfp emp
 scatter emp tfp, mlabel(sector) xlabel(-20(10)20)
 set scheme s2color
@@ -671,12 +646,7 @@ graph export "$output\tfp_lp_evolution_bysector.jpg", as (jpg) replace
 restore
 
 *Reported issues
-if "${dsf}" == "" {
-    display as error "Set global dsf in config_local_paths.do before running the DSF section of FCI_DataAnalysis_ECOFIN15_22.do."
-    exit 198
-}
-
-use "${dsf}/rge2016_and_dsf2022_clean.dta", clear
+use "$dsf\rge2016_and_dsf2022_clean.dta", clear
 keep if year==2016
 replace constraint1 = constraint2 if constraint1==5 & constraint2!=.
 
@@ -709,4 +679,3 @@ graph hbar (percent) if sector2==12 | sector2==3, over(constraint1, sort(1)) yti
 graph export "$output\constraints_sector2.jpg", as(jpg) name("Graph") quality(90) replace
 
 restore
-
