@@ -11,6 +11,8 @@ For the current CEMAC deck, the most defensible empirical framing is:
 - report all WBES trade statistics with WBES sampling weights and unweighted firm counts;
 - keep the country as the primary level of comparison;
 - suppress small cells before showing sector or activity-group results;
+- use the revenue-by-exporter interaction as the focal specification for
+  testing whether employment-revenue slopes differ by exporter status;
 - estimate exporter-only intensive-margin models separately from all-firm models;
 - in all-firm models, include an exporter dummy so the log export-value slope is not forced to absorb the extensive-margin exporter/non-exporter difference.
 
@@ -41,6 +43,7 @@ ln(employment_i) = alpha + beta ln(export_value_i^+) + gamma exporter_i + contro
 ```
 
 where `ln(export_value_i^+)` is set to zero for non-exporters and `exporter_i` captures the extensive-margin difference between exporters and non-exporters. This keeps the export-value slope closer to an intensive-margin association among positive exporters, while still retaining non-exporting firms for comparison.
+The current controlled specification uses log firm age plus foreign and government/state ownership shares as firm controls, and includes ISIC Rev.4 section fixed effects. Domestic private ownership is the omitted ownership category.
 
 Use exporters only when the question is whether larger export values among exporters are associated with higher employment:
 
@@ -50,6 +53,41 @@ export_value_i > 0
 ```
 
 This is cleaner as an intensive-margin elasticity, but it no longer describes the full covered firm population. The exporter-only sample also becomes thin quickly for small CEMAC countries and activity groups.
+The same firm controls and ISIC Rev.4 section fixed effects are used in the exporter-only model.
+
+## Focal Revenue-Exporter Interaction
+
+The focal exporter-comparison model replaces export value with winsorized
+annual sales, which is the WBES revenue measure already prepared as `sales_w`:
+
+```text
+ln(employment_i) = alpha + beta ln(revenue_i) + gamma exporter_i
+                   + delta [ln(revenue_i) x exporter_i]
+                   + controls_i + e_i
+```
+
+In this specification:
+
+- `beta` is the employment-revenue elasticity among non-exporters;
+- `beta + delta` is the employment-revenue elasticity among exporters;
+- `delta` is the exporter minus non-exporter slope difference and the estimate
+  of interest.
+
+The model uses WBES probability weights and robust standard errors, without
+firm fixed effects because the WBES file is a latest-wave cross-section. The
+controlled specification includes log firm age, foreign ownership share, and
+government/state ownership share, plus ISIC Rev.4 section fixed effects.
+Displayed estimates require at least 30 usable firms overall, at least 10
+exporters, and at least 10 non-exporters after the controls are nonmissing.
+Country results are primary; Cameroon activity-group results remain
+diagnostics. Benchmark rows are equal-country averages calculated from eligible
+country estimates only. The exporter main effect is not a focal estimate
+because it represents an intercept difference at `ln(revenue) = 0`.
+
+Export value is intentionally excluded from this revenue interaction model.
+The prepared export value equals winsorized sales times the export share, so
+including both measures would introduce a mechanically related regressor and
+answer a different question.
 
 ## Country vs Sector-Level Elasticities
 
@@ -75,4 +113,4 @@ Relevant references:
 
 ## Implementation Implication for This Repository
 
-The WBES elasticity stage should remain separate from the Cameroon administrative panel elasticity stage. It should start from `Data/Analysis/wbes_trade_clean.dta`, use WBES weights, write generated outputs under `output/`, and label results as "WBES cross-sectional associations" in both filenames and slides.
+The WBES elasticity stages should remain separate from the Cameroon administrative panel elasticity stage. They should start from `Data/Analysis/wbes_trade_clean.dta`, use WBES weights, write generated outputs under `output/`, and label results as "WBES cross-sectional associations" in both filenames and slides. The revenue-exporter interaction in `code/WBES_trade/04_wbes_revenue_exporter_interaction.do` is the focal exporter-comparison result; the export-value models in `code/WBES_trade/03_wbes_trade_elasticity.do` remain supporting specifications.

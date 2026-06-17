@@ -21,7 +21,9 @@ set more off
     Notes:
         These are weighted cross-sectional associations from latest-wave WBES
         data. They are not comparable to the Cameroon administrative panel's
-        firm fixed-effect employment elasticities.
+        firm fixed-effect employment elasticities. Specifications control for
+        log firm age, foreign ownership share, government/state ownership share,
+        and ISIC Rev.4 section fixed effects.
 *******************************************************************************/
 
 /*******************************************************************************
@@ -34,6 +36,9 @@ if "`username'" == "user" {
 }
 else if "`username'" == "wb648862" {
     global project_root "C:/Users/wb648862/Documents/Projects/CEMAC"
+}
+else if "`username'" == "wb603585" {
+    global project_root "C:/Users/wb603585/OneDrive - WBG/Documents/Projects/CEMAC/FY26/CEMAC jobs analytics"
 }
 else if fileexists("AGENTS.md") {
     global project_root "`=subinstr(c(pwd), "\", "/", .)'"
@@ -62,7 +67,8 @@ use "${DATADIR}/Analysis/wbes_trade_clean.dta", clear
 
 foreach var in ///
     firm_id country_name cemac_country wb_region wb_income_group weight ///
-    employment export_value export_status isic4_section {
+    employment export_value export_status isic4_section ///
+    ln_firm_age foreign_own_share gov_own_share {
     confirm variable `var'
 }
 
@@ -84,14 +90,21 @@ replace activity_group = "Trade/hospitality/transport" if inlist(isic4_section, 
 replace activity_group = "Other services" if inlist(isic4_section, "J", "K", "M", "N", "S")
 replace activity_group = "Other/unclear activity" if missing(activity_group) | activity_group == ""
 
+generate str16 isic4_section_fe_label = isic4_section
+replace isic4_section_fe_label = "Unknown" if isic4_section_fe_label == ""
+encode isic4_section_fe_label, generate(isic4_section_fe)
+label variable isic4_section_fe "ISIC Rev.4 section fixed effect"
+
 generate double ln_emp = ln(employment) if employment > 0
 generate double ln_export_value = ln(export_value) if export_value > 0
 generate double ln_export_value_all = .
 replace ln_export_value_all = 0 if export_status == 0
 replace ln_export_value_all = ln_export_value if export_status == 1 & !missing(ln_export_value)
 
-generate byte all_firm_sample = !missing(ln_emp, ln_export_value_all, export_status, weight)
-generate byte exporter_only_sample = !missing(ln_emp, ln_export_value, weight) & export_status == 1
+generate byte all_firm_sample = !missing(ln_emp, ln_export_value_all, ///
+    export_status, weight, ln_firm_age, foreign_own_share, gov_own_share)
+generate byte exporter_only_sample = !missing(ln_emp, ln_export_value, ///
+    weight, ln_firm_age, foreign_own_share, gov_own_share) & export_status == 1
 
 label variable ln_emp "Log employment"
 label variable ln_export_value "Log export value among exporters"
@@ -102,6 +115,8 @@ keep if retained_cemac == 1 | ssa_excl_cemac == 1 | high_income == 1
 
 local min_obs 30
 local zcrit = invnormal(.975)
+local firm_controls ///
+    c.ln_firm_age c.foreign_own_share c.gov_own_share i.isic4_section_fe
 
 /*******************************************************************************
     Country-level estimates
@@ -128,6 +143,7 @@ foreach country of local country_list {
 
     if `n_all' >= `min_obs' & `exporters_all' > 0 & `nonexporters_all' > 0 {
         capture quietly regress ln_emp ln_export_value_all export_status ///
+            `firm_controls' ///
             [pweight = weight] if country_name == "`country'" & all_firm_sample == 1, ///
             vce(robust)
 
@@ -149,7 +165,7 @@ foreach country of local country_list {
                 quietly levelsof display_name if country_name == "`country'", local(display_local) clean
 
                 post `country_handle' ///
-                    ("country") ("all_firms") ("All firms, exporter dummy") ///
+                    ("country") ("all_firms") ("All firms, controls") ///
                     ("`country'") ("`display_local'") ///
                     (`retained') (`ssa') (`hi') (0) ///
                     (b_trade) (se_trade) (lb_trade) (ub_trade) ///
@@ -164,6 +180,7 @@ foreach country of local country_list {
 
     if `n_exporter' >= `min_obs' {
         capture quietly regress ln_emp ln_export_value ///
+            `firm_controls' ///
             [pweight = weight] if country_name == "`country'" & exporter_only_sample == 1, ///
             vce(robust)
 
@@ -183,7 +200,7 @@ foreach country of local country_list {
                 quietly levelsof display_name if country_name == "`country'", local(display_local) clean
 
                 post `country_handle' ///
-                    ("country") ("exporters_only") ("Exporters only") ///
+                    ("country") ("exporters_only") ("Exporters only, controls") ///
                     ("`country'") ("`display_local'") ///
                     (`retained') (`ssa') (`hi') (0) ///
                     (b_trade) (se_trade) (lb_trade) (ub_trade) ///
@@ -220,6 +237,7 @@ foreach activity of local activity_list {
 
     if `n_all' >= `min_obs' & `exporters_all' > 0 & `nonexporters_all' > 0 {
         capture quietly regress ln_emp ln_export_value_all export_status ///
+            `firm_controls' ///
             [pweight = weight] if country_name == "Cameroon" ///
             & activity_group == "`activity'" & all_firm_sample == 1, ///
             vce(robust)
@@ -234,7 +252,7 @@ foreach activity of local activity_list {
                 scalar se_exporter = _se[export_status]
 
                 post `activity_handle' ///
-                    ("cameroon_activity") ("all_firms") ("All firms, exporter dummy") ///
+                    ("cameroon_activity") ("all_firms") ("All firms, controls") ///
                     ("`activity'") ("`activity'") ///
                     (1) (0) (0) (0) ///
                     (b_trade) (se_trade) (lb_trade) (ub_trade) ///
@@ -249,6 +267,7 @@ foreach activity of local activity_list {
 
     if `n_exporter' >= `min_obs' {
         capture quietly regress ln_emp ln_export_value ///
+            `firm_controls' ///
             [pweight = weight] if country_name == "Cameroon" ///
             & activity_group == "`activity'" & exporter_only_sample == 1, ///
             vce(robust)
@@ -261,7 +280,7 @@ foreach activity of local activity_list {
                 scalar ub_trade = b_trade + `zcrit' * se_trade
 
                 post `activity_handle' ///
-                    ("cameroon_activity") ("exporters_only") ("Exporters only") ///
+                    ("cameroon_activity") ("exporters_only") ("Exporters only, controls") ///
                     ("`activity'") ("`activity'") ///
                     (1) (0) (0) (0) ///
                     (b_trade) (se_trade) (lb_trade) (ub_trade) ///

@@ -11,7 +11,6 @@ set more off
     Inputs:
         Globals created by code/01_setup.do
         Data/Intermediate/cmr_bdf_nacam_isic_crosswalk.dta
-        Data/Intermediate/data_export.xlsx
 
     Outputs:
         Data/Intermediate/cmr_nacam_data_export_mapping.dta
@@ -26,6 +25,9 @@ if "${PROJECT_ROOT}" == "" {
     }
     else if "`username'" == "wb648862" {
         global project_root "C:/Users/wb648862/Documents/Projects/CEMAC"
+    }
+    else if "`username'" == "wb603585" {
+        global project_root "C:/Users/wb603585/OneDrive - WBG/Documents/Projects/CEMAC/FY26/CEMAC jobs analytics"
     }
     else if fileexists("AGENTS.md") {
         global project_root "`=subinstr(c(pwd), "\", "/", .)'"
@@ -46,20 +48,26 @@ if "${PROJECT_ROOT}" == "" {
 }
 
 local crosswalk_file "${DATADIR}/Intermediate/cmr_bdf_nacam_isic_crosswalk.dta"
-local group_file "${DATADIR}/Intermediate/data_export.xlsx"
 local out_file "${DATADIR}/Intermediate/cmr_nacam_data_export_mapping.dta"
 local audit_file "${DATADIR}/Intermediate/cmr_nacam_data_export_mapping.xlsx"
 
 confirm file "`crosswalk_file'"
-confirm file "`group_file'"
 
 tempfile data_export_groups
 
-import excel "`group_file'", sheet("Data") firstrow clear
-keep Groups
-drop if missing(Groups)
-duplicates drop
-rename Groups data_export
+clear
+input str70 data_export
+"A – Agriculture, Forestry and Fishing"
+"B – Mining and Quarrying"
+"C – Manufacturing"
+"Utilities"
+"F – Construction"
+"G – Wholesale and Retail Trade; Repair of Motor Vehicles"
+"H – Transportation and Storage"
+"J – Information and Communication"
+"K – Financial and Insurance Activities"
+"Other services"
+end
 isid data_export
 save "`data_export_groups'"
 

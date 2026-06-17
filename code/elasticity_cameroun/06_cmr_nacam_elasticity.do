@@ -41,6 +41,9 @@ if "`username'" == "user" {
 else if "`username'" == "wb648862" {
     global project_root "C:/Users/wb648862/Documents/Projects/CEMAC"
 }
+else if "`username'" == "wb603585" {
+    global project_root "C:/Users/wb603585/OneDrive - WBG/Documents/Projects/CEMAC/FY26/CEMAC jobs analytics"
+}
 else if fileexists("AGENTS.md") {
     global project_root "`=subinstr(c(pwd), "\", "/", .)'"
 }
@@ -534,7 +537,7 @@ twoway ///
     yscale(reverse) ///
     xline(0, lpattern(dash) lcolor(black)) ///
     legend(order(2 "Agriculture" 4 "Mining" 6 "Manufacturing" 8 "Utilities" ///
-        10 "Construction" 12 "Trade/repair" 14 "Transport" 16 "ICT" ///
+        10 "Construction" 12 "Wholesale/retail + repair" 14 "Transport" 16 "ICT" ///
         18 "Finance" 20 "Other services") cols(1) pos(3) ring(1) size(tiny) ///
         region(lcolor(none) fcolor(none))) ///
     ytitle("") ///
@@ -595,7 +598,7 @@ twoway ///
     yscale(reverse) ///
     xline(0, lpattern(dash) lcolor(black)) ///
     legend(order(2 "Agriculture" 4 "Mining" 6 "Manufacturing" 8 "Utilities" ///
-        10 "Construction" 12 "Trade/repair" 14 "Transport" 16 "ICT" ///
+        10 "Construction" 12 "Wholesale/retail + repair" 14 "Transport" 16 "ICT" ///
         18 "Finance" 20 "Other services") cols(1) pos(3) ring(1) size(tiny) ///
         region(lcolor(none) fcolor(none))) ///
     ytitle("") ///
@@ -665,7 +668,7 @@ twoway ///
     ytitle("Total revenue elasticity", size(small)) ///
     title("Cross-sector consistency in employment elasticities", size(medsmall)) ///
     legend(order(2 "Agriculture" 3 "Mining" 4 "Manufacturing" 5 "Utilities" ///
-        6 "Construction" 7 "Trade/repair" 8 "Transport" 9 "ICT" ///
+        6 "Construction" 7 "Wholesale/retail + repair" 8 "Transport" 9 "ICT" ///
         10 "Finance" 11 "Other services") cols(1) pos(3) ring(1) size(tiny) ///
         region(lcolor(none) fcolor(none))) ///
     plotregion(color(white)) graphregion(color(white)) ///
@@ -716,10 +719,7 @@ twoway ///
     xtitle("Average firm log employment", size(small)) ///
     ytitle("Value-added elasticity", size(small)) ///
     title("Value added", size(medsmall)) ///
-    legend(order(1 "Agriculture" 2 "Mining" 3 "Manufacturing" 4 "Utilities" ///
-        5 "Construction" 6 "Trade/repair" 7 "Transport" 8 "ICT" ///
-        9 "Finance" 10 "Other services") cols(1) pos(3) ring(1) size(tiny) ///
-        region(lcolor(none) fcolor(none))) ///
+    legend(off) ///
     plotregion(color(white)) graphregion(color(white)) ///
     bgcolor(white) name(scale_va_emp, replace)
 
@@ -760,12 +760,15 @@ twoway ///
     xtitle("Average firm log employment", size(small)) ///
     ytitle("Total-revenue elasticity", size(small)) ///
     title("Total revenue", size(medsmall)) ///
-    legend(off) ///
+    legend(order(1 "Agriculture" 2 "Mining" 3 "Manufacturing" 4 "Utilities" ///
+        5 "Construction" 6 "Wholesale/retail + repair" 7 "Transport" 8 "ICT" ///
+        9 "Finance" 10 "Other services") cols(1) pos(3) ring(1) size(tiny) ///
+        region(lcolor(none) fcolor(none))) ///
     plotregion(color(white)) graphregion(color(white)) ///
     bgcolor(white) name(scale_tot_emp, replace)
 
 graph combine scale_va_emp scale_tot_emp, ///
-    rows(1) xsize(10) ysize(4.8) graphregion(color(white)) ///
+    rows(1) xsize(11.5) ysize(4.8) graphregion(color(white)) ///
     title("Employment elasticities by sector employment scale", size(medsmall)) ///
     name(scale_emp_combined, replace)
 graph display scale_emp_combined
@@ -809,10 +812,7 @@ twoway ///
     xtitle("Average firm log total revenue", size(small)) ///
     ytitle("Value-added elasticity", size(small)) ///
     title("Value added", size(medsmall)) ///
-    legend(order(1 "Agriculture" 2 "Mining" 3 "Manufacturing" 4 "Utilities" ///
-        5 "Construction" 6 "Trade/repair" 7 "Transport" 8 "ICT" ///
-        9 "Finance" 10 "Other services") cols(1) pos(3) ring(1) size(tiny) ///
-        region(lcolor(none) fcolor(none))) ///
+    legend(off) ///
     plotregion(color(white)) graphregion(color(white)) ///
     bgcolor(white) name(scale_va_rev, replace)
 
@@ -853,12 +853,15 @@ twoway ///
     xtitle("Average firm log total revenue", size(small)) ///
     ytitle("Total-revenue elasticity", size(small)) ///
     title("Total revenue", size(medsmall)) ///
-    legend(off) ///
+    legend(order(1 "Agriculture" 2 "Mining" 3 "Manufacturing" 4 "Utilities" ///
+        5 "Construction" 6 "Wholesale/retail + repair" 7 "Transport" 8 "ICT" ///
+        9 "Finance" 10 "Other services") cols(1) pos(3) ring(1) size(tiny) ///
+        region(lcolor(none) fcolor(none))) ///
     plotregion(color(white)) graphregion(color(white)) ///
     bgcolor(white) name(scale_tot_rev, replace)
 
 graph combine scale_va_rev scale_tot_rev, ///
-    rows(1) xsize(10) ysize(4.8) graphregion(color(white)) ///
+    rows(1) xsize(11.5) ysize(4.8) graphregion(color(white)) ///
     title("Employment elasticities by sector revenue scale", size(medsmall)) ///
     name(scale_rev_combined, replace)
 graph display scale_rev_combined

@@ -29,6 +29,9 @@ if "${PROJECT_ROOT}" == "" {
     else if "`username'" == "wb648862" {
         global project_root "C:/Users/wb648862/Documents/Projects/CEMAC"
     }
+    else if "`username'" == "wb603585" {
+        global project_root "C:/Users/wb603585/OneDrive - WBG/Documents/Projects/CEMAC/FY26/CEMAC jobs analytics"
+    }
     else if fileexists("AGENTS.md") {
         global project_root "`=subinstr(c(pwd), "\", "/", .)'"
     }

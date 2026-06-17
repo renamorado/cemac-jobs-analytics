@@ -33,6 +33,28 @@ From the repository root, run:
 do "code/00_master.do"
 ```
 
+For Marina's OneDrive handoff copy, open Stata from:
+
+```text
+C:/Users/wb603585/OneDrive - WBG/Documents/Projects/CEMAC/FY26/CEMAC jobs analytics
+```
+
+Then run either:
+
+```stata
+do "00_master.do"
+```
+
+or:
+
+```stata
+do "code/00_master.do"
+```
+
+The Stata bootstrap maps `wb603585` to Marina's OneDrive project root and
+`wb648862` to the local working copy at
+`C:/Users/wb648862/Documents/Projects/CEMAC`.
+
 The current Cameroon master script sets paths, verifies the module structure, installs core packages, and runs the upstream crosswalk and cleaning checks in `code/elasticity_cameroun/`. The WBES trade branch is kept separate from the master script while the method is being validated. To build the current WBES trade prep dataset, run:
 
 ```stata
@@ -68,6 +90,18 @@ do "code/WBES_trade/03_wbes_trade_elasticity.do"
 
 That stage reads `Data/Analysis/wbes_trade_clean.dta`, estimates weighted latest-wave cross-sectional employment/export-value associations, and writes slide-ready country and Cameroon activity-group tables and figures. These are not panel fixed-effect elasticities; see `docs/wbes_trade_representativeness_note.md` for the methodological caveats.
 
+To estimate the focal revenue-exporter interaction specification, run:
+
+```stata
+do "code/WBES_trade/04_wbes_revenue_exporter_interaction.do"
+```
+
+That stage estimates weighted cross-sectional employment-revenue slopes
+separately for exporters and non-exporters. It reports the exporter minus
+non-exporter slope difference as the focal estimate, retains suppressed groups
+in an audit dataset, and requires at least 30 usable firms plus at least 10
+exporters and 10 non-exporters for displayed estimates.
+
 The reference metadata steps can also be run separately for audit:
 
 ```stata
@@ -101,3 +135,17 @@ do not maintain a second review copy under `output/slides/`.
 - `docs/reference/nacam-rev1-ins-cameroon.pdf` is the authoritative local
   reference for NACAM harmonization work in this repository.
 
+## OneDrive Handoff
+
+The authoritative working copy is the local repo at
+`C:/Users/wb648862/Documents/Projects/CEMAC`. To refresh the shared OneDrive
+handoff copy, run:
+
+```powershell
+backup_to_onedrive.bat dryrun
+backup_to_onedrive.bat full
+```
+
+The backup script is non-destructive: it copies current project files into the
+shared OneDrive folder without deleting destination-only files, and it excludes
+files named like `*_marina*` so Marina-specific variants are preserved.

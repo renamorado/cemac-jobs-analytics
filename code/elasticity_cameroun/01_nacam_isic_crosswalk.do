@@ -13,6 +13,7 @@ set more off
 
     Outputs:
         Data/Intermediate/cmr_bdf_nacam_isic_crosswalk.dta
+        output/tables/cmr_nacam_label_audit.csv
 *******************************************************************************/
 
 if "${PROJECT_ROOT}" == "" {
@@ -23,6 +24,9 @@ if "${PROJECT_ROOT}" == "" {
     }
     else if "`username'" == "wb648862" {
         global project_root "C:/Users/wb648862/Documents/Projects/CEMAC"
+    }
+    else if "`username'" == "wb603585" {
+        global project_root "C:/Users/wb603585/OneDrive - WBG/Documents/Projects/CEMAC/FY26/CEMAC jobs analytics"
     }
     else if fileexists("AGENTS.md") {
         global project_root "`=subinstr(c(pwd), "\", "/", .)'"
@@ -179,7 +183,7 @@ replace nacam_label_en = "Transport equipment manufacturing" if nacam == 27
 replace nacam_label_en = "Furniture, other manufacturing, and recovery/waste" if nacam == 28
 replace nacam_label_en = "Electricity and water supply in the legacy nomenclature" if nacam == 29
 replace nacam_label_en = "Construction" if nacam == 30
-replace nacam_label_en = "Trade" if nacam == 31
+replace nacam_label_en = "Wholesale/retail" if nacam == 31
 replace nacam_label_en = "Repair services" if nacam == 32
 replace nacam_label_en = "Accommodation and food services" if nacam == 33
 replace nacam_label_en = "Transport and warehousing" if nacam == 34
@@ -191,8 +195,8 @@ replace nacam_label_en = "Education" if nacam == 40
 replace nacam_label_en = "Human health and social work" if nacam == 41
 replace nacam_label_en = "Other community, social, and personal activities" if nacam == 42
 
-replace nacam_label_short_en = "Food-crop ag." if nacam == 1
-replace nacam_label_short_en = "Export ag." if nacam == 2
+replace nacam_label_short_en = "Food crop agriculture" if nacam == 1
+replace nacam_label_short_en = "Industrial/export agriculture" if nacam == 2
 replace nacam_label_short_en = "Livestock & hunting" if nacam == 3
 replace nacam_label_short_en = "Fishing & aquaculture" if nacam == 5
 replace nacam_label_short_en = "Hydrocarbon extraction" if nacam == 6
@@ -215,16 +219,16 @@ replace nacam_label_short_en = "Non-metallic minerals" if nacam == 23
 replace nacam_label_short_en = "Metals & metal products" if nacam == 24
 replace nacam_label_short_en = "Transport equipment" if nacam == 27
 replace nacam_label_short_en = "Furniture & other mfg." if nacam == 28
-replace nacam_label_short_en = "Legacy utilities" if nacam == 29
+replace nacam_label_short_en = "Electricity/water supply" if nacam == 29
 replace nacam_label_short_en = "Construction" if nacam == 30
-replace nacam_label_short_en = "Trade" if nacam == 31
+replace nacam_label_short_en = "Wholesale/retail" if nacam == 31
 replace nacam_label_short_en = "Repairs" if nacam == 32
-replace nacam_label_short_en = "Hospitality" if nacam == 33
+replace nacam_label_short_en = "Accommodation/food services" if nacam == 33
 replace nacam_label_short_en = "Transport & storage" if nacam == 34
-replace nacam_label_short_en = "Post & telecom" if nacam == 35
+replace nacam_label_short_en = "Post/telecommunications" if nacam == 35
 replace nacam_label_short_en = "Finance & insurance" if nacam == 36
 replace nacam_label_short_en = "Real estate" if nacam == 37
-replace nacam_label_short_en = "Business services" if nacam == 38
+replace nacam_label_short_en = "Services mainly to enterprises" if nacam == 38
 replace nacam_label_short_en = "Education" if nacam == 40
 replace nacam_label_short_en = "Health & social work" if nacam == 41
 replace nacam_label_short_en = "Other services" if nacam == 42
@@ -258,6 +262,9 @@ label variable mapping_quality "Crosswalk quality flag"
 label variable manual_review_flag "1 if the branch splits across multiple ISIC divisions"
 
 isid nacam
+
+export delimited nacam nacam_label nacam_label_en nacam_label_short_en ///
+    using "${OUTPUTDIR}/tables/cmr_nacam_label_audit.csv", replace
 
 count
 assert r(N) == 37

@@ -1,5 +1,598 @@
 # SESSIONS.md
 
+## 2026-06-17 - Inventoried Census and tax/BDF firm characteristics
+
+- Created `output/tables/cmr_firm_characteristics_inventory.csv` as a quick
+  source-availability audit without adding a permanent do-file.
+- Inspected the raw Census/RGE `BASE` sheet on its intended headquarters scope
+  (430,011 rows) and the cleaned tax/BDF panel (9,068 firm-years; 1,637 firms).
+- Confirmed strong Census coverage for location, legal form, formality,
+  employment, turnover, nationality, and sector; establishment year,
+  ownership, education, and management fields require more cautious use.
+- Confirmed that Census assets, Census wages, direct Census import/export
+  status, BDF firm age, BDF ownership/legal form, BDF location, and BDF direct
+  exporter status are unavailable in the supplied sources.
+- Flagged two source issues for follow-up: actual `S5Q01A` values are owner sex
+  rather than the dictionary-listed owner age, and `S4Q06` values describe
+  accounting systems rather than the dictionary-listed tax declaration.
+- Confirmed that BDF labour expenses are nearly complete but stored with a
+  negative accounting sign, which must be validated before use.
+- Marked Task 1.4 and implementation-order item 2 complete in
+  `tasks/Meeting 06-11-2026.md`; the accepted asset deliverable uses the BDF/tax
+  substitute because the supplied Census source has no asset field.
+
+## 2026-06-16 - Harmonized Census elasticity plot styling
+
+- Updated the Census turnover-employment coefficient plot to use the same
+  macro-sector colors, marker shapes, confidence-bar colors, and legend
+  convention as the administrative tax/BDF elasticity figures.
+- Regenerated `cmr_census_turnover_employment_elasticity_coefficients` from
+  Stata and rebuilt `slides/slides_cemac.pdf`.
+- Visually checked slide 23 to confirm the macro-sector styling is visible
+  inside the Beamer frame.
+
+## 2026-06-16 - Revised Census robustness slides and comparison figure
+
+- Updated the Census-vs-tax/BDF comparison graph so the equality line is solid
+  black with an internal label and the fitted relationship is a dashed grey
+  regression line.
+- Added a Census turnover-employment econometric specification slide that
+  explicitly describes the estimate as cross-sectional, with NACAM sector
+  intercepts and robust standard errors.
+- Added a Census-only elasticity coefficient slide using the generated
+  sector-specific turnover-employment elasticity figure.
+- Reran `code/elasticity_cameroun/13_cmr_census_turnover_employment_elasticity.do`
+  and confirmed the stage completed cleanly.
+- Compiled and visually checked a temporary `slides_cemac_updated.pdf` because
+  the canonical `slides/slides_cemac.pdf` was locked by Adobe Reader.
+
+## 2026-06-16 - Implemented Census turnover-employment elasticity robustness
+
+- Added `code/elasticity_cameroun/13_cmr_census_turnover_employment_elasticity.do`
+  to estimate cross-sectional Census/RGE employment elasticities with respect
+  to annual turnover.
+- Used `Data/Analysis/CMR_census_cleaned.dta` as the only Census source and
+  kept the sample to headquarters rows with positive employment, positive
+  annual turnover, nonmissing admin-overlap NACAM sector, and nonmissing
+  labels.
+- Estimated a common log-log slope with NACAM sector intercepts and
+  sector-specific slopes via annual-turnover-by-NACAM interactions. The common
+  Census slope is 0.204 with robust SE 0.002.
+- Reported 33 Census sectors and suppressed 2 small-support sectors in the
+  audit table. No firm FE, year FE, or NACAM-year FE are used because the
+  Census is cross-sectional.
+- Added Census-vs-administrative tax/BDF comparison outputs for overlapping
+  NACAM sectors using the baseline total-revenue estimates from
+  `Data/Analysis/cmr_nacam_fe_robustness_estimates.dta`.
+- Wired `code/00_master.do` to run FE robustness and the new Census elasticity
+  stage after Census diagnostics.
+- Added a slide with the Census-vs-tax/BDF comparison figure and documented
+  the combined source note in `docs/figure_sources.md`.
+- Updated `docs/cmr_census_cleaning_process.md` and
+  `tasks/Meeting 06-11-2026.md` with the completed Task 1.2 workflow,
+  outputs, and cross-sectional identification caveat.
+
+## 2026-06-16 - Planned Census turnover-employment elasticity robustness check
+
+- Added `docs/plans/2026-06-16-001-feat-census-turnover-employment-elasticity-plan.md`
+  for Task 1.2 from the 2026-06-11 Marina meeting notes.
+- Set the planned primary Census specification as cross-sectional log
+  employment on log annual turnover, matching the direction of the existing
+  administrative employment-on-revenue elasticity estimates.
+- Documented that Census fixed effects are limited to cross-sectional sector
+  intercepts and sector-specific slopes; firm FE, year FE, and sector-year FE
+  are not identified without panel time variation.
+- Planned outputs include a Census elasticity stage, audit tables, coefficient
+  and diagnostic figures, and an optional comparison against administrative
+  tax/BDF total-revenue elasticities.
+
+## 2026-06-15 - Added Census turnover-employment elasticity task
+
+- Updated `tasks/Meeting 06-11-2026.md` with a new backlog task to estimate
+  Census-based annual-turnover/employment elasticities.
+- Added implementation-order tracking, dependencies, subtasks, likely files,
+  deliverables, and open questions about specification orientation, unit of
+  analysis, and treatment of zero values.
+- Kept the task aligned with the Stata-first workflow by requiring auditable
+  sample checks, generated `esttab`/`estout` tables, and reproducible figures.
+
+## 2026-06-12 - Organized 2026-06-11 Marina meeting tasks
+
+- Reworked `tasks/Meeting 06-11-2026.md` from a compact meeting brainstorm
+  into an implementable, trackable backlog.
+- Added status labels, dependency ordering, deliverables, likely files, and open
+  questions for current-analysis edits, customs/export-data integration, and
+  B-READY/WBES high-elasticity sector constraint plots.
+- Marked customs integration as blocked until a mergeable customs dataset is
+  located and documented.
+- Preserved the Stata-first expectations: generated tables/figures from code,
+  visible diagnostics, source provenance, and no manual output editing.
+
+## 2026-06-11 - Added B-READY Enterprise Surveys question inventory
+
+- Added `code/BREADY_wbes/01_bready_enterprise_survey_questions.py` to extract
+  Enterprise Surveys-sourced rows from the B-READY 2025 EconomyAnswer workbook.
+- The script parses B-READY topic-score workbook headers for pillar, category,
+  subcategory, and score-indicator labels, then joins them through an explicit
+  topic/technical-variable crosswalk.
+- Generated `output/tables/bready_enterprise_survey_questions.xlsx` as a
+  single-sheet question inventory with Cameroon responses, economy counts, and
+  hierarchy match status.
+- Verified the export contains 66 Enterprise Surveys question rows across eight
+  topic sheets, with sample Cameroon responses matching `in1`, `tr18_u`,
+  `tax1`, and `comp1` in the source workbook.
+- One row, `05_Financial_Services` / `fin33`, remains marked `needs_review`
+  because it appears in EconomyAnswer as Enterprise Surveys-sourced but has no
+  confident matching score-workbook indicator label in the current crosswalk.
+
+## 2026-06-11 - Mapped priority B-READY questions to WBES variables
+
+- Added `code/BREADY_wbes/02_bready_priority_wbes_mapping.py` to read the
+  reviewer-edited `Data/B-Ready/Raw/2025/bready_enterprise_survey_questions.xlsx`
+  workbook and refresh a `wbes_variable_mapping` sheet.
+- The mapping sheet keeps the 28 rows marked `Priority == yes`, adds candidate
+  WBES microdata variable names, WBES variable-label evidence, construction or
+  filter notes, questionnaire/manual trace notes, confidence, and mapping
+  status.
+- Verified sample mappings including `reg12 -> g30a`, `tax1 -> j35a`,
+  `in1 -> c3; c4`, `comp2 -> e1; e2b_ESBR`, and
+  `gend7 -> j42; b4; b7a`.
+- The available `ES_QuestionnaireManual_2019.pdf` directly supports 18 mapped
+  rows; 10 rows are marked `mapped_from_dta_label` because the matching WBES
+  variable labels exist in `New_Comprehensive_July_21_2025.dta` but the terms
+  were not found in the available 2019 questionnaire-manual text.
+- Revised the `wbes_variable_mapping` sheet to one row per WBES variable name,
+  expanding the 28 priority indicators into 44 variable-level rows while keeping
+  `all_wbes_variable_names` for the grouped indicator mapping.
+
+## 2026-06-04 - Added Marina OneDrive handoff path and safe backup mode
+
+- Added an explicit Stata `c(username)` branch for Marina (`wb603585`) across
+  the current project bootstrap scripts, pointing to
+  `C:/Users/wb603585/OneDrive - WBG/Documents/Projects/CEMAC/FY26/CEMAC jobs analytics`.
+- Kept `wb648862` mapped to the authoritative local working copy at
+  `C:/Users/wb648862/Documents/Projects/CEMAC`.
+- Reworked `backup_to_onedrive.bat` so the default full copy is
+  non-destructive, supports `dryrun`, and excludes `*_marina*` files to
+  preserve Marina-specific variants in the shared OneDrive folder.
+- Updated `README.md` with Marina's OneDrive run instructions and the safe
+  handoff-copy workflow.
+- Ran `backup_to_onedrive.bat dryrun` and `backup_to_onedrive.bat full`
+  successfully; robocopy returned exit code 3, a nonfatal success state.
+- Confirmed the shared OneDrive copy contains the updated `wb603585` path
+  branch and the existing `*_marina*` files retained their pre-copy timestamps.
+
+## 2026-06-04 - Added WBES ISIC section fixed effects
+
+- Updated `code/WBES_trade/03_wbes_trade_elasticity.do` and
+  `code/WBES_trade/04_wbes_revenue_exporter_interaction.do` to include ISIC
+  Rev.4 section fixed effects in the WBES regressions, alongside log firm age,
+  foreign ownership share, and government/state ownership share controls.
+- Generated numeric `isic4_section_fe` variables inside each WBES analysis
+  stage from the cleaned `isic4_section` string, with missing sections assigned
+  to an explicit `Unknown` category.
+- Updated `slides/slides_cemac.tex` so WBES equations include `\lambda` sector
+  fixed-effect terms and explain that these are cross-sectional ISIC Rev.4
+  section FE, not panel firm FE.
+- Updated `docs/wbes_trade_representativeness_note.md` to document that the
+  WBES controlled specifications now include ISIC Rev.4 section fixed effects.
+- Reran `code/WBES_trade/03_wbes_trade_elasticity.do` and
+  `code/WBES_trade/04_wbes_revenue_exporter_interaction.do` successfully.
+- Recompiled `slides/slides_cemac.tex` twice with `pdflatex`; the rebuilt
+  `slides/slides_cemac.pdf` has 55 pages and no missing-figure or overfull-box
+  errors. Existing nonfatal MiKTeX logging/update warnings remain.
+- Controlled + sector-FE Cameroon revenue-exporter interaction result:
+  non-exporter slope 0.241, exporter slope 0.432, exporter minus non-exporter
+  difference 0.190 (p = 0.001), using 612 controlled-sample firms.
+
+## 2026-06-04 - Added WBES firm age and ownership controls
+
+- Updated `code/WBES_trade/01_wbes_trade_clean_prep.do` to retain WBES
+  establishment year (`b5`) and ownership shares (`b2a`-`b2d`), then construct
+  firm age, log firm age plus one, domestic/private ownership share, foreign
+  ownership share, government/state ownership share, other ownership share, and
+  control-availability flags.
+- Updated `code/WBES_trade/03_wbes_trade_elasticity.do` and
+  `code/WBES_trade/04_wbes_revenue_exporter_interaction.do` so WBES
+  regressions control for log firm age, foreign ownership share, and
+  government/state ownership share. Domestic private ownership is the omitted
+  ownership category.
+- Updated `slides/slides_cemac.tex` and
+  `docs/wbes_trade_representativeness_note.md` so WBES equations include
+  `Z_i` and define the controls explicitly.
+- Regenerated `Data/Analysis/wbes_trade_clean.dta`, WBES export-value tables
+  and figures, WBES revenue-exporter interaction tables and figures, and the
+  expanded WBES variable-availability tables.
+- Recompiled `slides/slides_cemac.tex` twice with `pdflatex`; the rebuilt
+  `slides/slides_cemac.pdf` has 55 pages and no missing-figure or overfull-box
+  errors. Existing nonfatal MiKTeX logging/update warnings remain.
+- Controlled Cameroon revenue-exporter interaction result: non-exporter slope
+  0.241, exporter slope 0.405, exporter minus non-exporter difference 0.164
+  (p = 0.003), using 612 controlled-sample firms.
+
+## 2026-06-04 - Clarified FE, controls, and regression subscripts in slides
+
+- Updated `slides/slides_cemac.tex` to spell out FE as fixed effects and
+  specify the exact levels used in the Cameroon administrative tax/BDF
+  elasticity models.
+- Clarified that the baseline BDF specification uses firm fixed effects plus
+  detailed NACAM-sector-by-fiscal-year fixed effects, with firm-level clustered
+  standard errors and no additional age, ownership, exporter-status, or other
+  firm controls.
+- Clarified the FE robustness slide: all variants retain firm fixed effects;
+  the time-shock controls vary across NACAM-sector-by-year, year-only, and
+  broad-activity-group-by-year fixed effects.
+- Replaced the generic WBES group subscript `g` with `c` for countries and `a`
+  for Cameroon activity groups, and clarified that WBES models are
+  cross-sectional weighted regressions with robust, non-clustered standard
+  errors and no firm fixed effects.
+- Recompiled `slides/slides_cemac.tex` twice with `pdflatex`; the rebuilt
+  `slides/slides_cemac.pdf` has 55 pages, includes the robustness figures, and
+  has no missing-figure or overfull-box errors. Existing nonfatal MiKTeX
+  logging/update warnings remain.
+
+## 2026-06-04 - Added Cameroon FE robustness figures to slides
+
+- Added a fixed-effect robustness setup slide to the Cameroon sectoral
+  elasticities section of `slides/slides_cemac.tex`.
+- Added the existing value-added and total-revenue FE robustness figures:
+  `cmr_nacam_fe_robustness_va_coefficients.png` and
+  `cmr_nacam_fe_robustness_tot_rev_coefficients.png`.
+- Kept the generated robustness check PDF in `output/robustness/` as a review
+  artifact and included the slide-ready figures directly in the main deck.
+- Recompiled `slides/slides_cemac.tex` twice with `pdflatex`; the rebuilt
+  `slides/slides_cemac.pdf` has 55 pages and includes both robustness figures
+  with no missing-figure errors.
+- Existing nonfatal MiKTeX logging/update warnings and the earlier overfull box
+  warning remain.
+
+## 2026-06-04 - Clarified Task 1.5 presentation wording and activity support
+
+- Replaced plot legend labels with accessible presentation wording:
+  employment response to revenue for exporters and non-exporters, plus the
+  exporter-non-exporter difference.
+- Added a Cameroon WBES activity-group specification slide before the
+  interaction diagnostic figure.
+- Confirmed only two of four Cameroon activity groups are displayed because
+  construction/utilities has 8 exporters and other services has 9, below the
+  minimum of 10 exporters per displayed interaction estimate.
+- Regenerated the real Task 1.5 figures, reran all embedded assertions, and
+  rebuilt the 52-page `slides/slides_cemac.pdf`.
+
+## 2026-06-04 - Completed Task 1.5 with restored WBES data
+
+- Restored `Data/World Bank Enterprise Survey/New_Comprehensive_July_21_2025.dta`
+  and regenerated `Data/Analysis/wbes_trade_clean.dta`.
+- Updated `code/WBES_trade/00_download_reference_data.do` to reuse official
+  reference files already present locally instead of redownloading them on
+  every prep run.
+- Ran `code/WBES_trade/04_wbes_revenue_exporter_interaction.do` successfully
+  and generated the contracted estimate dataset, tables, audit, and PDF/PNG
+  figures.
+- Confirmed all embedded support, completeness, benchmark, p-value, and slope
+  identity assertions passed. The audit retains suppressed Cameroon activity
+  groups with fewer than 10 exporters.
+- Cameroon has a non-exporter slope of 0.286, exporter slope of 0.450, and
+  exporter minus non-exporter difference of 0.164 (p = 0.002). The
+  equal-country CEMAC average difference is -0.103 (p = 0.371).
+- Reran the existing export-value stage successfully.
+- Recompiled `slides/slides_cemac.tex` twice and visually inspected the four
+  real Task 1.5 slides in the 51-page `slides/slides_cemac.pdf`.
+- Results are weighted cross-sectional associations, not causal effects.
+
+## 2026-06-04 - Implemented WBES revenue-exporter interaction stage
+
+### Objective
+
+Implement Marina task 1.5 by testing whether weighted WBES
+employment-revenue associations differ between exporters and non-exporters.
+
+### Files created or modified
+
+- `code/WBES_trade/04_wbes_revenue_exporter_interaction.do`
+- `slides/slides_cemac.tex`
+- `docs/wbes_trade_representativeness_note.md`
+- `README.md`
+- `tasks/2026-06-01_marina_meeting_phase_ii_iii.md`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Kept the new specification in the WBES branch because exporter status is not
+  available in the current Cameroon administrative elasticity panel.
+- Used `sales_w` as revenue and `export_status` for any direct or indirect
+  exports.
+- Treated the exporter minus non-exporter revenue-slope difference as the focal
+  estimate while also reporting both implied group slopes.
+- Used WBES probability weights, robust standard errors, no additional
+  controls, and a display rule of at least 30 usable firms plus at least 10
+  exporters and 10 non-exporters.
+- Kept country results primary, Cameroon activity-group results diagnostic,
+  and existing export-value specifications as supporting results.
+- Retained every attempted group in the results dataset with support counts,
+  eligibility, estimation status, and a suppression reason.
+- Built benchmark rows as equal-country averages from eligible country
+  estimates only.
+
+### Verification
+
+- Ran the new Stata stage end to end with a temporary synthetic WBES-shaped
+  dataset, including a deliberately suppressed country.
+- Confirmed the support audit retained the suppressed country and that the
+  eligible-only CEMAC benchmark excluded it.
+- Confirmed Stata assertions for sample support, populated estimates and
+  intervals, p-values, and the exporter-slope identity passed.
+- Visually checked the generated synthetic country and Cameroon activity plots.
+- Compiled a separate 51-page synthetic-validation deck and visually checked
+  the four new focal-result slides.
+- Removed all synthetic datasets, outputs, logs, and validation build files.
+- Subsequently restored the real WBES source and completed real-output
+  regeneration, as documented in the completion entry above.
+
+## 2026-06-04 - Downloaded and documented B-READY 2025 data
+
+### Objective
+
+Complete Phase III task 2.1 by preserving the official B-READY 2025 release
+and documenting its provenance and Cameroon coverage.
+
+### Files created or modified
+
+- `Data/B-Ready/Raw/2025/B-READY_ALL_DATA_2025.zip`
+- `Data/B-Ready/Raw/2025/00_B-READY-2025-DATA-README.pdf`
+- `Data/B-Ready/Raw/2025/01_B-READY-2025-PILLAR-TOPIC-SCORES.xlsx`
+- `Data/B-Ready/Raw/2025/02_B-READY-2025-EconomyAnswer.xlsx`
+- `Data/B-Ready/README.md`
+- `tasks/2026-06-01_marina_meeting_phase_ii_iii.md`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Preserved the complete official global B-READY 2025 archive rather than
+  creating a Cameroon-only derivative.
+- Kept all raw files unchanged under a year-specific raw-data folder.
+- Did not create a download or scraping script, as requested.
+- Recorded source URLs, release details, indicator-definition locations,
+  intended use, Cameroon coverage, and SHA-256 checksums in the README.
+
+### Verification
+
+- Confirmed the archive contains exactly the official README PDF and two
+  Excel workbooks.
+- Confirmed the release covers 101 economies and includes Cameroon (`CMR`).
+- Confirmed Cameroon appears in the overall pillar-score sheet, all ten
+  topic-score sheets, and all ten economy-answer topic sheets.
+
+## 2026-06-04 - Aligned FE robustness notation with slides
+
+### Objective
+
+Use the slide-deck elasticity notation in the FE robustness check and explicitly define the slide specification as the baseline.
+
+### Files modified
+
+- `code/elasticity_cameroun/10_cmr_fe_robustness_plots.do`
+- `output/robustness/cmr_nacam_fe_robustness_check.tex`
+- `output/robustness/cmr_nacam_fe_robustness_check.pdf`
+- `output/tables/cmr_nacam_fe_robustness_spec_summary.tex`
+- `output/figures/cmr_nacam_fe_robustness_va_coefficients.*`
+- `output/figures/cmr_nacam_fe_robustness_tot_rev_coefficients.*`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Replaced the generic output notation \(Q_{it}\) with the slide-deck notation \(X_{it}\).
+- Aligned the equations with the slides by using \(E_{it}\) for employment and \(D_{is}\) for NACAM-sector indicators.
+- Explicitly labeled firm FE plus NACAM-by-year FE as the baseline specification used in the slide deck.
+
+### Verification
+
+- Reran `stata-mp /e do code/elasticity_cameroun/10_cmr_fe_robustness_plots.do` successfully.
+- Recompiled the three-page check-only PDF successfully.
+- Existing nonfatal table-width, PDF-version, and local MiKTeX admin/update warnings remain.
+
+## 2026-06-04 - Added equations to FE robustness check
+
+### Objective
+
+Explain the common sector-specific elasticity structure and each fixed-effect robustness specification in the check-only LaTeX document.
+
+### Files modified
+
+- `code/elasticity_cameroun/10_cmr_fe_robustness_plots.do`
+- `output/robustness/cmr_nacam_fe_robustness_check.tex`
+- `output/robustness/cmr_nacam_fe_robustness_check.pdf`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Added a common equation defining employment, the output proxy, NACAM sector indicators, and sector-specific elasticities.
+- Added separate equations and brief explanations for firm plus NACAM-by-year FE, firm plus year FE, and firm plus broad-sector-by-year FE.
+- Kept the explanations inside the generated check-only document rather than the main slide deck.
+
+### Verification
+
+- Reran `stata-mp /e do code/elasticity_cameroun/10_cmr_fe_robustness_plots.do` successfully.
+- Compiled the regenerated check-only LaTeX file successfully; the PDF now has three pages.
+- Existing nonfatal table-width, PDF-version, and local MiKTeX admin/update warnings remain.
+
+## 2026-06-03 - Implemented Cameroon FE robustness plots
+
+### Objective
+
+Implement task 1.3 as a compact fixed-effect robustness check for the Cameroon NACAM employment elasticities, keeping outputs separate from the main deck.
+
+### Files created or modified
+
+- `code/elasticity_cameroun/10_cmr_fe_robustness_plots.do`
+- `Data/Analysis/cmr_nacam_fe_robustness_estimates.dta`
+- `output/tables/cmr_nacam_fe_robustness_spec_summary.tex`
+- `output/figures/cmr_nacam_fe_robustness_va_coefficients.pdf`
+- `output/figures/cmr_nacam_fe_robustness_va_coefficients.png`
+- `output/figures/cmr_nacam_fe_robustness_tot_rev_coefficients.pdf`
+- `output/figures/cmr_nacam_fe_robustness_tot_rev_coefficients.png`
+- `output/robustness/cmr_nacam_fe_robustness_check.tex`
+- `output/robustness/cmr_nacam_fe_robustness_check.pdf`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Treated the current primary specification as firm fixed effects plus NACAM-by-year fixed effects, clustered by firm.
+- Added two comparison specifications: firm plus year fixed effects, and firm plus broad-sector-by-year fixed effects.
+- Skipped firm age and ownership controls, per the final implementation decision.
+- Kept the robustness check out of `slides/slides_cemac.tex`; the generated PDF under `output/robustness/` is for review only.
+
+### Verification
+
+- Ran `stata-mp /e do code/elasticity_cameroun/10_cmr_fe_robustness_plots.do` successfully.
+- Confirmed current-primary value-added and total-revenue estimates match the active `cmr_nacam_results_en_labels_*_elasticity.tex` tables after rounding.
+- Visually checked both generated robustness PNG plots for readable NACAM labels, intervals, and legends.
+- Compiled `output/robustness/cmr_nacam_fe_robustness_check.tex` with `pdflatex`; it produced a two-page PDF with nonfatal overfull-box and PDF-version warnings.
+
+### Unresolved issues / warnings
+
+- The check-only table is slightly wide in LaTeX, producing a nonfatal overfull `\hbox` warning.
+- MiKTeX still reports the local admin/update log warning, but compilation exits successfully.
+
+## 2026-06-01 - Added Marina follow-up task backlog
+
+### Objective
+
+Capture new meeting tasks from Marina for later Cameroon elasticity robustness work and Phase III planning.
+
+### Files created or modified
+
+- `tasks/2026-06-01_marina_meeting_phase_ii_iii.md`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Added a dedicated dated task file rather than folding new work into completed older Marina task lists.
+- Organized items into Cameroon elasticity/presentation follow-ups and Phase III Cameroon tasks.
+- Included initial FE/control specification families for later elasticity robustness plots, while marking them as backlog items that still need identification and sample-size checks before implementation.
+
+### Unresolved issues / warnings
+
+- The official French NACAM label behind the current "Trade" display label still needs to be verified before any rename to "Commerce".
+- The comparator Cameroon report for the wood-sector discrepancy still needs to be identified.
+
+## 2026-05-28 - Commented Census sector diagnostics do-file
+
+### Objective
+
+Make `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do` easier to review by adding descriptive section and line-level comments.
+
+### Files modified
+
+- `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Added comments explaining project-root setup, file path definitions, raw Census import/provenance, numeric cleaning, crosswalk validation, firm-level sector merging, headquarters restrictions, audit table construction, sector aggregation, and plotting outputs.
+- Kept the Stata code behavior unchanged; this was documentation-only within the do-file.
+
+### Verification
+
+- Reviewed edited do-file snippets to confirm comments do not interrupt continuation lines, loops, or program blocks.
+- Did not rerun Stata because this was a comments-only change.
+
+## 2026-05-28 - Reviewed Census HQ inclusion in descriptive diagnostics
+
+### Objective
+
+Audit the Cameroon Census data process to ensure economy descriptive statistics include all possible headquarters firms.
+
+### Files created or modified
+
+- `code/elasticity_cameroun/02_nacam_data_export_mapping.do`
+- `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do`
+- `docs/cmr_census_cleaning_process.md`
+- `Data/Intermediate/cmr_nacam_data_export_mapping.dta`
+- `Data/Intermediate/cmr_nacam_data_export_mapping.xlsx`
+- `Data/Intermediate/cmr_census_activity_nacam_crosswalk.dta`
+- `Data/Analysis/CMR_census_cleaned.dta`
+- `Data/Analysis/CMR_census_nacam_diagnostics.dta`
+- `output/tables/cmr_census_sector_audit.tex`
+- `output/tables/cmr_census_crosswalk_examples.tex`
+- `output/figures/cmr_census_*.pdf`
+- `output/figures/cmr_census_*.png`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Removed the missing `Data/Intermediate/data_export.xlsx` dependency from the NACAM data-export mapping step; the Stata do-file now defines the allowed aggregate sector groups directly.
+- Added `census_nacam` in the Census diagnostics: it uses admin/BDF-overlap `nacam` when available and falls back to `official_legacy_nacam` for Census sectors absent from the elasticity panel.
+- Included 298 headquarters rows outside the elasticity NACAM sectors in the Census descriptive diagnostics, rather than dropping them from the whole-economy plots.
+- Added fallback labels and aggregate sector groups for the Census-only sectors 25, 26, 39, and 43.
+
+### Verification
+
+- Ran `code/elasticity_cameroun/02_nacam_data_export_mapping.do` successfully; all 37 admin NACAM sectors matched an allowed `data_export` group.
+- Ran `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do` successfully.
+- Confirmed raw Census rows = 438,893, headquarters rows = 430,011, headquarters rows with Census NACAM = 430,011, headquarters rows without official/admin NACAM = 0.
+- Confirmed Census diagnostics now cover 39 sectors and total 430,011 headquarters firms.
+
+### Unresolved issues / warnings
+
+- The 298 newly included headquarters rows remain flagged as outside the elasticity-sector crosswalk, so they should be described as Census-only descriptive sectors and not confused with sectors that have BDF elasticity estimates.
+
+## 2026-05-27 - Added duplicate robustness elasticity plan implementation
+
+### Objective
+
+Implement Marina's duplicate robustness task by retaining duplicate firm-year rows in a separate robustness sample and comparing elasticity estimates against the baseline cleaned panel.
+
+### Files created or modified
+
+- `code/elasticity_cameroun/09_cmr_duplicate_robustness.do`
+- `slides/slides_cemac.tex`
+- `tasks/2026-05-19_marina_meeting_tasks.md`
+- `Data/Analysis/CMR_BDF_duplicate_robustness.dta`
+- `output/tables/cmr_nacam_results_duplicate_robustness_va_elasticity.tex`
+- `output/tables/cmr_nacam_results_duplicate_robustness_tot_rev_elasticity.tex`
+- `output/figures/cmr_nacam_results_duplicate_robustness_comparison.pdf`
+- `output/figures/cmr_nacam_results_duplicate_robustness_comparison.png`
+- `slides/slides_cemac.pdf`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Kept `04_cmr_bdf_cleaning.do` unchanged so the baseline still excludes conflicting duplicate firm-years.
+- Built a duplicate-inclusive robustness panel with `firmid_original`, `firmyear_dup_seq`, `firmyear_robust_id`, and `duplicate_class`.
+- Used the original firm identifier for fixed effects and clustered standard errors in the robustness models.
+- Designed the comparison plot around baseline versus duplicate-inclusive markers rather than macro-sector colors.
+- The robustness duplicate audit identifies 125 conflicting duplicate firm-years and 4 exact-duplicate rows among the 257 retained duplicate rows; the older baseline cleaning note classifies the full 257 rows as conflicting.
+
+### Verification
+
+- Ran `stata-mp /e do code/elasticity_cameroun/09_cmr_duplicate_robustness.do`; it generated the robustness panel, tables, and comparison PDF/PNG.
+- Visually checked the comparison PNG.
+- Rebuilt `slides/slides_cemac.tex` twice with `pdflatex`; the deck compiled to 47 pages.
+- Remaining LaTeX output includes the pre-existing small overfull `\vbox` warning at line 158 and local MiKTeX admin/update log warnings, but no fatal errors.
+
+## 2026-05-25 - Moved loose root logs into logs folder
+
+### Objective
+
+Keep generated log artifacts in `logs/` rather than leaving old Stata logs in the repository root.
+
+### Files created or modified
+
+- `code/elasticity_cameroun/99_run_cmr_nacam_elasticity_batch.do`
+- `SESSIONS.md`
+- Existing root-level `.log` files moved into `logs/`
+
+### Key decisions
+
+- Updated the NACAM elasticity batch runner to write `.log`, `.done`, and `.failed` files through an absolute `logs/` path under the configured project root.
+- Preserved the older root-level `00_master.log` as `logs/00_master_root.log` because `logs/00_master.log` already existed.
+
+### Verification
+
+- Confirmed no `.log`, `.smcl`, `.done`, or `.failed` files remain in the repository root.
+- Confirmed the moved log files are now under `logs/`.
+
 ## 2026-05-25 - Added Codex handoff before computer switch
 
 ### Objective
@@ -1931,3 +2524,338 @@ Revise the current census employment, revenue, and revenue-per-worker slides so 
 - Ran `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do` successfully with Stata 17; the shell wrapper timed out after the do-file completed, so verification used the newest Stata log and output timestamps.
 - Visually checked the regenerated employment, revenue, and revenue-per-worker PNGs.
 - Compiled `slides/slides_cemac.tex` successfully with local MiKTeX `pdflatex`; the rebuilt deck has 30 pages.
+
+## 2026-05-26 - Documented Census cleaning process
+
+### Objective
+
+Create a Markdown documentation file summarizing the Cameroon 2024 RGE Census cleaning process and its current audit counts.
+
+### Files modified or created
+
+- Added `docs/cmr_census_cleaning_process.md`.
+- Updated `SESSIONS.md`.
+
+### Key decisions
+
+- Documented the active Stata implementation in `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do`.
+- Treated the note as a readable Markdown companion to the existing LaTeX crosswalk note.
+- Included source fields, basic cleaning rules, headquarters restriction, crosswalk workflow, review flags, outputs, diagnostics, and audit counts.
+
+### Verification
+
+- Cross-checked the documentation against the active Stata do-file, `docs/cmr_census_crosswalk_note.tex`, and `output/tables/cmr_census_sector_audit.tex`.
+
+## 2026-06-01 - Corrected NACAM commerce sector display label
+
+### Objective
+
+Implement task 1.1 by replacing the detailed NACAM activity label shown as "Trade" with the source-based English translation "Commerce" in Cameroon NACAM figures and tables.
+
+### Files modified
+
+- `code/elasticity_cameroun/01_nacam_isic_crosswalk.do`
+- `code/elasticity_cameroun/06_cmr_nacam_elasticity.do`
+- Regenerated Cameroon census and NACAM elasticity tables/figures under `output/`
+- Rebuilt `slides/slides_cemac.pdf`
+- Updated `SESSIONS.md`
+
+### Key decisions
+
+- Verified the official French source uses `COMMERCE` for the relevant NACAM activity; used `Commerce` for both full and short English labels for `nacam == 31`.
+- Updated visible Cameroon aggregate legends from `Trade/repair` to `Commerce/repair`.
+- Left WBES/international-trade wording unchanged because it refers to export/import trade analysis, not the Cameroon NACAM commerce sector.
+- Removed obsolete generated coefficient figures that were no longer referenced or produced by the active Stata workflow and still displayed the stale `Trade` label.
+
+### Verification
+
+- Ran `code/00_master.do` successfully via Stata; the shell wrapper timed out after completion, and `logs/00_master.log` closed cleanly.
+- Ran `code/elasticity_cameroun/99_run_cmr_nacam_elasticity_batch.do task1_1_commerce_labels` successfully.
+- Ran `code/elasticity_cameroun/09_cmr_duplicate_robustness.do` successfully.
+- Recompiled `slides/slides_cemac.tex` successfully with `pdflatex`; the rebuilt deck has 47 pages.
+
+## 2026-06-03 - Added legends to combined Census and elasticity plots
+
+### Objective
+
+Add color/shape labels to the multi-panel Census diagnostics and elasticity scale figures so sector groups are identifiable on combined plots.
+
+### Files modified
+
+- `code/elasticity_cameroun/06_cmr_nacam_elasticity.do`
+- `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do`
+- Regenerated affected Census and administrative/BDF figures under `output/figures/`
+- Rebuilt `slides/slides_cemac.pdf`
+- Updated `SESSIONS.md`
+
+### Key decisions
+
+- Kept the shared sector color/shape vocabulary used elsewhere in the deck.
+- Displayed the legend on the right-hand panel of combined two-panel figures to keep the left panel uncluttered.
+- Left source notes in the Beamer layer, not in Stata graph exports.
+
+### Verification
+
+- Ran `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do` successfully.
+- Ran `code/elasticity_cameroun/99_run_cmr_nacam_elasticity_batch.do task1_2_combined_legends` successfully.
+- Visually checked representative combined Census and elasticity-scale PNGs; color/shape legends are visible.
+- Recompiled `slides/slides_cemac.tex` successfully with `pdflatex`; the rebuilt deck has 47 pages.
+- Confirmed generated Cameroon NACAM tables now show `Commerce` and current Cameroon NACAM result PDFs no longer contain `Trade` or `Trade/repair`.
+
+## 2026-06-02 - Audited source-backed NACAM display labels
+
+### Objective
+
+Broaden task 1.1 from the standalone "Trade" label to a source-backed review of displayed NACAM sector labels in the BDF elasticity and Census diagnostic outputs.
+
+### Files modified
+
+- `code/elasticity_cameroun/01_nacam_isic_crosswalk.do`
+- `code/elasticity_cameroun/06_cmr_nacam_elasticity.do`
+- `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do`
+- `docs/reference/cmr_census_activity_nacam_crosswalk.xlsx`
+- `output/tables/cmr_nacam_label_audit.csv`
+- Regenerated Cameroon Census and NACAM elasticity tables/figures under `output/`
+- Rebuilt `slides/slides_cemac.pdf`
+- Updated `SESSIONS.md`
+
+### Key decisions
+
+- Replaced the displayed `nacam == 31` label with `Wholesale/retail`, while keeping repair activities as separate `nacam == 32` labels.
+- Changed `Export ag.` to `Industrial/export agriculture` so the short label preserves both substantive parts of `AGRICULTURE INDUSTRIELLE ET D'EXPORTATION`.
+- Replaced several overly compressed short labels with closer source-backed labels, including food crop agriculture, electricity/water supply, accommodation/food services, post/telecommunications, and services mainly to enterprises.
+- Added Census label normalization/assertions so imported workbook labels for the audited sectors cannot silently regress.
+- Updated the Census workbook directly through its native zipped XML structure because `openpyxl` installation was unavailable/stuck; no third-party Excel package was required.
+
+### Verification
+
+- Ran `code/00_master.do` successfully with Stata.
+- Ran `code/elasticity_cameroun/99_run_cmr_nacam_elasticity_batch.do task1_1_source_backed_labels` successfully.
+- Ran `code/elasticity_cameroun/09_cmr_duplicate_robustness.do` successfully.
+- Recompiled `slides/slides_cemac.tex` successfully with `pdflatex`; the rebuilt deck has 47 pages.
+- Confirmed `output/tables/cmr_nacam_label_audit.csv` lists the French NACAM label, full English label, and short display label.
+- Confirmed current Cameroon outputs no longer contain stale standalone `Trade`, `Export ag.`, `Food-crop ag.`, `Legacy utilities`, `Hospitality`, `Post & telecom`, `Business services`, `Trade/repair`, or `Commerce/repair` labels.
+- Visually checked `cmr_census_firm_count_by_nacam.png` and `cmr_nacam_results_en_labels_va_coefficients.png`; corrected labels render legibly.
+
+## 2026-06-02 - Shortened wholesale/retail label
+
+### Objective
+
+Remove the word "trade" from the displayed detailed NACAM wholesale/retail label while preserving the intended sector meaning.
+
+### Files modified
+
+- `code/elasticity_cameroun/01_nacam_isic_crosswalk.do`
+- `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do`
+- `docs/reference/cmr_census_activity_nacam_crosswalk.xlsx`
+- Regenerated Cameroon Census and NACAM elasticity tables/figures under `output/`
+- Rebuilt `slides/slides_cemac.pdf`
+- Updated `SESSIONS.md`
+
+### Key decisions
+
+- Changed both full and short displayed labels for `nacam == 31` from wholesale/retail wording with "trade" to `Wholesale/retail`.
+- Kept broad color-group legends as `Wholesale/retail + repair` because the aggregate group includes both `nacam == 31` and `nacam == 32`.
+- Left internal ISIC-style group strings and WBES/export-import trade wording unchanged.
+
+### Verification
+
+- Ran `code/00_master.do`, `code/elasticity_cameroun/99_run_cmr_nacam_elasticity_batch.do task1_1_wholesale_retail_label`, and `code/elasticity_cameroun/09_cmr_duplicate_robustness.do` successfully.
+- Rebuilt `slides/slides_cemac.pdf`; MiKTeX returned a logging-path warning after writing the 47-page PDF.
+- Confirmed the Census firm-count figure and slide PDF text now show `Wholesale/retail`.
+
+## 2026-06-03 - Added reproducible figure source notes
+
+### Objective
+
+Complete Marina task 1.2 by adding concise source notes to every generated figure used in the current CEMAC Beamer deck.
+
+### Files modified
+
+- `code/elasticity_cameroun/06_cmr_nacam_elasticity.do`
+- `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do`
+- `code/elasticity_cameroun/09_cmr_duplicate_robustness.do`
+- `code/WBES_trade/02_wbes_trade_plots.do`
+- `code/WBES_trade/03_wbes_trade_elasticity.do`
+- `docs/figure_sources.md`
+- `tasks/2026-06-01_marina_meeting_phase_ii_iii.md`
+- Regenerated deck figure outputs under `output/figures/`
+- Rebuilt `slides/slides_cemac.pdf`
+- Updated `SESSIONS.md`
+
+### Key decisions
+
+- Used `Source: INS Cameroon, RGE3 (2023-2024); calculations by authors.` for Census figures.
+- Used the cautious label `Source: Cameroon administrative tax/BDF panel; calculations by authors.` for administrative elasticity figures until the exact source institution is confirmed.
+- Used `Source: World Bank Enterprise Surveys, latest available CEMAC waves; calculations by authors.` for WBES figures.
+- Kept existing figure filenames unchanged so the Beamer deck continues to load the same generated artifacts.
+
+### Verification
+
+- Ran `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do`, `code/elasticity_cameroun/99_run_cmr_nacam_elasticity_batch.do task1_2_figure_sources`, and `code/elasticity_cameroun/09_cmr_duplicate_robustness.do` successfully.
+- Attempted `code/WBES_trade/02_wbes_trade_plots.do` and `code/WBES_trade/03_wbes_trade_elasticity.do`; both stopped because `Data/Analysis/wbes_trade_clean.dta` and the raw WBES extract are not present in the local checkout.
+- Added Beamer-layer WBES source notes so the current deck still carries a source note on each WBES figure slide.
+- Recompiled `slides/slides_cemac.tex` successfully with `pdflatex`; the rebuilt deck has 47 pages.
+- Visually checked representative Census, administrative elasticity, duplicate-robustness, and WBES figure outputs/source-note rendering.
+- Extracted PDF text and confirmed eight WBES source-note instances in the rebuilt deck.
+
+## 2026-06-11 - Mapped priority B-READY Enterprise Survey questions to WBES variables
+
+### Objective
+
+Add WBES source-variable mappings for rows marked `Priority == yes` in the B-READY Enterprise Surveys question workbook.
+
+### Files modified
+
+- `Data/B-Ready/Raw/2025/bready_enterprise_survey_questions.xlsx`
+- `code/BREADY_wbes/02_bready_priority_wbes_mapping.py`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Added/replaced the workbook sheet `wbes_variable_mapping`.
+- Matched 16 priority B-READY indicators to 25 WBES source-variable rows from `Data/World Bank Enterprise Survey/New_Comprehensive_July_21_2025.dta`.
+- Pulled WBES variable labels from the actual `.dta` metadata and added an existence flag for each mapped source variable.
+- Treated B-READY technical names such as `tr18_u`, `tr20`, `tr24_u`, `tr25`, and `fin30` as constructed indicators rather than literal WBES microdata variable names.
+
+### Verification
+
+- Ran `code/BREADY_wbes/02_bready_priority_wbes_mapping.py` successfully.
+- Confirmed `wbes_variable_mapping` has 25 data rows, 14 columns, and zero mapped variables missing from the WBES dataset metadata.
+
+## 2026-06-03 - Moved figure source notes into Beamer layer
+
+### Objective
+
+Revise task 1.2 so source notes are managed in the TeX deck rather than embedded in Stata-exported figures.
+
+### Files modified
+
+- `code/elasticity_cameroun/06_cmr_nacam_elasticity.do`
+- `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do`
+- `code/elasticity_cameroun/09_cmr_duplicate_robustness.do`
+- `code/WBES_trade/02_wbes_trade_plots.do`
+- `code/WBES_trade/03_wbes_trade_elasticity.do`
+- `slides/slides_cemac.tex`
+- `docs/figure_sources.md`
+- `tasks/2026-06-01_marina_meeting_phase_ii_iii.md`
+- Regenerated Cameroon Census and administrative/BDF figures under `output/figures/`
+- Rebuilt `slides/slides_cemac.pdf`
+
+### Key decisions
+
+- Removed embedded source-note logic from Stata graph exports.
+- Added reusable Beamer source macros for Census, administrative/BDF, and WBES figure slides.
+- Kept WBES generated image files unchanged because the local raw WBES extract and `Data/Analysis/wbes_trade_clean.dta` are not present in this checkout.
+
+### Verification
+
+- Ran `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do`, `code/elasticity_cameroun/99_run_cmr_nacam_elasticity_batch.do task1_2_tex_sources`, and `code/elasticity_cameroun/09_cmr_duplicate_robustness.do` successfully.
+- Visually checked representative regenerated Census, administrative elasticity, and duplicate-robustness PNGs to confirm source notes are no longer embedded.
+- Recompiled `slides/slides_cemac.tex` successfully with `pdflatex`; the rebuilt deck has 47 pages.
+- Extracted PDF text and confirmed 4 Census source notes, 7 administrative/BDF source notes, and 8 WBES source notes.
+
+## 2026-06-03 - Centered Beamer figure source notes
+
+### Objective
+
+Adjust the Beamer source-note macro so figure sources render centered below plots.
+
+### Files modified
+
+- `slides/slides_cemac.tex`
+- `slides/slides_cemac.pdf`
+- `SESSIONS.md`
+
+### Key decisions
+
+- Updated `\figsource` to force a paragraph break before the note and center the source text underneath the figure.
+- Kept the Stata graph exports source-note-free.
+
+### Verification
+
+- Recompiled `slides/slides_cemac.tex` successfully with `pdflatex`; the rebuilt deck has 47 pages.
+
+## 2026-06-15 - Blocked Census asset diagnostics on missing RGE source field
+
+### Objective
+
+Implement Task 1.1 from the 2026-06-11 Marina meeting notes by adding Census
+asset diagnostics if a usable RGE asset/capital field exists.
+
+### Files modified or created
+
+- `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do`
+- `Data/Cameroon/Raw/README.md`
+- `docs/cmr_census_cleaning_process.md`
+- `tasks/Meeting 06-11-2026.md`
+- `output/tables/cmr_census_asset_availability_audit.tex`
+- Regenerated current Census diagnostics under `Data/Analysis/` and `output/`
+- Updated `SESSIONS.md`
+
+### Key decisions
+
+- Searched the live repo and the shared OneDrive CEMAC archive for a fuller
+  RGE/Census source; the archive contains the same Census workbook as the live
+  repo.
+- Confirmed the current workbook dictionary lists `S4Q00` / `Capital social`,
+  but the `BASE` sheet does not contain `S4Q00`.
+- Treated Task 1.1 as blocked rather than substituting the BDF/tax-panel
+  capital variable, because the request is explicitly Census/RGE-based.
+- Added a generated Stata audit table so the missing Census asset source is
+  visible in reproducible outputs.
+- Left `slides/slides_cemac.tex` unchanged because no valid Census asset figure
+  can be generated from the current source.
+
+### Verification
+
+- Ran `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do`; the shell
+  wrapper timed out after the Stata log had closed cleanly.
+- Confirmed `output/tables/cmr_census_asset_availability_audit.tex` reports:
+  dictionary lists `S4Q00` = 1, `BASE` sheet contains `S4Q00` = 0, and asset
+  figures generated = 0.
+- Stopped the stale Stata GUI process left by the timed-out shell wrapper.
+
+## 2026-06-15 - Added BDF asset diagnostics by NACAM sector
+
+### Objective
+
+Implement a scoped administrative tax/BDF alternative to Task 1.1 because the
+current Census/RGE source lacks the dictionary-listed asset field.
+
+### Files modified or created
+
+- `code/elasticity_cameroun/11_cmr_bdf_asset_diagnostics.do`
+- `code/00_master.do`
+- `slides/slides_cemac.tex`
+- `docs/cmr_bdf_asset_diagnostics.md`
+- `docs/cmr_census_cleaning_process.md`
+- `tasks/Meeting 06-11-2026.md`
+- `Data/Analysis/CMR_BDF_asset_diagnostics.dta`
+- `output/tables/cmr_bdf_asset_availability_audit.tex`
+- `output/figures/cmr_bdf_net_fixed_assets_by_nacam.*`
+- `output/figures/cmr_bdf_net_total_assets_by_nacam.*`
+- `output/figures/cmr_bdf_assets_vs_employment_by_nacam.*`
+- Updated `SESSIONS.md`
+
+### Key decisions
+
+- Used `Data/Analysis/CMR_BDF_cleaned.dta` as the source and kept the Census
+  asset request documented as blocked.
+- Used `fa_net` as the primary capital proxy because it is net fixed assets.
+- Used `tot_assets_net` as a broader supporting balance-sheet measure.
+- Audited `fa_net`, `tot_assets_net`, `ta_net`, and `share_k`; each has
+  positive values in all 37 NACAM sectors.
+- Collapsed sector diagnostics from one latest positive asset observation per
+  firm, avoiding repeated firm-year summation of the same balance sheet.
+- Added fixed-asset and total-asset figures to the BDF/tax panel section of the
+  deck. Generated the assets-versus-employment scatter as a review artifact but
+  left it out of the deck because the labels are crowded.
+
+### Verification
+
+- Ran `code/elasticity_cameroun/11_cmr_bdf_asset_diagnostics.do` successfully.
+- Confirmed `Data/Analysis/CMR_BDF_asset_diagnostics.dta` has 37 unique NACAM
+  rows and no missing sector labels.
+- Visually checked the generated fixed-asset, total-asset, and
+  assets-versus-employment PNG figures.

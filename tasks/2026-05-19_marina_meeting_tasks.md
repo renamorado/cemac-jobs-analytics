@@ -8,10 +8,11 @@ Purpose: Backlog of follow-up tasks for the Cameroon/CEMAC jobs analytics workfl
 
 ## Task List
 
-- [ ] Duplicate robustness ID
+- [x] Duplicate robustness ID
   - Generate a new firm-year identifier that separates duplicate records so they can be counted separately instead of being collapsed or ignored.
   - Treat this as a robustness-check specification, not as the default baseline until the duplicate logic is diagnosed and documented.
   - Preserve the original identifier and add clear duplicate diagnostics before estimation.
+  - Implemented as a duplicate-inclusive robustness stage that preserves original firm fixed effects and clustering while comparing elasticities against the baseline.
 
 - [x] Split elasticity plots by outcome proxy
   - Separate the elasticity coefficient plots into total-revenue elasticities and value-added elasticities.
@@ -23,7 +24,7 @@ Purpose: Backlog of follow-up tasks for the Cameroon/CEMAC jobs analytics workfl
   - Candidate tracked outputs include LaTeX table fragments in `output/tables/`, PDFs, and PNGs in the `output/` tree.
   - Decide whether to track all generated artifacts or only a curated publication/presentation set.
 
-- [ ] Adapt trade analysis scaffold for CEMAC WBES data
+- [x] Adapt trade analysis scaffold for CEMAC WBES data
   - Extend the current trade-analysis scaffold beyond Cameroon so it can run for CEMAC countries with WBES data.
   - Identify the relevant WBES variables for exports, imports, domestic sales, total sales/revenue, value added, employment, sector, country, and survey year.
   - Document variable harmonization decisions before running pooled or cross-country comparisons.

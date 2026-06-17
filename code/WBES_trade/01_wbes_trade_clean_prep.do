@@ -44,6 +44,9 @@ if "`username'" == "user" {
 else if "`username'" == "wb648862" {
     global project_root "C:/Users/wb648862/Documents/Projects/CEMAC"
 }
+else if "`username'" == "wb603585" {
+    global project_root "C:/Users/wb603585/OneDrive - WBG/Documents/Projects/CEMAC/FY26/CEMAC jobs analytics"
+}
 else if fileexists("AGENTS.md") {
     global project_root "`=subinstr(c(pwd), "\", "/", .)'"
 }
@@ -86,6 +89,7 @@ use ///
     idstd country region sample wt wt_rs wt_BR ///
     stra_sector sector_MS size size_num l1 ///
     a20y a20_BR isic_v4 isic_v3_1 ///
+    b2a b2b b2c b2d b5 ///
     d2 d3a d3b d3c d31x d12a d12b d13 d38x n2e n2i ///
     using "`source_file'", clear
 
@@ -215,6 +219,12 @@ clonevar sector_isic31 = isic_v3_1
 clonevar sector_strata = stra_sector
 clonevar sector_manufacturing_services = sector_MS
 
+clonevar dom_private_own_pct_raw = b2a
+clonevar foreign_own_pct_raw = b2b
+clonevar gov_own_pct_raw = b2c
+clonevar other_own_pct_raw = b2d
+clonevar establishment_year_raw = b5
+
 capture confirm numeric variable sector_isic4
 if !_rc {
     generate int isic4_division = sector_isic4
@@ -340,11 +350,37 @@ replace sales = . if sales < 0
 
 foreach pct in ///
     domestic_sales_pct indirect_export_pct direct_export_pct ///
-    domestic_input_pct foreign_input_pct {
+    domestic_input_pct foreign_input_pct ///
+    dom_private_own_pct foreign_own_pct gov_own_pct other_own_pct {
     generate double `pct' = `pct'_raw
     replace `pct' = . if `pct' < 0
     replace `pct' = . if `pct' > 100
 }
+
+generate int establishment_year = establishment_year_raw
+replace establishment_year = . if establishment_year < 0
+replace establishment_year = . if establishment_year > survey_year
+
+generate double firm_age = survey_year - establishment_year ///
+    if !missing(survey_year, establishment_year)
+generate double ln_firm_age = ln(firm_age + 1) if firm_age >= 0
+
+generate double domestic_own_share = dom_private_own_pct / 100 ///
+    if !missing(dom_private_own_pct)
+generate double foreign_own_share = foreign_own_pct / 100 ///
+    if !missing(foreign_own_pct)
+generate double gov_own_share = gov_own_pct / 100 ///
+    if !missing(gov_own_pct)
+generate double other_own_share = other_own_pct / 100 ///
+    if !missing(other_own_pct)
+generate double ownership_share_sum = dom_private_own_pct ///
+    + foreign_own_pct + gov_own_pct + other_own_pct ///
+    if !missing(dom_private_own_pct, foreign_own_pct, ///
+        gov_own_pct, other_own_pct)
+generate byte ownership_share_off_100 = abs(ownership_share_sum - 100) > .001 ///
+    if !missing(ownership_share_sum)
+generate byte wbes_controls_available = !missing(ln_firm_age, ///
+    foreign_own_share, gov_own_share)
 
 generate double raw_material_cost = raw_material_cost_raw
 replace raw_material_cost = . if raw_material_cost < 0
@@ -361,6 +397,7 @@ replace direct_import_response = . if !inlist(direct_import_response, 1, 2) & !m
 assert employment >= 0 if !missing(employment)
 assert permanent_employment >= 0 if !missing(permanent_employment)
 assert sales >= 0 if !missing(sales)
+assert firm_age >= 0 if !missing(firm_age)
 assert raw_material_cost >= 0 if !missing(raw_material_cost)
 assert resale_goods_cost >= 0 if !missing(resale_goods_cost)
 assert input_cost >= 0 if !missing(input_cost)
@@ -511,6 +548,8 @@ generate byte has_sector_isic4 = !missing(sector_isic4)
 generate byte has_export_share = !missing(export_share)
 generate byte has_import_status = !missing(import_status)
 generate byte has_import_value = !missing(import_value)
+generate byte has_firm_age = !missing(ln_firm_age)
+generate byte has_ownership_controls = !missing(foreign_own_share, gov_own_share)
 generate byte sales_share_off_100 = abs(sales_share_sum - 100) > .001 if !missing(sales_share_sum)
 generate byte input_share_off_100 = abs(input_share_sum - 100) > .001 if !missing(input_share_sum)
 
@@ -519,7 +558,8 @@ preserve
         (count) firms = firm_id ///
         (sum) has_sales has_sales_w has_employment has_weight has_sector_isic4 ///
               has_export_share has_import_status has_import_value ///
-              sales_share_off_100 input_share_off_100, ///
+              has_firm_age has_ownership_controls ///
+              sales_share_off_100 input_share_off_100 ownership_share_off_100, ///
         by(country_name)
 
     sort country_name
@@ -527,9 +567,10 @@ preserve
 
     mkmat firms has_sales has_sales_w has_employment has_weight has_sector_isic4 ///
         has_export_share has_import_status has_import_value ///
-        sales_share_off_100 input_share_off_100, ///
+        has_firm_age has_ownership_controls ///
+        sales_share_off_100 input_share_off_100 ownership_share_off_100, ///
         matrix(variable_availability) rownames(rowname)
-    matrix colnames variable_availability = Firms Sales SalesW Employment Weight ISIC4 ExportShare ImportStatus ImportValue SalesShareOff100 InputShareOff100
+    matrix colnames variable_availability = Firms Sales SalesW Employment Weight ISIC4 ExportShare ImportStatus ImportValue FirmAge OwnershipControls SalesShareOff100 InputShareOff100 OwnershipShareOff100
 
     local availability_rowlabels
     quietly count
@@ -555,7 +596,8 @@ preserve
         (count) firms = firm_id ///
         (sum) has_sales has_sales_w has_employment has_weight has_sector_isic4 ///
               has_export_share has_import_status has_import_value ///
-              sales_share_off_100 input_share_off_100, ///
+              has_firm_age has_ownership_controls ///
+              sales_share_off_100 input_share_off_100 ownership_share_off_100, ///
         by(country_name)
 
     sort country_name
@@ -563,9 +605,10 @@ preserve
 
     mkmat firms has_sales has_sales_w has_employment has_weight has_sector_isic4 ///
         has_export_share has_import_status has_import_value ///
-        sales_share_off_100 input_share_off_100, ///
+        has_firm_age has_ownership_controls ///
+        sales_share_off_100 input_share_off_100 ownership_share_off_100, ///
         matrix(cemac_variable_availability) rownames(rowname)
-    matrix colnames cemac_variable_availability = Firms Sales SalesW Employment Weight ISIC4 ExportShare ImportStatus ImportValue SalesShareOff100 InputShareOff100
+    matrix colnames cemac_variable_availability = Firms Sales SalesW Employment Weight ISIC4 ExportShare ImportStatus ImportValue FirmAge OwnershipControls SalesShareOff100 InputShareOff100 OwnershipShareOff100
 
     local cemac_availability_rowlabels
     quietly count
@@ -609,6 +652,14 @@ label variable isic4_section_label "ISIC Rev.4 section label"
 label variable isic4_division_label "ISIC Rev.4 division label"
 label variable sector_strata "WBES stratification sector"
 label variable firm_size "WBES firm size category"
+label variable establishment_year "Year establishment began operations"
+label variable firm_age "Firm age in years at survey year"
+label variable ln_firm_age "Log firm age plus one"
+label variable domestic_own_share "Domestic private ownership share"
+label variable foreign_own_share "Foreign private ownership share"
+label variable gov_own_share "Government/state ownership share"
+label variable other_own_share "Other ownership share"
+label variable wbes_controls_available "Firm age and ownership controls available"
 label variable employment "Employment from WBES size_num, with negative codes set missing"
 label variable permanent_employment "Permanent full-time employment from WBES l1, with negative codes set missing"
 label variable sales "Annual sales from WBES d2, with negative codes set missing"
@@ -645,7 +696,10 @@ order ///
     sector_isic4 isic4_division isic4_division_code ///
     isic4_section isic4_section_label isic4_division_label ///
     sector_isic31 sector_strata sector_manufacturing_services ///
-    firm_size employment permanent_employment ///
+    firm_size establishment_year firm_age ln_firm_age ///
+    domestic_own_share foreign_own_share gov_own_share other_own_share ///
+    wbes_controls_available ///
+    employment permanent_employment ///
     sales sales_w input_cost input_cost_w ///
     domestic_sales_share indirect_export_share direct_export_share export_share ///
     domestic_sales local_sales export_value export_status direct_exporter_10 ///
@@ -661,7 +715,14 @@ keep ///
     sector_isic4 isic4_division isic4_division_code ///
     isic4_section isic4_section_label isic4_division_label ///
     sector_isic31 sector_strata sector_manufacturing_services ///
-    firm_size employment employment_raw permanent_employment permanent_employment_raw ///
+    firm_size establishment_year establishment_year_raw firm_age ln_firm_age ///
+    dom_private_own_pct dom_private_own_pct_raw ///
+    foreign_own_pct foreign_own_pct_raw ///
+    gov_own_pct gov_own_pct_raw ///
+    other_own_pct other_own_pct_raw ///
+    domestic_own_share foreign_own_share gov_own_share other_own_share ///
+    ownership_share_sum ownership_share_off_100 wbes_controls_available ///
+    employment employment_raw permanent_employment permanent_employment_raw ///
     sales sales_raw sales_w sales_p5 sales_p95 ///
     input_cost input_cost_w input_cost_p5 input_cost_p95 ///
     raw_material_cost raw_material_cost_raw resale_goods_cost resale_goods_cost_raw ///
@@ -676,7 +737,8 @@ keep ///
     gvc_local_only gvc_import_only gvc_export_only gvc_two_way ///
     has_sales has_sales_w has_employment has_weight has_sector_isic4 ///
     has_export_share has_import_status has_import_value ///
-    sales_share_off_100 input_share_off_100
+    has_firm_age has_ownership_controls ///
+    sales_share_off_100 input_share_off_100 ownership_share_off_100
 
 compress
 

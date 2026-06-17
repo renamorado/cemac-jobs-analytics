@@ -31,6 +31,15 @@
 \setbeamertemplate{itemize items}[circle]
 \setbeamertemplate{section in toc}[sections numbered]
 
+\newcommand{\figsource}[1]{%
+    \par\vspace{0.04cm}
+    {\centering\tiny #1\par}
+}
+\newcommand{\censusfigsource}{\figsource{Source: INS Cameroon, RGE3 (2023-2024); calculations by authors.}}
+\newcommand{\bdffigsource}{\figsource{Source: Cameroon administrative tax/BDF panel; calculations by authors.}}
+\newcommand{\censusbdffigsource}{\figsource{Sources: INS Cameroon, RGE3 (2023-2024), and Cameroon administrative tax/BDF panel; calculations by authors.}}
+\newcommand{\wbesfigsource}{\figsource{Source: World Bank Enterprise Surveys, latest available CEMAC waves; calculations by authors.}}
+
 \title{CEMAC Jobs Analytics}
 \subtitle{Cameroon elasticities and WBES trade diagnostics}
 \author{}
@@ -118,28 +127,32 @@
 
 \begin{frame}{Census Firm Counts by Harmonized NACAM Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_census_firm_count_by_nacam.png}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_firm_count_by_nacam.png}
+    \censusfigsource
 \end{frame}
 
 \begin{frame}{Census Log Employment by Harmonized NACAM Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_census_total_employment_by_nacam.png}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_total_employment_by_nacam.png}
+    \censusfigsource
 \end{frame}
 
 \begin{frame}{Census Log Revenue by Harmonized NACAM Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_census_total_revenue_by_nacam.png}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_total_revenue_by_nacam.png}
+    \censusfigsource
 \end{frame}
 
 \begin{frame}{Census Log Revenue per Worker by Harmonized NACAM Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_per_worker_by_nacam.png}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_per_worker_by_nacam.png}
+    \censusfigsource
 \end{frame}
 
 \section{Cameroun Sectoral Elasticities}
 
 \begin{frame}{Specification and Sample}
-    \small
+    \footnotesize
     \begin{equation}
         \ln(E_{it}) = \alpha_i + \delta_{st} + \sum_s \beta_s \left( \ln(X_{it}) \times D_{is} \right) + \varepsilon_{it}
     \end{equation}
@@ -150,16 +163,17 @@
         \item $X_{it}$ is either value added or total revenue, estimated in separate regressions.
         \item $D_{is}$ equals 1 if firm $i$ belongs to NACAM sector $s$, and 0 otherwise.
         \item Sector is treated as a firm characteristic, so each firm contributes to one NACAM interaction term.
-        \item $\alpha_i$ are firm fixed effects and $\delta_{st}$ are sector-by-year effects.
+        \item $\alpha_i$ are firm fixed effects; $\delta_{st}$ are NACAM-sector-by-fiscal-year fixed effects.
         \item $\beta_s$ is the elasticity for firms in sector $s$, identified through the interaction between $\ln(X_{it})$ and the sector indicator $D_{is}$.
-        \item Standard errors clustered at the firm level.
-        \item Inclusion rule for reported sectors: at least 30 observations and 10 firms in both outcome samples.
+        \item No additional firm-level controls are included beyond these fixed effects.
+        \item Standard errors are clustered at the firm level; reported sectors have at least 30 observations and 10 firms in both outcome samples.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Employment Distribution by Fiscal Year}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_ln_emp_density_by_year.png}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_ln_emp_density_by_year.png}
+    \bdffigsource
 \end{frame}
 
 \begin{frame}{Value-Added Elasticity Specification}
@@ -170,15 +184,17 @@
 
     \begin{itemize}
         \item Estimates use the Cameroon administrative firm-year panel.
-        \item Firm fixed effects absorb time-invariant firm differences.
-        \item Sector-by-year effects absorb shocks common to a NACAM sector in a fiscal year.
+        \item Firm fixed effects absorb time-invariant firm differences at the taxpayer/firm level.
+        \item NACAM-sector-by-fiscal-year fixed effects absorb annual shocks common to firms in the same detailed activity.
+        \item No age, ownership, exporter-status, or other firm controls are included.
         \item The plotted point for each sector is $\beta^{VA}_s$ with a firm-clustered 95 percent interval.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Value-Added Elasticities Across NACAM Sectors}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_va_coefficients.png}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_va_coefficients.png}
+    \bdffigsource
 \end{frame}
 
 \begin{frame}{Total-Revenue Elasticity Specification}
@@ -189,14 +205,16 @@
 
     \begin{itemize}
         \item $R_{it}$ is total revenue, estimated in a separate regression from value added.
-        \item The sample rule remains at least 30 observations and 10 firms in both reported outcome samples.
+        \item Fixed effects are at the firm level and NACAM-sector-by-fiscal-year level.
+        \item No additional firm-level controls are included beyond these fixed effects.
         \item The plotted point for each sector is $\beta^{R}_s$ with standard errors clustered at the firm level.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Total-Revenue Elasticities Across NACAM Sectors}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_tot_rev_coefficients.png}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_tot_rev_coefficients.png}
+    \bdffigsource
 \end{frame}
 
 \begin{frame}{Cross-Model Comparison}
@@ -210,7 +228,81 @@
 
 \begin{frame}{Cross-Model Consistency}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_scatter.png}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_scatter.png}
+    \bdffigsource
+\end{frame}
+
+\begin{frame}{Fixed-Effect Robustness Check}
+    \begin{itemize}
+        \item FE means fixed effects. All robustness specifications keep taxpayer/firm fixed effects and firm-clustered standard errors.
+        \item Baseline: firm FE plus detailed NACAM-sector-by-fiscal-year FE.
+        \item Looser alternative: firm FE plus fiscal-year FE only.
+        \item Intermediate alternative: firm FE plus broad-activity-group-by-fiscal-year FE.
+        \item No age, ownership, exporter-status, or other firm-level controls are added in these robustness checks.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Value-Added Elasticity Robustness}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_fe_robustness_va_coefficients.png}
+    \bdffigsource
+\end{frame}
+
+\begin{frame}{Total-Revenue Elasticity Robustness}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_fe_robustness_tot_rev_coefficients.png}
+    \bdffigsource
+\end{frame}
+
+\begin{frame}{Census Turnover-Employment Specification}
+    \footnotesize
+    \begin{equation}
+        \ln(E_i) = \alpha_s + \sum_s \beta_s
+        \left[\ln(R_i) \times D_{is}\right] + \varepsilon_i
+    \end{equation}
+
+    \begin{itemize}
+        \item The unit of observation is a Census headquarters firm $i$.
+        \item $E_i$ is employment and $R_i$ is annual turnover from RGE3.
+        \item $D_{is}$ equals 1 if firm $i$ belongs to NACAM sector $s$.
+        \item $\alpha_s$ are detailed NACAM sector intercepts.
+        \item $\beta_s$ is the cross-sectional employment elasticity with respect to annual turnover in sector $s$.
+        \item There are no firm fixed effects, year fixed effects, or NACAM-year fixed effects because the Census has no panel time variation.
+        \item Standard errors are heteroskedasticity-robust; reported sectors have at least 30 positive-employment and positive-turnover headquarters firms.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Census Turnover-Employment Elasticities}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_employment_elasticity_coefficients.png}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}{Census Turnover-Employment Robustness}
+    \footnotesize
+    \begin{itemize}
+        \item Census estimates are cross-sectional slopes; tax/BDF estimates are panel total-revenue elasticities with firm and NACAM-year fixed effects.
+        \item The solid black line marks equality between the two estimates; the dashed grey line shows the fitted relationship across overlapping NACAM sectors.
+    \end{itemize}
+    \vspace{-0.12cm}
+    \centering
+    \includegraphics[width=\textwidth,height=0.56\textheight,keepaspectratio]{../output/figures/cmr_census_vs_bdf_turnover_employment_elasticity.png}
+    \censusbdffigsource
+\end{frame}
+
+\begin{frame}{Duplicate Robustness Check}
+    \begin{itemize}
+        \item The baseline specification excludes conflicting duplicate firm-years from the cleaned panel.
+        \item The robustness specification keeps those duplicate rows as separate observations.
+        \item Firm fixed effects and clustered standard errors still use the original firm identifier, so duplicate rows do not become new firms.
+        \item The next plot compares baseline and duplicate-inclusive elasticities sector by sector.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Baseline vs Duplicate-Inclusive Elasticities}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_duplicate_robustness_comparison.png}
+    \bdffigsource
 \end{frame}
 
 \begin{frame}{Elasticity and Scale Comparison}
@@ -224,7 +316,8 @@
 
 \begin{frame}{Elasticities and Employment Scale}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_elasticities_vs_avg_log_employment.png}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_elasticities_vs_avg_log_employment.png}
+    \bdffigsource
 \end{frame}
 
 \begin{frame}{Elasticity and Revenue Scale Comparison}
@@ -236,7 +329,29 @@
 
 \begin{frame}{Elasticities and Revenue Scale}
     \centering
-    \includegraphics[width=\textwidth,height=0.76\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_elasticities_vs_avg_log_revenue.png}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_elasticities_vs_avg_log_revenue.png}
+    \bdffigsource
+\end{frame}
+
+\begin{frame}{Administrative Tax/BDF Asset Diagnostics}
+    \begin{itemize}
+        \item The RGE/Census file does not include the dictionary-listed asset field, so asset diagnostics use the administrative tax/BDF panel instead.
+        \item Net fixed assets are the preferred capital proxy because they most closely represent firm capital stock in the current BDF variables.
+        \item Each firm contributes once to the sector totals, using its latest available positive asset observation.
+        \item Net total assets are shown as a broader balance-sheet comparison.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{BDF Net Fixed Assets by Harmonized NACAM Sector}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_net_fixed_assets_by_nacam.png}
+    \bdffigsource
+\end{frame}
+
+\begin{frame}{BDF Net Total Assets by Harmonized NACAM Sector}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_net_total_assets_by_nacam.png}
+    \bdffigsource
 \end{frame}
 
 \begin{frame}{Revenue-Elasticity Sector Deciles}
@@ -308,7 +423,7 @@
     \centering
     \tiny
     \resizebox{\textwidth}{!}{
-        \begin{tabular}{lrrrrrrrrrrr}
+        \begin{tabular}{lrrrrrrrrrrrrrr}
             \input{../output/tables/cemac_wbes_trade_variable_availability.tex}
         \end{tabular}
     }
@@ -346,34 +461,133 @@
 
 \begin{frame}{Exporter Participation}
     \centering
-    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_exporter_share.png}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_exporter_share.png}
+    \wbesfigsource
 \end{frame}
 
 \begin{frame}{Export Intensity Among Exporters}
     \centering
-    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_export_intensity.png}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_export_intensity.png}
+    \wbesfigsource
 \end{frame}
 
 \begin{frame}{Import and Foreign-Input Participation}
     \centering
-    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_import_participation.png}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_import_participation.png}
+    \wbesfigsource
 \end{frame}
 
 \begin{frame}{Two-Way Trader Status}
     \centering
-    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_two_way_trader.png}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_two_way_trader.png}
+    \wbesfigsource
 \end{frame}
 
-\begin{frame}{WBES Trade-Employment Association}
+\begin{frame}{Focal WBES Revenue-Exporter Specification}
     \small
     \begin{equation}
-        \ln(E_i) = \alpha + \beta \ln(X_i^+) + \gamma Exporter_i + \varepsilon_i
+        \ln(E_i) = \alpha_c + \beta_c \ln(R_i) + \gamma_c Exporter_i
+        + \delta_c\left[\ln(R_i) \times Exporter_i\right]
+        + \theta_c Z_i + \lambda_{c q(i)} + \varepsilon_i,
+        \quad i \in c
     \end{equation}
 
     \begin{itemize}
-        \item Latest-wave WBES estimates are weighted cross-sectional associations.
+        \item $c$ indexes the country. The model is estimated separately within each country.
+        \item WBES is cross-sectional, so there are no firm fixed effects or panel controls.
+        \item $Z_i$ controls for log firm age, foreign ownership share, and government/state ownership share.
+        \item $\lambda_{c q(i)}$ are country-specific ISIC Rev.4 section fixed effects.
+        \item Estimates use WBES weights and robust standard errors, not clustered standard errors.
+        \item $\beta_c$ is the non-exporter slope; $\beta_c + \delta_c$ is the exporter slope.
+        \item The focal estimate is $\delta_c$, the exporter minus non-exporter slope difference.
+        \item Display rule: at least 30 firms overall and at least 10 firms in each exporter group.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Country Revenue-Exporter Interaction Estimates}
+    \IfFileExists{../output/tables/cemac_wbes_revenue_exporter_interaction_country.tex}{
+    \vspace{-0.3cm}
+    \centering
+    \tiny
+    \resizebox{\textwidth}{!}{
+        \begin{tabular}{lrrrrrrrrrr}
+            \input{../output/tables/cemac_wbes_revenue_exporter_interaction_country.tex}
+        \end{tabular}
+    }
+
+    \vspace{0.1cm}
+    {\scriptsize The difference column is the focal exporter minus non-exporter slope estimate.}
+    }{
+    \centering
+    \vfill
+    \large Results pending regeneration of the WBES interaction stage.
+
+    \vspace{0.4cm}
+    \normalsize Required input: \texttt{Data/Analysis/wbes\_trade\_clean.dta}
+    \vfill
+    }
+\end{frame}
+
+\begin{frame}{Country Employment Responses to Revenue by Exporter Status}
+    \centering
+    \IfFileExists{../output/figures/cemac_wbes_revenue_exporter_interaction_country.png}{
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/cemac_wbes_revenue_exporter_interaction_country.png}
+    \wbesfigsource
+    }{
+    \vfill
+    \large Figure pending regeneration of the WBES interaction stage.
+    \vfill
+    }
+\end{frame}
+
+\begin{frame}{Cameroon WBES Activity-Group Specification}
+    \footnotesize
+    \begin{equation}
+        \ln(E_i) = \alpha_a + \beta_a \ln(R_i) + \gamma_a Exporter_i
+        + \delta_a\left[\ln(R_i) \times Exporter_i\right]
+        + \theta_a Z_i + \lambda_{a q(i)} + \varepsilon_i,
+        \quad i \in a
+    \end{equation}
+
+    \begin{itemize}
+        \item $a$ indexes broad Cameroon WBES activity groups; the model is estimated separately within each group.
+        \item Groups combine ISIC Rev.4 sections: manufacturing; construction/utilities; trade/hospitality/transport; and other services.
+        \item WBES is cross-sectional, so there are no firm fixed effects.
+        \item $Z_i$ controls for log firm age, foreign ownership share, and government/state ownership share.
+        \item $\lambda_{a q(i)}$ are activity-specific ISIC Rev.4 section fixed effects where there is within-activity variation.
+        \item Estimates use WBES weights and robust standard errors, not clustered standard errors.
+        \item Only two groups satisfy the display rule. The excluded groups are construction/utilities with 8 exporters and other services with 9, below the required 10 exporters.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Cameroon Activity Employment Responses to Revenue (Diagnostic)}
+    \centering
+    \IfFileExists{../output/figures/cemac_wbes_revenue_exporter_interaction_cameroon_activity.png}{
+    \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{../output/figures/cemac_wbes_revenue_exporter_interaction_cameroon_activity.png}
+    \wbesfigsource
+
+    {\scriptsize Activity estimates are exploratory diagnostics; suppressed groups remain documented in the generated sample audit.}
+    }{
+    \vfill
+    \large Diagnostic figure pending regeneration of the WBES interaction stage.
+    \vfill
+    }
+\end{frame}
+
+\begin{frame}{Supporting WBES Export-Value Specification}
+    \small
+    \begin{equation}
+        \ln(E_i) = \alpha + \beta \ln(X_i^+) + \gamma Exporter_i
+        + \theta Z_i + \lambda_{q(i)} + \varepsilon_i
+    \end{equation}
+
+    \begin{itemize}
+        \item These supporting models use export value rather than total revenue.
+        \item Latest-wave WBES estimates remain weighted cross-sectional associations.
         \item $X_i^+$ is export value, with log export value set to zero for non-exporters in the all-firm model.
         \item The exporter dummy separates the extensive margin from the positive-export-value slope.
+        \item $Z_i$ controls for log firm age, foreign ownership share, and government/state ownership share.
+        \item $\lambda_{q(i)}$ are ISIC Rev.4 section fixed effects.
         \item Rows with fewer than 30 observations are suppressed; benchmark rows are equal-country averages.
     \end{itemize}
 \end{frame}
@@ -395,37 +609,45 @@
 \begin{frame}{WBES Country Specification: All Firms}
     \small
     \begin{equation}
-        \ln(E_i) = \alpha_c + \beta_c \ln(X_i^+) + \gamma_c Exporter_i + \varepsilon_i
+        \ln(E_i) = \alpha_c + \beta_c \ln(X_i^+) + \gamma_c Exporter_i
+        + \theta_c Z_i + \lambda_{c q(i)} + \varepsilon_i
     \end{equation}
 
     \begin{itemize}
         \item Estimated separately by country using WBES weights.
         \item Non-exporters stay in the sample with $\ln(X_i^+) = 0$.
+        \item $Z_i$ controls for log firm age, foreign ownership share, and government/state ownership share.
+        \item $\lambda_{c q(i)}$ are country-specific ISIC Rev.4 section fixed effects.
         \item The plotted coefficient is $\beta_c$; it is descriptive, not causal.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{WBES Country Associations: All Firms}
     \centering
-    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_country_all_firms.png}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_country_all_firms.png}
+    \wbesfigsource
 \end{frame}
 
 \begin{frame}{WBES Country Specification: Exporters Only}
     \small
     \begin{equation}
-        \ln(E_i) = \alpha_c + \beta_c \ln(X_i) + \varepsilon_i,\quad X_i > 0
+        \ln(E_i) = \alpha_c + \beta_c \ln(X_i) + \theta_c Z_i
+        + \lambda_{c q(i)} + \varepsilon_i,\quad X_i > 0
     \end{equation}
 
     \begin{itemize}
         \item Estimated separately by country among firms with positive export value.
         \item This is the intensive-margin association within exporters.
+        \item $Z_i$ controls for log firm age, foreign ownership share, and government/state ownership share.
+        \item $\lambda_{c q(i)}$ are country-specific ISIC Rev.4 section fixed effects.
         \item Countries with fewer than 30 exporters are suppressed in the plot.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{WBES Country Associations: Exporters Only}
     \centering
-    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_country_exporters_only.png}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_country_exporters_only.png}
+    \wbesfigsource
 \end{frame}
 
 \begin{frame}{Cameroon WBES Activity Estimates}
@@ -445,29 +667,36 @@
 \begin{frame}{Cameroon Activity Specification: All Firms}
     \small
     \begin{equation}
-        \ln(E_i) = \alpha_a + \beta_a \ln(X_i^+) + \gamma_a Exporter_i + \varepsilon_i
+        \ln(E_i) = \alpha_a + \beta_a \ln(X_i^+) + \gamma_a Exporter_i
+        + \theta_a Z_i + \lambda_{a q(i)} + \varepsilon_i
     \end{equation}
 
     \begin{itemize}
         \item Estimated within Cameroon WBES activity groups.
         \item This is a diagnostic adaptation of the elasticity idea to cross-sectional survey data.
+        \item $Z_i$ controls for log firm age, foreign ownership share, and government/state ownership share.
+        \item $\lambda_{a q(i)}$ are activity-specific ISIC Rev.4 section fixed effects where there is within-activity variation.
         \item Activity rows pass the all-firm sample threshold, but exporter-only rows may be suppressed.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Cameroon Activity Associations: All Firms}
     \centering
-    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_cameroon_activity_all_firms.png}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_cameroon_activity_all_firms.png}
+    \wbesfigsource
 \end{frame}
 
 \begin{frame}{Cameroon Activity Specification: Exporters Only}
     \small
     \begin{equation}
-        \ln(E_i) = \alpha_a + \beta_a \ln(X_i) + \varepsilon_i,\quad X_i > 0
+        \ln(E_i) = \alpha_a + \beta_a \ln(X_i) + \theta_a Z_i
+        + \lambda_{a q(i)} + \varepsilon_i,\quad X_i > 0
     \end{equation}
 
     \begin{itemize}
         \item Estimated among Cameroon exporters within WBES activity groups.
+        \item $Z_i$ controls for log firm age, foreign ownership share, and government/state ownership share.
+        \item $\lambda_{a q(i)}$ are activity-specific ISIC Rev.4 section fixed effects where there is within-activity variation.
         \item Rows are shown only when at least 30 exporter observations are available.
         \item These results are best read as sample diagnostics for follow-up, not sector multipliers.
     \end{itemize}
@@ -475,7 +704,8 @@
 
 \begin{frame}{Cameroon Activity Associations: Exporters Only}
     \centering
-    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_cameroon_activity_exporters_only.png}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_cameroon_activity_exporters_only.png}
+    \wbesfigsource
 \end{frame}
 
 \end{document}

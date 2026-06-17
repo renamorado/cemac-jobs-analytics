@@ -14,6 +14,9 @@ if "`username'" == "user" {
 else if "`username'" == "wb648862" {
     global project_root "C:/Users/wb648862/Documents/Projects/CEMAC"
 }
+else if "`username'" == "wb603585" {
+    global project_root "C:/Users/wb603585/OneDrive - WBG/Documents/Projects/CEMAC/FY26/CEMAC jobs analytics"
+}
 else if fileexists("AGENTS.md") {
     global project_root "`=subinstr(c(pwd), "\", "/", .)'"
 }
@@ -33,9 +36,12 @@ if "`run_id'" == "" {
     local run_id "default"
 }
 
-local log_path "logs/cmr_nacam_elasticity_batch_`run_id'.log"
-local done_path "logs/cmr_nacam_elasticity_`run_id'.done"
-local fail_path "logs/cmr_nacam_elasticity_`run_id'.failed"
+local log_dir "${project_root}/logs"
+capture mkdir "`log_dir'"
+
+local log_path "`log_dir'/cmr_nacam_elasticity_batch_`run_id'.log"
+local done_path "`log_dir'/cmr_nacam_elasticity_`run_id'.done"
+local fail_path "`log_dir'/cmr_nacam_elasticity_`run_id'.failed"
 
 capture erase "`done_path'"
 capture erase "`fail_path'"

@@ -12,6 +12,9 @@ if "`username'" == "user" {
 else if "`username'" == "wb648862" {
     global project_root "C:/Users/wb648862/Documents/Projects/CEMAC"
 }
+else if "`username'" == "wb603585" {
+    global project_root "C:/Users/wb603585/OneDrive - WBG/Documents/Projects/CEMAC/FY26/CEMAC jobs analytics"
+}
 else if fileexists("AGENTS.md") {
     global project_root "`=subinstr(c(pwd), "\", "/", .)'"
 }
@@ -32,7 +35,7 @@ do "code/01_setup.do"
 log using "${LOGDIR}/00_master.log", replace text
 
 display as text "Starting Cameroon pipeline from ${PROJECT_ROOT}"
-display as text "Current stage: Cameroon elasticity module checks, cleaning-note exports, and census diagnostics."
+display as text "Current stage: Cameroon elasticity module checks, cleaning-note exports, BDF asset diagnostics, census diagnostics, and Census elasticity robustness."
 
 /*******************************************************************************
     Current pipeline order
@@ -46,10 +49,19 @@ do "${ELASTICITY_CAMEROUN_CODEDIR}/02_nacam_data_export_mapping.do"
 do "${ELASTICITY_CAMEROUN_CODEDIR}/03_repo_checks.do"
 do "${ELASTICITY_CAMEROUN_CODEDIR}/04_cmr_bdf_cleaning.do"
 
-* 3. Census sector diagnostics
+* 3. Administrative tax/BDF asset diagnostics
+do "${ELASTICITY_CAMEROUN_CODEDIR}/11_cmr_bdf_asset_diagnostics.do"
+
+* 4. Census sector diagnostics
 do "${ELASTICITY_CAMEROUN_CODEDIR}/08_cmr_census_sector_diagnostics.do"
 
-display as result "Cameroon checks, BDF cleaning, and census diagnostics completed successfully."
+* 5. Fixed-effect robustness source for tax/BDF comparison
+do "${ELASTICITY_CAMEROUN_CODEDIR}/10_cmr_fe_robustness_plots.do"
+
+* 6. Census turnover-employment elasticity robustness
+do "${ELASTICITY_CAMEROUN_CODEDIR}/13_cmr_census_turnover_employment_elasticity.do"
+
+display as result "Cameroon checks, BDF cleaning, BDF asset diagnostics, census diagnostics, and Census elasticity robustness completed successfully."
 
 log close
 
