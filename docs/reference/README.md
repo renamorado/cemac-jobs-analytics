@@ -25,3 +25,10 @@ Derived reference files:
     administrative NACAM sectors used in the elasticity analysis.
   - Points back to `nacam_rev1_citi_bridge_extracted.xlsx` and keeps review
     flags for ambiguous or non-observed administrative sectors.
+- `cmr_wbes_isic4_nacam_crosswalk.xlsx`
+  - Project crosswalk for the 112 four-digit main-product ISIC Rev.4 codes
+    observed among 615 latest-wave Cameroon WBES firms.
+  - Maps 102 codes uniquely to the administrative NACAM vocabulary and retains
+    10 review-excluded codes rather than assigning ambiguous sectors.
+  - Generated reproducibly by
+    `code/BREADY_wbes/00_build_wbes_nacam_crosswalk.mjs`.

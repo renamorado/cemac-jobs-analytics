@@ -48,6 +48,7 @@ global CAMEROONDIR    "${DATADIR}/Cameroon"
 global CODEDIR        "${PROJECT_ROOT}/code"
 global ELASTICITY_CAMEROUN_CODEDIR "${CODEDIR}/elasticity_cameroun"
 global WBES_TRADE_CODEDIR "${CODEDIR}/WBES_trade"
+global BREADY_WBES_CODEDIR "${CODEDIR}/BREADY_wbes"
 global OUTPUTDIR      "${PROJECT_ROOT}/output"
 global LOGDIR         "${PROJECT_ROOT}/logs"
 global MANUSCRIPTDIR  "${PROJECT_ROOT}/manuscript"
@@ -68,6 +69,7 @@ foreach dir in ///
     "${CODEDIR}" ///
     "${ELASTICITY_CAMEROUN_CODEDIR}" ///
     "${WBES_TRADE_CODEDIR}" ///
+    "${BREADY_WBES_CODEDIR}" ///
     "${DATADIR}/Intermediate" ///
     "${DATADIR}/Analysis" ///
     "${DATADIR}/WBES_manual" ///

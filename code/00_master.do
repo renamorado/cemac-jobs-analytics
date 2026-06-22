@@ -35,7 +35,7 @@ do "code/01_setup.do"
 log using "${LOGDIR}/00_master.log", replace text
 
 display as text "Starting Cameroon pipeline from ${PROJECT_ROOT}"
-display as text "Current stage: Cameroon elasticity module checks, cleaning-note exports, BDF asset diagnostics, census diagnostics, and Census elasticity robustness."
+display as text "Current stage: Cameroon elasticities, diagnostics, and B-READY/WBES sector constraints."
 
 /*******************************************************************************
     Current pipeline order
@@ -49,19 +49,28 @@ do "${ELASTICITY_CAMEROUN_CODEDIR}/02_nacam_data_export_mapping.do"
 do "${ELASTICITY_CAMEROUN_CODEDIR}/03_repo_checks.do"
 do "${ELASTICITY_CAMEROUN_CODEDIR}/04_cmr_bdf_cleaning.do"
 
-* 3. Administrative tax/BDF asset diagnostics
+* 3. Baseline NACAM elasticity rankings used by downstream extensions
+do "${ELASTICITY_CAMEROUN_CODEDIR}/06_cmr_nacam_elasticity.do"
+
+* 4. Administrative tax/BDF asset diagnostics
 do "${ELASTICITY_CAMEROUN_CODEDIR}/11_cmr_bdf_asset_diagnostics.do"
 
-* 4. Census sector diagnostics
+* 5. Census sector diagnostics
 do "${ELASTICITY_CAMEROUN_CODEDIR}/08_cmr_census_sector_diagnostics.do"
 
-* 5. Fixed-effect robustness source for tax/BDF comparison
+* 6. Exact-NIU Census-customs linkage
+do "${ELASTICITY_CAMEROUN_CODEDIR}/14_cmr_customs_census_linkage.do"
+
+* 7. Fixed-effect robustness source for tax/BDF comparison
 do "${ELASTICITY_CAMEROUN_CODEDIR}/10_cmr_fe_robustness_plots.do"
 
-* 6. Census turnover-employment elasticity robustness
+* 8. Census turnover-employment elasticity robustness
 do "${ELASTICITY_CAMEROUN_CODEDIR}/13_cmr_census_turnover_employment_elasticity.do"
 
-display as result "Cameroon checks, BDF cleaning, BDF asset diagnostics, census diagnostics, and Census elasticity robustness completed successfully."
+* 9. B-READY mapped WBES constraints by harmonized NACAM sector
+do "${BREADY_WBES_CODEDIR}/03_bready_wbes_sector_constraints.do"
+
+display as result "Cameroon analysis and B-READY/WBES constraint extension completed successfully."
 
 log close
 
