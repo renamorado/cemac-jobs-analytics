@@ -19,6 +19,8 @@ Stata-first empirical research repository for job creation and employment multip
 - `code/elasticity_cameroun/`: current Cameroon NACAM crosswalk, checks, cleaning-note exports, elasticity analysis, and related Cameroon trade scaffold.
 - `code/WBES_trade/`: WBES trade-analysis branch, starting with a latest-wave
   all-country cleaning/prep stage that includes CEMAC as a filter.
+- `code/BREADY_wbes/`: B-READY priority-question mapping and weighted Cameroon
+  WBES constraint comparisons by harmonized NACAM sector.
 - `docs/reference/`: official reference PDFs used for reproducible harmonization work.
 - `output/`: generated tables, figures, and slide-ready artifacts.
 - `logs/`: generated log files.
@@ -55,11 +57,32 @@ The Stata bootstrap maps `wb603585` to Marina's OneDrive project root and
 `wb648862` to the local working copy at
 `C:/Users/wb648862/Documents/Projects/CEMAC`.
 
-The current Cameroon master script sets paths, verifies the module structure, installs core packages, and runs the upstream crosswalk and cleaning checks in `code/elasticity_cameroun/`. The WBES trade branch is kept separate from the master script while the method is being validated. To build the current WBES trade prep dataset, run:
+The current Cameroon master script sets paths, verifies the module structure,
+installs core packages, runs the Cameroon elasticity and diagnostic stages, and
+then generates the B-READY/WBES constraint extension. The broader CEMAC WBES
+trade branch remains separately runnable while its method is being validated.
+To build the current WBES trade prep dataset, run:
 
 ```stata
 do "code/WBES_trade/01_wbes_trade_clean_prep.do"
 ```
+
+To regenerate the Cameroon B-READY/WBES constraint dataset, validation tables,
+and all-sector figures with weighted 95% confidence intervals, run:
+
+```stata
+do "code/BREADY_wbes/03_bready_wbes_sector_constraints.do"
+```
+
+This stage reads the 16 rows marked `Priority = yes` in
+`Data/B-Ready/Raw/2025/bready_enterprise_survey_questions.xlsx`, uses the
+reviewed four-digit ISIC Rev.4 crosswalk in
+`docs/reference/cmr_wbes_isic4_nacam_crosswalk.xlsx`, and defines
+high-elasticity sectors as total-revenue elasticity deciles 7--10.
+Each validated indicator figure lists all 16 elasticity-eligible NACAM sectors,
+reports the unweighted sector N, and retains small-sample estimates with an
+explicit caution rather than suppressing them. Pooled estimates remain in the
+analysis dataset for reference but are not used in the slide deck.
 
 That stage reads the comprehensive WBES extract, keeps all latest-wave economies, downloads and merges World Bank country metadata plus UNSD ISIC Rev.4 sector labels, and writes `Data/Analysis/wbes_trade_clean.dta` plus audit table fragments.
 

@@ -695,13 +695,13 @@ graph export "${OUTPUTDIR}/figures/cmr_census_firm_count_by_nacam.png", replace
 
 * Employment scale plot: combine aggregate sector employment with the average
 * firm size in the sector, both on log scales for readability.
-cmr_census_colored_dotplot log_total_employment if !missing(log_total_employment), ///
+cmr_census_colored_dotplot  total_employment if !missing(total_employment), ///
     title("Aggregate sector total") ///
     xtitle("Log total employment") ///
     name(census_emp_total) labsz(tiny) titlesz(small) ///
     ydim(6.2) xdim(4.2) legendoff
 
-cmr_census_colored_dotplot log_average_employment if !missing(log_average_employment), ///
+cmr_census_colored_dotplot average_employment if !missing(average_employment), ///
     title("Sector firm average") ///
     xtitle("Log average firm employment") ///
     name(census_emp_average) labsz(tiny) titlesz(small) ///

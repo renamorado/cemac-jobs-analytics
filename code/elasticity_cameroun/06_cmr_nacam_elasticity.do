@@ -26,6 +26,15 @@ set more off
         output/figures/cmr_nacam_results_en_labels_elasticities_vs_avg_log_employment.png
         output/figures/cmr_nacam_results_en_labels_elasticities_vs_avg_log_revenue.pdf
         output/figures/cmr_nacam_results_en_labels_elasticities_vs_avg_log_revenue.png
+        Data/Analysis/cmr_nacam_elasticity_performance_scale.dta
+        output/figures/cmr_elasticities_va_worker_bubble_total_revenue.pdf
+        output/figures/cmr_elasticities_va_worker_bubble_total_revenue.png
+        output/figures/cmr_elasticities_va_worker_bubble_total_employment.pdf
+        output/figures/cmr_elasticities_va_worker_bubble_total_employment.png
+        output/figures/cmr_elasticities_va_worker_bubble_avg_revenue.pdf
+        output/figures/cmr_elasticities_va_worker_bubble_avg_revenue.png
+        output/figures/cmr_elasticities_va_worker_bubble_avg_employment.pdf
+        output/figures/cmr_elasticities_va_worker_bubble_avg_employment.png
 
     Notes:
         This file is intentionally standalone, but it still bootstraps
@@ -69,6 +78,7 @@ do "code/01_setup.do"
 *******************************************************************************/
 local min_sector_obs 30
 local min_sector_firms 10
+local label_elasticity_threshold 0.20
 local output_stub "cmr_nacam_results_en_labels"
 
 ***# Some descriptive stats
@@ -196,10 +206,10 @@ restore
 merge m:1 nacam using "`sector_counts'", nogen
 
 /*******************************************************************************
-    Build sector scale measures for elasticity scatter plots
-    - Use the common valid sample for both value-added and revenue models.
-    - Average logs within firm first, then average firms within sector so longer
-      firm panels do not mechanically receive more weight.
+    Build sector performance and scale measures for elasticity scatter plots
+    - Use one common positive-value sample for all performance measures.
+    - Collapse to sector-year first so years, rather than firm-year rows, receive
+      equal weight in the final sector averages.
 *******************************************************************************/
 preserve
 keep if employment > 0 & va > 0 & tot_rev > 0 & include_sector == 1 ///
@@ -207,23 +217,57 @@ keep if employment > 0 & va > 0 & tot_rev > 0 & include_sector == 1 ///
         ln_emp, ln_va, ln_tot_rev)
 assert !missing(nacam, firm_fe, ln_emp, ln_va, ln_tot_rev)
 
-bysort nacam firm_fe: egen double firm_mean_ln_emp = mean(ln_emp)
-bysort nacam firm_fe: egen double firm_mean_ln_tot_rev = mean(ln_tot_rev)
-bysort nacam firm_fe: keep if _n == 1
+collapse ///
+    (sum) sector_year_total_employment = employment ///
+          sector_year_total_va = va ///
+          sector_year_total_revenue = tot_rev ///
+    (count) sector_year_firms = firm_fe, ///
+    by(nacam fin_yr)
+
+isid nacam fin_yr
+assert sector_year_total_employment > 0
+assert sector_year_total_va > 0
+assert sector_year_total_revenue > 0
+assert sector_year_firms > 0
+
+generate double sector_year_va_per_worker = ///
+    sector_year_total_va / sector_year_total_employment
+generate double sector_year_avg_firm_employment = ///
+    sector_year_total_employment / sector_year_firms
+generate double sector_year_avg_firm_revenue = ///
+    sector_year_total_revenue / sector_year_firms
 
 collapse ///
-    (mean) avg_firm_ln_emp = firm_mean_ln_emp ///
-           avg_firm_ln_tot_rev = firm_mean_ln_tot_rev ///
-    (count) scale_firms = firm_fe, ///
+    (mean) avg_annual_total_employment = sector_year_total_employment ///
+           avg_annual_total_revenue = sector_year_total_revenue ///
+           avg_firm_employment = sector_year_avg_firm_employment ///
+           avg_firm_revenue = sector_year_avg_firm_revenue ///
+           sector_va_per_worker = sector_year_va_per_worker ///
+           avg_annual_firms = sector_year_firms ///
+    (count) contributing_years = fin_yr, ///
     by(nacam)
 
-label variable avg_firm_ln_emp "Sector average firm log employment"
-label variable avg_firm_ln_tot_rev "Sector average firm log total revenue"
-label variable scale_firms "Firms in common scale sample"
+generate double ln_sector_va_per_worker = ln(sector_va_per_worker)
+
+label variable avg_annual_total_employment "Average annual total sector employment"
+label variable avg_annual_total_revenue "Average annual total sector revenue"
+label variable avg_firm_employment "Average firm employment"
+label variable avg_firm_revenue "Average firm revenue"
+label variable sector_va_per_worker "Sector value added per worker"
+label variable ln_sector_va_per_worker "Log sector value added per worker"
+label variable avg_annual_firms "Average firms per contributing sector-year"
+label variable contributing_years "Contributing sector-years"
 
 isid nacam
-tempfile sector_scale
-save "`sector_scale'"
+assert avg_annual_total_employment > 0
+assert avg_annual_total_revenue > 0
+assert avg_firm_employment > 0
+assert avg_firm_revenue > 0
+assert sector_va_per_worker > 0
+assert !missing(ln_sector_va_per_worker)
+
+tempfile sector_performance
+save "`sector_performance'"
 restore
 
 /*******************************************************************************
@@ -368,10 +412,25 @@ esttab matrix(tot_rev_table, fmt(%9.3f %9.3f %9.3f %9.3f %9.0fc %9.0fc)) ///
 *******************************************************************************/
 merge 1:1 nacam using "`va_table_data'", nogen
 merge m:1 nacam using "`sector_labels'", nogen keep(match)
-merge 1:1 nacam using "`sector_scale'", nogen keep(match)
+merge 1:1 nacam using "`sector_performance'", nogen keep(match)
 assert !missing(nacam_label_display)
 assert !missing(nacam_label_short_display)
-assert !missing(avg_firm_ln_emp, avg_firm_ln_tot_rev, scale_firms)
+assert !missing(ln_sector_va_per_worker, avg_annual_total_employment, ///
+    avg_annual_total_revenue, avg_firm_employment, avg_firm_revenue)
+
+preserve
+keep nacam nacam_label_display nacam_label_short_display data_export ///
+    va_elasticity va_se va_lb va_ub va_firms va_obs ///
+    tot_rev_elasticity tot_rev_se tot_rev_lb tot_rev_ub ///
+    tot_rev_firms tot_rev_obs ///
+    sector_va_per_worker ln_sector_va_per_worker ///
+    avg_annual_total_employment avg_annual_total_revenue ///
+    avg_firm_employment avg_firm_revenue ///
+    avg_annual_firms contributing_years
+sort nacam
+isid nacam
+save "${DATADIR}/Analysis/cmr_nacam_elasticity_performance_scale.dta", replace
+restore
 
 generate double sort_value = va_elasticity
 replace sort_value = -1e10 if missing(sort_value)
@@ -448,6 +507,17 @@ esttab matrix(decile_table, fmt(%9.0fc %9.3f %9.3f %9.0fc %9.0fc)) ///
     collabels("Revenue decile" "Total revenue elasticity" ///
         "Value added elasticity" "Revenue observations" "VA observations") ///
     varlabels(`decile_rowlabels')
+
+* Save the ranking as data so downstream extensions never parse LaTeX output.
+generate byte high_elasticity = revenue_decile >= 7
+label variable revenue_decile "Total-revenue employment-elasticity decile"
+label variable high_elasticity "1 if total-revenue elasticity decile is 7-10"
+keep nacam nacam_label_display nacam_label_short_display data_export ///
+    va_elasticity va_se va_obs tot_rev_elasticity tot_rev_se tot_rev_obs ///
+    revenue_decile high_elasticity
+sort nacam
+isid nacam
+save "${DATADIR}/Analysis/cmr_nacam_elasticity_ranking.dta", replace
 restore
 
 /*******************************************************************************
@@ -677,6 +747,8 @@ twoway ///
 graph export "output/figures/`output_stub'_scatter.pdf", replace
 graph export "output/figures/`output_stub'_scatter.png", replace
 
+* Keep the superseded scale-plot code for reference without regenerating it.
+if 0 {
 /*******************************************************************************
     Elasticities by sector scale
     - Compare sector elasticities with average firm log employment and revenue.
@@ -867,6 +939,352 @@ graph combine scale_va_rev scale_tot_rev, ///
 graph display scale_rev_combined
 graph export "output/figures/`output_stub'_elasticities_vs_avg_log_revenue.pdf", replace
 graph export "output/figures/`output_stub'_elasticities_vs_avg_log_revenue.png", replace
+}
+
+/*******************************************************************************
+    Sector opportunity maps
+    - The x-axis is aggregate sector value added per worker, averaged equally
+      across contributing sector-years and shown in logs.
+    - Bubble sizes are transparent tercile categories calculated separately for
+      each scale measure across the common 29-sector plotting sample.
+    - Sectors are labelled when the absolute value of the relevant employment
+      elasticity meets the common threshold or they rank among the two most
+      productive sectors.
+*******************************************************************************/
+isid nacam
+assert _N == 29
+assert !missing(ln_sector_va_per_worker, va_elasticity, tot_rev_elasticity, ///
+    avg_annual_total_revenue, avg_annual_total_employment, ///
+    avg_firm_revenue, avg_firm_employment)
+
+quietly summarize ln_sector_va_per_worker, detail
+local productivity_median = r(p50)
+
+foreach measure in total_revenue total_employment avg_revenue avg_employment {
+    if "`measure'" == "total_revenue" {
+        local size_source avg_annual_total_revenue
+        local size_unit "CFAF bn"
+        local size_divisor 1000000000
+        local size_format "%9.1fc"
+    }
+    else if "`measure'" == "total_employment" {
+        local size_source avg_annual_total_employment
+        local size_unit "workers"
+        local size_divisor 1
+        local size_format "%12.0fc"
+    }
+    else if "`measure'" == "avg_revenue" {
+        local size_source avg_firm_revenue
+        local size_unit "CFAF bn/firm"
+        local size_divisor 1000000000
+        local size_format "%9.1fc"
+    }
+    else if "`measure'" == "avg_employment" {
+        local size_source avg_firm_employment
+        local size_unit "workers/firm"
+        local size_divisor 1
+        local size_format "%12.0fc"
+    }
+
+    xtile tercile_`measure' = `size_source', nq(3)
+    assert inrange(tercile_`measure', 1, 3)
+
+    forvalues tercile = 1/3 {
+        quietly count if tercile_`measure' == `tercile'
+        local tercile_n`tercile' = r(N)
+        assert r(N) > 0
+
+        quietly summarize `size_source' if tercile_`measure' == `tercile', ///
+            meanonly
+        local range_min : display `size_format' (r(min) / `size_divisor')
+        local range_max : display `size_format' (r(max) / `size_divisor')
+        local range_min = trim("`range_min'")
+        local range_max = trim("`range_max'")
+
+        if `tercile' == 1 {
+            local tercile_name "Bottom third"
+        }
+        else if `tercile' == 2 {
+            local tercile_name "Middle third"
+        }
+        else {
+            local tercile_name "Top third"
+        }
+
+        local legend`tercile'_`measure' ///
+            "`tercile_name': `range_min'-`range_max' `size_unit'"
+    }
+
+    if abs(`tercile_n1' - `tercile_n2') > 1 ///
+            | abs(`tercile_n1' - `tercile_n3') > 1 ///
+            | abs(`tercile_n2' - `tercile_n3') > 1 {
+        display as error "Uneven tercile allocation for `measure'."
+        exit 459
+    }
+}
+
+* Label economically large elasticities and the two most productive sectors.
+gsort -ln_sector_va_per_worker nacam
+generate byte top_productivity = _n <= 2
+sort nacam
+quietly count if top_productivity == 1
+assert r(N) == 2
+
+generate byte annotate_va = ///
+    abs(va_elasticity) >= `label_elasticity_threshold' | top_productivity == 1
+generate byte annotate_totrev = ///
+    abs(tot_rev_elasticity) >= `label_elasticity_threshold' ///
+    | top_productivity == 1
+
+assert !missing(annotate_va, annotate_totrev)
+quietly count if annotate_va == 1
+assert r(N) > 0
+quietly count if annotate_totrev == 1
+assert r(N) > 0
+
+* Default anchors allow the threshold-selected set to change with the estimates.
+* Tailored overrides keep the current leader-line layout readable.
+generate double label_x_va = ln_sector_va_per_worker if annotate_va == 1
+generate double label_y_va = va_elasticity if annotate_va == 1
+generate byte label_pos_va = 3 if annotate_va == 1
+replace label_x_va = 15.60 if nacam == 17
+replace label_y_va =  0.47 if nacam == 17
+replace label_pos_va = 3 if nacam == 17
+replace label_x_va = 15.55 if nacam == 27
+replace label_y_va =  0.34 if nacam == 27
+replace label_pos_va = 3 if nacam == 27
+replace label_x_va = 17.55 if nacam == 29
+replace label_y_va = -0.31 if nacam == 29
+replace label_pos_va = 3 if nacam == 29
+replace label_x_va = 15.85 if nacam == 41
+replace label_y_va = -0.24 if nacam == 41
+replace label_pos_va = 3 if nacam == 41
+replace label_x_va = 19.20 if nacam == 5
+replace label_y_va =  0.01 if nacam == 5
+replace label_pos_va = 9 if nacam == 5
+
+generate double label_x_totrev = ln_sector_va_per_worker ///
+    if annotate_totrev == 1
+generate double label_y_totrev = tot_rev_elasticity if annotate_totrev == 1
+generate byte label_pos_totrev = 3 if annotate_totrev == 1
+replace label_x_totrev = 15.64 if nacam == 17
+replace label_y_totrev =  0.67 if nacam == 17
+replace label_pos_totrev = 3 if nacam == 17
+replace label_x_totrev = 17.05 if nacam == 9
+replace label_y_totrev =  0.66 if nacam == 9
+replace label_pos_totrev = 3 if nacam == 9
+replace label_x_totrev = 16.20 if nacam == 6
+replace label_y_totrev = -0.32 if nacam == 6
+replace label_pos_totrev = 3 if nacam == 6
+replace label_x_totrev = 15.10 if nacam == 2
+replace label_y_totrev = -0.14 if nacam == 2
+replace label_pos_totrev = 3 if nacam == 2
+replace label_x_totrev = 19.20 if nacam == 5
+replace label_y_totrev =  0.21 if nacam == 5
+replace label_pos_totrev = 9 if nacam == 5
+
+assert !missing(label_x_va, label_y_va, label_pos_va) if annotate_va == 1
+assert !missing(label_x_totrev, label_y_totrev, label_pos_totrev) ///
+    if annotate_totrev == 1
+
+capture program drop cmr_elasticity_bubble_panel
+program define cmr_elasticity_bubble_panel
+    version 17.0
+    syntax varname(numeric), TERCILEvar(name) MODEL(string) ///
+        Title(string asis) Name(name) XMEDIAN(real) ///
+        LEGEND1(string asis) LEGEND2(string asis) LEGEND3(string asis) ///
+        [LEGENDOFF]
+
+    if "`model'" == "va" {
+        local annotation_flag annotate_va
+        local label_x label_x_va
+        local label_y label_y_va
+        local label_position label_pos_va
+        local y_min -0.42
+        local y_max 0.54
+        local y_ticks "-0.4(0.2)0.4"
+        local heading_top 0.50
+        local heading_bottom -0.39
+    }
+    else if "`model'" == "totrev" {
+        local annotation_flag annotate_totrev
+        local label_x label_x_totrev
+        local label_y label_y_totrev
+        local label_position label_pos_totrev
+        local y_min -0.42
+        local y_max 0.78
+        local y_ticks "-0.4(0.2)0.8"
+        local heading_top 0.74
+        local heading_bottom -0.39
+    }
+    else {
+        display as error "model() must be va or totrev."
+        exit 198
+    }
+
+    if "`legendoff'" != "" {
+        local legend_options legend(off)
+    }
+    else {
+        local legend_options ///
+            legend(order(1 `legend1' 2 `legend2' 3 `legend3') ///
+                title("Bubble-size terciles across 29 sectors", size(tiny)) ///
+                cols(1) pos(4) ring(0) size(tiny) ///
+                region(lcolor(gs14) fcolor(white%85)))
+    }
+
+    twoway ///
+        (scatter `varlist' ln_sector_va_per_worker if `tercilevar' == 1, ///
+            msymbol(circle) msize(1.45) mcolor("112 128 144%50") ///
+            mlcolor(white%80) mlwidth(vthin)) ///
+        (scatter `varlist' ln_sector_va_per_worker if `tercilevar' == 2, ///
+            msymbol(circle) msize(2.15) mcolor("112 128 144%50") ///
+            mlcolor(white%80) mlwidth(vthin)) ///
+        (scatter `varlist' ln_sector_va_per_worker if `tercilevar' == 3, ///
+            msymbol(circle) msize(3.00) mcolor("112 128 144%50") ///
+            mlcolor(white%80) mlwidth(vthin)) ///
+        (scatter `varlist' ln_sector_va_per_worker ///
+            if `annotation_flag' == 1 & `varlist' >= 0 & `tercilevar' == 1, ///
+            msymbol(circle) msize(1.45) mcolor("0 130 125%85") ///
+            mlcolor(white) mlwidth(vthin)) ///
+        (scatter `varlist' ln_sector_va_per_worker ///
+            if `annotation_flag' == 1 & `varlist' >= 0 & `tercilevar' == 2, ///
+            msymbol(circle) msize(2.15) mcolor("0 130 125%85") ///
+            mlcolor(white) mlwidth(vthin)) ///
+        (scatter `varlist' ln_sector_va_per_worker ///
+            if `annotation_flag' == 1 & `varlist' >= 0 & `tercilevar' == 3, ///
+            msymbol(circle) msize(3.00) mcolor("0 130 125%85") ///
+            mlcolor(white) mlwidth(vthin)) ///
+        (scatter `varlist' ln_sector_va_per_worker ///
+            if `annotation_flag' == 1 & `varlist' < 0 & `tercilevar' == 1, ///
+            msymbol(circle) msize(1.45) mcolor("214 111 67%85") ///
+            mlcolor(white) mlwidth(vthin)) ///
+        (scatter `varlist' ln_sector_va_per_worker ///
+            if `annotation_flag' == 1 & `varlist' < 0 & `tercilevar' == 2, ///
+            msymbol(circle) msize(2.15) mcolor("214 111 67%85") ///
+            mlcolor(white) mlwidth(vthin)) ///
+        (scatter `varlist' ln_sector_va_per_worker ///
+            if `annotation_flag' == 1 & `varlist' < 0 & `tercilevar' == 3, ///
+            msymbol(circle) msize(3.00) mcolor("214 111 67%85") ///
+            mlcolor(white) mlwidth(vthin)) ///
+        (pcspike `label_y' `label_x' `varlist' ln_sector_va_per_worker ///
+            if `annotation_flag' == 1, lcolor(gs7) lwidth(vthin)) ///
+        (scatter `label_y' `label_x' if `annotation_flag' == 1, ///
+            msymbol(none) mlabel(nacam_label_short_display) ///
+            mlabvposition(`label_position') mlabsize(vsmall) mlabcolor(black)), ///
+        xline(`xmedian', lpattern(shortdash) lcolor(gs8) lwidth(thin)) ///
+        yline(0, lpattern(solid) lcolor(gs6) lwidth(thin)) ///
+        xscale(range(14.8 20.0)) yscale(range(`y_min' `y_max')) ///
+        xlabel(15(1)20, grid glpattern(shortdash) glcolor(gs14) labsize(small)) ///
+        ylabel(`y_ticks', format(%4.1f) grid glpattern(shortdash) ///
+            glcolor(gs14) labsize(small)) ///
+        xtitle("Log sector value added per worker", size(small)) ///
+        ytitle("Employment elasticity", size(small)) ///
+        title(`title', size(medsmall)) ///
+        text(`heading_top' 14.92 "Lower-productivity" "employment-expanding", ///
+            place(e) justification(left) color("0 105 100") size(vsmall)) ///
+        text(`heading_top' 19.90 "Higher-productivity" "employment-expanding", ///
+            place(w) justification(right) color("0 105 100") size(vsmall)) ///
+        text(`heading_bottom' 14.92 "Lower-productivity" "employment-contracting", ///
+            place(e) justification(left) color("181 82 45") size(vsmall)) ///
+        text(`heading_bottom' 19.90 "Higher-productivity" "employment-contracting", ///
+            place(w) justification(right) color("181 82 45") size(vsmall)) ///
+        `legend_options' ///
+        plotregion(color(white)) graphregion(color(white)) bgcolor(white) ///
+        name(`name', replace)
+end
+
+cmr_elasticity_bubble_panel va_elasticity, ///
+    tercilevar(tercile_total_revenue) model(va) ///
+    title("Value-added elasticity") xmedian(`productivity_median') ///
+    legend1("`legend1_total_revenue'") ///
+    legend2("`legend2_total_revenue'") ///
+    legend3("`legend3_total_revenue'") ///
+    name(bubble_va_total_revenue) legendoff
+cmr_elasticity_bubble_panel tot_rev_elasticity, ///
+    tercilevar(tercile_total_revenue) model(totrev) ///
+    title("Total-revenue elasticity") xmedian(`productivity_median') ///
+    legend1("`legend1_total_revenue'") ///
+    legend2("`legend2_total_revenue'") ///
+    legend3("`legend3_total_revenue'") ///
+    name(bubble_totrev_total_revenue)
+graph combine bubble_va_total_revenue bubble_totrev_total_revenue, ///
+    rows(1) xsize(11.5) ysize(5.2) graphregion(color(white)) ///
+    title("Where are Cameroon's employment-expanding sectors?", size(medsmall)) ///
+    subtitle("Employment response, productivity, and sector scale", size(small)) ///
+    note("Vertical line marks median log sector value added per worker.", size(vsmall)) ///
+    name(bubble_total_revenue_combined, replace)
+graph export "output/figures/cmr_elasticities_va_worker_bubble_total_revenue.pdf", replace
+graph export "output/figures/cmr_elasticities_va_worker_bubble_total_revenue.png", replace
+
+cmr_elasticity_bubble_panel va_elasticity, ///
+    tercilevar(tercile_total_employment) model(va) ///
+    title("Value-added elasticity") xmedian(`productivity_median') ///
+    legend1("`legend1_total_employment'") ///
+    legend2("`legend2_total_employment'") ///
+    legend3("`legend3_total_employment'") ///
+    name(bubble_va_total_employment) legendoff
+cmr_elasticity_bubble_panel tot_rev_elasticity, ///
+    tercilevar(tercile_total_employment) model(totrev) ///
+    title("Total-revenue elasticity") xmedian(`productivity_median') ///
+    legend1("`legend1_total_employment'") ///
+    legend2("`legend2_total_employment'") ///
+    legend3("`legend3_total_employment'") ///
+    name(bubble_totrev_total_employment)
+graph combine bubble_va_total_employment bubble_totrev_total_employment, ///
+    rows(1) xsize(11.5) ysize(5.2) graphregion(color(white)) ///
+    title("Where are Cameroon's employment-expanding sectors?", size(medsmall)) ///
+    subtitle("Employment response, productivity, and sector scale", size(small)) ///
+    note("Vertical line marks median log sector value added per worker.", size(vsmall)) ///
+    name(bubble_total_employment_combined, replace)
+graph export "output/figures/cmr_elasticities_va_worker_bubble_total_employment.pdf", replace
+graph export "output/figures/cmr_elasticities_va_worker_bubble_total_employment.png", replace
+
+cmr_elasticity_bubble_panel va_elasticity, ///
+    tercilevar(tercile_avg_revenue) model(va) ///
+    title("Value-added elasticity") xmedian(`productivity_median') ///
+    legend1("`legend1_avg_revenue'") ///
+    legend2("`legend2_avg_revenue'") ///
+    legend3("`legend3_avg_revenue'") ///
+    name(bubble_va_avg_revenue) legendoff
+cmr_elasticity_bubble_panel tot_rev_elasticity, ///
+    tercilevar(tercile_avg_revenue) model(totrev) ///
+    title("Total-revenue elasticity") xmedian(`productivity_median') ///
+    legend1("`legend1_avg_revenue'") ///
+    legend2("`legend2_avg_revenue'") ///
+    legend3("`legend3_avg_revenue'") ///
+    name(bubble_totrev_avg_revenue)
+graph combine bubble_va_avg_revenue bubble_totrev_avg_revenue, ///
+    rows(1) xsize(11.5) ysize(5.2) graphregion(color(white)) ///
+    title("Where are Cameroon's employment-expanding sectors?", size(medsmall)) ///
+    subtitle("Employment response, productivity, and sector scale", size(small)) ///
+    note("Vertical line marks median log sector value added per worker.", size(vsmall)) ///
+    name(bubble_avg_revenue_combined, replace)
+graph export "output/figures/cmr_elasticities_va_worker_bubble_avg_revenue.pdf", replace
+graph export "output/figures/cmr_elasticities_va_worker_bubble_avg_revenue.png", replace
+
+cmr_elasticity_bubble_panel va_elasticity, ///
+    tercilevar(tercile_avg_employment) model(va) ///
+    title("Value-added elasticity") xmedian(`productivity_median') ///
+    legend1("`legend1_avg_employment'") ///
+    legend2("`legend2_avg_employment'") ///
+    legend3("`legend3_avg_employment'") ///
+    name(bubble_va_avg_employment) legendoff
+cmr_elasticity_bubble_panel tot_rev_elasticity, ///
+    tercilevar(tercile_avg_employment) model(totrev) ///
+    title("Total-revenue elasticity") xmedian(`productivity_median') ///
+    legend1("`legend1_avg_employment'") ///
+    legend2("`legend2_avg_employment'") ///
+    legend3("`legend3_avg_employment'") ///
+    name(bubble_totrev_avg_employment)
+graph combine bubble_va_avg_employment bubble_totrev_avg_employment, ///
+    rows(1) xsize(11.5) ysize(5.2) graphregion(color(white)) ///
+    title("Where are Cameroon's employment-expanding sectors?", size(medsmall)) ///
+    subtitle("Employment response, productivity, and sector scale", size(small)) ///
+    note("Vertical line marks median log sector value added per worker.", size(vsmall)) ///
+    name(bubble_avg_employment_combined, replace)
+graph export "output/figures/cmr_elasticities_va_worker_bubble_avg_employment.pdf", replace
+graph export "output/figures/cmr_elasticities_va_worker_bubble_avg_employment.png", replace
 
 
 

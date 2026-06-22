@@ -1,5 +1,115 @@
 # SESSIONS.md
 
+
+## 2026-06-19 - Replaced B-READY sector rankings with employment-opportunity bubbles
+
+- Extended `code/BREADY_wbes/03_bready_wbes_sector_constraints.do` to merge
+  total-revenue employment elasticities and average annual total employment
+  from `cmr_nacam_elasticity_performance_scale.dta` onto the 16-sector roster.
+- Added the administrative elasticity, employment scale, and fixed 5/5/6
+  employment-size groups to the sector-level analytical results while retaining
+  the original estimates, confidence intervals, sample sizes, and validation fields.
+- Replaced all 14 validated coefficient-style figures with bubbles: WBES-weighted
+  constraint on the horizontal axis, revenue elasticity on the vertical axis,
+  and employment footprint represented by three common marker sizes.
+- Highlighted sectors above the published Cameroon benchmark with elasticity at
+  least 0.20 and labeled those opportunities plus the two largest valid sectors.
+- Kept the existing filenames, documented the descriptive/noncausal interpretation,
+  and updated the B-READY overview and source language in `slides/slides_cemac.tex`.
+- Verified unique complete merges, positive employment, invariant balanced size
+  groups, missing-value exclusion, and exactly 14 PDF/PNG pairs in Stata; visually
+## 2026-06-18 - Redesigned elasticity figures as sector opportunity maps
+
+- Reworked the four elasticity-productivity bubble figures in
+  `code/elasticity_cameroun/06_cmr_nacam_elasticity.do` without changing their
+  estimates, samples, or output filenames.
+- Replaced proportional bubble radii with lower, middle, and upper terciles
+  calculated separately for each scale measure across the 29 plotted sectors;
+  each legend now reports its observed numeric ranges.
+- Added the common median-productivity reference line and labeled the four
+  employment-expanding/contracting and lower-/higher-productivity regions.
+- Applied a deterministic annotation rule in each elasticity panel: the two
+  highest and two lowest elasticities plus the highest-productivity sector.
+  Selected sectors use fixed Stata label anchors and thin leader lines.
+- Updated the four opportunity-map frame titles and explanatory slide in
+  `slides/slides_cemac.tex`.
+- Verified all four PDF/PNG pairs with Stata batch run ID
+  `opportunity_map_final2` and visually inspected the label placement, leading
+  zeros, reference lines, and measure-specific tercile legends.
+- Recompiled the 77-page Beamer deck successfully and rendered the four map
+  frames to confirm that titles, legends, labels, and source notes are not
+  clipped.
+
+## 2026-06-18 - Rebuilt Task 1.3 elasticity-performance bubble plots
+
+- Updated `code/elasticity_cameroun/06_cmr_nacam_elasticity.do` to collapse the
+  common positive firm-year sample to sector-years and then equal-weighted
+  sector averages.
+- Saved `Data/Analysis/cmr_nacam_elasticity_performance_scale.dta` with log
+  sector value added per worker and total/average revenue and employment scale.
+- Generated four two-panel PDF/PNG bubble figures containing both elasticity
+  specifications; bubble size shows scale and color/shape shows macro sector.
+- Replaced the earlier scale figures in `slides/slides_cemac.tex` without
+  deleting their existing output files.
+- Moved the macro-sector legend inside the right plot so the two combined
+  panels retain identical plotting dimensions.
+- Verified the final Stata batch with run ID `task13_equal_panels` and visually
+  inspected all four PNG outputs.
+
+## 2026-06-18 - Added exact-NIU Census-customs linkage
+
+- Added `code/elasticity_cameroun/14_cmr_customs_census_linkage.do` and wired
+  it into `code/00_master.do` after Census cleaning.
+- Linked Census headquarters to 2023 customs exports using exact normalized,
+  structurally valid NIUs only; names and workbook match helpers are unused.
+- Used Stata tempfiles for all intermediate work and saved only
+  `Data/Analysis/CMR_census_customs_linked.dta` plus the combined audit table.
+- Preserved both raw and exact-row-deduplicated customs totals and retained all
+  unmatched headquarters with explicit link-status flags.
+- Verified 430,011 headquarters, 646 exact-NIU customs matches, 581 matched
+  unique NIUs, and 319 headquarters with positive customs exports.
+- Deferred exporter analysis, figures, wages, slides, and BDF linkage.
+
+## 2026-06-18 - Planned exact-NIU Census-customs linkage layer
+
+- Added `docs/plans/2026-06-18-001-feat-census-customs-niu-linkage-plan.md`
+  for the linkage-only portion of Task 1.5.
+- Confirmed the reproducible chain: cleaned Census to workbook `Feuil2` by
+  `S0Q01`, then to customs `Sheet3` by exact normalized `S1Q16`/`NIU`.
+- Restricted production linkage to structurally valid exact NIUs; name-based
+  matches and the prefilled Census export field are audit-only.
+- Planned preservation of raw customs rows plus raw-sum and exact-row-
+  deduplicated NIU totals, with Census NIU multiplicity and nonmatches visible.
+- Deferred exporter analysis, figures, wages, slides, and BDF linkage to later
+  sessions.
+
+## 2026-06-17 - Implemented B-READY mapped WBES constraint extension
+
+- Added a reviewed four-digit ISIC Rev.4-to-NACAM crosswalk for the 112 codes
+  observed among 615 Cameroon 2024 WBES firms; 102 codes are uniquely mapped
+  and 10 remain explicitly review-excluded.
+- Updated the administrative elasticity stage to save
+  `Data/Analysis/cmr_nacam_elasticity_ranking.dta`, including total-revenue
+  deciles and the decile 7--10 high-elasticity flag.
+- Added `code/BREADY_wbes/03_bready_wbes_sector_constraints.do` to assert the
+  16 live priority selections, construct weighted indicators, validate national
+  values, merge sector rankings, and export sector and pooled descriptive
+  comparisons.
+- National construction validates 14 indicators within two points. The
+  market-concentration item is unavailable in Cameroon microdata and the
+  VAT-refund denominator requires further review.
+- Revised the 14 validated constraint figures to list all 16 elasticity-eligible
+  NACAM sectors, report unweighted N, distinguish elasticity deciles 7--10 by
+  color, and show probability-weighted 95% confidence intervals. Small cells
+  remain visible with a caution; one-observation cells have points but no
+  interval.
+- Replaced the paired pooled comparisons in the Beamer deck with one readable,
+  full-width sector figure per validated indicator.
+- Generated mapping and indicator audit tables plus
+  `Data/Analysis/bready_wbes_sector_constraints_cmr.dta`.
+- Verified 256 sector rows, 32 retained pooled rows, 14 validated indicators,
+  114 displayed small-cell estimates, and 33 displayed zero-response rows.
+
 ## 2026-06-17 - Inventoried Census and tax/BDF firm characteristics
 
 - Created `output/tables/cmr_firm_characteristics_inventory.csv` as a quick
@@ -2859,3 +2969,18 @@ current Census/RGE source lacks the dictionary-listed asset field.
   rows and no missing sector labels.
 - Visually checked the generated fixed-asset, total-asset, and
   assets-versus-employment PNG figures.
+
+## 2026-06-19 - Switched bubble-plot labels to an elasticity threshold
+
+- Modified `code/elasticity_cameroun/06_cmr_nacam_elasticity.do`.
+- Replaced the rank-based label rule with a common absolute employment-
+  elasticity threshold of 0.20 for both value-added and total-revenue models.
+- Added default label anchors so future changes in estimates can change the
+  labelled sector set without causing missing-anchor failures.
+- Verified the full do-file runs successfully and regenerates all four bubble-
+  plot variants.
+- The threshold selects 5 sectors for the value-added model and 10 sectors for
+  the total-revenue model with the current estimates.
+- Expanded the final label set to also include the two sectors with the highest
+  log value added per worker, using NACAM code as the deterministic tie-breaker.
+- Reran the full do-file successfully and regenerated all bubble-plot variants.
