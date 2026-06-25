@@ -66,7 +66,7 @@ Key changes already made before this handoff:
 ## Suggested Next Steps
 
 - Open the regenerated `slides/slides_cemac.pdf` and do a final presentation-level scan of the census diagnostic slides.
-- If further visual polish is needed, adjust `cmr_census_colored_dotplot` in `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do`, rerun the do-file, and recompile the deck.
+- If further visual polish is needed, adjust `cmr_census_colored_dotplot` in `code/elasticity_cameroun/08_cmr_census_sector_figures.do`, rerun the do-file, and recompile the deck.
 - Keep figure filenames stable unless the deck is updated in the same change.
 - Before additional substantive analysis, review the latest entries in `SESSIONS.md` and `TASKS.md`.
 

@@ -661,8 +661,7 @@ foreach item of local plot_indicators {
         quietly count if plot_ready == 1
         assert r(N) > 0
 
-        generate byte opportunity = plot_ready == 1 ///
-            & estimate > benchmark & tot_rev_elasticity >= 0.20
+        generate byte opportunity = plot_ready == 1 & high_elasticity == 1
         gsort -plot_ready -avg_annual_total_employment nacam
         generate int employment_rank = _n if plot_ready == 1
         generate byte label_sector = plot_ready == 1 ///
@@ -732,7 +731,7 @@ foreach item of local plot_indicators {
                 title("Average annual total employment", size(vsmall)) ///
                 rows(1) pos(6) size(vsmall) ///
                 region(lcolor(none) fcolor(none))) ///
-            note("Dashed vertical line: published Cameroon B-READY benchmark. Orange: above benchmark with elasticity >= 0.20." ///
+            note("Dashed vertical line: published Cameroon B-READY benchmark. Orange: revenue elasticity deciles 7-10." ///
                 "Descriptive; sectors without indicator responses omitted.", ///
                 size(tiny)) ///
             graphregion(color(white)) plotregion(color(white)) ///

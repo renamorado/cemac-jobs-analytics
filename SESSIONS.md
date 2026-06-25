@@ -1,6 +1,73 @@
 # SESSIONS.md
 
 
+## 2026-06-24 - Added Tax/BDF fixed-asset coefficient figures
+
+- Added `code/elasticity_cameroun/15_cmr_fixed_asset_elasticity_figures.do` to estimate sector-specific fixed-asset slopes using the same firm FE, NACAM-year FE, and firm-clustered structure as the main elasticity models.
+- Used `fa_net` as net fixed assets, `totemp` as employment, and `egen rowtotal(sog sls_prod sls_svcs), missing` as sales turnover.
+- Applied a common support rule requiring at least 30 observations and 10 firms in both the employment and sales specifications; 25 NACAM sectors were reported.
+- Exported `Data/Analysis/cmr_fixed_asset_elasticity_estimates.dta`, a support audit table, two coefficient tables, and PDF/PNG coefficient figures for employment and sales turnover.
+- Wired the new stage into `code/00_master.do` after the Tax/BDF sector-scale figures and added two figure frames to `slides/slides_cemac.tex` after the BDF asset diagnostics.
+- Ran the new do-file successfully; the latest Stata log closed without `r(#);`, the estimates dataset is unique by `model` and `nacam`, and all coefficient intervals are nonmissing.
+- Recompiled `slides/slides_cemac.tex` twice with `pdflatex`; the rebuilt deck has 83 pages and includes the new fixed-asset figures.
+## 2026-06-23 - Replaced Tax/BDF sector-scale tables with plots
+
+- Replaced the active Tax/BDF companion table stage with
+  `code/elasticity_cameroun/12_cmr_bdf_sector_scale_figures.do`, which builds
+  plot analogues of the Census firm-count, employment, revenue, and
+  revenue-per-worker sector scale figures.
+- Kept the existing `output/tables/cmr_bdf_sector_scale_*.tex` fragments on disk
+  but removed them from the active master workflow and from `slides/slides_cemac.tex`.
+- Added four PDF/PNG figure pairs under `output/figures/`:
+  `cmr_bdf_firm_count_by_nacam`, `cmr_bdf_total_employment_by_nacam`,
+  `cmr_bdf_total_revenue_by_nacam`, and `cmr_bdf_revenue_per_worker_by_nacam`.
+- Updated the deck so each Tax/BDF plot slide follows the matching Census plot
+  slide, using the same source-note style as other administrative tax/BDF figures.
+- Ran the affected BDF figure do-file successfully; the latest log closed without
+  `r(#);` and all expected PDF/PNG outputs were created.
+- Recompiled `slides/slides_cemac.tex` twice with `pdflatex`; the rebuilt deck
+  has 81 pages and loads the new Tax/BDF plots rather than the table fragments.
+
+
+## 2026-06-23 - Added Tax/BDF companion sector-scale tables
+
+- Added `code/elasticity_cameroun/12_cmr_bdf_sector_scale_tables.do` to create
+  tax/BDF companion tables for the Census firm-count, employment, revenue, and
+  revenue-per-worker sector scale slides.
+- Used `Data/Analysis/CMR_BDF_cleaned.dta`, `totemp`, and `tot_rev`; collapsed
+  firm-years to sector-years first, then averaged across 2015-2022 so panel
+  stacking does not drive sector scale.
+- Wired the new stage into `code/00_master.do` after BDF cleaning and added four
+  companion table frames near the matching Census scale frames in
+  `slides/slides_cemac.tex`.
+- Outputs are `output/tables/cmr_bdf_sector_scale_firm_count.tex`,
+  `output/tables/cmr_bdf_sector_scale_employment.tex`,
+  `output/tables/cmr_bdf_sector_scale_revenue.tex`, and
+  `output/tables/cmr_bdf_sector_scale_revenue_per_worker.tex`.
+- Ran `code/elasticity_cameroun/12_cmr_bdf_sector_scale_tables.do` successfully;
+  the latest log closed without `r(#);`, and all four table fragments were
+  created under `output/tables/`.
+- Recompiled `slides/slides_cemac.tex` twice with `pdflatex`; the rebuilt deck
+  has 81 pages and includes the new companion table slides.
+
+
+## 2026-06-22 - Replaced active Census source with export-enhanced workbook
+
+- Made `CENSUS 2024 with exports BASE RGE 3 BANQUE MONDIALE exp.xlsx` the
+  sole production Census workbook; the older workbook remains archival only.
+- Extended Census cleaning to retain embedded export turnover as raw and
+  numeric fields with explicit nonnumeric, missing, zero, negative, and
+  positive-export flags while preserving non-headquarters values as supplied.
+- Added hard source-contract checks for 438,893 unique units, 430,011
+  headquarters, 1,710 positive-export units, 1,554 positive-export
+  headquarters, and CFAF 1,808,328,021,284 in embedded export turnover.
+- Added `output/tables/cmr_census_export_field_audit.tex` and kept embedded
+  Census exports distinct from the separately linked exact-NIU customs fields.
+- Updated the Census cleaning, raw-data, and crosswalk documentation.
+- Verified the cleaning, exact-NIU customs linkage, and Census elasticity stages,
+  then completed `code/00_master.do`; customs and Census elasticity audit tables
+  remained byte-for-byte unchanged.
+
 ## 2026-06-19 - Replaced B-READY sector rankings with employment-opportunity bubbles
 
 - Extended `code/BREADY_wbes/03_bready_wbes_sector_constraints.do` to merge
@@ -2984,3 +3051,49 @@ current Census/RGE source lacks the dictionary-listed asset field.
 - Expanded the final label set to also include the two sectors with the highest
   log value added per worker, using NACAM code as the deterministic tie-breaker.
 - Reran the full do-file successfully and regenerated all bubble-plot variants.
+
+## 2026-06-22 - Added long-running Stata execution guidance
+
+- Added a compressed header section to `AGENTS.md` covering noninteractive execution, patient polling, stall checks, termination safeguards, completion validation, and affected-do-file-first testing.
+
+## 2026-06-22 - Split Cameroon Census cleaning from figure export
+
+### Objective
+
+Refactor the Census sector workflow so raw-data cleaning and NACAM harmonization produce reusable analysis datasets before a separate reviewer-friendly figure stage runs.
+
+### Files modified or created
+
+- Renamed `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do` to `code/elasticity_cameroun/08_cmr_census_cleaning.do`.
+- Created `code/elasticity_cameroun/08_cmr_census_sector_figures.do`.
+- Updated `code/00_master.do`, `docs/cmr_census_cleaning_process.md`, and the actionable plotting reference in `CODEX_HANDOFF.md`.
+- Regenerated the existing Census analysis datasets, audit tables, and five PDF/PNG figure pairs.
+
+### Key decisions
+
+- Kept the existing `CMR_census_cleaned.dta` and `CMR_census_nacam_diagnostics.dta` filenames and variable contracts.
+- Assigned all Excel imports, crosswalk validation/merges, audit exports, and sector collapse logic to the cleaning stage.
+- Made the figure stage consume only the sector diagnostics dataset and exposed common sizes, palette, legend, and export-directory controls near the top.
+- Corrected the combined employment figure to plot `log_total_employment` and `log_average_employment`, matching its titles.
+- Replaced the planned hard-coded 35-sector assertion after the current cleaning output was verified to contain 39 unique whole-economy Census NACAM sectors, including four Census-only sectors deliberately retained by the current crosswalk logic. The figure contract now requires a nonempty dataset uniquely identified by `nacam`.
+
+### Verification
+
+- Ran `code/elasticity_cameroun/08_cmr_census_cleaning.do` successfully; the timestamped log closed cleanly with no uncaptured `r(#);`, and all expected datasets and audit tables updated.
+- Confirmed the diagnostics dataset has 39 rows, 39 unique NACAM codes, and no missing NACAM labels or broad sector groups.
+- Ran `code/elasticity_cameroun/08_cmr_census_sector_figures.do` independently and successfully after the final reviewer-control edit; all five PDF/PNG pairs updated.
+- Visually checked the combined employment and revenue PNGs; sector labels, legends, and panels render without clipping, and the employment axes now display log measures.
+- Confirmed the figure script contains no `import excel`, `merge`, `collapse`, or `save` commands and that the master runs cleaning immediately before figures.
+
+## 2026-06-23 - Updated B-READY plot orange-sector rule
+
+- Modified `code/BREADY_wbes/03_bready_wbes_sector_constraints.do`.
+- Changed the B-READY/WBES figure highlight rule so orange bubbles now mark sectors with `high_elasticity == 1`, defined in the pipeline as total-revenue elasticity deciles 7-10.
+- Kept benchmark lines, employment bubble sizing, and the underlying analysis dataset unchanged.
+- Updated the figure note to state that orange indicates revenue elasticity deciles 7-10.
+
+### Verification
+
+- Ran `code/BREADY_wbes/03_bready_wbes_sector_constraints.do` successfully; the latest log closed cleanly with no uncaptured `r(#);`, and all 14 B-READY PDF/PNG figure pairs were regenerated.
+- Confirmed the do-file still asserts `high_elasticity == (revenue_decile >= 7)` for sector-level results.
+- Direct PNG visual inspection was blocked by the local image-viewer sandbox error in this session; as a substitute, extracted text from two regenerated PDFs (`disp6` and `reg12`) and confirmed the rendered note says orange indicates revenue elasticity deciles 7-10.

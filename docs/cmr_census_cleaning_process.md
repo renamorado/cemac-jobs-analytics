@@ -4,7 +4,7 @@ Date documented: 2026-05-26
 
 ## Purpose
 
-This note documents the cleaning process used for the Cameroon 2024 RGE Census dataset in the current CEMAC project pipeline. The active Stata implementation is `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do`.
+This note documents the cleaning process used for the Cameroon 2024 RGE Census dataset in the current CEMAC project pipeline. The active Stata workflow is split between `code/elasticity_cameroun/08_cmr_census_cleaning.do` and `code/elasticity_cameroun/08_cmr_census_sector_figures.do`.
 
 The cleaned Census data are used to produce sector-level diagnostics that align the Census activity information with the NACAM sectors used in the Cameroon administrative-data elasticity analysis.
 
@@ -12,7 +12,7 @@ The cleaned Census data are used to produce sector-level diagnostics that align 
 
 Raw source workbook:
 
-- `Data/Cameroon/Raw/CENSUS 2024 - Copy of BASE RGE 3 BANQUE MONDIALE - Copy.xlsx`
+- `Data/Cameroon/Raw/CENSUS 2024 with exports BASE RGE 3 BANQUE MONDIALE exp.xlsx`
 
 Source sheet:
 
@@ -36,6 +36,7 @@ The Stata cleaning step imports the workbook as strings, preserves source proven
 - `BRANCHD_S1Q14`: CITI/ISIC Rev.4 branch label, renamed `citi_branch`
 - `S6Q05AC`: employment, renamed `employment_raw`
 - `S6Q01A`: annual turnover, renamed `annual_turnover_raw`
+- `chiffre d'affaire exportation`: embedded export turnover, renamed `census_export_turnover_raw`
 
 The Stata step also audits, but does not import, the dictionary-listed
 `S4Q00` / `Capital social` field. As of 2026-06-15, the dictionary names this
@@ -48,7 +49,7 @@ The script also creates:
 - `source_sheet`
 - `source_excel_row`
 
-These provenance fields make it possible to trace cleaned records back to the raw workbook.
+These provenance fields make it possible to trace cleaned records back to the raw workbook. The script also creates `census_export_turnover` and transparent missing, zero, negative, nonnumeric, and positive-export flags. The embedded measure remains distinct from the exact-NIU customs variables produced by the linkage stage.
 
 ## Basic Cleaning Rules
 
@@ -61,7 +62,9 @@ The Census cleaning process applies the following basic rules:
 - Parse employment and annual turnover from string to numeric values, ignoring commas and spaces.
 - Flag nonnumeric employment and turnover entries before destringing.
 - Flag missing, zero, and negative values for employment and turnover.
-- Set negative employment and negative annual turnover to missing.
+- Set negative employment, annual turnover, and embedded export turnover to missing after preserving negative-value flags.
+- Define `census_exporter` as positive embedded Census export turnover.
+- Assert the authoritative workbook's expected row, headquarters, export-coverage, and export-total counts.
 
 The flags remain in the cleaned file so later users can audit data quality rather than silently losing information.
 
@@ -71,7 +74,7 @@ Employment and annual turnover are used only for headquarters rows. This follows
 
 The script creates `hq_sample` to flag rows where `unit_status` identifies a headquarters unit.
 
-Non-headquarters rows remain in the cleaned Census dataset for traceability, but their employment and annual turnover values are set to missing before sector diagnostics are produced.
+Non-headquarters rows remain in the cleaned Census dataset for traceability, but their employment and annual turnover values are set to missing before sector diagnostics are produced. Embedded export turnover is preserved for every unit as supplied; any headquarters analysis must filter explicitly on `hq_sample`.
 
 ## Sector Crosswalk
 
@@ -110,9 +113,8 @@ The Census cleaning script writes:
 - `Data/Intermediate/cmr_census_activity_nacam_crosswalk.dta`
 - `Data/Analysis/CMR_census_cleaned.dta`
 - `Data/Analysis/CMR_census_nacam_diagnostics.dta`
-- `Data/Analysis/cmr_census_turnover_employment_elasticity.dta`
-- `Data/Analysis/cmr_census_vs_bdf_turnover_employment_elasticity.dta`
 - `output/tables/cmr_census_asset_availability_audit.tex`
+- `output/tables/cmr_census_export_field_audit.tex`
 
 The cleaned file keeps firm-level Census records with provenance, cleaned numeric fields, crosswalk fields, review flags, and plotting eligibility indicators.
 
@@ -124,7 +126,7 @@ figures were generated from the current source.
 
 ## Sector Diagnostics
 
-For headquarters rows with official/admin NACAM sectors, the script constructs sector-level diagnostics:
+For headquarters rows with official/admin NACAM sectors, the cleaning script constructs sector-level diagnostics:
 
 - number of headquarters firms
 - total employment
@@ -135,7 +137,7 @@ For headquarters rows with official/admin NACAM sectors, the script constructs s
 - average firm-level annual turnover per worker
 - log versions of positive totals and averages used in plots
 
-The script exports Census figures to:
+The figure script reads only `Data/Analysis/CMR_census_nacam_diagnostics.dta` and exports Census figures to:
 
 - `output/figures/cmr_census_firm_count_by_nacam.pdf`
 - `output/figures/cmr_census_firm_count_by_nacam.png`
@@ -222,14 +224,17 @@ The asset availability audit currently reports:
 
 These counts come from `output/tables/cmr_census_asset_availability_audit.tex`.
 
+The embedded export-field audit reports 438,893 numeric values, 437,183 zeros, 1,710 positive units, no negatives, 1,554 positive headquarters, 156 positive non-headquarters, and CFAF 1,808,328,021,284 in total embedded export turnover. These values are not substituted for the separately linked exact-NIU customs measure.
+
 ## Reproducibility Notes
 
 The Census cleaning process is run from the project master script:
 
 - `code/00_master.do`
 
-The relevant Census step is:
+The relevant Census steps are:
 
-- `code/elasticity_cameroun/08_cmr_census_sector_diagnostics.do`
+- `code/elasticity_cameroun/08_cmr_census_cleaning.do`
+- `code/elasticity_cameroun/08_cmr_census_sector_figures.do`
 
-The process should be rerun from Stata whenever the raw Census workbook, crosswalk workbook, official bridge extraction, or administrative NACAM sector mapping changes.
+The process should be rerun from Stata whenever the authoritative export-enhanced Census workbook, crosswalk workbook, official bridge extraction, or administrative NACAM sector mapping changes. The older Census workbook is archival and is not a runnable dependency.

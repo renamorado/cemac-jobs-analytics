@@ -82,7 +82,7 @@
         \end{tabular}
     }
 \end{frame}
-\begin{comment} 
+\begin{comment}
     % Lets confirm this but I think that we are not using the ISIC codes for the elasticity analysis, so we can skip this slide if we want to save time.
     % We can also move it to the appendix if we want to keep it for reference but not spend time on it in the main presentation.
 \begin{frame}{NACAM-to-ISIC Crosswalk}
@@ -109,7 +109,7 @@
     \begin{itemize}
         \item The cleaned panel resizes the sample from 9,325 to 9,068 observations after removing duplicate firm-years.
         \item There are 127 conflicting firm-years, accounting for 257 dropped obs. Those observations are excluded rather than resolved ad hoc.
-        %\item The crosswalk covers 37 observed legacy NACAM codes, but only 17 map cleanly to a single ISIC Rev.4 division. 
+        %\item The crosswalk covers 37 observed legacy NACAM codes, but only 17 map cleanly to a single ISIC Rev.4 division.
         \item To avoid introducing unwanted noise we keep the analysis using NACAM classification and link it to ISIC aggregates when possible.
         %\item The remaining 20 codes are explicitly flagged for manual review, which keeps sector harmonization transparent before pooled industry comparisons.
     \end{itemize}
@@ -132,10 +132,22 @@
     \censusfigsource
 \end{frame}
 
+\begin{frame}{Tax/BDF Firm Counts by Harmonized NACAM Sector}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_firm_count_by_nacam.pdf}
+    \bdffigsource
+\end{frame}
+
 \begin{frame}{Census Log Employment by Harmonized NACAM Sector}
     \centering
     \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_total_employment_by_nacam.pdf}
     \censusfigsource
+\end{frame}
+
+\begin{frame}{Tax/BDF Log Employment by Harmonized NACAM Sector}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_employment_by_nacam.pdf}
+    \bdffigsource
 \end{frame}
 
 \begin{frame}{Census Log Revenue by Harmonized NACAM Sector}
@@ -144,10 +156,22 @@
     \censusfigsource
 \end{frame}
 
+\begin{frame}{Tax/BDF Log Revenue by Harmonized NACAM Sector}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_revenue_by_nacam.pdf}
+    \bdffigsource
+\end{frame}
+
 \begin{frame}{Census Log Revenue per Worker by Harmonized NACAM Sector}
     \centering
     \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_per_worker_by_nacam.pdf}
     \censusfigsource
+\end{frame}
+
+\begin{frame}{Tax/BDF Log Revenue per Worker by Harmonized NACAM Sector}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_revenue_per_worker_by_nacam.pdf}
+    \bdffigsource
 \end{frame}
 
 \section{Cameroun Sectoral Elasticities}
@@ -357,6 +381,17 @@
 \begin{frame}{BDF Net Total Assets by Harmonized NACAM Sector}
     \centering
     \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_net_total_assets_by_nacam.pdf}
+    \bdffigsource
+\end{frame}
+\begin{frame}{Employment Response to Net Fixed Assets}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_fixed_asset_elasticity_employment_coefficients.pdf}
+    \bdffigsource
+\end{frame}
+
+\begin{frame}{Sales-Turnover Response to Net Fixed Assets}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_fixed_asset_elasticity_sales_coefficients.pdf}
     \bdffigsource
 \end{frame}
 

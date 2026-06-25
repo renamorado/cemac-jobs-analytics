@@ -1,5 +1,12 @@
 # AGENTS.md
 
+## Long-running Stata runs
+
+- From the project root, run the affected do-file first with `stata-mp /e do path/to/file.do`; run the master only when requested or materially needed for integration.
+- Keep the original terminal attached: quiet is not stalled. Wait about 30 seconds for immediate failures, then 3-5 minutes between checks; never start a duplicate run or repeatedly inspect the log.
+- If runtime is unexpectedly long, make one health check: confirm the original process exists and the log's size or modification time is advancing. Terminate only if confirmed stalled or with user approval.
+- After exit, verify all applicable signals: process completion, updated log, no uncaptured `r(#);`, success marker/final assertion reached, and expected outputs updated.
+
 ## Purpose
 
 This repository is for Stata-first empirical research on job creation and employment multipliers in Cameroon, with room for later expansion if explicitly requested. Future agents should optimize for reproducibility, auditability, and readable empirical workflows that another researcher or research assistant can continue with minimal hand-holding.
