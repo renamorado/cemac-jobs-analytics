@@ -156,6 +156,13 @@ generate double log_aggregate_revenue_per_worker = ///
 generate double log_avg_firm_revenue_per_worker = ///
     ln(avg_firm_revenue_per_worker) if avg_firm_revenue_per_worker > 0
 
+generate double avg_annual_total_revenue_bil = avg_annual_total_revenue / 1000000000
+generate double avg_firm_revenue_mil = avg_firm_revenue / 1000000
+generate double aggregate_revenue_per_worker_mil = ///
+    aggregate_revenue_per_worker / 1000000
+generate double avg_firm_revenue_per_worker_mil = ///
+    avg_firm_revenue_per_worker / 1000000
+
 /*******************************************************************************
     Plot helper
 *******************************************************************************/
@@ -264,8 +271,7 @@ local standalone_xsize "7.5"
 local panel_label_size "tiny"
 local panel_title_size "small"
 local panel_ysize "6.2"
-local left_panel_xsize "4.2"
-local right_panel_xsize "5.4"
+local panel_xsize "5.2"
 local combined_ysize "6.2"
 local combined_xsize "11.5"
 
@@ -284,7 +290,7 @@ cmr_bdf_colored_dotplot log_avg_annual_total_employment ///
     xtitle("Log average annual total employment") ///
     name(bdf_emp_total) labsz(`panel_label_size') ///
     titlesz(`panel_title_size') ydim(`panel_ysize') ///
-    xdim(`left_panel_xsize') legendoff
+    xdim(`panel_xsize') legendoff
 
 cmr_bdf_colored_dotplot log_avg_firm_employment ///
     if !missing(log_avg_firm_employment), ///
@@ -292,7 +298,7 @@ cmr_bdf_colored_dotplot log_avg_firm_employment ///
     xtitle("Log average firm employment") ///
     name(bdf_emp_average) labsz(`panel_label_size') ///
     titlesz(`panel_title_size') ydim(`panel_ysize') ///
-    xdim(`right_panel_xsize')
+    xdim(`panel_xsize') legendoff
 
 graph combine bdf_emp_total bdf_emp_average, ///
     cols(2) title("Tax/BDF log employment by NACAM sector", size(medsmall)) ///
@@ -302,13 +308,38 @@ graph display bdf_emp_combined
 graph export "`figure_dir'/cmr_bdf_total_employment_by_nacam.pdf", replace
 graph export "`figure_dir'/cmr_bdf_total_employment_by_nacam.png", replace
 
+cmr_bdf_colored_dotplot avg_annual_total_employment ///
+    if !missing(avg_annual_total_employment), ///
+    title("Aggregate sector total") ///
+    xtitle("Average annual total employment (workers)") ///
+    name(bdf_emp_total_levels) labsz(`panel_label_size') ///
+    titlesz(`panel_title_size') ydim(`panel_ysize') ///
+    xdim(`panel_xsize') legendoff
+
+cmr_bdf_colored_dotplot avg_firm_employment ///
+    if !missing(avg_firm_employment), ///
+    title("Sector firm average") ///
+    xtitle("Average firm employment (workers)") ///
+    name(bdf_emp_average_levels) labsz(`panel_label_size') ///
+    titlesz(`panel_title_size') ydim(`panel_ysize') ///
+    xdim(`panel_xsize') legendoff
+
+graph combine bdf_emp_total_levels bdf_emp_average_levels, ///
+    cols(2) title("Tax/BDF employment by NACAM sector, levels", size(medsmall)) ///
+    plotregion(color(white)) graphregion(color(white)) ///
+    ysize(`combined_ysize') xsize(`combined_xsize') ///
+    name(bdf_emp_combined_levels, replace)
+graph display bdf_emp_combined_levels
+graph export "`figure_dir'/cmr_bdf_total_employment_by_nacam_levels.pdf", replace
+graph export "`figure_dir'/cmr_bdf_total_employment_by_nacam_levels.png", replace
+
 cmr_bdf_colored_dotplot log_avg_annual_total_revenue ///
     if !missing(log_avg_annual_total_revenue), ///
     title("Aggregate sector total") ///
     xtitle("Log average annual total revenue") ///
     name(bdf_rev_total) labsz(`panel_label_size') ///
     titlesz(`panel_title_size') ydim(`panel_ysize') ///
-    xdim(`left_panel_xsize') legendoff
+    xdim(`panel_xsize') legendoff
 
 cmr_bdf_colored_dotplot log_avg_firm_revenue ///
     if !missing(log_avg_firm_revenue), ///
@@ -316,7 +347,7 @@ cmr_bdf_colored_dotplot log_avg_firm_revenue ///
     xtitle("Log average firm annual revenue") ///
     name(bdf_rev_average) labsz(`panel_label_size') ///
     titlesz(`panel_title_size') ydim(`panel_ysize') ///
-    xdim(`right_panel_xsize')
+    xdim(`panel_xsize') legendoff
 
 graph combine bdf_rev_total bdf_rev_average, ///
     cols(2) title("Tax/BDF log annual revenue by NACAM sector", size(medsmall)) ///
@@ -326,13 +357,38 @@ graph display bdf_rev_combined
 graph export "`figure_dir'/cmr_bdf_total_revenue_by_nacam.pdf", replace
 graph export "`figure_dir'/cmr_bdf_total_revenue_by_nacam.png", replace
 
+cmr_bdf_colored_dotplot avg_annual_total_revenue_bil ///
+    if !missing(avg_annual_total_revenue_bil), ///
+    title("Aggregate sector total") ///
+    xtitle("Average annual total revenue (CFAF billions)") ///
+    name(bdf_rev_total_levels) labsz(`panel_label_size') ///
+    titlesz(`panel_title_size') ydim(`panel_ysize') ///
+    xdim(`panel_xsize') legendoff
+
+cmr_bdf_colored_dotplot avg_firm_revenue_mil ///
+    if !missing(avg_firm_revenue_mil), ///
+    title("Sector firm average") ///
+    xtitle("Average firm annual revenue (CFAF millions)") ///
+    name(bdf_rev_average_levels) labsz(`panel_label_size') ///
+    titlesz(`panel_title_size') ydim(`panel_ysize') ///
+    xdim(`panel_xsize') legendoff
+
+graph combine bdf_rev_total_levels bdf_rev_average_levels, ///
+    cols(2) title("Tax/BDF annual revenue by NACAM sector, levels", size(medsmall)) ///
+    plotregion(color(white)) graphregion(color(white)) ///
+    ysize(`combined_ysize') xsize(`combined_xsize') ///
+    name(bdf_rev_combined_levels, replace)
+graph display bdf_rev_combined_levels
+graph export "`figure_dir'/cmr_bdf_total_revenue_by_nacam_levels.pdf", replace
+graph export "`figure_dir'/cmr_bdf_total_revenue_by_nacam_levels.png", replace
+
 cmr_bdf_colored_dotplot log_aggregate_revenue_per_worker ///
     if !missing(log_aggregate_revenue_per_worker), ///
     title("Aggregate sector ratio") ///
     xtitle("Log annual revenue per worker") ///
     name(bdf_rpw_total) labsz(`panel_label_size') ///
     titlesz(`panel_title_size') ydim(`panel_ysize') ///
-    xdim(`left_panel_xsize') legendoff
+    xdim(`panel_xsize') legendoff
 
 cmr_bdf_colored_dotplot log_avg_firm_revenue_per_worker ///
     if !missing(log_avg_firm_revenue_per_worker), ///
@@ -340,7 +396,7 @@ cmr_bdf_colored_dotplot log_avg_firm_revenue_per_worker ///
     xtitle("Log average annual revenue per worker") ///
     name(bdf_rpw_average) labsz(`panel_label_size') ///
     titlesz(`panel_title_size') ydim(`panel_ysize') ///
-    xdim(`right_panel_xsize')
+    xdim(`panel_xsize') legendoff
 
 graph combine bdf_rpw_total bdf_rpw_average, ///
     cols(2) title("Tax/BDF log annual revenue per worker by NACAM sector", size(medsmall)) ///
@@ -349,6 +405,31 @@ graph combine bdf_rpw_total bdf_rpw_average, ///
 graph display bdf_rpw_combined
 graph export "`figure_dir'/cmr_bdf_revenue_per_worker_by_nacam.pdf", replace
 graph export "`figure_dir'/cmr_bdf_revenue_per_worker_by_nacam.png", replace
+
+cmr_bdf_colored_dotplot aggregate_revenue_per_worker_mil ///
+    if !missing(aggregate_revenue_per_worker_mil), ///
+    title("Aggregate sector ratio") ///
+    xtitle("Annual revenue per worker (CFAF millions)") ///
+    name(bdf_rpw_total_levels) labsz(`panel_label_size') ///
+    titlesz(`panel_title_size') ydim(`panel_ysize') ///
+    xdim(`panel_xsize') legendoff
+
+cmr_bdf_colored_dotplot avg_firm_revenue_per_worker_mil ///
+    if !missing(avg_firm_revenue_per_worker_mil), ///
+    title("Sector firm average") ///
+    xtitle("Average annual revenue per worker (CFAF millions)") ///
+    name(bdf_rpw_average_levels) labsz(`panel_label_size') ///
+    titlesz(`panel_title_size') ydim(`panel_ysize') ///
+    xdim(`panel_xsize') legendoff
+
+graph combine bdf_rpw_total_levels bdf_rpw_average_levels, ///
+    cols(2) title("Tax/BDF annual revenue per worker by NACAM sector, levels", size(medsmall)) ///
+    plotregion(color(white)) graphregion(color(white)) ///
+    ysize(`combined_ysize') xsize(`combined_xsize') ///
+    name(bdf_rpw_combined_levels, replace)
+graph display bdf_rpw_combined_levels
+graph export "`figure_dir'/cmr_bdf_revenue_per_worker_by_nacam_levels.pdf", replace
+graph export "`figure_dir'/cmr_bdf_revenue_per_worker_by_nacam_levels.png", replace
 
 display as result "BDF sector scale figures completed successfully."
 log close cmrbdfscale

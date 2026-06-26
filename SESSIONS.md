@@ -3097,3 +3097,35 @@ Refactor the Census sector workflow so raw-data cleaning and NACAM harmonization
 - Ran `code/BREADY_wbes/03_bready_wbes_sector_constraints.do` successfully; the latest log closed cleanly with no uncaptured `r(#);`, and all 14 B-READY PDF/PNG figure pairs were regenerated.
 - Confirmed the do-file still asserts `high_elasticity == (revenue_decile >= 7)` for sector-level results.
 - Direct PNG visual inspection was blocked by the local image-viewer sandbox error in this session; as a substitute, extracted text from two regenerated PDFs (`disp6` and `reg12`) and confirmed the rendered note says orange indicates revenue elasticity deciles 7-10.
+
+## 2026-06-25 - Added Census exporter-turnover elasticity stage
+
+- Created `code/elasticity_cameroun/16_cmr_census_exporter_turnover_elasticity.do`.
+- Added the new stage to `code/00_master.do` after the existing Census turnover-employment elasticity step.
+- Updated `slides/slides_cemac.tex` and regenerated `slides/slides_cemac.pdf` with a Census exporter-interaction specification slide and a sector-by-sector coefficient plot slide.
+- Generated `output/tables/cmr_census_exporter_turnover_elasticity.tex`, `output/tables/cmr_census_exporter_turnover_elasticity_audit.tex`, and PDF/PNG coefficient plots.
+- Used embedded Census export turnover (`census_exporter == 1`) as the exporter definition and annual turnover as the revenue measure.
+- Applied support rules of at least 30 usable firms, 10 exporters, and 10 non-exporters per reported NACAM sector; 25 sectors were reported in the current run.
+- Results remain descriptive cross-sectional Census associations with robust standard errors, not causal or panel fixed-effect estimates.
+
+### Verification
+
+- Ran `code/elasticity_cameroun/16_cmr_census_exporter_turnover_elasticity.do` successfully; the timestamped log closed cleanly with no uncaptured `r(#);`.
+- Confirmed the expected analysis dataset, LaTeX tables, and PDF/PNG coefficient plots were regenerated.
+- Compiled `slides/slides_cemac.tex` successfully with `pdflatex`; the deck output is 85 pages and includes the new Census exporter-turnover figure.
+
+## 2026-06-25 - Added appendix level twins for sector-scale slides
+
+- Updated `code/elasticity_cameroun/08_cmr_census_sector_figures.do` and `code/elasticity_cameroun/12_cmr_bdf_sector_scale_figures.do` to export level-scale PDF/PNG twins for the six log employment, revenue, and revenue-per-worker sector figures.
+- Scaled level axes into readable units: workers for employment, CFAF billions for aggregate revenue totals, and CFAF millions for firm averages and revenue-per-worker measures.
+- Standardized paired-panel graph sizing with a shared panel width and suppressed paired-plot legends to keep left and right panels balanced.
+- Updated `slides/slides_cemac.tex` with clickable links from the six original log slides to appendix twins, backlinks from appendix twins to the log slides, and a new appendix section.
+- Regenerated the six `_levels` PDF/PNG figure pairs and recompiled `slides/slides_cemac.pdf`; the deck now has 91 pages.
+
+### Verification
+
+- Ran `stata-mp /e do code/elasticity_cameroun/08_cmr_census_sector_figures.do`; latest log `logs/08_cmr_census_sector_figures_215412.log` closed cleanly with the success marker and no uncaptured `r(#);`.
+- Ran `stata-mp /e do code/elasticity_cameroun/12_cmr_bdf_sector_scale_figures.do`; latest log `logs/12_cmr_bdf_sector_scale_figures_215544.log` closed cleanly with the success marker and no uncaptured `r(#);`.
+- Confirmed all six appendix `_levels` PDF/PNG pairs were created with fresh timestamps in `output/figures/`.
+- Ran `pdflatex -interaction=nonstopmode -halt-on-error slides_cemac.tex` twice from `slides/`; compilation succeeded and cross-reference rerun warnings cleared. Remaining warnings are existing PDF-version inclusion warnings plus a harmless appendix bookmark string warning.
+- Rendered affected slides 9-14 and 86-91 to PNG for geometry checks and used `pdftotext` to confirm forward/back link text appears. Direct PNG viewing via `view_image` was blocked by the local Windows sandbox helper (`CreateProcessAsUserW failed: 4551`), so visual QA relied on rendered-page geometry, text extraction, and compile logs rather than interactive image inspection.

@@ -72,9 +72,11 @@ use "`diagnostics_file'", clear
 confirm variable nacam
 confirm variable nacam_label_short_display
 confirm variable data_export
-foreach var in firms total_employment average_employment log_total_employment ///
-    log_average_employment log_total_revenue log_average_revenue ///
-    log_turnover_per_worker log_average_turnover_per_worker {
+foreach var in firms total_employment average_employment total_turnover ///
+    total_revenue_bil average_revenue turnover_per_worker ///
+    average_turnover_per_worker log_total_employment log_average_employment ///
+    log_total_revenue log_average_revenue log_turnover_per_worker ///
+    log_average_turnover_per_worker {
     confirm numeric variable `var'
 }
 
@@ -82,6 +84,11 @@ isid nacam
 quietly count
 assert r(N) > 0
 assert !missing(nacam, nacam_label_short_display, data_export)
+
+generate double average_revenue_mil = average_revenue / 1000000
+generate double turnover_per_worker_mil = turnover_per_worker / 1000000
+generate double average_turnover_per_worker_mil = ///
+    average_turnover_per_worker / 1000000
 
 /*******************************************************************************
     Reviewer controls
@@ -98,8 +105,7 @@ local standalone_xsize "7.5"
 local panel_label_size "tiny"
 local panel_title_size "small"
 local panel_ysize "6.2"
-local left_panel_xsize "4.2"
-local right_panel_xsize "5.4"
+local panel_xsize "5.2"
 local combined_ysize "6.2"
 local combined_xsize "11.5"
 local figure_dir "${OUTPUTDIR}/figures"
@@ -146,8 +152,8 @@ program define cmr_census_colored_dotplot
         local ydim "6.2"
     }
 
-    * Standalone plots keep a legend; combined two-panel plots use the right
-    * panel as the shared color/shape legend.
+    * Standalone plots can keep a legend; combined two-panel plots usually
+    * suppress legends so the left and right plot areas stay balanced.
     if "`legendoff'" == "legendoff" {
         local legend_options legend(off)
     }
@@ -241,13 +247,13 @@ cmr_census_colored_dotplot log_total_employment if !missing(log_total_employment
     title("Aggregate sector total") ///
     xtitle("Log total employment") ///
     name(census_emp_total) labsz(`panel_label_size') titlesz(`panel_title_size') ///
-    ydim(`panel_ysize') xdim(`left_panel_xsize') legendoff
+    ydim(`panel_ysize') xdim(`panel_xsize') legendoff
 
 cmr_census_colored_dotplot log_average_employment if !missing(log_average_employment), ///
     title("Sector firm average") ///
     xtitle("Log average firm employment") ///
     name(census_emp_average) labsz(`panel_label_size') titlesz(`panel_title_size') ///
-    ydim(`panel_ysize') xdim(`right_panel_xsize')
+    ydim(`panel_ysize') xdim(`panel_xsize') legendoff
 
 graph combine census_emp_total census_emp_average, ///
     cols(2) title("Census log employment by NACAM sector", size(medsmall)) ///
@@ -257,19 +263,42 @@ graph display census_emp_combined
 graph export "`figure_dir'/cmr_census_total_employment_by_nacam.pdf", replace
 graph export "`figure_dir'/cmr_census_total_employment_by_nacam.png", replace
 
+cmr_census_colored_dotplot total_employment if !missing(total_employment), ///
+    title("Aggregate sector total") ///
+    xtitle("Total employment (workers)") ///
+    name(census_emp_total_levels) labsz(`panel_label_size') ///
+    titlesz(`panel_title_size') ydim(`panel_ysize') ///
+    xdim(`panel_xsize') legendoff
+
+cmr_census_colored_dotplot average_employment if !missing(average_employment), ///
+    title("Sector firm average") ///
+    xtitle("Average firm employment (workers)") ///
+    name(census_emp_average_levels) labsz(`panel_label_size') ///
+    titlesz(`panel_title_size') ydim(`panel_ysize') ///
+    xdim(`panel_xsize') legendoff
+
+graph combine census_emp_total_levels census_emp_average_levels, ///
+    cols(2) title("Census employment by NACAM sector, levels", size(medsmall)) ///
+    plotregion(color(white)) graphregion(color(white)) ///
+    ysize(`combined_ysize') xsize(`combined_xsize') ///
+    name(census_emp_combined_levels, replace)
+graph display census_emp_combined_levels
+graph export "`figure_dir'/cmr_census_total_employment_by_nacam_levels.pdf", replace
+graph export "`figure_dir'/cmr_census_total_employment_by_nacam_levels.png", replace
+
 * Revenue scale plot: show the sector total and the mean firm turnover side by
 * side so large sectors are not confused with high-average firms.
 cmr_census_colored_dotplot log_total_revenue if !missing(log_total_revenue), ///
     title("Aggregate sector total") ///
     xtitle("Log total annual revenue") ///
     name(census_rev_total) labsz(`panel_label_size') titlesz(`panel_title_size') ///
-    ydim(`panel_ysize') xdim(`left_panel_xsize') legendoff
+    ydim(`panel_ysize') xdim(`panel_xsize') legendoff
 
 cmr_census_colored_dotplot log_average_revenue if !missing(log_average_revenue), ///
     title("Sector firm average") ///
     xtitle("Log average firm annual revenue") ///
     name(census_rev_average) labsz(`panel_label_size') titlesz(`panel_title_size') ///
-    ydim(`panel_ysize') xdim(`right_panel_xsize')
+    ydim(`panel_ysize') xdim(`panel_xsize') legendoff
 
 graph combine census_rev_total census_rev_average, ///
     cols(2) title("Census log annual revenue by NACAM sector", size(medsmall)) ///
@@ -278,6 +307,29 @@ graph combine census_rev_total census_rev_average, ///
 graph display census_rev_combined
 graph export "`figure_dir'/cmr_census_total_revenue_by_nacam.pdf", replace
 graph export "`figure_dir'/cmr_census_total_revenue_by_nacam.png", replace
+
+cmr_census_colored_dotplot total_revenue_bil if !missing(total_revenue_bil), ///
+    title("Aggregate sector total") ///
+    xtitle("Total annual turnover (CFAF billions)") ///
+    name(census_rev_total_levels) labsz(`panel_label_size') ///
+    titlesz(`panel_title_size') ydim(`panel_ysize') ///
+    xdim(`panel_xsize') legendoff
+
+cmr_census_colored_dotplot average_revenue_mil if !missing(average_revenue_mil), ///
+    title("Sector firm average") ///
+    xtitle("Average firm annual turnover (CFAF millions)") ///
+    name(census_rev_average_levels) labsz(`panel_label_size') ///
+    titlesz(`panel_title_size') ydim(`panel_ysize') ///
+    xdim(`panel_xsize') legendoff
+
+graph combine census_rev_total_levels census_rev_average_levels, ///
+    cols(2) title("Census annual revenue by NACAM sector, levels", size(medsmall)) ///
+    plotregion(color(white)) graphregion(color(white)) ///
+    ysize(`combined_ysize') xsize(`combined_xsize') ///
+    name(census_rev_combined_levels, replace)
+graph display census_rev_combined_levels
+graph export "`figure_dir'/cmr_census_total_revenue_by_nacam_levels.pdf", replace
+graph export "`figure_dir'/cmr_census_total_revenue_by_nacam_levels.png", replace
 
 * Keep the older average-employment standalone figure available for slides or
 * quick review even though the combined employment figure is now primary.
@@ -296,14 +348,14 @@ cmr_census_colored_dotplot log_turnover_per_worker ///
     title("Aggregate sector ratio") ///
     xtitle("Log annual revenue per worker") ///
     name(census_rpw_total) labsz(`panel_label_size') titlesz(`panel_title_size') ///
-    ydim(`panel_ysize') xdim(`left_panel_xsize') legendoff
+    ydim(`panel_ysize') xdim(`panel_xsize') legendoff
 
 cmr_census_colored_dotplot log_average_turnover_per_worker ///
     if !missing(log_average_turnover_per_worker), ///
     title("Sector firm average") ///
     xtitle("Log average annual revenue per worker") ///
     name(census_rpw_average) labsz(`panel_label_size') titlesz(`panel_title_size') ///
-    ydim(`panel_ysize') xdim(`right_panel_xsize')
+    ydim(`panel_ysize') xdim(`panel_xsize') legendoff
 
 graph combine census_rpw_total census_rpw_average, ///
     cols(2) title("Census log annual revenue per worker by NACAM sector", size(medsmall)) ///
@@ -312,5 +364,31 @@ graph combine census_rpw_total census_rpw_average, ///
 graph display census_rpw_combined
 graph export "`figure_dir'/cmr_census_turnover_per_worker_by_nacam.pdf", replace
 graph export "`figure_dir'/cmr_census_turnover_per_worker_by_nacam.png", replace
+
+cmr_census_colored_dotplot turnover_per_worker_mil ///
+    if !missing(turnover_per_worker_mil), ///
+    title("Aggregate sector ratio") ///
+    xtitle("Annual turnover per worker (CFAF millions)") ///
+    name(census_rpw_total_levels) labsz(`panel_label_size') ///
+    titlesz(`panel_title_size') ydim(`panel_ysize') ///
+    xdim(`panel_xsize') legendoff
+
+cmr_census_colored_dotplot average_turnover_per_worker_mil ///
+    if !missing(average_turnover_per_worker_mil), ///
+    title("Sector firm average") ///
+    xtitle("Average annual turnover per worker (CFAF millions)") ///
+    name(census_rpw_average_levels) labsz(`panel_label_size') ///
+    titlesz(`panel_title_size') ydim(`panel_ysize') ///
+    xdim(`panel_xsize') legendoff
+
+graph combine census_rpw_total_levels census_rpw_average_levels, ///
+    cols(2) title("Census annual revenue per worker by NACAM sector, levels", size(medsmall)) ///
+    plotregion(color(white)) graphregion(color(white)) ///
+    ysize(`combined_ysize') xsize(`combined_xsize') ///
+    name(census_rpw_combined_levels, replace)
+graph display census_rpw_combined_levels
+graph export "`figure_dir'/cmr_census_turnover_per_worker_by_nacam_levels.pdf", replace
+graph export "`figure_dir'/cmr_census_turnover_per_worker_by_nacam_levels.png", replace
+
 display as result "Cameroon Census sector figures completed successfully."
 log close cmrcensusfigures

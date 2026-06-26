@@ -73,6 +73,7 @@ do "${ELASTICITY_CAMEROUN_CODEDIR}/10_cmr_fe_robustness_plots.do"
 
 * 10. Census turnover-employment elasticity robustness
 do "${ELASTICITY_CAMEROUN_CODEDIR}/13_cmr_census_turnover_employment_elasticity.do"
+do "${ELASTICITY_CAMEROUN_CODEDIR}/16_cmr_census_exporter_turnover_elasticity.do"
 
 * 11. B-READY mapped WBES constraints by harmonized NACAM sector
 do "${BREADY_WBES_CODEDIR}/03_bready_wbes_sector_constraints.do"

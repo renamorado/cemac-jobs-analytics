@@ -40,6 +40,14 @@
 \newcommand{\censusbdffigsource}{\figsource{Sources: INS Cameroon, RGE3 (2023-2024), and Cameroon administrative tax/BDF panel; calculations by authors.}}
 \newcommand{\wbesfigsource}{\figsource{Source: World Bank Enterprise Surveys, latest available CEMAC waves; calculations by authors.}}
 \newcommand{\cmrwbesfigsource}{\figsource{Sources: World Bank Enterprise Surveys, Cameroon 2024, and Cameroon administrative tax/BDF panel; calculations by authors.}}
+\newcommand{\appendixtwin}[1]{%
+    \par\vspace{0.01cm}
+    {\centering\tiny\hyperlink{#1}{Appendix: same figure in levels}\par}
+}
+\newcommand{\mainfigurelink}[1]{%
+    \par\vspace{0.01cm}
+    {\centering\tiny\hyperlink{#1}{Back to log figure}\par}
+}
 
 \title{CEMAC Jobs Analytics}
 \subtitle{Cameroon elasticities and WBES trade diagnostics}
@@ -138,39 +146,45 @@
     \bdffigsource
 \end{frame}
 
-\begin{frame}{Census Log Employment by Harmonized NACAM Sector}
+\begin{frame}[label=main-census-employment-log]{Census Log Employment by Harmonized NACAM Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_total_employment_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_employment_by_nacam.pdf}
+    \appendixtwin{app-census-employment-levels}
     \censusfigsource
 \end{frame}
 
-\begin{frame}{Tax/BDF Log Employment by Harmonized NACAM Sector}
+\begin{frame}[label=main-bdf-employment-log]{Tax/BDF Log Employment by Harmonized NACAM Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_employment_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_employment_by_nacam.pdf}
+    \appendixtwin{app-bdf-employment-levels}
     \bdffigsource
 \end{frame}
 
-\begin{frame}{Census Log Revenue by Harmonized NACAM Sector}
+\begin{frame}[label=main-census-revenue-log]{Census Log Revenue by Harmonized NACAM Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_total_revenue_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_revenue_by_nacam.pdf}
+    \appendixtwin{app-census-revenue-levels}
     \censusfigsource
 \end{frame}
 
-\begin{frame}{Tax/BDF Log Revenue by Harmonized NACAM Sector}
+\begin{frame}[label=main-bdf-revenue-log]{Tax/BDF Log Revenue by Harmonized NACAM Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_revenue_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_revenue_by_nacam.pdf}
+    \appendixtwin{app-bdf-revenue-levels}
     \bdffigsource
 \end{frame}
 
-\begin{frame}{Census Log Revenue per Worker by Harmonized NACAM Sector}
+\begin{frame}[label=main-census-rpw-log]{Census Log Revenue per Worker by Harmonized NACAM Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_per_worker_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_per_worker_by_nacam.pdf}
+    \appendixtwin{app-census-rpw-levels}
     \censusfigsource
 \end{frame}
 
-\begin{frame}{Tax/BDF Log Revenue per Worker by Harmonized NACAM Sector}
+\begin{frame}[label=main-bdf-rpw-log]{Tax/BDF Log Revenue per Worker by Harmonized NACAM Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_revenue_per_worker_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_revenue_per_worker_by_nacam.pdf}
+    \appendixtwin{app-bdf-rpw-levels}
     \bdffigsource
 \end{frame}
 
@@ -300,6 +314,31 @@
 \begin{frame}{Census Turnover-Employment Elasticities}
     \centering
     \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_employment_elasticity_coefficients.pdf}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}{Census Exporter-Interaction Specification}
+    \footnotesize
+    \begin{equation}
+        \ln(E_i) = \alpha_s + \beta_s \ln(R_i) + \gamma_s Exporter_i
+        + \delta_s \left[\ln(R_i) \times Exporter_i\right] + \varepsilon_i,
+        \quad i \in s
+    \end{equation}
+
+    \begin{itemize}
+        \item The unit of observation is a Census headquarters firm $i$ in NACAM sector $s$.
+        \item $E_i$ is employment and $R_i$ is annual turnover from RGE3.
+        \item $Exporter_i$ equals 1 when embedded Census export turnover is positive.
+        \item $\beta_s$ is the non-exporter elasticity; $\beta_s+\delta_s$ is the exporter elasticity.
+        \item The total elasticity is estimated separately among all firms in the same reported sector sample.
+        \item Standard errors are heteroskedasticity-robust.
+        \item Reported sectors have at least 30 usable firms, 10 exporters, and 10 non-exporters.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Census Turnover Elasticities by Exporter Status}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_exporter_turnover_elasticity_coefficients.pdf}
     \censusfigsource
 \end{frame}
 
@@ -846,6 +885,51 @@
     \centering
     \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_cameroon_activity_exporters_only.pdf}
     \wbesfigsource
+\end{frame}
+
+\appendix
+\section{Appendix: Sector Scale in Levels}
+
+\begin{frame}[label=app-census-employment-levels]{Census Employment by Harmonized NACAM Sector, Levels}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_employment_by_nacam_levels.pdf}
+    \mainfigurelink{main-census-employment-log}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}[label=app-bdf-employment-levels]{Tax/BDF Employment by Harmonized NACAM Sector, Levels}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_employment_by_nacam_levels.pdf}
+    \mainfigurelink{main-bdf-employment-log}
+    \bdffigsource
+\end{frame}
+
+\begin{frame}[label=app-census-revenue-levels]{Census Revenue by Harmonized NACAM Sector, Levels}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_revenue_by_nacam_levels.pdf}
+    \mainfigurelink{main-census-revenue-log}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}[label=app-bdf-revenue-levels]{Tax/BDF Revenue by Harmonized NACAM Sector, Levels}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_revenue_by_nacam_levels.pdf}
+    \mainfigurelink{main-bdf-revenue-log}
+    \bdffigsource
+\end{frame}
+
+\begin{frame}[label=app-census-rpw-levels]{Census Revenue per Worker by Harmonized NACAM Sector, Levels}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_per_worker_by_nacam_levels.pdf}
+    \mainfigurelink{main-census-rpw-log}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}[label=app-bdf-rpw-levels]{Tax/BDF Revenue per Worker by Harmonized NACAM Sector, Levels}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_revenue_per_worker_by_nacam_levels.pdf}
+    \mainfigurelink{main-bdf-rpw-log}
+    \bdffigsource
 \end{frame}
 
 \end{document}
