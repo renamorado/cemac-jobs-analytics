@@ -36,10 +36,10 @@
     {\centering\tiny #1\par}
 }
 \newcommand{\censusfigsource}{\figsource{Source: INS Cameroon, RGE3 (2023-2024); calculations by authors.}}
-\newcommand{\bdffigsource}{\figsource{Source: Cameroon administrative tax/BDF panel; calculations by authors.}}
-\newcommand{\censusbdffigsource}{\figsource{Sources: INS Cameroon, RGE3 (2023-2024), and Cameroon administrative tax/BDF panel; calculations by authors.}}
+\newcommand{\bdffigsource}{\figsource{Source: Cameroon administrative Ecofin panel; calculations by authors.}}
+\newcommand{\censusbdffigsource}{\figsource{Sources: INS Cameroon, RGE3 (2023-2024), and Cameroon administrative Ecofin panel; calculations by authors.}}
 \newcommand{\wbesfigsource}{\figsource{Source: World Bank Enterprise Surveys, latest available CEMAC waves; calculations by authors.}}
-\newcommand{\cmrwbesfigsource}{\figsource{Sources: World Bank Enterprise Surveys, Cameroon 2024, and Cameroon administrative tax/BDF panel; calculations by authors.}}
+\newcommand{\cmrwbesfigsource}{\figsource{Sources: World Bank Enterprise Surveys, Cameroon 2024, and Cameroon administrative Ecofin panel; calculations by authors.}}
 \newcommand{\appendixtwin}[1]{%
     \par\vspace{0.01cm}
     {\centering\tiny\hyperlink{#1}{Appendix: same figure in levels}\par}
@@ -140,7 +140,7 @@
     \censusfigsource
 \end{frame}
 
-\begin{frame}{Tax/BDF Firm Counts by Harmonized NACAM Sector}
+\begin{frame}{Ecofin Firm Counts by Harmonized NACAM Sector}
     \centering
     \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_firm_count_by_nacam.pdf}
     \bdffigsource
@@ -153,7 +153,7 @@
     \censusfigsource
 \end{frame}
 
-\begin{frame}[label=main-bdf-employment-log]{Tax/BDF Log Employment by Harmonized NACAM Sector}
+\begin{frame}[label=main-bdf-employment-log]{Ecofin Log Employment by Harmonized NACAM Sector}
     \centering
     \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_employment_by_nacam.pdf}
     \appendixtwin{app-bdf-employment-levels}
@@ -167,7 +167,7 @@
     \censusfigsource
 \end{frame}
 
-\begin{frame}[label=main-bdf-revenue-log]{Tax/BDF Log Revenue by Harmonized NACAM Sector}
+\begin{frame}[label=main-bdf-revenue-log]{Ecofin Log Revenue by Harmonized NACAM Sector}
     \centering
     \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_revenue_by_nacam.pdf}
     \appendixtwin{app-bdf-revenue-levels}
@@ -181,7 +181,7 @@
     \censusfigsource
 \end{frame}
 
-\begin{frame}[label=main-bdf-rpw-log]{Tax/BDF Log Revenue per Worker by Harmonized NACAM Sector}
+\begin{frame}[label=main-bdf-rpw-log]{Ecofin Log Revenue per Worker by Harmonized NACAM Sector}
     \centering
     \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_revenue_per_worker_by_nacam.pdf}
     \appendixtwin{app-bdf-rpw-levels}
@@ -345,7 +345,7 @@
 \begin{frame}{Census Turnover-Employment Robustness}
     \footnotesize
     \begin{itemize}
-        \item Census estimates are cross-sectional slopes; tax/BDF estimates are panel total-revenue elasticities with firm and NACAM-year fixed effects.
+        \item Census estimates are cross-sectional slopes; Ecofin estimates are panel total-revenue elasticities with firm and NACAM-year fixed effects.
         \item The solid black line marks equality between the two estimates; the dashed grey line shows the fitted relationship across overlapping NACAM sectors.
     \end{itemize}
     \vspace{-0.12cm}
@@ -402,9 +402,9 @@
     \bdffigsource
 \end{frame}
 
-\begin{frame}{Administrative Tax/BDF Asset Diagnostics}
+\begin{frame}{Administrative Ecofin Asset Diagnostics}
     \begin{itemize}
-        \item The RGE/Census file does not include the dictionary-listed asset field, so asset diagnostics use the administrative tax/BDF panel instead.
+        \item The RGE/Census file does not include the dictionary-listed asset field, so asset diagnostics use the administrative Ecofin panel instead.
         \item Net fixed assets are the preferred capital proxy because they most closely represent firm capital stock in the current BDF variables.
         \item Each firm contributes once to the sector totals, using its latest available positive asset observation.
         \item Net total assets are shown as a broader balance-sheet comparison.
@@ -897,7 +897,7 @@
     \censusfigsource
 \end{frame}
 
-\begin{frame}[label=app-bdf-employment-levels]{Tax/BDF Employment by Harmonized NACAM Sector, Levels}
+\begin{frame}[label=app-bdf-employment-levels]{Ecofin Employment by Harmonized NACAM Sector, Levels}
     \centering
     \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_employment_by_nacam_levels.pdf}
     \mainfigurelink{main-bdf-employment-log}
@@ -911,7 +911,7 @@
     \censusfigsource
 \end{frame}
 
-\begin{frame}[label=app-bdf-revenue-levels]{Tax/BDF Revenue by Harmonized NACAM Sector, Levels}
+\begin{frame}[label=app-bdf-revenue-levels]{Ecofin Revenue by Harmonized NACAM Sector, Levels}
     \centering
     \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_revenue_by_nacam_levels.pdf}
     \mainfigurelink{main-bdf-revenue-log}
@@ -925,7 +925,7 @@
     \censusfigsource
 \end{frame}
 
-\begin{frame}[label=app-bdf-rpw-levels]{Tax/BDF Revenue per Worker by Harmonized NACAM Sector, Levels}
+\begin{frame}[label=app-bdf-rpw-levels]{Ecofin Revenue per Worker by Harmonized NACAM Sector, Levels}
     \centering
     \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_revenue_per_worker_by_nacam_levels.pdf}
     \mainfigurelink{main-bdf-rpw-log}

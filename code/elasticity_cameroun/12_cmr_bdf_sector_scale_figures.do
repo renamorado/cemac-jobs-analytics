@@ -3,7 +3,7 @@ set more off
 
 /*******************************************************************************
     Purpose:
-        Build administrative tax/BDF companion figures for the Census sector
+        Build administrative Ecofin companion figures for the Census sector
         scale plots: firm counts, employment, revenue, and revenue per worker.
 
     Input:
@@ -163,6 +163,49 @@ generate double aggregate_revenue_per_worker_mil = ///
 generate double avg_firm_revenue_per_worker_mil = ///
     avg_firm_revenue_per_worker / 1000000
 
+
+/*******************************************************************************
+    Export helper
+*******************************************************************************/
+
+capture program drop cmr_bdf_export_graph
+program define cmr_bdf_export_graph
+    version 17.0
+    args stub
+
+    local pdf_file "`stub'.pdf"
+    local png_file "`stub'.png"
+    local png_stub "`stub'"
+
+    graph export "`pdf_file'", replace
+
+    capture noisily graph export "`png_file'", replace
+    if _rc {
+        local png_rc = _rc
+        display as text "Stata PNG export failed with return code `png_rc'."
+        display as text "Trying pdftoppm fallback from the exported PDF."
+
+        capture erase "`png_file'"
+
+        local pdftoppm_exe "pdftoppm"
+        if c(os) == "Windows" ///
+            & fileexists("C:/Program Files/MiKTeX/miktex/bin/x64/pdftoppm.exe") {
+            local pdftoppm_exe "C:/Program Files/MiKTeX/miktex/bin/x64/pdftoppm.exe"
+        }
+
+        capture noisily shell "`pdftoppm_exe'" -png -singlefile ///
+            -r 180 "`pdf_file'" "`png_stub'"
+        capture confirm file "`png_file'"
+        if _rc {
+            display as error "Unable to create `png_file'."
+            display as error "Install/configure Java for Stata PNG export, or make pdftoppm available on PATH."
+            exit `png_rc'
+        }
+
+        display as result "Saved `png_file' using pdftoppm fallback."
+    }
+end
+
 /*******************************************************************************
     Plot helper
 *******************************************************************************/
@@ -276,13 +319,12 @@ local combined_ysize "6.2"
 local combined_xsize "11.5"
 
 cmr_bdf_colored_dotplot avg_annual_firms, ///
-    title("Tax/BDF firm counts by NACAM sector") ///
+    title("Ecofin firm counts by NACAM sector") ///
     xtitle("Average annual firms") ///
     name(bdf_firms) labsz(`standalone_label_size') ///
     titlesz(`standalone_title_size') ydim(`standalone_ysize') ///
     xdim(`standalone_xsize')
-graph export "`figure_dir'/cmr_bdf_firm_count_by_nacam.pdf", replace
-graph export "`figure_dir'/cmr_bdf_firm_count_by_nacam.png", replace
+cmr_bdf_export_graph "`figure_dir'/cmr_bdf_firm_count_by_nacam"
 
 cmr_bdf_colored_dotplot log_avg_annual_total_employment ///
     if !missing(log_avg_annual_total_employment), ///
@@ -301,12 +343,11 @@ cmr_bdf_colored_dotplot log_avg_firm_employment ///
     xdim(`panel_xsize') legendoff
 
 graph combine bdf_emp_total bdf_emp_average, ///
-    cols(2) title("Tax/BDF log employment by NACAM sector", size(medsmall)) ///
+    cols(2) title("Ecofin log employment by NACAM sector", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
     ysize(`combined_ysize') xsize(`combined_xsize') name(bdf_emp_combined, replace)
 graph display bdf_emp_combined
-graph export "`figure_dir'/cmr_bdf_total_employment_by_nacam.pdf", replace
-graph export "`figure_dir'/cmr_bdf_total_employment_by_nacam.png", replace
+cmr_bdf_export_graph "`figure_dir'/cmr_bdf_total_employment_by_nacam"
 
 cmr_bdf_colored_dotplot avg_annual_total_employment ///
     if !missing(avg_annual_total_employment), ///
@@ -325,13 +366,12 @@ cmr_bdf_colored_dotplot avg_firm_employment ///
     xdim(`panel_xsize') legendoff
 
 graph combine bdf_emp_total_levels bdf_emp_average_levels, ///
-    cols(2) title("Tax/BDF employment by NACAM sector, levels", size(medsmall)) ///
+    cols(2) title("Ecofin employment by NACAM sector, levels", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
     ysize(`combined_ysize') xsize(`combined_xsize') ///
     name(bdf_emp_combined_levels, replace)
 graph display bdf_emp_combined_levels
-graph export "`figure_dir'/cmr_bdf_total_employment_by_nacam_levels.pdf", replace
-graph export "`figure_dir'/cmr_bdf_total_employment_by_nacam_levels.png", replace
+cmr_bdf_export_graph "`figure_dir'/cmr_bdf_total_employment_by_nacam_levels"
 
 cmr_bdf_colored_dotplot log_avg_annual_total_revenue ///
     if !missing(log_avg_annual_total_revenue), ///
@@ -350,12 +390,11 @@ cmr_bdf_colored_dotplot log_avg_firm_revenue ///
     xdim(`panel_xsize') legendoff
 
 graph combine bdf_rev_total bdf_rev_average, ///
-    cols(2) title("Tax/BDF log annual revenue by NACAM sector", size(medsmall)) ///
+    cols(2) title("Ecofin log annual revenue by NACAM sector", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
     ysize(`combined_ysize') xsize(`combined_xsize') name(bdf_rev_combined, replace)
 graph display bdf_rev_combined
-graph export "`figure_dir'/cmr_bdf_total_revenue_by_nacam.pdf", replace
-graph export "`figure_dir'/cmr_bdf_total_revenue_by_nacam.png", replace
+cmr_bdf_export_graph "`figure_dir'/cmr_bdf_total_revenue_by_nacam"
 
 cmr_bdf_colored_dotplot avg_annual_total_revenue_bil ///
     if !missing(avg_annual_total_revenue_bil), ///
@@ -374,13 +413,12 @@ cmr_bdf_colored_dotplot avg_firm_revenue_mil ///
     xdim(`panel_xsize') legendoff
 
 graph combine bdf_rev_total_levels bdf_rev_average_levels, ///
-    cols(2) title("Tax/BDF annual revenue by NACAM sector, levels", size(medsmall)) ///
+    cols(2) title("Ecofin annual revenue by NACAM sector, levels", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
     ysize(`combined_ysize') xsize(`combined_xsize') ///
     name(bdf_rev_combined_levels, replace)
 graph display bdf_rev_combined_levels
-graph export "`figure_dir'/cmr_bdf_total_revenue_by_nacam_levels.pdf", replace
-graph export "`figure_dir'/cmr_bdf_total_revenue_by_nacam_levels.png", replace
+cmr_bdf_export_graph "`figure_dir'/cmr_bdf_total_revenue_by_nacam_levels"
 
 cmr_bdf_colored_dotplot log_aggregate_revenue_per_worker ///
     if !missing(log_aggregate_revenue_per_worker), ///
@@ -399,12 +437,11 @@ cmr_bdf_colored_dotplot log_avg_firm_revenue_per_worker ///
     xdim(`panel_xsize') legendoff
 
 graph combine bdf_rpw_total bdf_rpw_average, ///
-    cols(2) title("Tax/BDF log annual revenue per worker by NACAM sector", size(medsmall)) ///
+    cols(2) title("Ecofin log annual revenue per worker by NACAM sector", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
     ysize(`combined_ysize') xsize(`combined_xsize') name(bdf_rpw_combined, replace)
 graph display bdf_rpw_combined
-graph export "`figure_dir'/cmr_bdf_revenue_per_worker_by_nacam.pdf", replace
-graph export "`figure_dir'/cmr_bdf_revenue_per_worker_by_nacam.png", replace
+cmr_bdf_export_graph "`figure_dir'/cmr_bdf_revenue_per_worker_by_nacam"
 
 cmr_bdf_colored_dotplot aggregate_revenue_per_worker_mil ///
     if !missing(aggregate_revenue_per_worker_mil), ///
@@ -423,13 +460,12 @@ cmr_bdf_colored_dotplot avg_firm_revenue_per_worker_mil ///
     xdim(`panel_xsize') legendoff
 
 graph combine bdf_rpw_total_levels bdf_rpw_average_levels, ///
-    cols(2) title("Tax/BDF annual revenue per worker by NACAM sector, levels", size(medsmall)) ///
+    cols(2) title("Ecofin annual revenue per worker by NACAM sector, levels", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
     ysize(`combined_ysize') xsize(`combined_xsize') ///
     name(bdf_rpw_combined_levels, replace)
 graph display bdf_rpw_combined_levels
-graph export "`figure_dir'/cmr_bdf_revenue_per_worker_by_nacam_levels.pdf", replace
-graph export "`figure_dir'/cmr_bdf_revenue_per_worker_by_nacam_levels.png", replace
+cmr_bdf_export_graph "`figure_dir'/cmr_bdf_revenue_per_worker_by_nacam_levels"
 
 display as result "BDF sector scale figures completed successfully."
 log close cmrbdfscale

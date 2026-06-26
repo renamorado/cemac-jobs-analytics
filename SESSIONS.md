@@ -3129,3 +3129,15 @@ Refactor the Census sector workflow so raw-data cleaning and NACAM harmonization
 - Confirmed all six appendix `_levels` PDF/PNG pairs were created with fresh timestamps in `output/figures/`.
 - Ran `pdflatex -interaction=nonstopmode -halt-on-error slides_cemac.tex` twice from `slides/`; compilation succeeded and cross-reference rerun warnings cleared. Remaining warnings are existing PDF-version inclusion warnings plus a harmless appendix bookmark string warning.
 - Rendered affected slides 9-14 and 86-91 to PNG for geometry checks and used `pdftotext` to confirm forward/back link text appears. Direct PNG viewing via `view_image` was blocked by the local Windows sandbox helper (`CreateProcessAsUserW failed: 4551`), so visual QA relied on rendered-page geometry, text extraction, and compile logs rather than interactive image inspection.
+
+## 2026-06-26 - Made BDF sector-scale PNG exports more robust
+
+- Updated `code/elasticity_cameroun/12_cmr_bdf_sector_scale_figures.do` to route figure exports through a small helper that writes PDF first, tries native Stata PNG export, and falls back to `pdftoppm` if Stata PNG export fails because Java is unavailable.
+- Preserved the current Ecofin wording in the BDF sector-scale graph titles.
+- Regenerated the seven BDF sector-scale PDF/PNG figure pairs under `output/figures/`.
+- Diagnosed the earlier failure as Stata stopping on the first PNG export with `Java installation not found r(5004)` after the corresponding PDF had already been written.
+
+### Verification
+
+- Ran `stata-mp /e do code/elasticity_cameroun/12_cmr_bdf_sector_scale_figures.do` successfully.
+- Latest log `logs/12_cmr_bdf_sector_scale_figures_114859.log` closed with `BDF sector scale figures completed successfully.` and all seven PNG/PDF pairs had fresh timestamps.
