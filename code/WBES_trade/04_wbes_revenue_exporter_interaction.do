@@ -7,7 +7,7 @@ set more off
         between exporters and non-exporters.
 
     Inputs:
-        Data/Analysis/wbes_trade_clean.dta
+        Data/Analysis/wbes_elasticity_clean.dta
 
     Outputs:
         Data/Analysis/cemac_wbes_revenue_exporter_interaction_estimates.dta
@@ -63,15 +63,17 @@ log using "${LOGDIR}/04_wbes_revenue_exporter_interaction.log", ///
     replace text name(wbesrevenueinteraction)
 
 /*******************************************************************************
-    Load cleaned WBES file and define the common sample
+    Load prepared WBES elasticity file and define the common sample
 *******************************************************************************/
-confirm file "${DATADIR}/Analysis/wbes_trade_clean.dta"
-use "${DATADIR}/Analysis/wbes_trade_clean.dta", clear
+confirm file "${DATADIR}/Analysis/wbes_elasticity_clean.dta"
+use "${DATADIR}/Analysis/wbes_elasticity_clean.dta", clear
 
 foreach var in ///
     firm_id country_name cemac_country wb_region wb_income_group weight ///
     employment sales_w export_status isic4_section ///
-    ln_firm_age foreign_own_share gov_own_share {
+    ln_firm_age foreign_own_share gov_own_share retained_cemac ///
+    ssa_excl_cemac high_income display_name activity_group ///
+    isic4_section_fe ln_emp ln_revenue revenue_interaction_sample {
     confirm variable `var'
 }
 
@@ -79,45 +81,7 @@ assert !missing(weight)
 assert weight > 0
 assert inlist(export_status, 0, 1) if !missing(export_status)
 
-generate byte retained_cemac = cemac_country == 1 & country_name != "Gabon"
-generate byte ssa_excl_cemac = ///
-    strpos(wb_region, "Sub-Saharan Africa") > 0 & cemac_country != 1
-generate byte high_income = strpos(wb_income_group, "High income") > 0
-
-generate str40 display_name = country_name
-replace display_name = "Central Afr. Rep." ///
-    if country_name == "Central African Republic"
-replace display_name = "Eq. Guinea" if country_name == "Equatorial Guinea"
-
-generate str36 activity_group = ""
-replace activity_group = "Manufacturing" if isic4_section == "C"
-replace activity_group = "Construction/utilities" ///
-    if inlist(isic4_section, "E", "F")
-replace activity_group = "Trade/hospitality/transport" ///
-    if inlist(isic4_section, "G", "H", "I")
-replace activity_group = "Other services" ///
-    if inlist(isic4_section, "J", "K", "M", "N", "S")
-replace activity_group = "Other/unclear activity" ///
-    if missing(activity_group) | activity_group == ""
-
-generate str16 isic4_section_fe_label = isic4_section
-replace isic4_section_fe_label = "Unknown" if isic4_section_fe_label == ""
-encode isic4_section_fe_label, generate(isic4_section_fe)
-label variable isic4_section_fe "ISIC Rev.4 section fixed effect"
-
-generate double ln_emp = ln(employment) if employment > 0
-generate double ln_revenue = ln(sales_w) if sales_w > 0
-generate byte interaction_sample = ///
-    !missing(ln_emp, ln_revenue, export_status, weight, ln_firm_age, ///
-        foreign_own_share, gov_own_share)
-
-label variable ln_emp "Log employment"
-label variable ln_revenue "Log winsorized annual sales"
-label variable export_status "Firm exports directly or indirectly"
-label variable interaction_sample "Usable controlled revenue-exporter interaction sample"
-
-keep if retained_cemac == 1 | ssa_excl_cemac == 1 | high_income == 1
-
+generate byte interaction_sample = revenue_interaction_sample
 local min_total 30
 local min_group 10
 local zcrit = invnormal(.975)

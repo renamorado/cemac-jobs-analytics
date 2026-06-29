@@ -105,21 +105,23 @@ do "code/WBES_trade/02_wbes_trade_plots.do"
 
 That stage reads `Data/Analysis/wbes_trade_clean.dta` and exports weighted country-plus-benchmark dot-and-interval plots for exporter share, export intensity among exporters, import or foreign-input participation, and two-way trader status. Gabon remains coverage-only in these plots.
 
-To export exploratory WBES employment/trade elasticity outputs, run:
+To prepare and export exploratory WBES employment/trade elasticity outputs, run:
 
 ```stata
+do "code/WBES_trade/05_wbes_elasticity_prep.do"
 do "code/WBES_trade/03_wbes_trade_elasticity.do"
 ```
 
-That stage reads `Data/Analysis/wbes_trade_clean.dta`, estimates weighted latest-wave cross-sectional employment/export-value associations, and writes slide-ready country and Cameroon activity-group tables and figures. These are not panel fixed-effect elasticities; see `docs/wbes_trade_representativeness_note.md` for the methodological caveats.
+The prep stage reads `Data/Analysis/wbes_trade_clean.dta` and writes `Data/Analysis/wbes_elasticity_clean.dta`. The elasticity stage reads that clean file, estimates weighted latest-wave cross-sectional employment/export-value associations, and writes slide-ready country and Cameroon activity-group tables and figures. These are not panel fixed-effect elasticities; see `docs/wbes_trade_representativeness_note.md` for the methodological caveats.
 
 To estimate the focal revenue-exporter interaction specification, run:
 
 ```stata
+do "code/WBES_trade/05_wbes_elasticity_prep.do"
 do "code/WBES_trade/04_wbes_revenue_exporter_interaction.do"
 ```
 
-That stage estimates weighted cross-sectional employment-revenue slopes
+The interaction stage reads `Data/Analysis/wbes_elasticity_clean.dta` and estimates weighted cross-sectional employment-revenue slopes
 separately for exporters and non-exporters. It reports the exporter minus
 non-exporter slope difference as the focal estimate, retains suppressed groups
 in an audit dataset, and requires at least 30 usable firms plus at least 10

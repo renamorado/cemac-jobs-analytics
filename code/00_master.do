@@ -53,6 +53,7 @@ do "${ELASTICITY_CAMEROUN_CODEDIR}/04_cmr_bdf_cleaning.do"
 do "${ELASTICITY_CAMEROUN_CODEDIR}/12_cmr_bdf_sector_scale_figures.do"
 
 * 4. Fixed-asset coefficient figures
+do "${ELASTICITY_CAMEROUN_CODEDIR}/17_cmr_bdf_elasticity_prep.do"
 do "${ELASTICITY_CAMEROUN_CODEDIR}/15_cmr_fixed_asset_elasticity_figures.do"
 
 * 5. Baseline NACAM elasticity rankings used by downstream extensions
@@ -72,6 +73,7 @@ do "${ELASTICITY_CAMEROUN_CODEDIR}/14_cmr_customs_census_linkage.do"
 do "${ELASTICITY_CAMEROUN_CODEDIR}/10_cmr_fe_robustness_plots.do"
 
 * 10. Census turnover-employment elasticity robustness
+do "${ELASTICITY_CAMEROUN_CODEDIR}/18_cmr_census_elasticity_prep.do"
 do "${ELASTICITY_CAMEROUN_CODEDIR}/13_cmr_census_turnover_employment_elasticity.do"
 do "${ELASTICITY_CAMEROUN_CODEDIR}/16_cmr_census_exporter_turnover_elasticity.do"
 
