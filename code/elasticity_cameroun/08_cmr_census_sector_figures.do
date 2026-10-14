@@ -4,10 +4,10 @@ set more off
 /*******************************************************************************
     Purpose:
         Export reviewer-friendly Cameroon Census sector figures from the
-        prepared NACAM diagnostics dataset.
+        prepared ISIC Rev.4 division diagnostics dataset.
 
     Input:
-        Data/Analysis/CMR_census_nacam_diagnostics.dta
+        Data/Analysis/CMR_census_isic4_division_diagnostics.dta
 
     Outputs:
         output/figures/cmr_census_*.pdf
@@ -65,13 +65,13 @@ if _rc {
         text name(cmrcensusfigures)
 }
 
-local diagnostics_file "${DATADIR}/Analysis/CMR_census_nacam_diagnostics.dta"
+local diagnostics_file "${DATADIR}/Analysis/CMR_census_isic4_division_diagnostics.dta"
 confirm file "`diagnostics_file'"
 use "`diagnostics_file'", clear
 
-confirm variable nacam
-confirm variable nacam_label_short_display
-confirm variable data_export
+confirm variable isic4_sector_id
+confirm variable isic4_label_short_display
+confirm variable broad_sector
 foreach var in firms total_employment average_employment total_turnover ///
     total_revenue_bil average_revenue turnover_per_worker ///
     average_turnover_per_worker log_total_employment log_average_employment ///
@@ -80,10 +80,10 @@ foreach var in firms total_employment average_employment total_turnover ///
     confirm numeric variable `var'
 }
 
-isid nacam
+isid isic4_sector_id
 quietly count
 assert r(N) > 0
-assert !missing(nacam, nacam_label_short_display, data_export)
+assert !missing(isic4_sector_id, isic4_label_short_display, broad_sector)
 
 generate double average_revenue_mil = average_revenue / 1000000
 generate double turnover_per_worker_mil = turnover_per_worker / 1000000
@@ -115,13 +115,13 @@ local figure_dir "${OUTPUTDIR}/figures"
 *******************************************************************************/
 * Reusable plotting helper for horizontal dot plots. Each plotted variable is
 * sorted descending within the current dataset, and marker color/shape comes
-* from the broad data_export sector group.
+* from the broad broad_sector sector group.
 capture program drop cmr_census_colored_dotplot
 program define cmr_census_colored_dotplot
     version 17.0
     syntax varname(numeric) [if], Title(string asis) XTitle(string asis) ///
         Name(name) [LABSZ(string) TITLESZ(string) XDIM(string) ///
-        YDIM(string) LEGENDOFF]
+        YDIM(string) LEGENDOFF RANKFROM(integer 0) RANKTO(integer 0)]
 
     * Shared palette and legend controls.
     local marker_size "medlarge"
@@ -177,13 +177,14 @@ program define cmr_census_colored_dotplot
     }
 
     * Sort sectors by the plotted metric so each figure is independently ranked.
-    gsort -`varlist' nacam
+    gsort -`varlist' isic4_sector_id
+    if `rankfrom' > 0 keep if inrange(_n, `rankfrom', `rankto')
     generate int plot_order = _n
 
-    * Build a temporary value label for the y-axis from the short NACAM labels.
+    * Build a temporary value label for the y-axis from the short ISIC Rev.4 division labels.
     capture label drop census_sector_plot
     forvalues i = 1/`=_N' {
-        local sector_label = subinstr(nacam_label_short_display[`i'], char(34), "'", .)
+        local sector_label = subinstr(isic4_label_short_display[`i'], char(34), "'", .)
         if `i' == 1 {
             label define census_sector_plot `i' `"`sector_label'"'
         }
@@ -198,25 +199,25 @@ program define cmr_census_colored_dotplot
     * Draw one scatter layer per broad sector group so the legend and marker
     * vocabulary match the Cameroon elasticity plots.
     twoway ///
-        (scatter plot_order `varlist' if data_export == "A – Agriculture, Forestry and Fishing", ///
+        (scatter plot_order `varlist' if broad_sector == 1, ///
             msymbol(circle) mcolor("`agriculture_color'") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if data_export == "B – Mining and Quarrying", ///
+        (scatter plot_order `varlist' if broad_sector == 2, ///
             msymbol(diamond) mcolor("`mining_color'") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if data_export == "C – Manufacturing", ///
+        (scatter plot_order `varlist' if broad_sector == 3, ///
             msymbol(square) mcolor("`manufacturing_color'") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if data_export == "Utilities", ///
+        (scatter plot_order `varlist' if broad_sector == 4, ///
             msymbol(triangle) mcolor("`utilities_color'") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if data_export == "F – Construction", ///
+        (scatter plot_order `varlist' if broad_sector == 5, ///
             msymbol(Oh) mcolor("`construction_color'") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if data_export == "G – Wholesale and Retail Trade; Repair of Motor Vehicles", ///
+        (scatter plot_order `varlist' if broad_sector == 6, ///
             msymbol(Th) mcolor("`trade_color'") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if data_export == "H – Transportation and Storage", ///
+        (scatter plot_order `varlist' if broad_sector == 7, ///
             msymbol(Sh) mcolor("`transport_information_color'") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if data_export == "J – Information and Communication", ///
+        (scatter plot_order `varlist' if broad_sector == 8, ///
             msymbol(plus) mcolor("`transport_information_color'") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if data_export == "K – Financial and Insurance Activities", ///
+        (scatter plot_order `varlist' if broad_sector == 9, ///
             msymbol(x) mcolor("`finance_color'") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if data_export == "Other services", ///
+        (scatter plot_order `varlist' if broad_sector == 10, ///
             msymbol(Dh) mcolor("`services_color'") msize(`marker_size')), ///
         ylabel(1(1)`last_order', valuelabel angle(horizontal) ///
             labsize(`labsz') noticks) ///
@@ -231,115 +232,139 @@ program define cmr_census_colored_dotplot
     restore
 end
 
+* Preserve full exports for zooming; slide parts contain at most 28 ranked rows.
+quietly count
+local division_n = r(N)
+local pages = ceil(`division_n'/28)
+local rows_per_page = ceil(`division_n'/`pages')
+forvalues page = 0/`pages' {
+    local page_suffix ""
+    local rank_options ""
+    local page_note ""
+    local standalone_label_size "tiny"
+    local panel_label_size "tiny"
+    if `page' > 0 {
+        local first = (`page'-1)*`rows_per_page' + 1
+        local last = `page'*`rows_per_page'
+        local page_suffix "_part`page'"
+        local rank_options "rankfrom(`first') rankto(`last')"
+        local page_note note("Ranks `first'-`last'; each panel ranks divisions separately.", size(small))
+        local standalone_label_size "vsmall"
+        local panel_label_size "small"
+    }
 * Firm-count plot: a single count panel is enough because counts have no
 * meaningful sector-average counterpart.
 cmr_census_colored_dotplot firms, ///
-    title("Census firm counts by NACAM sector") ///
+    title("Census firm counts by ISIC Rev.4 division") ///
     xtitle("Headquarters firms") ///
-    name(census_firms) labsz(`standalone_label_size') titlesz(`standalone_title_size') ///
+    `rank_options' name(census_firms) labsz(`standalone_label_size') titlesz(`standalone_title_size') ///
     ydim(`standalone_ysize') xdim(`standalone_xsize')
-graph export "`figure_dir'/cmr_census_firm_count_by_nacam.pdf", replace
-graph export "`figure_dir'/cmr_census_firm_count_by_nacam.png", replace
+graph export "`figure_dir'/cmr_census_firm_count_by_isic4_division`page_suffix'.pdf", name(census_firms) replace
+graph export "`figure_dir'/cmr_census_firm_count_by_isic4_division`page_suffix'.png", name(census_firms) replace
 
 * Employment scale plot: combine aggregate sector employment with the average
 * firm size in the sector, both on log scales for readability.
 cmr_census_colored_dotplot log_total_employment if !missing(log_total_employment), ///
     title("Aggregate sector total") ///
     xtitle("Log total employment") ///
-    name(census_emp_total) labsz(`panel_label_size') titlesz(`panel_title_size') ///
+    `rank_options' name(census_emp_total) labsz(`panel_label_size') titlesz(`panel_title_size') ///
     ydim(`panel_ysize') xdim(`panel_xsize') legendoff
 
 cmr_census_colored_dotplot log_average_employment if !missing(log_average_employment), ///
     title("Sector firm average") ///
     xtitle("Log average firm employment") ///
-    name(census_emp_average) labsz(`panel_label_size') titlesz(`panel_title_size') ///
+    `rank_options' name(census_emp_average) labsz(`panel_label_size') titlesz(`panel_title_size') ///
     ydim(`panel_ysize') xdim(`panel_xsize') legendoff
 
 graph combine census_emp_total census_emp_average, ///
-    cols(2) title("Census log employment by NACAM sector", size(medsmall)) ///
+    cols(2) title("Census log employment by ISIC Rev.4 division", size(medsmall)) ///
+    `page_note' ///
     plotregion(color(white)) graphregion(color(white)) ///
     ysize(`combined_ysize') xsize(`combined_xsize') name(census_emp_combined, replace)
 graph display census_emp_combined
-graph export "`figure_dir'/cmr_census_total_employment_by_nacam.pdf", replace
-graph export "`figure_dir'/cmr_census_total_employment_by_nacam.png", replace
+graph export "`figure_dir'/cmr_census_total_employment_by_isic4_division`page_suffix'.pdf", name(census_emp_combined) replace
+graph export "`figure_dir'/cmr_census_total_employment_by_isic4_division`page_suffix'.png", name(census_emp_combined) replace
 
 cmr_census_colored_dotplot total_employment if !missing(total_employment), ///
     title("Aggregate sector total") ///
     xtitle("Total employment (workers)") ///
-    name(census_emp_total_levels) labsz(`panel_label_size') ///
+    `rank_options' name(census_emp_total_levels) labsz(`panel_label_size') ///
     titlesz(`panel_title_size') ydim(`panel_ysize') ///
     xdim(`panel_xsize') legendoff
 
 cmr_census_colored_dotplot average_employment if !missing(average_employment), ///
     title("Sector firm average") ///
     xtitle("Average firm employment (workers)") ///
-    name(census_emp_average_levels) labsz(`panel_label_size') ///
+    `rank_options' name(census_emp_average_levels) labsz(`panel_label_size') ///
     titlesz(`panel_title_size') ydim(`panel_ysize') ///
     xdim(`panel_xsize') legendoff
 
 graph combine census_emp_total_levels census_emp_average_levels, ///
-    cols(2) title("Census employment by NACAM sector, levels", size(medsmall)) ///
+    cols(2) title("Census employment by ISIC Rev.4 division, levels", size(medsmall)) ///
+    `page_note' ///
     plotregion(color(white)) graphregion(color(white)) ///
     ysize(`combined_ysize') xsize(`combined_xsize') ///
     name(census_emp_combined_levels, replace)
 graph display census_emp_combined_levels
-graph export "`figure_dir'/cmr_census_total_employment_by_nacam_levels.pdf", replace
-graph export "`figure_dir'/cmr_census_total_employment_by_nacam_levels.png", replace
+graph export "`figure_dir'/cmr_census_total_employment_by_isic4_division_levels`page_suffix'.pdf", name(census_emp_combined_levels) replace
+graph export "`figure_dir'/cmr_census_total_employment_by_isic4_division_levels`page_suffix'.png", name(census_emp_combined_levels) replace
 
 * Revenue scale plot: show the sector total and the mean firm turnover side by
 * side so large sectors are not confused with high-average firms.
 cmr_census_colored_dotplot log_total_revenue if !missing(log_total_revenue), ///
     title("Aggregate sector total") ///
     xtitle("Log total annual revenue") ///
-    name(census_rev_total) labsz(`panel_label_size') titlesz(`panel_title_size') ///
+    `rank_options' name(census_rev_total) labsz(`panel_label_size') titlesz(`panel_title_size') ///
     ydim(`panel_ysize') xdim(`panel_xsize') legendoff
 
 cmr_census_colored_dotplot log_average_revenue if !missing(log_average_revenue), ///
     title("Sector firm average") ///
     xtitle("Log average firm annual revenue") ///
-    name(census_rev_average) labsz(`panel_label_size') titlesz(`panel_title_size') ///
+    `rank_options' name(census_rev_average) labsz(`panel_label_size') titlesz(`panel_title_size') ///
     ydim(`panel_ysize') xdim(`panel_xsize') legendoff
 
 graph combine census_rev_total census_rev_average, ///
-    cols(2) title("Census log annual revenue by NACAM sector", size(medsmall)) ///
+    cols(2) title("Census log annual revenue by ISIC Rev.4 division", size(medsmall)) ///
+    `page_note' ///
     plotregion(color(white)) graphregion(color(white)) ///
     ysize(`combined_ysize') xsize(`combined_xsize') name(census_rev_combined, replace)
 graph display census_rev_combined
-graph export "`figure_dir'/cmr_census_total_revenue_by_nacam.pdf", replace
-graph export "`figure_dir'/cmr_census_total_revenue_by_nacam.png", replace
+graph export "`figure_dir'/cmr_census_total_revenue_by_isic4_division`page_suffix'.pdf", name(census_rev_combined) replace
+graph export "`figure_dir'/cmr_census_total_revenue_by_isic4_division`page_suffix'.png", name(census_rev_combined) replace
 
 cmr_census_colored_dotplot total_revenue_bil if !missing(total_revenue_bil), ///
     title("Aggregate sector total") ///
     xtitle("Total annual turnover (CFAF billions)") ///
-    name(census_rev_total_levels) labsz(`panel_label_size') ///
+    `rank_options' name(census_rev_total_levels) labsz(`panel_label_size') ///
     titlesz(`panel_title_size') ydim(`panel_ysize') ///
     xdim(`panel_xsize') legendoff
 
 cmr_census_colored_dotplot average_revenue_mil if !missing(average_revenue_mil), ///
     title("Sector firm average") ///
     xtitle("Average firm annual turnover (CFAF millions)") ///
-    name(census_rev_average_levels) labsz(`panel_label_size') ///
+    `rank_options' name(census_rev_average_levels) labsz(`panel_label_size') ///
     titlesz(`panel_title_size') ydim(`panel_ysize') ///
     xdim(`panel_xsize') legendoff
 
 graph combine census_rev_total_levels census_rev_average_levels, ///
-    cols(2) title("Census annual revenue by NACAM sector, levels", size(medsmall)) ///
+    cols(2) title("Census annual revenue by ISIC Rev.4 division, levels", size(medsmall)) ///
+    `page_note' ///
     plotregion(color(white)) graphregion(color(white)) ///
     ysize(`combined_ysize') xsize(`combined_xsize') ///
     name(census_rev_combined_levels, replace)
 graph display census_rev_combined_levels
-graph export "`figure_dir'/cmr_census_total_revenue_by_nacam_levels.pdf", replace
-graph export "`figure_dir'/cmr_census_total_revenue_by_nacam_levels.png", replace
+graph export "`figure_dir'/cmr_census_total_revenue_by_isic4_division_levels`page_suffix'.pdf", name(census_rev_combined_levels) replace
+graph export "`figure_dir'/cmr_census_total_revenue_by_isic4_division_levels`page_suffix'.png", name(census_rev_combined_levels) replace
 
 * Keep the older average-employment standalone figure available for slides or
 * quick review even though the combined employment figure is now primary.
 cmr_census_colored_dotplot average_employment, ///
-    title("Census average employment by NACAM sector") ///
+    title("Census average employment by ISIC Rev.4 division") ///
     xtitle("Average employment") ///
-    name(census_avg_emp) labsz(`standalone_label_size') titlesz(`standalone_title_size') ///
+    `rank_options' name(census_avg_emp) labsz(`standalone_label_size') titlesz(`standalone_title_size') ///
     ydim(`standalone_ysize') xdim(`standalone_xsize')
-graph export "`figure_dir'/cmr_census_average_employment_by_nacam.pdf", replace
-graph export "`figure_dir'/cmr_census_average_employment_by_nacam.png", replace
+graph export "`figure_dir'/cmr_census_average_employment_by_isic4_division`page_suffix'.pdf", name(census_avg_emp) replace
+graph export "`figure_dir'/cmr_census_average_employment_by_isic4_division`page_suffix'.png", name(census_avg_emp) replace
 
 * Revenue-per-worker plot: compare the aggregate ratio with the average of
 * firm-level ratios, which answer related but distinct diagnostic questions.
@@ -347,29 +372,30 @@ cmr_census_colored_dotplot log_turnover_per_worker ///
     if !missing(log_turnover_per_worker), ///
     title("Aggregate sector ratio") ///
     xtitle("Log annual revenue per worker") ///
-    name(census_rpw_total) labsz(`panel_label_size') titlesz(`panel_title_size') ///
+    `rank_options' name(census_rpw_total) labsz(`panel_label_size') titlesz(`panel_title_size') ///
     ydim(`panel_ysize') xdim(`panel_xsize') legendoff
 
 cmr_census_colored_dotplot log_average_turnover_per_worker ///
     if !missing(log_average_turnover_per_worker), ///
     title("Sector firm average") ///
     xtitle("Log average annual revenue per worker") ///
-    name(census_rpw_average) labsz(`panel_label_size') titlesz(`panel_title_size') ///
+    `rank_options' name(census_rpw_average) labsz(`panel_label_size') titlesz(`panel_title_size') ///
     ydim(`panel_ysize') xdim(`panel_xsize') legendoff
 
 graph combine census_rpw_total census_rpw_average, ///
-    cols(2) title("Census log annual revenue per worker by NACAM sector", size(medsmall)) ///
+    cols(2) title("Census log annual revenue per worker by ISIC Rev.4 division", size(medsmall)) ///
+    `page_note' ///
     plotregion(color(white)) graphregion(color(white)) ///
     ysize(`combined_ysize') xsize(`combined_xsize') name(census_rpw_combined, replace)
 graph display census_rpw_combined
-graph export "`figure_dir'/cmr_census_turnover_per_worker_by_nacam.pdf", replace
-graph export "`figure_dir'/cmr_census_turnover_per_worker_by_nacam.png", replace
+graph export "`figure_dir'/cmr_census_turnover_per_worker_by_isic4_division`page_suffix'.pdf", name(census_rpw_combined) replace
+graph export "`figure_dir'/cmr_census_turnover_per_worker_by_isic4_division`page_suffix'.png", name(census_rpw_combined) replace
 
 cmr_census_colored_dotplot turnover_per_worker_mil ///
     if !missing(turnover_per_worker_mil), ///
     title("Aggregate sector ratio") ///
     xtitle("Annual turnover per worker (CFAF millions)") ///
-    name(census_rpw_total_levels) labsz(`panel_label_size') ///
+    `rank_options' name(census_rpw_total_levels) labsz(`panel_label_size') ///
     titlesz(`panel_title_size') ydim(`panel_ysize') ///
     xdim(`panel_xsize') legendoff
 
@@ -377,18 +403,21 @@ cmr_census_colored_dotplot average_turnover_per_worker_mil ///
     if !missing(average_turnover_per_worker_mil), ///
     title("Sector firm average") ///
     xtitle("Average annual turnover per worker (CFAF millions)") ///
-    name(census_rpw_average_levels) labsz(`panel_label_size') ///
+    `rank_options' name(census_rpw_average_levels) labsz(`panel_label_size') ///
     titlesz(`panel_title_size') ydim(`panel_ysize') ///
     xdim(`panel_xsize') legendoff
 
 graph combine census_rpw_total_levels census_rpw_average_levels, ///
-    cols(2) title("Census annual revenue per worker by NACAM sector, levels", size(medsmall)) ///
+    cols(2) title("Census annual revenue per worker by ISIC Rev.4 division, levels", size(medsmall)) ///
+    `page_note' ///
     plotregion(color(white)) graphregion(color(white)) ///
     ysize(`combined_ysize') xsize(`combined_xsize') ///
     name(census_rpw_combined_levels, replace)
 graph display census_rpw_combined_levels
-graph export "`figure_dir'/cmr_census_turnover_per_worker_by_nacam_levels.pdf", replace
-graph export "`figure_dir'/cmr_census_turnover_per_worker_by_nacam_levels.png", replace
+graph export "`figure_dir'/cmr_census_turnover_per_worker_by_isic4_division_levels`page_suffix'.pdf", name(census_rpw_combined_levels) replace
+graph export "`figure_dir'/cmr_census_turnover_per_worker_by_isic4_division_levels`page_suffix'.png", name(census_rpw_combined_levels) replace
+
+}
 
 display as result "Cameroon Census sector figures completed successfully."
 log close cmrcensusfigures

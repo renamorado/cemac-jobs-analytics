@@ -1,0 +1,89 @@
+isic4_division,insee_full_fr,insee_short65_fr,insee_short40_fr,label_short_en
+01,"Culture et production animale, chasse et services annexes","Culture et production animale, chasse et services annexes","Cult. & prod. animale, chasse & sce ann.","Crops, livestock, hunting & support"
+02,Sylviculture et exploitation forestière,Sylviculture et exploitation forestière,Sylviculture et exploitation forestière,Forestry & logging
+03,Pêche et aquaculture,Pêche et aquaculture,Pêche et aquaculture,Fishing & aquaculture
+05,Extraction de houille et de lignite,Extraction de houille et de lignite,Extraction de houille et de lignite,Coal & lignite mining
+06,Extraction d'hydrocarbures,Extraction d'hydrocarbures,Extraction d'hydrocarbures,Oil & gas extraction
+07,Extraction de minerais métalliques,Extraction de minerais métalliques,Extraction de minerais métalliques,Metal ore mining
+08,Autres industries extractives,Autres industries extractives,Autres industries extractives,Other mining & quarrying
+09,Services de soutien aux industries extractives,Services de soutien aux industries extractives,Sces de soutien aux indust. extractives,Mining support services
+10,Industries alimentaires,Industries alimentaires,Industries alimentaires,Food manufacturing
+11,Fabrication de boissons,Fabrication de boissons,Fabrication de boissons,Beverage manufacturing
+12,Fabrication de produits à base de tabac,Fabrication de produits à base de tabac,Fabrication de produits à base de tabac,Tobacco manufacturing
+13,Fabrication de textiles,Fabrication de textiles,Fabrication de textiles,Textile manufacturing
+14,Industrie de l'habillement,Industrie de l'habillement,Industrie de l'habillement,Wearing apparel
+15,Industrie du cuir et de la chaussure,Industrie du cuir et de la chaussure,Industrie du cuir et de la chaussure,Leather & footwear
+16,"Travail du bois et fabrication d'articles en bois et en liège, à l’exception des meubles ; fabrication d’articles en vannerie et sparterie","Trav. bois; fab. art. bois liège (sf mbles), vannerie & sparterie","Trav. bois; fab. article bois, vannerie","Wood, cork & plaited products"
+17,Industrie du papier et du carton,Industrie du papier et du carton,Industrie du papier et du carton,Paper & paper products
+18,Imprimerie et reproduction d'enregistrements,Imprimerie et reproduction d'enregistrements,Imprimerie & reprod. d'enregistrements,Printing & recorded media reproduction
+19,Cokéfaction et raffinage,Cokéfaction et raffinage,Cokéfaction et raffinage,Coke & petroleum refining
+20,Industrie chimique,Industrie chimique,Industrie chimique,Chemical manufacturing
+21,Industrie pharmaceutique,Industrie pharmaceutique,Industrie pharmaceutique,Pharmaceutical manufacturing
+22,Fabrication de produits en caoutchouc et en plastique,Fabrication de produits en caoutchouc et en plastique,Fab. prod. en caoutchouc & en plastique,Rubber & plastic products
+23,Fabrication d'autres produits minéraux non métalliques,Fabrication d'autres produits minéraux non métalliques,Fab. aut. prod. minéraux non métalliques,Other non-metallic mineral products
+24,Métallurgie,Métallurgie,Métallurgie,Basic metals
+25,"Fabrication de produits métalliques, à l’exception des machines et des équipements","Fabric. produits métalliques, sf machines & équipements",Fab. prod. métalliq. sf machine & équipt,Fabricated metal products
+26,"Fabrication de produits informatiques, électroniques et optiques","Fabrication de produits informatiques, électroniques et optiques","Fab. prod. informat., électroniq. & opt.","Computer, electronic & optical products"
+27,Fabrication d'équipements électriques,Fabrication d'équipements électriques,Fabrication d'équipements électriques,Electrical equipment
+28,Fabrication de machines et équipements n.c.a.,Fabrication de machines et équipements n.c.a.,Fabric. de machines & équipements n.c.a.,Machinery & equipment n.e.c.
+29,Industrie automobile,Industrie automobile,Industrie automobile,Motor vehicles & trailers
+30,Fabrication d'autres matériels de transport,Fabrication d'autres matériels de transport,Fabric. d'autres matériels de transport,Other transport equipment
+31,Fabrication de meubles,Fabrication de meubles,Fabrication de meubles,Furniture manufacturing
+32,Autres industries manufacturières,Autres industries manufacturières,Autres industries manufacturières,Other manufacturing
+33,Réparation et installation de machines et d'équipements ,Réparation et installation de machines et d'équipements,Réparation & install. machine & équipt,Machinery/equipment repair & install.
+35,"Production et distribution d'électricité, de gaz, de vapeur et d'air conditionné",Prod. & distribution électricité gaz vapeur & air conditionné,Prdn & distr. élec. gaz vap. & air cond.,"Electricity, gas, steam & air cond."
+36,"Captage, traitement et distribution d'eau ","Captage, traitement et distribution d'eau","Captage, traitement & distribution d'eau","Water collection, treatment & supply"
+37,Collecte et traitement des eaux usées,Collecte et traitement des eaux usées,Collecte et traitement des eaux usées,Sewerage & treatment
+38,"Collecte, traitement et élimination des déchets ; récupération","Collecte, traitement et élimination des déchets ; récupération","Collecte, gestion déchets ; récupération","Waste collection, treatment & recovery"
+39,Dépollution et autres services de gestion des déchets,Dépollution et autres services de gestion des déchets,Dépollution & autre sces gestion déchets,Remediation & other waste services
+41,Construction de bâtiments ,Construction de bâtiments,Construction de bâtiments,Building construction
+42,Génie civil,Génie civil,Génie civil,Civil engineering
+43,Travaux de construction spécialisés ,Travaux de construction spécialisés,Travaux de construction spécialisés,Specialized construction
+45,Commerce et réparation d'automobiles et de motocycles,Commerce et réparation d'automobiles et de motocycles,Commerce & répar. automobile & motocycle,Motor vehicle & motorcycle trade/repair
+46,"Commerce de gros, à l’exception des automobiles et des motocycles","Commerce de gros, à l’exception des automobiles et des motocycles",Commerce gros hors auto. & motocycle,Wholesale excl. vehicles & motorcycles
+47,"Commerce de détail, à l’exception des automobiles et des motocycles","Comm. détail, sf automobiles et motocycles","Com. détail, sf automobiles & motocycles",Retail excl. vehicles & motorcycles
+49,Transports terrestres et transport par conduites,Transports terrestres et transport par conduites,Transport terrest. & trans. par conduite,Land & pipeline transport
+50,Transports par eau,Transports par eau,Transports par eau,Water transport
+51,Transports aériens,Transports aériens,Transports aériens,Air transport
+52,Entreposage et services auxiliaires des transports,Entreposage et services auxiliaires des transports,Entreposage & sce auxiliaire des transp.,Warehousing & transport support
+53,Activités de poste et de courrier,Activités de poste et de courrier,Activités de poste et de courrier,Postal & courier services
+55,Hébergement,Hébergement,Hébergement,Accommodation
+56,Restauration,Restauration,Restauration,Food & beverage services
+58,Édition,Édition,Édition,Publishing
+59,"Production de films cinématographiques, de vidéo et de programmes de télévision ; enregistrement sonore et édition musicale",Prod. films cinémat. vidéo & prog.TV; enrg. sonore & éd. musicale,Prod. films ; enr. sonore & éd. musicale,"Film/TV, sound recording & music publ."
+60,Programmation et diffusion,Programmation et diffusion,Programmation et diffusion,Programming & broadcasting
+61,Télécommunications,Télécommunications,Télécommunications,Telecommunications
+62,"Programmation, conseil et autres activités informatiques ","Programmation, conseil et autres activités informatiques",Pgmtion conseil & aut. act. informatique,"IT programming, consultancy & related"
+63,Services d'information,Services d'information,Services d'information,Information services
+64,"Activités des services financiers, hors assurance et caisses de retraite","Activ. services financiers, hors assurance & caisses de retraite",Act. financ. hs assur. & cais. retraite,Finance excl. insurance & pensions
+65,Assurance,Assurance,Assurance,"Insurance, reinsurance & pensions"
+66,Activités auxiliaires de services financiers et d'assurance ,Activités auxiliaires de services financiers et d'assurance,Act. auxiliaire sces financ. & d'assur.,Finance & insurance support
+68,Activités immobilières,Activités immobilières,Activités immobilières,Real estate
+69,Activités juridiques et comptables,Activités juridiques et comptables,Activités juridiques et comptables,Legal & accounting services
+70,Activités des sièges sociaux ; conseil de gestion,Activités des sièges sociaux ; conseil de gestion,Act. sièges sociaux ; conseil de gestion,Head offices & management consultancy
+71,Activités d'architecture et d'ingénierie ; activités de contrôle et analyses techniques,Activ.  architecture & ingénierie; contrôle & analyses techniques,Architec. & ingénierie; ctrle ana. tech.,"Architecture, engineering & testing"
+72,Recherche-développement scientifique,Recherche-développement scientifique,Recherche-développement scientifique,Scientific R&D
+73,Publicité et études de marché,Publicité et études de marché,Publicité et études de marché,Advertising & market research
+74,"Autres activités spécialisées, scientifiques et techniques","Autres activités spécialisées, scientifiques et techniques",Aut. act. spécial. scientifique & techn.,Other professional/scientific/tech. svcs
+75,Activités vétérinaires,Activités vétérinaires,Activités vétérinaires,Veterinary services
+77,Activités de location et location-bail,Activités de location et location-bail,Activités de location et location-bail,Rental & leasing
+78,Activités liées à l'emploi,Activités liées à l'emploi,Activités liées à l'emploi,Employment services
+79,"Activités des agences de voyage, voyagistes, services de réservation et activités connexes","Activ. agences voyage, voyagistes, serv. résa. & activ. connexes",Act .ag. voyage voyagiste sv. résa. etc.,"Travel agencies, tours & reservations"
+80,Enquêtes et sécurité,Enquêtes et sécurité,Enquêtes et sécurité,Security & investigation
+81,Services relatifs aux bâtiments et aménagement paysager,Services relatifs aux bâtiments et aménagement paysager,Sces relatifs bâtimnt & aménagt paysager,Building & landscape services
+82,Activités administratives et autres activités de soutien aux entreprises,Activ. administratives & autres activ. soutien aux entreprises,Act. admin. & aut. act. soutien aux ent.,Office administration & business support
+84,Administration publique et défense ; sécurité sociale obligatoire,Administration publique et défense ; sécurité sociale obligatoire,Admin. publi. & défense; séc. soc. obli.,"Public admin., defence & social security"
+85,Enseignement,Enseignement,Enseignement,Education
+86,Activités pour la santé humaine,Activités pour la santé humaine,Activités pour la santé humaine,Human health
+87,Hébergement médico-social et social,Hébergement médico-social et social,Hébergement médico-social et social,Residential care
+88,Action sociale sans hébergement,Action sociale sans hébergement,Action sociale sans hébergement,Social work without accommodation
+90,"Activités créatives, artistiques et de spectacle ","Activités créatives, artistiques et de spectacle",Act. créativ. artistiques & de spectacle,Creative arts & entertainment
+91,"Bibliothèques, archives, musées et autres activités culturelles","Bibliothèques, archives, musées et autres activités culturelles",Biblioth. archive musée & aut. act. cul.,"Libraries, archives, museums & culture"
+92,Organisation de jeux de hasard et d'argent,Organisation de jeux de hasard et d'argent,Organisation jeux de hasard & d'argent,Gambling & betting
+93,"Activités sportives, récréatives et de loisirs","Activités sportives, récréatives et de loisirs","Act. sportiv., récréatives & de loisirs","Sports, amusement & recreation"
+94,Activités des organisations associatives,Activités des organisations associatives,Activités des organisations associatives,Membership organizations
+95,Réparation d'ordinateurs et de biens personnels et domestiques,Réparation d'ordinateurs et de biens personnels et domestiques,Répar. ordi. & bien perso. & domestique,"Computer, personal & household repairs"
+96,Autres services personnels,Autres services personnels,Autres services personnels,Other personal services
+97,Activités des ménages en tant qu'employeurs de personnel domestique,Activ. ménages : employeurs de personnel domestique,Act. ménage: empl. de person. domestique,Households employing domestic personnel
+98,Activités indifférenciées des ménages en tant que producteurs de biens et services pour usage propre,Activ. ménages : prod. biens & services (usage propre),Act. ménage : prod. b.&s. (usage propre),Household production for own use
+99,Activités des organisations et organismes extraterritoriaux,Activités des organisations et organismes extraterritoriaux,Act. organisations extraterritoriales,Extraterritorial organizations

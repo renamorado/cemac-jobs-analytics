@@ -1,0 +1,4434 @@
+PDF PAGE 1
+REPUBLIQUE DU CAMEROUN REPUBLIC OF CAMEROON
+Paix – Travail – Patrie Peace – Work – Fatherland
+--------------- -------------
+INSTITUT NATIONAL NATIONAL INSTITUTE
+DE LA STATISTIQUE OF STATISTICS
+---------- ----------
+RECENSEMENT GENERAL DES ENTREPRISES
+RGE 2008
+DOCUMENT DE NOMENCLATURES
+Juillet 2009
+
+PDF PAGE 2
+SOMMAIRE
+SOMMAIRE .................................................................................................................................. 1
+NOTE D’UTILISATION ............................................................................................................. 2
+NOMENCLATURE DES CIRCONSCRIPTIONS ADMINISTRATIVES ............................ 5
+NOMENCLATURE DES ACTIVITES .................................................................................... 13
+NOMENCLATURE DES PRODUITS ..................................................................................... 35
+NOMENCLATURE DES ZONES DE RECENSEMENT ...................................................... 63
+1
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 3
+NOTE D’UTILISATION
+Les différentes nomenclatures ont été élaborées principalement en vue de faciliter l’organisation de la
+collecte des données. Leur finalité pour cette opération est essentiellement de permettre une bonne
+description de la structure des entreprises.
+Le présent document en plus des nomenclatures classiques que sont la nomenclature des zones de
+recensement et celle des circonscriptions administratives, comprend la nomenclature des activités et
+celle des produits.
+1- Nomenclature des activités
+Cette nomenclature classifie les unités de recensement selon la nature de l’activité menée. Elle contient
+des instructions pour faciliter son utilisation notamment pour ce qui est des cas particuliers. Ces cas sont
+traités à l’aide des abréviations NC, NCA et CA définies ci-dessous en note de lecture.
+La notion d’activité caractérise ce que fait l’entreprise. Pour un individu, il importe de distinguer cette
+notion de l’emploi qui caractérise plutôt ce que celui-ci fait.
+Notez que pour bien codifier l’activité d’une entreprise, vous vous aiderez de son ou ses principaux
+produits. Ainsi, il convient de bien décrire ce qui se fait dans l’entreprise tout en précisant les principaux
+produits qui en découlent.
+La nomenclature des activités distingue trois grands postes d’activité à savoir :
+• Les activités du secteur primaire : l’agriculture, l’élevage, la sylviculture, la pêche et la chasse ;
+• Les activités du secteur secondaire : l’extraction, la transformation et les BTP ;
+• Les activités du secteur tertiaire : les services (hôtellerie et restauration, transport,
+intermédiation, administration, sécurité, activités associatives) ; le commerce (commerce de
+véhicules de motocycles, commerce des accessoires et carburant, commerce de gros et de détail,
+etc.)
+-Activités du secteur primaire (branches 01 à 05)
+Cette partie inclut la culture des produits vivriers et maraîchers (riz, haricot vert, tomate etc.), la culture
+des produits de rente destinés essentiellement à l’exportation ou à la transformation locale (café, cacao,
+coton, caoutchouc, tabac, hévéa, canne à sucre, thé, banane, etc.). Sont également incluses les activités
+d’élevage, de production des produits d’origine animale (œufs, lait produit à la ferme, poils, autres
+produits dérivés). En outre figurent ici les activités de chasse et piégeage, les activités de pêches
+(maritimes, continentales et pisciculture). Enfin sont concernées les activités de sylviculture (boisement,
+reboisement, transplantation, pépinières, etc.), d’exploitation forestière (abattage et production de bois
+bruts, etc.) et de culture et/ou récolte de produits forestiers (liège, gomme etc.).
+-Activités d’Extraction d’hydrocarbures et de produits énergétiques/autres activités extractives
+(Branches 06 et 07)
+Elle inclut les activités liées à l’extraction des minerais naturels à l’état solide (charbon, minerais),
+liquide (pétrole) et gazeux (gaz naturel). L’extraction peut se faire à l’aide de divers procédés (sur terre,
+en surface, par creusage de puits, en mer etc.). Sont également inclues les activités complémentaires
+relatives aux traitements de ces matières en vue d’être prêt à la commercialisation. Par exemple :
+2
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 4
+pressage, nettoyage, séchage, triage, mise en état concentré de minerais, liquéfaction, reluire des
+combustibles à l’état solide etc.
+Le traitement des produits d’extraction mené non conjointement avec les activités d’extraction, l’usage
+de ces produits sans une transformation ultérieure, les activités de sondages géophysiques, géologiques
+et sismiques ne sont pas incluses ici.
+-Activités manufacturières (branches 08 à 28)
+Ce segment inclut en général les transformations physiques ou chimiques des matières, substances ou
+composants en des produits nouveaux. Les matières, substances ou composants transformés sont des
+matières premières qui sont issues de l’agriculture, de la forêt, de la pêche, de l’extraction, aussi bien
+que d’autres activités manufacturières.
+Les unités manufacturières sont le plus souvent identifiées par des usines, fabriques, moulins, atelier de
+filatures etc. Elles se caractérisent par l’usage des machines à haute puissance et d’équipements de
+grande portée. Toutefois, les unités transformant les matières et substances en nouveaux produits par
+l’usage de la main telles que les boulangeries et les ateliers de confection sont inclues.
+Le résultat d’une transformation peut être un produit fini, dans le sens qu’il est prêt à l’usage ou à la
+consommation, ou être semi-fini dans le sens qu’il devient un input pour un autre stade de la
+transformation. Par exemple : le résultat du raffinage de l’alumine est un input pour la production
+primaire de l’aluminium qui lui-même est un input pour la production de composants à base
+d’aluminium et cette dernière est un input pour la fabrication de produits métalliques.
+L’assemblage des composants issus de la manufacture est considéré comme activité manufacturière.
+Celui-ci inclut l’assemblage des produits fabriqués soi-même ou acheté sur le marché.
+Certaines activités bien que donnant lieu à une certaine transformation sont classées ailleurs que dans la
+manufacture. Il s’agit par exemple de :
+-l’exploitation forestière et la production de bois brut, classée dans les activités du primaire (01 à 05);
+-l’activité de nettoyage, séchage, triage de produits agricoles, classée dans les activités du primaire (01 à
+05);
+-l’activité de séparation des minerais et autres objets minéraux, classée dans les activités d’extraction
+(06 à 07);
+-la construction des structures et opérations de fabrication menées dans les sites de construction, classée
+dans la branche 30.
+-Production et distribution d’électricité, gaz et eau (branche 29)
+Les activités économiques considérées ici sont des activités de production, collecte et transport
+d’électricité, gaz naturel et supports énergétiques (glace hydrique, liquides réfrigérants, vapeur et eau
+chaude, air comprimé) aussi bien à travers un infrastructure (réseau) permanent de lignes, de conduites
+que de canalisations. La dimension du réseau ici n’est pas importante. Elle inclut également la
+distribution d’électricité, de gaz et supports énergétiques aussi bien aux entreprises qu’aux ménages.
+Elles incluent les activités de fourniture et distribution d’eau potable.
+-Construction (branche 30)
+Elle comprend la construction de bâtiments et ouvrages neufs (routes, ponts, voies ferrées, voies
+navigables, etc.), la restauration et les réparations courantes.
+3
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 5
+-Activités du secteur tertiaire (branches 31 à 43)
+Sont considérés ici les activités de revente à l’état, ie sans aucune transformation (commerce de
+gros/détail), les activités de réparation (véhicules, articles ménagers), les activités de restauration et
+d’hébergement, les activités de transports aussi bien de personnes que de marchandises (par terre, mer
+ou air), les activités de postes et de télécommunications, les activités financières (banques, assurances,
+etc) les activités immobilières, les activités de services aux entreprises (location de matériels/machines,
+conseils, informatiques, R&D, Prospection, publicité, photographie…), les activités des administrations
+publiques et de sécurité sociale, les activités d’éducation, de santé et d’action sociale, les autres activités
+fournies à la collectivité (traitement de déchets, activités syndicales, sportives, services personnels,
+domestiques…) et enfin les activités des organisations et organismes extraterritoriaux.
+Commerce de gros : vente de produit neuf ou d’occasion aux détaillants, aux entreprises pour les usages
+diverses (industriel, commercial, institutionnel ou professionnel) ou vente aux autres grossistes.
+Commerce de détail : vente de produit neuf ou d’occasion principalement au grand public pour une
+consommation ou une utilisation personnelle ou domestique (ménage). Les produits vendus sont limités
+aux produits de consommation ou biens divisibles.
+2- Nomenclature des produits
+Elle vise à fournir une classification assez précise des services offerts et des produits vendus ou utilisés
+comme input par les entreprises dans le cadre de leurs activités. Tous les produits des activités
+manufacturières sont classés dans les branches 08 à 28.
+3- Nomenclature des zones de recensement
+Cette nomenclature concerne les régions de recensement. Pour chacune d’elle, elle fournit le code
+région, le code département, le numéro de la ZS, le numéro de la ZC, le numéro de la ZR et le nombre
+d’entreprise estimé en 2007.
+Note de lecture
+NC : Non classé
+N.C.A : non classé ailleurs
+CA : Classé ailleurs
+4
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 6
+NOMENCLATURE DES CIRCONSCRIPTIONS ADMINISTRATIVES
+Région de recensement Code Région Département Code Département Arrondissement Code arrondissement
+DOUALA I 001
+DOUALA II 002
+DOUALA 01 WOURI 01 DOUALA III 003
+DOUALA IV 004
+DOUALA V 005
+YAOUNDE I 006
+YAOUNDE II 007
+YAOUNDE III 008
+YAOUNDE 02 MFOUNDI 02 YAOUNDE IV 009
+YAOUNDE V 010
+YAOUNDE VI 011
+YAOUNDE VII 012
+NGAOUNDERE Ier 013
+NGAOUNDERE II 014
+NGAOUNDERE III 015
+NGANHA 016
+VINA 03 NYAMBAKA 017
+MARTAP 018
+MBE 019
+BELEL 020
+MEIGANGA 021
+MBERE 04 DJOHONG 022
+ADAMAOUA 03 DIR 023
+NGAOUI* 307
+TIGNERE 024
+FARO-ET-DEO 05 MAYO-BALEO 025
+KONTCHA* 308
+GALIM-TIGNERE 026
+BANYO 027
+MAYO-BANYO 06 MAYO-DARLE* 309
+BANKIM 028
+TIBATI 029
+DJEREM 07 NGAOUNDAL 030
+NANGA-EBOKO 031
+NSEM* 310
+MINTA 032
+HAUTE-SANAGA 08 BIBEY* 311
+MBANDJOCK 033
+NKOTENG 034
+LEMBE-YEZOUM* 312
+EVODOULA 035
+MONATELE 036
+OBALA 037
+LEKIE 09 BATCHENGA* 313
+ELIG-MFOMO 038
+OKOLA 039
+5
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 7
+Région de recensement Code Région Département Code Département Arrondissement Code arrondissement
+LOBO* 314
+SA'A 040
+EBEBDA 041
+BAFIA 042
+KIIKI 043
+KON-YAMBETTA 044
+DEUK 045
+MBAM-ET-
+10 BOKITO 046
+INOUBOU
+NDIKINIMEKI 047
+NITOUKOU* 315
+MAKENENE 048
+OMBESSA 049
+CENTRE 04 NTUI 050
+NGORO 051
+MBAM-ET-KIM 11 YOKO 052
+NGAMBE-TIKAR 053
+MBANGASSINA 054
+AWAE 055
+ASSAMBA
+316
+(OLANGUINA)*
+ESSE 056
+MEFOU-ET- AFAMLOUM
+12 317
+AFAMBA EDZENDOUAN*
+MFOU 057
+NKOLAFAMBA* 318
+SOA 058
+NGOUMOU 059
+MEFOU-ET-AKONO 13 AKONO 060
+BIKOK 061
+MBANKOMO 062
+ESEKA 063
+MATOMB 064
+BOT-MAKAK 065
+NGUIBASSAL* 319
+NYONG-ET-KELE 14 MAKAK 066
+BONDJOCK* 320
+MESSONDO 067
+BIYOUHA* 321
+NGOG-MAPUBI 068
+DIBANG 069
+AKONOLINGA 070
+NYONG-ET -
+MENGANG* 322
+MFOUMOU
+15
+ENDOM 071
+AYOS 072
+NYAKOMBO* 323
+MBALMAYO 073
+6
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 8
+Région de recensement Code Région Département Code Département Arrondissement Code arrondissement
+CENTRE 04 AKOEMAN* 324
+NYONG-ET-SO'O 16 MENGUEME* 325
+NKOLMETET* 326
+DZENG 074
+NGOMEDZAP 075
+YOKADOUMA 076
+GARI-GOMBO 077
+BOUMBA-ET-
+17 MOLOUNDOU 078
+NGOKO
+SALAPOUMBE* 327
+ABONG-MBANG 079
+BEBENG* 328
+Dja* 329
+MBOUANZ* 330
+DOUME 080
+HAUT-NYONG 18 DOUMAINTANG* 331
+DIMAKO 081
+LOMIE 082
+MESSOK* 332
+EST 05 NGOYLA 083
+MESSAMENA 084
+SAMALOMO* 333
+NGUELEMENDOUKA 085
+MBOMA* 334
+BATOURI 086
+NDEM-NAM* 335
+MBANG 087
+KADEY 19 NDELELE 088
+Bombe* 336
+KETTE 089
+MBOTORO* 337
+BERTOUA I 090
+BERTOUA II 091
+MANDJOU 092
+LOM-ET-DJEREM 20 BELABO 093
+DIANG 094
+BETARE-OYA 095
+NGOURA* 338
+GAROUA-BOULAI 096
+MAROUA I 097
+DARGALA* 339
+EXTREME-NORD 06 DIAMARE 21 MAROUA II 098
+DOUKOULA* 340
+MAROUA III 099
+GAZAWA 100
+PETTE 101
+BOGO 102
+MERI 103
+KOUSSERI 104
+LOGONE-BIRNI 105
+ZINA* 341
+7
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 9
+Région de recensement Code Région Département Code Département Arrondissement Code arrondissement
+WAZA 106
+LOGONE-ET-CHARI 22 MAKARY 107
+GOULFEY 108
+BLANGOUA 109
+FOTOKOL 110
+HILE-HALIFA 111
+DARAK 112
+YAGOUA
+113
+GUERE 114
+MAGA 115
+EXTREME-NORD 06 WINA 116
+MAYO-DANAY 23 VELE 117
+KAI-KAI 118
+GOBO 119
+KAR-HAY 120
+DATCHEKA 121
+TCHATIBALI 122
+KALFOU 123
+MOKOLO 124
+SOULEDE-ROUA* 342
+BOURRHA 125
+MAYO-TSANAGA 24 KOZA 126
+HINA 127
+MOGODE 128
+MAYO-MASKOTA 129
+MORA 130
+MAYO-SAVA 25 TOKOMBERE 131
+KOLOFATA 132
+KAELE 133
+GUIDIGUIS 134
+MOUTOURWA 135
+MAYO-KANI 26 PORHI 136
+TAIBONG 137
+MINDIF 138
+MOULVOUDAYE 139
+NKONGSAMBA I 140
+NKONGSAMBA II 141
+NKONGSAMBA III 142
+NLONAKO 143
+MOUNGO 27 DIBOMBARI 144
+ABO/FIKO* 343
+LOUM 145
+LITTORAL 07 NJOMBE-PENJA 146
+MANJO 147
+MBANGA 148
+MOMBO* 344
+MELONG 149
+BARE-BAKEM 150
+8
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 10
+Région de recensement Code Région Département Code Département Arrondissement Code arrondissement
+YABASSI 151
+NKONDJOCK 152
+NKAM 28 NORD-MAKOMBE* 345
+YINGUI 153
+DIBAMBA 154
+EDEA I 155
+EDEA II 156
+NGWEI 157
+SANAGA-
+29 DIZANGUE 158
+MARITIME
+MOUANKO 159
+NDOM 160
+NYANON* 346
+NGAMPE 161
+MASSOCK-
+347
+SONGLOULOU*
+POUMA 162
+WOURI 01 MANOKA (DOUALA VI) 163
+GAROUA I 164
+BASHEO* 348
+GAROUA II 165
+GAROUA III 166
+TOUROUA* 349
+BENOUE 30 MAYO HOURNA 167
+BIBEMI 168
+PITOA 169
+DEMBO 170
+LAGDO 171
+NORD 08 TCHEBOA 172
+POLI 173
+FARO 31 BEKA 174
+TCHOLLIRE 175
+MAYO-REY 32 MADINGRING* 350
+REY-BOUBA 176
+TOUBORO 177
+GUIDER 178
+MAYO-LOUTI 33 MAYO-OULO 179
+FIGUIL 180
+KUMBO 181
+NKUM 182
+BUI 34 NONI 183
+MBVEN 184
+JAKIRI 185
+OKU 186
+WUM 187
+MENCHUM 35 FURU-AWA 188
+FUNGOM 189
+MENCHUM VALLEY 190
+FUNDONG 191
+BELO 192
+9
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 11
+Région de recensement Code Région Département Code Département Arrondissement Code arrondissement
+BOYO 36 BUM 193
+NJINIKOM 194
+BAMENDA I 195
+BAMENDA II 196
+BAMENDA III 197
+MEZAM 37 SANTA 198
+TUBAH 199
+NORD-OUEST 09 BALI 200
+BAFUT 201
+202
+NDOP
+NGO-KETUNJIA 38 BABESSI 203
+BALIKUMBAT 204
+MBENGWI 205
+NJIKWA 206
+MOMO 39 NGIE 207
+BATIBO 208
+WIDIKUM-MENKA 209
+NKAMBE 210
+AKO 211
+DONGA-MANTUNG 40 212
+NDU
+MISAJE 213
+NWA 214
+MBOUDA 215
+BABADJOU 216
+BAMBOUTOS 41 BATCHAM 217
+GALIM 218
+BAFANG 219
+BANKA 220
+BAKOU 221
+HAUT-NKAM 42 BANA 222
+BANDJA 223
+KEKEM 224
+BANWA* 351
+DSCHANG 225
+FONGO-TONGO 226
+SANTCHOU 227
+MENOUA 43 FOKOUE 228
+NKONG-NI 229
+PENKA-MICHEL 230
+BAFOUSSAM I 231
+MIFI 44 BAFOUSSAM II 232
+BAFOUSSAM III 233
+BAMENDJOU 234
+OUEST 10 HAUTS-PLATEAUX 45 BATIE* 352
+BAHAM 235
+BANGOU 236
+POUMOUGNE 237
+KOUNG-KHI 46 DJEMBEM* 353
+BAYANGAM 238
+BAGANGTE 239
+10
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 12
+Région de recensement Code Région Département Code Département Arrondissement Code arrondissement
+NDE 47 BASSAMBA* 354
+BAZOU 240
+TONGA 241
+FOUMBAN 242
+NJIMOM 243
+MALENTOUEN 244
+KOUTABA 245
+NOUN 48 MAGBA 246
+BANGOURAIN 247
+FOUMBOT 248
+MASSANGAM 249
+KOUOPTAMO 250
+SANGMELIMA 251
+MEYOMESSI 252
+MEYOMESSALA 253
+DJA-ET-LOBO 49 BENGBIS 254
+DJOUM 255
+MINTOM 256
+OVENG 257
+ZOETELE 258
+EBOLOWA I 259
+EBOLOWA II 260
+EFOULAN 261
+MVILA 50 BIWONG-BULU 262
+MVANGAN 263
+BIWONG BANE 264
+NGOULEMAKONG 265
+MENGONG 266
+SUD 11 AMBAM 267
+MA'AN 268
+VALLEE DU NTEM 51 OLANZE 269
+KYE-OSSI 270
+KRIBI I 271
+KRIBI II 272
+LOKOUNDJE 273
+AKOM II 274
+OCEAN 52 NIETE* 355
+CAMPO 275
+LOLODORF 276
+BIPINDI 277
+MVENGUE 278
+LIMBE I 279
+LIMBE II 280
+LIMBE III 281
+FAKO 53 BUEA 282
+WEST-COAST* 356
+MUYUKA 283
+TIKO 284
+MAMFE 285
+11
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 13
+Région de recensement Code Région Département Code Département Arrondissement Code arrondissement
+EYUMODJOCK 286
+MANYU 54 UPPER-BAYANG 287
+AKWAYA 288
+FONTEM 289
+LEBIALEM 55 ALOU 290
+WABANE 291
+KUMBA I 292
+KUMBA II 293
+SUD OUEST 12 MEME 56 KUMBA III 294
+KONYE 295
+MBONGE 296
+BANGEM 297
+KOUPE-ET-
+57 TOMBEL 298
+MANENGOUBA
+NGUTI 299
+MUNDEMBA 300
+TOKO* 357
+BAMUSSO 301
+EKONDO TITI 302
+NDIAN 58 ISANGUELE 303
+DIKOME-BALUE* 358
+KOMBO ITINDI 304
+KOMBO ABEDIMO 305
+IDABATO 306
+* : district
+12
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 14
+NOMENCLATURE DES ACTIVITES
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+AGRICULTURE, CHASSE, SYLVICULTURE ET PECHE
+01 AGRICULTURE VIVRIERE
+0101 Culture des céréales
+cette classe comprend:
+•
+la culture du blé, maïs, riz, mil, sorgho, orge, seigle, avoine, etc.
+0102 Culture des tubercules et de banane
+cette classe comprend:
+•
+la culture des tubercules et la production des dérivés primaires à la ferme: manioc,
+manioc séché, macabo, taro, igname, patate, pomme de terre, etc.
+•
+la culture du plantain et la banane douce « non industrielle »
+0103 Culture des oléagineux (sauf palmier)
+cette classe comprend :
+•
+la culture de l’arachide et des autres graines et fruits oléagineux: soja, colza, etc.
+NC : la culture du coton et palmier à huile.
+0104 Culture des fruits et légumes (y.c. horticulture)
+cette classe comprend :
+•
+la culture des agrumes, des ananas, des fruits à pépins ou à noyau, et des autres fruits
+tropicaux ou non (détail en produits);des noix comestibles (e.g. coco)
+•
+la culture des légumes fruits (tomates melons, oignons, etc.);
+•
+la culture des légumes racines (...) et légumineuses y.c le haricot, etc.
+•
+la culture des épices et des condiments
+•
+la culture des légumes feuilles et de champignons, y.c la collecte.
+CA :- la cueillette des légumes locaux en feuilles ;
+l’horticulture et les pépinières.
+02 AGRICULTURE INDUSTRIELLE ET D'EXPORTATION
+0201 culture du cacao
+cette classe comprend :
+•
+la culture du cacao
+0202 culture du café
+cette classe comprend :
+•
+la culture du café arabica et robusta
+0203 culture du coton
+cette classe comprend :
+•
+la culture du coton
+0204 culture de Banane
+cette classe comprend :
+•
+la culture de la banane douce par des techniques d’agriculture moderne et destinée
+essentiellement à l’exportation
+0205 culture de palmier
+cette classe comprend :
+•
+la culture du palmier à huile sous toutes ses formes: de la petite exploitation à
+l’exploitation de type industrielle en passant par « la cueillette ».
+0206 culture d'autres produits industriels ou d'exportation
+cette classe comprend :
+13
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 15
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+•
+la culture des autres produits destinés essentiellement à l’industrie locale pour
+transformation ou à l’exportation : le tabac de coupe, la culture de l’hévéa, de la canne à
+sucre, du théier;
+•
+la culture des plantes médicinales, etc.
+03 ELEVAGE ET CHASSE
+0301 élevage de bovins
+cette classe comprend :
+•
+l’élevage de bovins
+0302 élevage d'autres animaux
+cette classe comprend:
+(cid:132) l’élevage d’ovins et de caprins et d’équidés;
+(cid:132) l’élevage de porcins; l’élevage de volailles (poules, dindes, oies, pintades et canards) et
+(cid:132) l’élevage d’autres animaux (lapins, pigeons, cailles, animaux à fourrure, animaux de
+compagnie, animaux de laboratoires, etc.)
+0303 Production de produits d'origine animale et activités annexes à l'élevage
+cette comprend :
+(cid:132) la production des oeufs et l’activité des écloseries de poussins et autres activités
+spécialisées sur une étape de l’élevage des volailles ;
+(cid:132) l’apiculture et la sericulture et les services annexes à l’élevage ;
+(cid:132) la production de lait à la ferme, de laine, poils et autres sous produits dérivés des
+animaux.
+0304 chasse et piégeage
+cette classe comprend :
+•
+les activités de chasse et de piégeage d’animaux pour l’alimentation, leur fourrure, leur
+peau ou pour la recherche ; - le repeuplement en gibier, la production de pelleterie, de
+peaux de reptiles ou d’oiseaux provenant d’activités de chasse et de piégeage ;
+•
+CA : la capture des mammifères marins tels que les morses et les phoques.
+NC : la chasse sportive ; la production des cuirs et peaux provenant des abattoirs
+04 SYLVICULTURE ET EXPLOITATION FORESTIERE
+0400 Sylviculture et exploitation forestière
+Cette classe comprend :
+(cid:132) la sylviculture sur pieds : boisement reboisement, transplantation, coupe d’éclaircie et
+conservation des forêts et des coupes ;
+(cid:132) l’exploitation des pépinières ;
+(cid:132) l’exploitation forestière : abattage et production de bois bruts, les échalas fendus, les
+piquets et les bois de construction ; le bois de chauffage et le charbon de bois*.
+(cid:132) la culture et/ou la récolte des produits forestiers poussant à l’état sauvage : liège, laque,
+gomme, lichens, etc.
+NC : la culture et la cueillette des champignons et des fruits à coque. Les copeaux de bois.
+05 PECHE ET PISCICULTURE
+La différenciation des niveaux ci-dessous est plus basée sur les lieux où se déroule l’activité
+de pêche qui induisent par conséquent les techniques et les méthodes à utiliser.
+0501 Pêche maritime
+Cette classe comprend :
+•
+la pêche en haute mer avec des outils et des techniques de pêche moderne. Les produits
+étant indifféremment du poisson, des crustacés ou les autres.
+0502 Pêche continentale et pisciculture
+Cette classe comprend :
+(cid:132) la pêche côtière et dans les eaux intérieures ;
+(cid:132) la pisciculture et l’aquaculture.
+14
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 16
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+06 EXTRACTION D'HYDROCARBURES ET DE PRODUITS ENERGETIQUES
+0600 Extraction d'hydrocarbures (sauf prospection) et de produits énergétiques
+cette classe comprend :
+(cid:132) l’extraction d’hydrocarbures tels que le pétrole brut, le gaz naturel ; la liquéfaction et la
+regazéification du gaz naturel aux fins de transport ; la désulfuration du gaz naturel ; la
+décantation et la séparation de fractions d’hydrocarbures liquides ;
+(cid:132) l’extraction de sables et de schistes bitumineux et d’huile brute associée ;
+(cid:132) les services annexes ou liées à l’extraction d’hydrocarbures pour le compte des tiers :
+forage et reforage dirigés ; montage, réparation et démontage de tours de forage,
+cimentation et cuvelage de puits de pétrole ou de gaz, pompage des puits, etc.
+NC : les études géologiques de prospection de gisements
+(cid:132) l’extraction des autres produits énergétiques :
+• extraction et agglomération de houille, de lignite et de tourbe
+• l’extraction de minerais d’uranium et de thorium
+NC : l’enrichissement de l’uranium et du thorium en isotopes radioactifs et la production de
+matières fissiles ou fertiles.
+07 AUTRES ACTIVITES EXTRACTIVES
+Cette branche couvre l’extraction des produits non énergétiques, en souterrain ou à ciel
+ouvert ainsi que la préparation des minerais par tous procédés conduisant aux produits
+marchands.
+0701 Extraction de minerais métalliques
+cette classe comprend :
+(cid:132) l’extraction et la préparation de minerais de fer
+(cid:132) l’extraction et la préparation de métaux non ferreux : bauxite, cuivre, plomb, zinc, étain,
+manganèse, chrome, nickel, cobalt, etc.
+(cid:132) l’extraction et la préparation des minerais de métaux précieux : or, argent, platine.
+NC : l’extraction et la préparation des minerais d’uranium et de thorium ; la production
+d’oxyde d’aluminium et de mattes de nickel ou de cuivre (024000)
+0702 Extraction de minerais non métalliques
+Cette classe comprend :
+(cid:132) l’extraction, la taille grossière et le sciage de pierres pour la construction comme le
+marbre, le granit, le grès, etc.
+(cid:132) l’extraction de gypse et de clinker (intrants pour la production du ciment)
+(cid:132) l’extraction, le broyage et le concassage des pierres calcaires, de craie, de dolomite et
+d’ardoise ;
+(cid:132) l’extraction et la production de sable et de granulats et graviers pour l’industrie et la
+construction
+(cid:132) l’extraction d’argile et de kaolin
+(cid:132) l’extraction de minéraux pour l’industrie chimique (pyrite, borates, terres colorantes) et
+d’engrais naturels : phosphates naturels et sels potassiques naturels, soufre natif, sulfates
+et carbonates naturels, etc.
+(cid:132) la production de sel : par extraction y c. par dissolution et pompage, par évaporation et
+autres procédés ; le broyage, le raffinage et autres traitements de sel.
+(cid:132) les activités extractives n.c.a: matières abrasives, amiante, pierres gemmes, quartz,
+asphaltes et bitumes naturels, etc.
+08 INDUSTRIE DE LA VIANDE ET DU POISSON
+0801 Production, transformation & conservation de viande et des produits à base de viande
+Cette classe comprend :
+(cid:132) la production de viande de boucherie, fraîche, congelée ou surgelée en carcasses ou en
+morceaux de bovins, ovins, caprins et caprins, porcins, d’autres viandes de boucherie et
+de volailles ;
+(cid:132) C.A. la production de cuirs et de peaux travaillés ; la production de laine de délainage,
+l’extraction de graisses comestibles d’origine animale ;
+(cid:132) la préparation des produits à base de viande : production de viandes séchées, salées ou
+fumées ;
+(cid:132) la production de produits de charcuterie : saucisses, salamis, pâtés, jambons, etc.
+NC : le conditionnement de viande pour compte propre par le commerce (cf. 3104) ou pour
+15
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 17
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+compte de tiers (cf. 3104)
+0802 Transformation et conservation de poisson et des produits de la pêche
+Cette classe comprend :
+(cid:132) la préparation et la conservation de poissons, de crustacés et de mollusques par
+congélation, surgélation, séchage, salage, salage, saumurage, mise en conserve, etc.
+(cid:132) la préparation de produits à base de poissons, crustacés ou mollusques ; la production de
+plats préparés à base de poisson
+(cid:132) C.A. la fabrication de farine de poisson et la transformation et la conservation à bord des
+navires usines
+NC : l’activité des navires de pêche qui font en même temps la transformation (cf.0501) et la
+fabrication des soupes de poissons cf. 1302)
+09 TRAVAIL DES GRAINS ET FABRICATION DES PRODUITS AMYLACES
+0901 fabrication de farine de céréales
+cette classe comprend :
+(cid:132) la production de farines, de gruaux, de semoules ou d’agglomérés sous forme de pellets,
+des différentes céréales
+(cid:132) la production de farines ou de semoules de légumes secs ou de fruits à coque comestibles
+(cid:132) la préparation de farines mélangées préparées pour la boulangerie ou les pâtes
+alimentaires
+(cid:132) la fabrication de produits amylacés : amidons, glucose, gluten, mouture du maïs par voie
+humide, etc.
+0902 Préparation du riz
+cette classe comprend :
+(cid:132) la production de riz blanchi, poli, glacé ou brisé
+0903 fabrication de produits à base de manioc
+cette classe comprend :
+(cid:132) la production de la farine de manioc
+(cid:132) la fabrication du tapioca
+(cid:132) la production des bâtons de manioc
+10 INDUSTRIE DU CACAO, DU CAFE, DU THE ET DU SUCRE
+1001 Fabrication de cacao, chocolat et confiserie
+cette classe comprend :
+(cid:132) la fabrication de produits du cacao : masse, poudre et beurre de cacao, graisse et huile de
+cacao ;
+(cid:132) la fabrication de chocolat et de confiseries ;
+(cid:132) la fabrication de fruits confits et de gomme à mâcher ;
+(cid:132) CA : la fabrication des confiseries pharmaceutiques.
+NC : la production de saccharose (cf. 1004)
+1002 Décorticage et transformation du café
+Remarque : le décorticage du café dans l’espace économique camerounais est classé
+comme une activité industrielle, puisque non réalisé par les paysans à la ferme.
+Cette classe comprend :
+(cid:132) le décorticage et la torréfaction du café ;
+(cid:132) la production des produits à base de café : café moulu ou soluble, extraits et concentrés
+de café, décaféinés ;
+(cid:132) la fabrication de succédanés du café.
+1003 Préparation et conservation du thé
+cette classe comprend :
+(cid:132) le conditionnement du thé, y.c. en sachets ;
+(cid:132) la production de chicorée en grain, moulue, soluble et liquide ;
+(cid:132) la fabrication de tisanes de plantes (menthe, verveine, tilleul, etc.) sauf en médicaments
+1004 Fabrication du sucre
+cette classe comprend :
+(cid:132) la fabrication et le raffinage du sucre sous toutes ses formes
+(cid:132) la production du sucre de canne et de betterave ; la production de sirops de sucre et de
+mélasses
+16
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 18
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+NC : la fabrication de glucose, de maltose (0901) et de lactose (cf. 1301) ; la fabrication
+d’édulcorants de synthèse (cf.2103)
+11 INDUSTRIE DES OLEAGINEUX ET D'ALIMENTS POUR ANIMAUX
+1101 Fabrication des huiles brutes
+Cette classe comprend :
+(cid:132) la production d’huiles végétales brutes : palme, coton, tournesol, soja, arachide, maïs, etc.
+(cid:132) la production de noix de palmiste, la production de farines végétales, d’autres noix et
+amendes oléagineuses, non déshuilées.
+(cid:132) CA : la production d’huiles et de graisses animales non comestibles ; l’extraction d’huiles
+de poissons et de mammifères marins
+NC : la production des huiles essentielles
+1102 Fabrication des huiles raffinées de margarine et de matières grasses
+cette classe comprend :
+(cid:132) la production d’huiles végétales raffinées : palme, coton, arachide, soja, maïs, olive, etc.
+(cid:132) le traitement des huiles végétales par soufflage, oxydation, polymérisation, etc.
+(cid:132) la fabrication de margarine et des mélanges et spécialités à tartiner ; la fabrication de
+graisses destinées à la cuisson des aliments : pâtes d’arachide, etc.
+1103 Production d'aliments pour animaux
+cette classe comprend :
+•
+la fabrication des produits pour l’alimentation des animaux de ferme et de compagnie,
+y.c. les fourrages déshydratés.
+•
+la production des résidus de brasserie et de distillerie
+12 FABRICATION DE PRODUITS A BASE DE CEREALES
+1201 Boulangerie, Pâtisserie, Biscuiterie
+cette classe comprend :
+(cid:132) la fabrication de pain ;
+(cid:132) la fabrication de pâtisserie, de gâteaux, de tourtes, de tartes, de pizzas, etc.
+(cid:132) la fabrication de biscottes, de biscuits et de produits de boulangerie secs, sucrés ou salés ;
+(cid:132) la fabrication de beignets de tout genre : farine de blé, maïs, manioc, riz, etc.
+1202 Fabrication de pâtes alimentaires
+cette classe comprend :
+(cid:132) la fabrication de pâtes alimentaires, fraîches ou non ;
+(cid:132) la fabrication de couscous
+13 INDUSTRIE DU LAIT, DES FRUITS ET LEGUMES ET DES AUTRES PRODUITS
+ALIMENTAIRES
+1301 Fabrication de produits laitiers
+cette classe comprend :
+(cid:132) la production de laits liquides frais, pasteurisés, stérilisés, homogénéisés etc.,
+conditionnés ou non, écrémés ou non ; la production de crème de lait ;
+(cid:132) la fabrication de lait concentré et de lait sec, conditionnés ou non, dégraissés ou non,
+sucrés ou non, édulcorés ou non ;
+(cid:132) la fabrication de produits dérivés de l’industrie laitière : lactose, lactosérum, caséine, etc.
+(cid:132) la production de laits fermentés, yaourts et desserts lactés frais ;
+(cid:132) la fabrication de beurre et de fromage sous toutes les formes
+(cid:132) CA : la fabrication de crèmes glacées, de glaces et de sorbets : notamment les
+« sucettes »
+NC : la production de lait cru à la ferme (cf. 0303) ; la fabrication des spécialités à tartiner (
+cf. 1102) ; la fabrication de lait pour nourrissons (cf.1302)
+1302 Transformation et conservation des fruits, légumes et
+autres produits alimentaires
+cette classe comprend :
+(cid:132) la transformation et la conservation des pommes de terre et autres tubercules et banane
+(cid:132) la préparation de jus de fruits et de légumes, de concentrés et de nectar (NC : la
+17
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 19
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+préparation de boissons rafraîchissantes à base de fruits et légumes) ;
+(cid:132) la préparation et la conservation des fruits ou légumes par congélation, séchage, mise en
+conserve ou par tout autre procédé ;
+(cid:132) la fabrication de produits alimentaires à base de fruits ou légumes ; la fabrication de
+confiture, de marmelade, de compote ou de gelée ;
+(cid:132) la fabrication d’épices, de sauces et de condiments : mayonnaise, moutarde, ketchup,
+épices conditionnés tels les cubes et autres assaisonnements;
+(cid:132) la fabrication de vinaigre ;
+(cid:132) la fabrication d’aliments adaptés à l’enfant et aliments diététiques : préparations pour
+nourrissons, aliments pour bébé y.c. le lait pour nourrisson ; denrées alimentaires
+destinées à un régime alimentaire, aliments diététiques divers ;
+(cid:132) préparation de produits alimentaires n.c.a: potages, soupes, levures, etc.
+NC : la culture d’épices (cf.0104) et la fabrication du sel de table ou de cuisine (cf.0702)
+14 INDUSTRIE DE BOISSONS
+1401 Fabrication de bière et du malt
+cette classe comprend :
+(cid:132) la brasserie et la malterie : production de bières et de malt
+1402 Fabrication des autres boissons alcoolisées (sauf bière et malt)
+cette classe comprend :
+(cid:132) la production de boissons alcooliques distillées propres à la consommation : whisky,
+cognac, gin, rhum, liqueurs, etc.
+(cid:132) la production d’alcool éthylique de fermentation et des alcools neutres ;
+(cid:132) la production de vin et de champagne
+(cid:132) la production d’autres boissons alcoolisées n.c.a.
+•
+la production de boissons alcoolisées artisanales sous toutes les formes : distillées,
+fermentées ou naturelles.
+NC : la mise en bouteille et le conditionnement avec ou sans traitement des vins (cf. 3103) ;
+la production d’alcool éthylique de synthèse (cf.2103)
+1403 Fabrication de boissons non alcoolisées et d'eaux minérales
+cette classe comprend :
+(cid:132) la production et la mise en bouteille des eaux de sources et des eaux minérales ;
+(cid:132) la production des boissons rafraîchissantes sans alcool : sodas, colas, tonics, boissons
+diverses aux fruits ; la production de sirop, etc.
+NC : la production de jus de fruits et légumes (cf.1302)
+15 INDUSTRIES DU TABAC
+1500 Fabrication de produits à base de tabac
+cette classe comprend :
+•
+la fabrication de produits à base de tabac : cigarettes, tabac à cigarettes, cigares, tabac à
+pipe, tabac à mâcher, tabac à priser ;
+(cid:132) la fabrication d’autres tabacs.
+NC : la culture et le traitement préliminaires du tabac
+(cf.0206)
+16 INDUSTRIES DU TEXTILE ET DE LA CONFECTION
+1601 Egrenage du coton
+cette classe comprend :
+(cid:132) l’extraction des graines de coton à partir du coton en masse afin d’obtenir du coton
+égrené pour la filature d’une part et les graines de coton pour les huileries d’autre part.
+Cette opération peut se faire soit à la main à la ferme, soit à l’usine.
+1602 Fabrication des fibres et fils textiles
+cette classe comprend :
+(cid:132) la filature de l’industrie cotonnière
+(cid:132) la filature de l’industrie lainière - cycle cardé
+(cid:132) la préparation et la filature de l’industrie lainière - cycle peigné
+18
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 20
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+(cid:132) la préparation et la filature du lin
+(cid:132) le moulinage et la texturation de la soie et des textiles artificiels ou synthétiques
+(cid:132) la fabrication des fils à coudre
+(cid:132) la préparation et la filature d’autres fibres comme le jute ou les fibres dures ; la
+fabrication de fils de papier
+NC : la fabrication de fibres de verre (2302) ; la fabrication de fibres artificielles ou
+synthétiques (2103)
+1603 Fabrication de tissus et mailles
+cette classe comprend :
+(cid:132) le tissage de l’industrie cotonnière
+(cid:132) le tissage de l’industrie lainière - cycles cardé et peigné
+(cid:132) le tissage de soieries
+(cid:132) le tissage d’autres textiles
+(cid:132) l’ennoblissement textile
+(cid:132) la fabrication d’étoffes à maille
+(cid:132) la fabrication d’articles chaussants à maille
+(cid:132) la fabrication de pull-overs et articles similaires
+1604 Autres industries textiles
+cette comprend :
+(cid:132) la fabrication de linge de maison et d’articles d’ameublement et de literie
+(cid:132) la fabrication de tapis et moquettes
+(cid:132) la ficellerie, la corderie et la fabrication de filets
+(cid:132) la fabrication d’étoffes et d’articles en étoffes non tissés par voie sèche
+(cid:132) la fabrication d’autres articles confectionnés en textile
+(cid:132) industries textiles n.c.a.
+1605 Fabrication d'articles d’habillement (sauf chaussures)
+cette classe comprend :
+(cid:132) la fabrication de vêtement en textiles
+- vêtements de travail
+- vêtements de dessus
+- vêtements de dessous
+- autres vêtements et accessoires
+(cid:132) la fabrication de vêtement en cuir et en fourrure
+17 INDUSTRIES DU CUIR ET FABRICATION DES CHAUSSURES
+1701 Production du cuir et d'articles en cuir
+Cette classe comprend :
+(cid:132) la production de cuir tanné ;
+(cid:132) la fabrication de cuirs et de peaux chamoisés, parcheminés, vernis ou métallisés, la
+fabrication de cuirs reconstitués.
+(cid:132) la fabrication d’articles de voyage, d’articles de maroquinerie et d’articles similaires en
+cuir ou en toute autre matière (plastique, textile, fibre ou carton) pour autant que la
+technologie utilisée soit identique à celle employée pour le cuir ;
+(cid:132) la fabrication de bracelets de montre non métalliques ;
+(cid:132) la fabrication d’articles divers en cuirs ;
+(cid:132) la fabrication d’articles de sellerie et de bourrellerie.
+NC : la fabrication de peaux brutes et d’articles d’habillement en cuir ; la fabrication de
+chaussures et la fabrication de bracelets de montre métalliques.
+1702 Fabrication de chaussures, y compris chaussures en caoutchouc et plastiques
+cette classe comprend :
+(cid:132) la fabrication de chaussures pour tous usages, en toutes matières, par tous procédés
+(cid:132) CA : la fabrication de guêtres, de jambières et d’articles similaires ; la fabrication de
+parties de chaussures
+NC : la fabrication de chaussures orthopédiques et la réparation des chaussures.
+18 INDUSTRIES DU BOIS SAUF FABRICATION DES MEUBLES
+19
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 21
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+1801 Sciage et traitement de bois: séchage, imprégnation, traitement chimique
+cette classe comprend :
+(cid:132) le sciage, le rabotage et le façonnage du bois
+(cid:132) la fabrication de traverses en bois pour voies ferrées et de poteaux de ligne
+(cid:132) la fabrication de parquets et de lambris en lames
+(cid:132) le séchage, l’imprégnation, ou le traitement chimique du bois et d’ouvrages en bois en
+vue de leur conservation
+(cid:132) la production des sous-produits du sciage : laine, farine, copeaux ou particules de bois
+NC : l’exploitation forestière et la production bois brut.
+1802 Fabrication de feuilles de placages, contre-plaqués et panneaux
+cette classe comprend :
+(cid:132) le tranchage et le déroulage du bois
+(cid:132) la fabrication de contre-plaqué, de panneaux et de placages en bois
+1803 Fabrication de produits en bois assemblés
+cette classe comprend :
+(cid:132) la fabrication de charpentes et d’ouvrages de menuiserie de bâtiment, en bois ;
+(cid:132) la fabrication de bâtiments préfabriqués en bois ou d’éléments de ces bâtiments ;
+(cid:132) la fabrication d’emballages en bois ;
+(cid:132) la fabrication d’objets divers en bois, liège ou vannerie ;
+(cid:132) CA : la fabrication de cercueils ;
+(cid:132) la fabrication d’objets en liège, vannerie ou sparterie :le travail du liège, la fabrication de
+paniers et d’ouvrages de vannerie ou de sparterie.
+NC : la fabrication d’articles de voyage en bois ; la fabrication de meubles ; la fabrication
+de brosses, de balais, cannes, parapluies et allumettes
+19 FABRICATION DE PAPIER ET D'ARTICLES EN PAPIER; IMPRIMERIE ET
+EDITION
+1901 Fabrication de pâte à papier, de papier, de carton et d'articles en papier
+Cette classe comprend :
+(cid:132) la fabrication de pâte à papier sous toutes les formes et par tous les procédés ;
+(cid:132) la fabrication de papiers et de cartons destinés à faire l’objet d’une transformation
+ultérieure par l’industrie : papiers à usage graphique, papiers pour articles sanitaires et
+domestiques, etc.
+(cid:132) le couchage, l’enduction, l’imprégnation et le crêpage des papiers et cartons ; la
+fabrication de matériaux complexes à base de papier
+(cid:132) la fabrication de papier journal et de papier pour l’impression ou l’écriture ;
+(cid:132) la fabrication d’ouate de cellulose et de nappes en fibres de cellulose ;
+(cid:132) la fabrication de papiers et de cartons ondulés ;
+(cid:132) la fabrication d’emballages en papiers ou en cartons ondulés ou en carton homogène ; la
+fabrication de cartonnage pliants ou de bureau et articles similaires ; la fabrication
+d’autres emballages en papier et carton ;
+(cid:132) la fabrication de sacs et sachets en papier ;
+(cid:132) la fabrication d’articles en papier à usage sanitaire ou domestique ;
+(cid:132) la fabrication d’articles de papeterie : ramettes, blocs pour l’écriture, papier pour
+imprimantes (listings) ,etc.
+(cid:132) la fabrication d’enveloppes et d’articles de correspondance, de pochettes postales ;
+(cid:132) la fabrication de papiers peints
+(cid:132) la fabrication d’autres articles en papier ou en carton : étiquettes de tous genres, papier-
+filtre et carton-filtre, tambours, bobines, tubes, canettes, ... en papier ou carton ; alvéoles
+et autres articles moulés en pâte à papier pour emballages
+NC : la fabrication de papeterie scolaire et commerciale (cf. 1902) et de cartes à jouer et de
+jeux et jouets en papier (cf. 2802)
+1902 Imprimerie et activités annexes à l'imprimerie; édition
+cette classe comprend :
+(cid:132) l’édition des livres, manuels scolaires, brochures, prospectus ; l’édition de cartes et de
+plans, d’atlas et de partitions musicales
+(cid:132) l’édition de journaux et de revues périodiques y.c. les journaux publicitaires
+(cid:132) l’édition d’enregistrements sonores : disques, disques compacts et bandes contenant des
+20
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 22
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+enregistrements sonores
+l’édition de photos, de gravures et cartes postales ; l’édition de calendriers et de formulaires,
+d’affiches et de reproduction d’œuvre d’art
+(cid:132) l’impression des journaux et revues périodiques, des livres et des brochures
+(cid:132) l’impression des catalogues, agendas et imprimés publicitaires ; l’impression des
+formulaires commerciaux, timbres et billet ;
+(cid:132) la fabrication de papeterie scolaire et commerciale (cahiers, classeurs, carnets, registres,
+livres comptables, etc.)
+(cid:132) la reliure et la finition ; la composition, la photogravure et les autres activités graphiques
+(cid:132) la reproduction d’enregistrements sonores et la reproduction d’enregistrements vidéo et
+informatiques
+NC : l’édition des produits vidéo (cf. 3803) et de logiciels (cf. 3802)
+20 RAFFINAGE DE PETROLE COKEFACTION ET TRANSFORMATION D'AUTRES
+PRODUITS ENERGETIQUES
+2000 Raffinage de pétrole ; cokéfaction et industrie nucléaire
+Cette classe comprend :
+(cid:132) le raffinage de pétrole qui inclut :
+∗ la production de carburants pour moteurs : essences, kérosènes, gazoles, etc.
+∗ la production de combustibles : fiouls et gaz de raffinerie tels que le butane, l’éthane, le
+propane, etc.
+∗ la production d’huile et de graisse lubrifiantes
+∗ la fabrication des produits pour la pétrochimie et les revêtements routiers et autres
+produits divers tels la vaseline, paraffine, etc.
+(cid:132) la cokéfaction (production de coke et de goudrons) et l’élaboration et la transformation
+des matières nucléaires.
+21 INDUSTRIES CHIMIQUES ET FABRICATION DE PRODUITS CHIMIQUES
+2101 Fabrication de produits chimiques de base
+cette classe comprend :
+(cid:132) la fabrication de gaz industriels ou médicaux liquéfiés ou comprimés
+(cid:132) la fabrication de colorants et de pigments et d’agents d’avivage et luminophores
+(cid:132) la fabrication de produits azotés et d’engrais
+(cid:132) la fabrication d’autres produits chimiques inorganiques de base tels que les éléments, les
+acides, les bases et leurs sels
+(cid:132) la fabrication de produits chimiques organiques de base d’origine pétrochimique ou
+carbochimique
+(cid:132) la fabrication de matières plastiques à l’état brut sous forme de liquides ou de granulés en
+général ; la préparation de mélanges de matières plastiques de base.
+(cid:132) la fabrication de caoutchouc synthétique sous forme primaire ou de mélanges avec du
+caoutchouc naturel
+NC : la production de gaz de raffinerie, l’extraction et la liquéfaction de gaz (cf.0600)
+NC : le compostage d’ordures ménagères (cf.4201)
+NC : la transformation des matières plastiques (cf.2203)
+NC : la fabrication de peinture et de pigments conditionnés
+2102 Fabrication de savons, parfums, détergents et produits d'entretien
+cette classe comprend :
+(cid:132) la fabrication d’agents tensioactifs
+(cid:132) la fabrication de savons
+(cid:132) la fabrication de préparations détergentes ou adoucissantes pour la lessive, la vaisselle,
+etc.
+(cid:132) la fabrication de produits d’entretien : cire, cirage, encaustiques, produits à polir, à
+récurer, etc.
+(cid:132) la fabrication de glycérine
+(cid:132) la fabrication de parfums et eaux de toilettes, cosmétiques, produits de beauté
+(cid:132) la fabrication de produits capillaires et dermatologiques
+(cid:132) la fabrication de produits de rasage, d’hygiène buccale et dépilatoires
+NC : la fabrication des huiles essentielles (cf.2103)
+2103 Fabrication d'autres produits chimiques
+cette classe comprend :
+(cid:132) la fabrication de produits agrochimiques : insecticides, pesticides, fongicides, herbicides
+21
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 23
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+et autres produits phytosanitaires à usage agricole ou domestique
+(cid:132) la fabrication de peinture de tous types et pour tous usages ; la fabrication de vernis,
+mastics, etc. et de solvants et décapants pour peinture et vernis ; préparation d’adjuvants
+et couleurs préparées
+(cid:132) la fabrication d’encres d’imprimerie
+(cid:132) la fabrication de produits pharmaceutiques de base : i.e. l’étude, la mise au point et la
+production des principes actifs destinés à la fabrication de médicaments ; le traitement du
+sang ; la fabrication de sucres et d’édulcorants de synthèse
+(cid:132) la fabrication de médicaments, i.e. de spécialités pharmaceutiques, humaines ou
+vétérinaires, allopathiques ou homéopathiques
+(cid:132) la fabrication de sérums et de vaccins ; la fabrication de contraceptifs chimiques
+(cid:132) la fabrication de compositions pour l’art dentaire
+(cid:132) la fabrication de pansements, ouates, bandes et gazes à usage médical
+(cid:132) CA : la fabrication de produits et spécialités thérapeutiques traditionnels conditionnés ou
+non ;
+(cid:132) la fabrication de produits explosifs, d’artifices et autres articles de pyrotechnie, y.c. la
+fabrication des allumettes ;
+(cid:132) la fabrication de colles de toutes natures, de gélatines et leurs dérivés et d’adhésifs
+préparés ;
+(cid:132) la fabrication des huiles essentielles ;
+(cid:132) la fabrication de produits chimiques pour la photographie
+(cid:132) la fabrication de supports de données, vierges pour l’enregistrement du son, de l’image
+ou de données informatiques ;
+(cid:132) la fabrication de produits chimiques à usage industriel : produits pour le décapage, le
+dégrippage, le soudage, le brasage, le finissage des textiles et du cuir, réactifs de
+laboratoires, catalyseurs et accélérateurs, encre à écrire ou à dessiner, etc.
+(cid:132) la fabrication des fibres artificielles ou synthétiques.
+22 PRODUCTION DE CAOUTCHOUC ET FABRICATION D'ARTICLES EN
+CAOUTCHOUC ET EN MATIERES PLASTIQUES
+2201 Production de caoutchouc
+cette classe comprend :
+(cid:132) la production du caoutchouc sec en lingots : demi-produit issu de la première
+transformation du latex (destiné à l’exportation dans le cas spécifique du Cameroun)
+2202 Fabrication d'articles en caoutchouc
+cette classe comprend :
+(cid:132) la fabrication de pneumatiques en caoutchouc pour véhicules, avions, équipements,
+machines mobiles et autres utilisations
+(cid:132) la fabrication de chambre air
+(cid:132) la fabrication de bandes de roulement amovibles pour pneumatiques, de flaps, de profilés
+pour le rechapage, etc.
+(cid:132) le rechapage et le resculptage de pneumatiques
+NC : la pose, le remplacement et la réparation de pneumatiques
+(cid:132) la fabrication d’autres articles en caoutchouc naturel ou synthétique, vulcanisé ou non,
+durci :
+- plaques, feuilles, bandes, baguettes et profilés, fils, cordes, etc.
+- tubes, tuyaux, courroies, joints et rondelles, etc.
+- articles d’hygiène (préservatifs, tétines, bouillottes, etc.), gants et tissus en caoutchouc ;
+- revêtements de sol en caoutchouc; matelas pneumatiques, etc.
+2203 Fabrication d'articles en matières plastiques (sauf chaussures)
+cette classe comprend :
+(cid:132) la fabrication de produits semi-finis en matières plastiques : plaques, feuilles, bandes,
+lames, etc. ; la fabrication de produits finis en matières plastiques : tubes, tuyaux et
+accessoires ;
+(cid:132) la fabrication d’éléments en matières plastiques pour la construction ;
+(cid:132) la fabrication d’emballages en matières plastiques : sacs, sachets, conteneurs, boîtes,
+bouteilles, bidons, caisses, etc.
+(cid:132) la fabrication de vaisselle, articles de cuisine, d’hygiène ou de toilette en matières
+plastiques ;
+(cid:132) la fabrication de produits divers en matières plastiques : fournitures de bureau et
+scolaires, rubans adhésifs, articles d’éclairage, d’habillement, etc.
+22
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 24
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+NC : la fabrication d’articles de voyage en matière plastique (cf. 2802) ; la fabrication de
+chaussures (cf. 2802) ; la fabrication d’articles à usage médical ou dentaire (cf. 2802); la
+fabrication de meubles en matières plastiques (cf. 2801) ; la fabrication d’articles de sports,
+de jeux et jouets en matières plastiques (cf.2802) ; les activités de conditionnement.
+23 FABRICATION D'AUTRES PRODUITS MINERAUX NON METALLIQUES
+MATERIAUX DE CONSTRUCTION
+2301 Fabrication de ciment
+cette classe comprend :
+(cid:132) la fabrication de ciment
+NC : la fabrication de ciment d’obturation dentaire ; la fabrication de mortiers et bétons
+secs ou réfractaires ; la fabrication d’ouvrage en béton
+2302 Fabrication des autres produits non métalliques
+cette classe comprend :
+(cid:132) la fabrication de verre et d’articles en verre
+(cid:132) la fabrication de produits céramiques ; fabrication de carreaux en céramique ;
+(cid:132) la fabrication de tuiles et briques en terre cuite ;
+(cid:132) la fabrication de chaux et de plâtre ;
+(cid:132) la fabrication d’ouvrage en béton ou en plâtre pour la construction ;
+(cid:132) le travail de la pierre ;
+(cid:132) la fabrication de produits abrasifs ;
+(cid:132) la fabrication de produits minéraux non métalliques n.c.a.
+24 FABRICATION DES PRODUITS METALLURGIQUES DE BASE ET
+D'OUVRAGES EN METAUX (SAUF MACHINES ET MATERIELS)
+2400 Fabrication de produits métallurgiques et d'ouvrages en métaux
+cette classe :
+(cid:132) la sidérurgie
+(cid:132) la fabrication des tubes en fonte ou en acier
+(cid:132) la première transformation de l’acier ........
+(cid:132) la production des métaux non ferreux : ........
+- la production de métaux précieux ;
+- la production d’aluminium et la première transformation de l’aluminium ;
+- la métallurgie du plomb, du zinc ou de l’étain ;
+- la métallurgie du cuivre et des autres métaux non ferreux.
+(cid:132) la fonderie de fonte, d’acier, de métaux légers et d’autres métaux non ferreux ;
+(cid:132) la fabrication de constructions métalliques : ossatures métalliques pour la construction ou
+pour équipements industriels ; la fabrication de constructions métalliques préfabriquées ;
+NC : la fabrication d’éléments de structure pour navires et bateaux (cf.2702)
+(cid:132) la fabrication de menuiseries métalliques : portes, fenêtres, huisseries, grilles, etc.
+(cid:132) la fabrication de réservoirs et citernes métalliques ;
+(cid:132) la fabrication de bouteilles pour gaz ; la fabrication de radiateurs et de chaudières pour le
+chauffage central ;
+(cid:132) la fabrication de générateurs de vapeur ; la chaudronnerie nucléaire ; la chaudronnerie
+tuyauterie ;
+(cid:132) la forge, l’estampage et le matriçage ; le découpage et l’emboutissage ; la métallurgie des
+poudres ;
+(cid:132) le traitement et le revêtement des métaux ;
+(cid:132) le décolletage et les opérations de mécanique générale ;
+(cid:132) la fabrication de coutellerie de table et professionnelle, la fabrication de couverts de
+tables, y.c. argentés ou dorés ; la fabrication d’instruments tranchants divers ;
+(cid:132) la fabrication d’outillage à main et d’outillage mécanique ;
+(cid:132) la fabrication de serrures et de ferrures
+(cid:132) la fabrication de fûts et emballages métalliques similaires
+(cid:132) la fabrication de fûts et emballages métalliques légers : boîtes à conserves, emballages
+pour boisson, etc.
+(cid:132) la fabrication d’articles en fils métalliques : câbles et tresses, grillages, treillis, toiles
+métalliques, etc.
+(cid:132) la visserie et la boulonnerie ; la fabrication de ressorts et de chaînes
+23
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 25
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+(cid:132) la fabrication d’articles métalliques ménagers ; de coffres-forts
+(cid:132) la fabrication d’articles métalliques n.c.a: bouclerie, agrafes, articles de voirie, échelles et
+escabeaux, sabres épées, baïonnettes, éléments de couverture en métal, articles divers en
+métaux communs, etc.
+25 FABRICATION DE MACHINES, D’APPAREILS ELECTRIQUES
+ET MATERIELS N.C.A
+2500 Fabrication de machines, d'appareils électriques et matériels n.c.a.
+cette classe comprend :
+(cid:132) la fabrication de moteurs et turbines (sauf moteurs pour véhicules automobiles et
+motocycles cf.2701) ;
+(cid:132) la fabrication de pompes et compresseurs ;
+(cid:132) la conception et les réalisations de système de transmission hydrauliques ou
+pneumatiques ;
+(cid:132) la fabrication d’articles de robinetterie : vannes industrielles et de régulation ; robinetterie
+sanitaire, d’adduction et de chauffage ;
+(cid:132) la fabrication de roulements à billes, à aiguilles ou à rouleaux ;
+(cid:132) la fabrication d’organes mécaniques de transmission ;
+(cid:132) la fabrication de fours et de brûleurs ;
+(cid:132) la fabrication d’ascenseurs, monte-charge et escaliers mécaniques ;
+(cid:132) la fabrication d’équipements de levage et de manutention ;
+(cid:132) la fabrication d’équipements aérauliques et frigorifiques industriels ;
+(cid:132) la fabrication de machines à remplir, fermer, sceller, capsuler ou étiqueter, etc. ; la
+réalisation de chaînes de conditionnement ;
+(cid:132) la fabrication d’appareils de pesage ;
+(cid:132) la fabrication de machines diverses d’usage général ;
+(cid:132) la fabrication de tracteurs agricoles et forestiers ; la fabrication de motoculteurs ;
+(cid:132) la fabrication d’autres machines agricoles n.c.a; la réparation de matériel agricole ;
+(cid:132) la fabrication de machines-outils à métaux ou à bois ; machines-outils portatives à moteur
+incorporé ;
+(cid:132) la fabrication de matériel de soudage et d’autres machines-outils :à scier, cliver, polir,
+etc.
+(cid:132) la fabrication de machines pour la métallurgie ;
+(cid:132) la fabrication de machines pour l’extraction ou la construction ;
+(cid:132) la fabrication de machines pour l’industrie agro-alimentaire ;
+(cid:132) la fabrication de machines pour les industries textiles ;
+(cid:132) la fabrication de machines pour les industries du papier et du carton ;
+(cid:132) la fabrication de machines pour l’imprimerie ;
+(cid:132) la fabrication de machines pour le travail du caoutchouc ou des plastiques ;
+(cid:132) la fabrication de moules et modèles ; la fabrication d’autres machines spécialisées n.c.a.
+(cid:132) la fabrication d’armement, i.e. : chars et autres véhicules blindés de combat ; matériel
+d’artillerie et de missiles balistiques ; armes légères, revolvers et pistolets ; la fabrication
+des munitions de guerre ;
+(cid:132) la fabrication d’armes de chasse, de tir et de défense ;
+(cid:132) la fabrication d’engins explosifs tels que bombes, mines et torpilles ;
+(cid:132) la fabrication d’appareils électroménagers : réfrigérateurs, machines à laver ou à sécher la
+vaisselle ou le linge ; appareils électriques de cuisson ; aspirateurs, ventilateurs, etc.
+(cid:132) la fabrication d’appareils ménagers non électriques : cuisinières, chauffe-eau, etc.
+(cid:132) la fabrication de machines de bureau ;
+(cid:132) la fabrication d’ordinateurs et d’autres équipements informatiques ;
+(cid:132) la fabrication de moteurs, génératrices et transformateurs électriques ; le rebobinage de
+machines électriques tournantes et de transformateurs ;
+(cid:132) la fabrication de matériel de distribution et de commande électrique ;
+(cid:132) la fabrication de fils et de câbles isolés ;
+(cid:132) la fabrication d’accumulateurs et de piles électriques ;
+(cid:132) la fabrication de lampes et d’appareils d’éclairage ;
+(cid:132) la fabrication de matériels électriques pour moteurs et véhicules : dispositifs électriques
+d’allumage ou de démarrage, etc.
+(cid:132) la fabrication de matériel électromagnétique industriel ;
+(cid:132) la fabrication de matériels électriques n.c.a.
+26 FABRICATION D'EQUIPEMENTS ET D'APPAREILS AUDIO-VISUELS ET DE
+COMMUNICATION, FABRICATION D'INSTRUMENTS MEDICAUX, D'OPTIQUE
+ET D'HORLOGERIE
+24
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 26
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+2600 Fabrication d'équipements et d'appareils audiovisuels et de communication,
+d'instruments médicaux, de précision, d'optique et d'horlogerie
+cette classe comprend :
+(cid:132) la fabrication de composants électroniques
+(cid:132) la fabrication d’appareils d’émission et de transmission
+(cid:132) la fabrication d’appareils de réception, enregistrement ou reproduction du son et de
+l’image
+(cid:132) la fabrication de matériel médico-chirurgical et d’orthopédie
+⇒ la fabrication d’appareils d’imagerie médicale, de radiologie et de radiothérapie ;
+⇒ la fabrication d’instruments et appareils et de mobilier pour la médecine, la chirurgie,
+l’art dentaire et vétérinaire
+⇒ la fabrication de seringues, d’aiguilles à usage médical
+⇒ la fabrication d’appareil de mécanothérapie, de massage, d’anesthésie-réanimation,
+etc.
+⇒ la fabrication d’appareils et d’articles utilisés en orthopédie
+(cid:132) la fabrication d’instrument de mesure et de contrôle
+⇒ la fabrication d’équipements d’aide à la navigation (radar, sonar, etc.), de
+météorologie, de géophysique, etc.
+⇒ la fabrication d’instruments de mesure de longueur et traçage ; la fabrication de
+balance de laboratoire,
+⇒ la fabrication d’instruments de mesure de grandeur physiques et électriques, de
+topographie et géophysique ;
+⇒ la fabrication d’appareils de contrôle de matériaux ou de pièces mécaniques ; la
+fabrication de matériel d’analyse automatique
+⇒ la fabrication de compteurs d’électricité, gaz, eau, essence, etc.
+⇒ la fabrication de microscopes non optiques
+(cid:132) la fabrication d’équipements de contrôle des processus industriels
+⇒ la conception, la réalisation et l’entretien de systèmes de contrôle de processus
+industriels continus
+⇒ la conception, la réalisation et l’entretien d’ensemble de production automatisés à
+partir d’un poste de contrôle centralisé.
+(cid:132) la fabrication de matériels optique et photographique
+⇒ la fabrication de lunettes : verres de lunetterie et verres de contact, lunettes correctrices
+et lunettes solaires ; lunettes protectrices et écrans protecteurs pour soudage.
+CA : la fabrication des montures de lunettes.
+⇒ la fabrication d’éléments d’optique : prismes, lentilles, miroirs et filtres optiques,
+éléments polarisants en verre ou autre matière ; fibres optiques et câbles de fibres
+optiques pour transmission d’image : endoscopie, imagerie, etc.
+⇒ la fabrication d’instruments d’optique : microscopes, jumelles, lunettes de visée,
+télescopes et instruments d’astronomie
+⇒ la fabrication de matériel photographique et cinématographique de prise de vue et de
+projection, y.c. les écrans
+⇒ la fabrication de matériel pour les laboratoires photographiques et cinématographiques.
+NC : la fabrication de produits photochimiques (cf.2103)
+(cid:132) l’horlogerie
+⇒ la fabrication de montres et d’horloges de tous types
+⇒ la fabrication d’appareils de contrôle du temps ou d’appareils compteurs de temps
+⇒ la fabrication de fournitures d’horlogerie, y.c. les bracelets en métaux.
+27 FABRICATION DE MATERIEL DE TRANSPORT
+2701 Fabrication des véhicules routiers
+cette classe comprend :
+(cid:132) la construction de véhicules automobiles : voitures de tourisme ; camions et
+camionnettes, autobus et autocars, etc. ; moteurs pour véhicules automobiles, châssis
+avec moteur ; autres véhicules automobiles n.c.a.
+(cid:132) la fabrication de carrosseries et remorques
+(cid:132) la fabrication d’équipements automobiles : parties et accessoires divers pour véhicules
+25
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 27
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+automobiles et carrosseries
+(cid:132) la fabrication de motocycles et de bicyclettes
+(cid:132) la fabrication de véhicules pour invalides
+(cid:132) la fabrication d’autres matériels de transport routier n.c.a: brouettes, porte-tout,
+charrettes, véhicules à traction animale, etc.
+(cid:132) la fabrication de parties et accessoires pour motocycles, bicyclettes, cycles, etc.
+NC : la fabrication de tracteurs pour l’agriculture et l’industrie (cf. 2500) ; l’entretien, la
+réparation et la transformation de véhicules automobiles (cf. 3201) ; la fabrication de
+batteries pour véhicules automobiles (cf. 2101)
+2702 Fabrication des autres matériels de transport
+cette classe comprend :
+(cid:132) la construction et la réparation de navires
+(cid:132) la construction de matériel ferroviaire roulant
+(cid:132) la construction, l’entretien et la réparation de matériel aéronautique et spatial
+28 FABRICATION DE MEUBLES; ACTIVITES DE FABRICATION N.C.A. ET
+RECUPERATION
+2801 Fabrication de meubles
+cette classe couvre la fabrication de meubles en tous matériaux, toutefois l’on pourra faire
+une distinction des meubles en bois et ceux en d’autres matériaux pour des besoins
+spécifiques tels le suivi des filières.
+Elle comprend :
+(cid:132) la fabrication de sièges d’ameublement, de bureau et d’atelier ; la fabrication de parties
+de sièges et le finissage de siège
+(cid:132) la fabrication de siège pour salles de spectacles, pour matériels de transport, etc.
+(cid:132) la fabrication de meubles de bureau, d’atelier et de magasin
+(cid:132) la fabrication de meubles pour la cuisine ou la sale de bain
+(cid:132) la fabrication de meubles pour séjour, salle à manger et chambre à coucher ; meubles de
+jardin et d’extérieur
+(cid:132) industries connexes à l’ameublement et fabrication de meubles n.c.a; la fabrication de
+matelas
+2802 Activités manufacturières diverses et récupération
+cette classe comprend :
+(cid:132) la fabrication de monnaies et médailles ;
+(cid:132) la bijouterie, la joaillerie et l’orfèvrerie ;
+(cid:132) la fabrication d’instruments de musique ;
+(cid:132) la fabrication d’articles de sport ;
+(cid:132) la fabrication de jeux et jouets ;
+(cid:132) les industries diverses : bijouterie de fantaisie, industrie de la brosserie et autres activités
+manufacturières n.c.a.
+(cid:132) la récupération des matières recyclables, i.e. la transformation des déchets récupérés, par
+triage, compactage, traitements chimiques ou manuels, etc. en matière première
+secondaire en vue d’une nouvelle transformation ou d’une utilisation directe.
+Remarque : les produits issus de la récupération sont indiscernables de ceux provenant de la
+branche d’activité les produisant normalement, par conséquent cette activité ne génère pas de
+produit caractéristique conformément à notre méthodologie.
+29 PRODUCTION ET DISTRIBUTION D'ELECTRICITE, GAZ ET EAU
+2901 Production, collecte, transport et distribution d'énergie électrique
+Cette classe comprend :
+(cid:132) la production d’électricité par n’importe quelle technique : usine hydroélectrique ;
+centrale thermique ou nucléaire, turbine à gaz ou éolienne, groupe électrogène ou à partir
+d’autres sources d’énergie renouvelables ;
+(cid:132) le transport et la distribution d’électricité ;
+(cid:132) la production, la collecte et la distribution de supports énergétiques : glace hydrique et
+liquides réfrigérants pour le refroidissement, vapeur et eau chaude pour le chauffage, air
+comprimé ;
+(cid:132) la production et la distribution de combustibles gazeux.
+26
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 28
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+NC : la production de gaz de pétrole liquéfié (2101) ou de gaz industriel (2101) et leur
+commercialisation en bouteille ou en vrac (3103)
+2902 Captage, traitement et distribution d'eau
+cette classe comprend :
+(cid:132) le captage, le traitement et la distribution de l’eau potable, industrielle et pour l’irrigation
+(cid:132) CA : le dessalement de l’eau de mer (si activité principale)
+NC : l’exploitation des systèmes d’irrigation pour l’agriculture (cf.01 & 02) et l’épuration
+des eaux usées (cf.4201)
+30 CONSTRUCTION
+cette division comprend : la construction de bâtiments et ouvrages neufs, la restauration et
+les réparations courantes.
+3001 Préparation des sites & construction d'ouvrages de génie civil et bâtiments
+cette classe comprend :
+(cid:132) la démolition d’immeubles et autres constructions ; les travaux de terrassement, de
+déblayage des chantiers et de préparation de sites
+(cid:132) les forages et sondages d’essai pour les constructions et les études géophysiques,
+géologiques et similaires
+NC : le forage de puits d’extraction d’hydrocarbures (cf.06) et la prospection de gisements
+d’hydrocarbures et les études géophysiques, géologiques et sismiques (cf.3803)
+(cid:132) la construction de bâtiments de tous types : pour logements, bureaux, commerces,
+services, etc.
+(cid:132) la construction d’ouvrage de génie civil : ponts, viaducs, tunnels et autres travaux
+souterrains
+(cid:132) la construction de réseaux d’adduction ou d’évacuation d’eau, de transport de gaz et de
+produits pétroliers
+(cid:132) la construction de lignes électriques et de télécommunication
+(cid:132) la réalisation de charpentes et de couverture, et travaux d’étanchéification
+(cid:132) la construction de voies ferrées
+(cid:132) la construction de chaussées routières et des aires sportives
+(cid:132) la construction des voies navigables, de ports, écluses, de barrages et digues, le dragage
+et les travaux sous-marins
+(cid:132) l’exécution pour les tiers de travaux de montage ou de levage : ossatures métalliques,
+murs, échafaudage, etc.
+(cid:132) les travaux de maçonnerie générale et de pavage
+(cid:132) autres travaux de construction n.c.a.
+3002 Travaux d’installation et de finition
+cette classe couvre les travaux d’installation dans les immeubles de toute nature des
+équipements techniques qui sont nécessaires à leur utilisation habituelle.
+Elle comprend :
+(cid:132) les travaux d’installation électrique : câbles et appareils électriques, systèmes de
+télécommunication, ascenseurs et escaliers mécaniques, antennes d’immeubles et
+paratonnerres, systèmes d’alarme incendie ou contre effractions, etc.
+(cid:132) les travaux d’isolation thermique, acoustique, de chambres froides etc.
+(cid:132) la plomberie et l’installation et la maintenance d’équipements thermiques et de
+climatisation ;
+(cid:132) l’installation de systèmes d’éclairage et de signalisation pour chaussées, voies ferrées,
+aéroports et installations portuaires ;
+(cid:132) autres travaux d’installation n.c.a.
+(cid:132) les travaux de finition : la plâtrerie, le revêtement des sols et des murs, la peinture des
+bâtiments, la vitrerie et la miroiterie de bâtiment, la menuiserie (bois, métallique,
+plastique) du bâtiments, serrurerie et l’aménagement intérieur ; autres travaux de finition
+n.c.a.
+(cid:132) la location avec opérateur de matériel de construction.
+31 COMMERCE DE GROS ET DE DETAIL
+3101 Commerce de véhicules, d'accessoires et de carburants
+cette classe comprend :
+(cid:132) le commerce de véhicules automobiles
+(cid:132) le commerce de motocycles
+(cid:132) le commerce d’équipements automobiles et pour motocycles
+27
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 29
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+(cid:132) le commerce de détail de carburants et de lubrifiants
+3102 Commerce de gros de produits agricoles bruts et d'animaux vivants
+cette classe comprend :
+(cid:132) le commerce de gros de cacao, café, coton, banane, et autres produits agricoles
+(cid:132) le commerce de gros de bois bruts
+(cid:132) le commerce de gros d’animaux vivants
+3103 Autres commerces de gros
+cette classe comprend :
+(cid:132) les intermédiaires du commerce de gros
+(cid:132) le commerce de gros de produits alimentaires
+(cid:132) le commerce de gros de boissons et tabacs
+(cid:132) le commerce de biens de consommation non alimentaires : textiles, articles d’habillement
+et chaussures, appareils électroménagers et radiotélévision, céramique, verrerie et
+produits d’entretien, parfumerie et produits de beauté, produits pharmaceutiques,
+papeterie, jouets et biens de consommation n.c.a.
+(cid:132) le commerce de gros de combustibles, de minerais et métaux, de bois et matériaux de
+construction, autres produits intermédiaires non agricoles n.c.a.
+(cid:132) le commerce de gros d’équipements industriels
+(cid:132) autres commerces de gros n.c.a.
+(cid:132) Activité d’intermédiaires du commerce de gros
+3104 Commerce de détail (sauf automobiles et motocycles)
+cette classe comprend notamment :
+(cid:132) la revente (vente sans transformation) au public de biens neufs ou usagés destinés à la
+consommation des particuliers, des ménages ou des utilisateurs professionnels ;
+(cid:132) l’activité des intermédiaires de commerce de détail ;
+(cid:132) les activités usuelles associées au commerce telles que le tri, le classement, le
+fractionnement, le reconditionnement, l’entreposage, la livraison et l’installation des
+biens livrés ;
+Remarque : la vente peut se faire par des magasins spécialisés ou non, des comptoirs ou
+kiosques, par correspondance, par des colporteurs et marchands ambulants, etc.
+NC : la location au public d’articles personnels et domestiques (3801) ; la vente des produits
+alimentaires et de boissons à consommer sur place (cf.3302) ; le commerce de véhicules,
+accessoires et carburants (cf.3101)
+32 ACTIVITES DE REPARATION
+3201 Réparation de véhicules
+cette classe comprend :
+(cid:132) l’entretien et la réparation des véhicules automobiles : mécanique, électricité, carrosserie
+et peinture ;
+(cid:132) l’entretien courant : lavage, vidange, montage des pièces, remorquage et dépannage
+routier, etc.
+(cid:132) l’entretien et la réparation des motocycles
+3202 Autres réparations de biens personnels
+cette classe comprend :
+(cid:132) la réparation des chaussures et d’articles en cuir ou articles similaires en d’autres
+matières
+(cid:132) la réparation de matériel électronique grand public : téléviseurs, radio, hi-fi, etc.
+(cid:132) la réparation d’autres articles électriques à usage domestique (électroménagers)
+(cid:132) la réparation des montres, horloges et bijoux
+(cid:132) la réparation d’autres biens personnels et domestiques n.c.a.
+33 RESTAURANTS ET HOTELS
+3301 Hôtels et campements
+cette classe comprend :
+(cid:132) les activités d’hébergement pour des séjours de courte durée en hôtels, motels, auberges
+avec ou sans services complémentaires associés tels que restaurants, salles de réunion,
+etc.
+(cid:132) autres moyens d’hébergements de courte durée : terrains de camping, chalets, maisons de
+vacances, auberges de jeunesses, etc.
+28
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 30
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+(cid:132) hébergement collectif non touristique : foyers d’élèves et d’étudiants et résidences
+universitaires
+NC : les hébergements collectifs spécialisés pour enfants ou pour adultes (4103).
+3302 Restaurants et bars
+cette classe comprend :
+(cid:132) les restaurants, i.e. la vente de repas généralement préparés pour la consommation sur
+place ainsi que la vente des boissons accompagnant ces repas, avec ou sans installation
+appropriée.
+NC : l’exercice de ces activités par des services d’hébergement
+(cid:132) les cantines et les restaurants d’entreprises ou universitaires ; les traiteurs et
+l’organisation des réceptions.
+(cid:132) les débits de boissons i.e. la vente de boissons (sans restauration) à consommer sur place
+par les bars, les cafés, salons de thé, « circuits ou à domicile », ou dans un quelconque
+endroit avec ou sans installation appropriée.
+34 TRANSPORT, ENTREPOSAGE ET COMMUNICATION
+3401 Transport ferroviaire
+cette classe comprend :
+(cid:132) le transport interurbain de passagers et de marchandises par chemin de fer
+NC : la manutention du fret, l’entreposage de marchandises et autres activités auxiliaires,
+l’entretien et les petites réparations de matériel roulant
+3402 Transport par taxis
+cette classe comprend :
+(cid:132) le transport de voyageurs par taxis et les autres types de location de voitures particulières
+avec chauffeur
+NC : l’exploitation d’avion-taxis (cf.3405)
+3403 Autres transports routiers de voyageurs
+cette classe comprend :
+(cid:132) le transport urbain de voyageurs par bus, car et autre moyen de transport collectif
+(cid:132) le ramassage scolaire ou le transport de personnel et les navettes d’aéroport
+(cid:132) le transport interurbain de voyageurs par autocars sur des lignes déterminés
+(cid:132) les autres transports routiers de voyageurs : organisations des excursions en autocars, la
+location d’autocars avec conducteur et les autres services occasionnels de transport par
+autocar
+NC : le transport en ambulances (cf.4101)
+3404 Transport routier de marchandises
+cette classe comprend :
+(cid:132) le transport routier à caractère urbain ou de proximité, consistant à enlever ou à livrer
+des marchandises emballées ou non, lors des déplacements de courte durée
+(cid:132) le transport routier de marchandises, régulier ou non, interurbain, sur longue distance,
+y.c. international ; le transport lourd, en vrac, par conteneurs, etc.
+(cid:132) le déménagement de mobilier ; la location de camions avec chauffeur
+(cid:132) le transport de marchandises par véhicules à traction humaine ou animale
+(cid:132) le transport par conduites de gaz, de liquides, de boues et d’autres substances ;
+l’exploitation des stations de pompage
+NC : la distribution de gaz ou d’eau par conduite (Cf.29).
+3405 Autres transports (air, eau)
+cette branche comprend :
+(cid:132) le transport régulier ou non de passagers et de marchandises par eau
+(cid:132) l’exploitation de bateaux d’excursion, de croisière ou de tourisme ; l’exploitation de
+bateaux et navires avec équipage
+(cid:132) l’exploitation de remorqueurs et de pousseurs de péniches, de plates-formes de forage
+29
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 31
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+pétrolier, etc.
+(cid:132) le transport de passagers et de marchandises sur les fleuves, les canaux, les lacs et les
+autres voies navigables intérieures
+(cid:132) le transport aérien régulier ou non des passagers et de marchandises
+(cid:132) le lancement et la mise sur orbites de satellites et de véhicules spatiaux
+NC : l’exploitation des ports et services annexes (3406); la manutention, l’entreposage
+(cf.3406) et les activités de restauration à bord des bateaux (cf.3302)
+3406 Activités annexes et auxiliaires des transports
+cette classe comprend :
+(cid:132) le chargement et le déchargement de marchandises ou de bagages, quel que soit le mode
+de transport utilisé (terre, air, eau)
+(cid:132) l’arrimage et le débardage de marchandises
+(cid:132) l’exploitation d’installations d’entreposage et stockage pour tous les types de produits :
+entrepôts frigorifiques, silos à grains, hangars, réservoirs, ... à caractère industriel ou
+agricole.
+(cid:132) la gestion des infrastructures de transport terrestres : exploitation des gares routières et
+ferroviaires, des postes de manutention de marchandises ; exploitation des routes, des
+ponts, aires de stationnement, etc.
+(cid:132) les services portuaires, maritimes et fluviaux : exploitation des ports, quais et écluses ;
+services d’entretien maintenance des navires (hors réparation), activités annexes de la
+navigation par eau
+(cid:132) les services aéroportuaires : exploitation des aéroports ; activités de contrôle des
+aéroports et de la navigation aérienne, activités de service au sol sur les terrains
+d’aviation, les services d’entretien maintenance des avions (hors réparation)
+(cid:132) les activités des agences de voyage et des organisateurs de voyage
+(cid:132) l’organisation du transport de fret : l’ensemble des prestations de services visant à
+prendre en charge l’organisation du transport de fret pour le compte de l’expéditeur ou
+du destinataire ; les activités logistiques spécialisées qu’implique cette organisation telles
+que le conditionnement, l’emballage, le stockage, l’étiquetage, le ramassage, le groupage,
+les formalités en douane, les contrôle sanitaires ou phytosanitaires éventuels, les
+formalités d’assurance, fiscales, bancaires, visas consulaires etc.
+NC : les activités de courrier et d’assurances de marchandises.
+35 POSTES ET TELECOMMUNICATIONS
+3500 Postes et Télécommunications
+Cette classe comprend :
+(cid:132) les activités de la poste nationale : la levée, l’acheminement et la distribution du courrier
+et des colis, la poste restante, location des boîtes postales, etc.
+(cid:132) les activités de courrier exercées par d’autres entreprises que la poste nationale ;
+(cid:132) les télécommunications i.e. la transmission du son, des images, des données ou autres
+informations par câbles, par voie hertzienne, par relais ou par satellite : téléphone,
+télégraphe, télex, télécopie ;
+(cid:132) l’ entretien des réseaux et transmission de programmes radio et télévision.
+NC : la Caisse d’épargne postale et les CCP (cf. 3601)
+36 ACTIVITES FINANCIERES
+Cette division regroupe toutes les activités dont l’objet consiste à créer, collecter et
+redistribuer des moyens de financement sous sa propre responsabilité
+3601 Intermédiation monétaire et financière
+cette classe comprend :
+(cid:132) l’activité de la banque centrale (BEAC),
+(cid:132) l’activité des établissements bancaires,
+(cid:132) l’activité des caisses d’épargne et des coopératives d’épargne et de crédit,
+(cid:132) l’activité des autres institutions financières bancaires et non bancaires;
+•
+l’activité des CCP
+•
+activités des auxiliaires financiers : administration des marchés financiers, gestion de
+portefeuille, bureaux de change, etc.
+NC : la production des monnaies divisionnaires (cf. 2802)
+30
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 32
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+3602 Activités d'assurances (sauf sécurité sociale)
+Cette classe comprend la couverture des risques à long et à court terme, avec ou sans
+élément d’épargne.
+(cid:132) assurance vie et capitalisation ;
+(cid:132) les caisses de retraites autres que CNPS
+(cid:132) autres assurances : maladie, incendie, accidents, biens et risques divers.
+(cid:132) activités des auxiliaires d’assurance : courtiers et agents d’assurance, experts chargés
+d’évaluer le risque d’assurance et les dommages, liquidateurs de sinistres et actuaires.
+37 ACTIVITES IMMOBILIERES
+3701 Location de logements et autres biens immobiliers
+cette classe comprend :
+(cid:132) la location d’immeubles résidentiels ou maisons d’habitation ; la location d’immeubles
+non résidentiels (bureaux, espaces commerciaux, salles d’exposition, de conférence, de
+réception ou de réunion) ;
+(cid:132) la location de terres et de terrains.
+3702 Autres activités immobilières
+Cette classe comprend :
+(cid:132) la promotion immobilière et l’achat/vente de biens immobiliers propres : immeubles
+résidentiels ou non ; terres et terrains.
+(cid:132) l’activité des agences immobilières et l’administration des biens immobiliers tels que les
+immeubles résidentiels, etc.
+38 ACTIVITES DE SERVICES AUX ENTREPRISES
+3801 Location sans opérateur et des biens personnels et domestiques
+La classe Comprend :
+(cid:132) location de matériel de transports terrestres (automobiles, etc.)
+(cid:132) location de matériels de transport aérien et par eau ;
+(cid:132) location de machines et matériel agricoles ;
+(cid:132) location de machines et matériel pour la construction (BTP)
+(cid:132) location de machines et matériel pour le bureau y.c matériel informatique et autres
+locations de machines et matériel n.c.a.
+(cid:132) location d’articles personnels et domestiques n.c.a.
+3802 Activités informatiques et Recherche - Développement
+Cette Classe comprend :
+(cid:132) Conseil en systèmes et matériels informatiques
+(cid:132) Production et réalisation des logiciels, traitement des données et activités des banques de
+données ;
+(cid:132) Entretien et réparation de machines de bureau et de matériel informatique ; autres
+activités rattachées à l’informatique n.c.a.
+(cid:132) Recherche et Développement
+cette sous-classe couvre les trois types de R&D :
+la recherche fondamentale, la recherche appliquée et le développement expérimental en
+sciences physiques et naturelles, en ingénierie, en sciences sociales et humaines.
+NC : l’enseignement associé à la R&D et l’administration par les pouvoirs publics de la
+R&D et son subventionnement
+3803 Autres activités professionnelles, scientifiques et techniques
+Elle comprend :
+(cid:132) Activités juridiques (NC les activités des tribunaux judiciaires : voir 3901), les activités
+comptables et d’audit et le conseil fiscal ; les études de marchés et sondages ; le conseil
+pour les affaires et la gestion
+(cid:132) Activités d’architecture et d’ingénierie, de levées topographiques, de prospection
+géologique, etc.
+(cid:132) Activités d’essais, d’analyses et de contrôle technique....
+NC. Les sondages et forages d’essai en relation avec l’extraction de pétrole et de gaz (cf.
+06).
+31
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 33
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+•
+Publicité : conception et réalisation des campagnes publicitaires ; la création et le
+placement des publicités dans les journaux, à la radio et télévision ou par affichage,
+vitrines, magasins d’exposition, voitures, etc.
+•
+régie publicitaire de médias pour la vente des temps d’antennes et d’espaces
+publicitaires ; la distribution des prospectus et d’échantillons publicitaires ; la publicité
+aérienne.
+NC : l’impression des documents publicitaires, les relations publiques et la réalisations des
+messages publicitaires pour la radio, la télévision et le cinéma (cf. 42)
+(cid:132) la sélection et la fourniture du personnel ; les activités d’enquêtes, de sécurité et de
+gardiennage ; les activités de nettoyage des bâtiments y.c. la désinfection et la destruction
+des parasites et des animaux nuisibles.
+(cid:132) Activités photographiques
+(cid:132) Production photographique pour la commercialisation et la consommation : portrait
+photographique pour passeport, Carte d’identité, mariage etc. ; photographie pour le
+commerce, la publicité, la mode etc. ; photographie aérienne ; reportage vidéo des
+évènements, mariage, réunion etc.
+39 ADMINISTRATIONS PUBLIQUES ET SECURITE SOCIALE
+3901 Activités d'administration publique générale et services fournis à l'ensemble de la
+collectivité.
+Cette classe décrit les activités d’administration publique qui ne peuvent, par nature,
+s’exercer sur le marché.
+Elle comprend:
+(cid:132) l’administration publique générale: exécutif, législatif au niveau central, régional ou
+local;
+(cid:132) la tutelle des activités sociales et économiques;
+(cid:132) les services de prérogatives publiques: Affaires étrangères; Défense; Justice; Police et
+Protection civile.
+3902 Sécurité sociale obligatoire
+cette classe couvre les activités de financement et d’administration de la sécurité sociale
+obligatoire par l’état, et se distingue des assurances par son caractère obligatoire.
+Elle comprend:
+♦ l’assurance maladie, accident et chômage; les pensions de retraite i.e. la CNPS.
+NC : les régimes de sécurité sociale non obligatoire (3602) et les activités d’action sociale
+(4103).
+40 EDUCATION
+4000 Education
+Cette classe couvre l’enseignement public et privé de tout type, de tous les niveaux et dans
+toutes les disciplines.
+Elle comprend:
+(cid:132) l’enseignement primaire;
+(cid:132) l’enseignement secondaire général, technique et professionnel;
+(cid:132) l’enseignement supérieur (NC : la R&D);
+(cid:132) la formation permanente et les autres activités d’enseignement: école de conduite,
+formation des adultes et formation continue, et les enseignements divers (artistiques,
+religieux, etc.).
+NC : les cours de nature principalement récréative (cours de golf, etc.)
+41 SANTE ET ACTION SOCIALE
+4101 Activités pour la santé humaine
+Cette classe comprend:
+(cid:132) les activités hospitalières;
+(cid:132) la pratique médicale et dentaire;
+(cid:132) les activités des auxiliaires médicaux (kiné, orthophonistes, psy. etc.);
+(cid:132) la médecine traditionnelle;
+(cid:132) les services des ambulances;
+(cid:132) les laboratoires d’analyses médicales;
+32
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 34
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+(cid:132) les centres de collectes et banques d’organes.
+4102 Activités vétérinaires
+cette classe comprend :
+(cid:132) les activités de soins et de contrôle vétérinaires exercées sur des animaux d’élevage ou
+de compagnie;
+(cid:132) l’activité des cliniques vétérinaires
+4103 Activités d'action sociale
+cette couvre les activités d’assistance sociale qui intéressent les enfants, les personnes âgées
+et des catégories particulières de personnes dont l’autonomie est limitée, sans toutefois que
+les soins médicaux, l’enseignement ou la formation jouent un rôle prédominant. Elles
+peuvent être de service public ou privé.
+Cette classe comprend:
+(cid:132) l’accueil des enfants handicapés;
+(cid:132) l’accueil des enfants en difficulté;
+(cid:132) l’accueil des adultes handicapés,
+(cid:132) l’accueil des personnes âgées et autres hébergements sociaux.
+NC: les activités de crèche et de garderies d’enfants et des centres de rééducation
+professionnelle.
+42 AUTRES ACTIVITES FOURNIS A LA COLLECTIVITE, SERVICES SOCIAUX ET
+PERSONNELS
+4201 Assainissement et gestion des ordures
+cette classe comprend:
+(cid:132) l’enlèvement et le traitement des déchets solides (ordures ménagères);
+(cid:132) le traitement des déchets liquides (ex. épuration des eaux usées);
+(cid:132) les travaux de voirie (balayage des voies).
+NC. le recyclage des déchets (cf. 2802).
+4202 Activités associatives
+cette classe comprend:
+(cid:132) les activités des organisations économiques et patronales;
+(cid:132) les activités des organisations professionnelles et syndicales;
+(cid:132) les activités des organisations religieuses;
+(cid:132) les activités des organisations politiques
+(cid:132) les activités associatives nca.
+4203 Activités récréatives, culturelles et sportives
+cette classe comprend:
+(cid:132) la production, l’édition, la distribution et la projection de films cinématographiques et
+vidéo;
+(cid:132) les activités de radio et de télévision;
+(cid:132) les activités d’art dramatique et de musique et autres activités artistiques; autres activités
+de spectacle.
+(cid:132) les agences de presses; les activités des bibliothèques, archives, musées; la gestion du
+patrimoine culturel et naturel;
+(cid:132) les activités sportives;
+(cid:132) les autres activités récréatives et de loisir: jeux de hasard et d’argent; activités de loisir
+nca.
+4204 Services personnels
+cette comprend:
+(cid:132) la blanchisserie et teinturerie;
+(cid:132) la coiffure et les soins de beauté;
+(cid:132) les pompes funèbres et soins rattachés;
+(cid:132) l’entretien corporel et les autres soins personnels nca.
+4205 Services domestiques
+cette classe comprend les activités des ménages privés employant du personnel domestiques: bonnes,
+cuisiniers, jardiniers, chauffeurs, blanchisseurs, baby-sitters, gouvernantes, etc.
+NC : la fourniture de personnel de maison par des entreprises (3803).
+43 ORGANISATIONS ET ORGANISMES EXTRATERRITORIAUX
+33
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 35
+NOMENCLATURE DES ACTIVITES
+Branche Classe
+LIBELLE
+4300 Organisations et organismes extraterritoriaux
+Cette classe comprend:
+(cid:132) les activités des ambassades et consulats étrangers au Cameroun;
+(cid:132) les activités des organisations internationales telles que l’ONU et ses institutions
+spécialisées,
+(cid:132) les organismes régionaux et tout autre organisme ayant un statut diplomatique au
+Cameroun.
+NC. l’administration et la gestion des missions diplomatiques ou consulaires camerounaises
+à l’étranger (cf.3901).
+34
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 36
+NOMENCLATURE DES PRODUITS
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+01 PRODUITS DE L'AGRICULTURE VIVRIERE
+0101 Céréales
+010101 Blé tendre et dur
+010102 Maïs
+010103 Mil et Sorgho
+010104 Riz paddy
+010105 Autres Céréales :
+Orge, Seigle, Avoine, Fonio
+Autres céréales n.c.a.
+0102 Tubercules et bananes
+010201 Manioc frais
+010202 Manioc séché
+010203 Banane douce non industrielle et Plantain*
+010204 Macabo et Taro
+010205 Autres tubercules
+Pomme de terre
+Igname
+Patate douce
+Racines et tubercules à amidon ou inuline
+0103 Plantes oléagineuses (sauf palmier)
+010301 Arachide
+010302 Autres plantes oléagineuses :
+Soja
+Graines de coton
+Oléagineux non tropicaux
+Colza
+Sésame et Graines de courges
+0104 Fruits et légumes
+010401 Agrumes :
+Citron, Orange, Mandarine, Pamplemousse
+Cadrat, Lime, Clémentine, Tangerine...
+010402 Ananas
+010403 Autres fruits:
+Fruits tropicaux divers : datte, noix de coco, baies et fruits à coque de la cueillette, noisette,
+pastèque....
+Fruits des climats tempérés divers : châtaigne, pomme, poire, Framboise, Fraise, Raisin de
+table, Raisin de cuve,
+Fruits à coque et olive
+010404 Légumineuses et légumes secs
+Haricots secs (blanc, rouge, noir…), niébé
+Pois secs, Lentilles, Luzerne vouandzou
+Tomate, Haricots verts, melon, aubergine, courgette, courge, citrouille, oseille, concombre,
+épinard etc.
+010405 Épices et condiments :
+Thym, Laurier, gingembre, ail, poivre, piment, curry, persil, céleri, basilic, poivron, poireau,
+menthe, clou de girofle, djansan, estragon, vanille, camomille, etc.
+010406 Légumes feuilles et champignons :
+Légumes racine (carotte, oignon,...)
+Autres légumes frais (chou, maïs doux, salades,...)
+Folon, ndolè, feuilles de manioc,
+Champignons de la cueillette ou cultivés
+010407 Plantes et fleurs d'ornements
+Plants de pépinière, plantes vertes ou fleuries (plants forestiers, fruitiers et d’ornement)
+Fleurs coupées
+Semences florales ou fruitières
+Plants et semences potagers
+* banane douce
+35
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 37
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+PRODUITS DE L'AGRICULTURE INDUSTRIELLE ET D'EXPORTATION
+0201 Cacao
+020100 cacao
+0202 Café
+020201 Café arabica
+020202 Café robusta
+0203 Coton
+020300 Coton (coton fibre et coton non égrené)
+0204 Banane
+020400 Banane douce pour l’exportation
+0205 Palmier à huile
+020500 Noix de palme
+0206 Autres produits de l'Agriculture industrielle et d'exportation
+020601 Tabac brut
+020602 Latex
+020603 Canne à sucre
+Betterave à sucre,
+Canne à sucre
+020604 Thé vert et noir
+020605 Autres Produits d'exportation n.c.a. et Plantes médicinales
+03 PRODUITS DE L'ÉLEVAGE ET DE LA CHASSE
+0301 Produits de l'élevage bovin
+030100 Bovins sur pieds
+0302 Produits de l'élevage d'autres animaux
+030201 Ovins et caprins sur pied
+030202 Porcins vivants
+030203 Volailles vivantes (poule, oie, dinde, canars, pintade)
+Viande de volaille (080104)
+Plumes et duvets
+Préparations à base de viande de volaille ****
+030204 Equidés et autres animaux d'élevage vivants.
+Cheval, âne, zèbre, poney, mulet, bardot, camélidés etc..
+Lapin, cobaye, chien, chat, pigeon et autres animaux de compagnie ou de laboratoire.
+0303 Produits d'origine animale
+030301 Oeufs frais
+030302 Miel naturel
+030303 Autres produits d'origine animale
+Lait de brebis ou de chèvre, Lait de vache, de chamelle
+Laine en suint,
+Poils et crins divers de cheval, de porc, etc.
+Grenouilles et escargots non cuits
+Cocon de vers à soie
+Sperme de taureau
+Sécrétions animales diverses
+Produits comestibles d’origine animale
+0304 Produits de la chasse et du piégeage
+030400 Gibier frais, fumé ou séché
+04 PRODUITS SYLVICOLES
+0400 PRODUCTION FORESTIERE
+040001 Bois bruts (grumes)
+040002 Bois de construction
+Piquets, bois de charpente, planches, lattes, pieux etc.
+040003 Bois de chauffage
+040004 Charbon de bois
+040005 Liège et autres produits forestiers
+Gommes caoutchouteuses, autres gommes naturelles
+Liège naturel brut,
+Ornements végétaux (arbre de noël
+Matières premières végétales diverses : bambous de chine, raphia, osier, liane
+et produits de palmier assimilés, rotang, sparte, laque, résine, crin, mousse, lichen, etc.
+Services forestiers : inventaire des forêts, évaluation du bois,
+protection contre les incendies, entretien, abattage, transport de grumes dans la forêt, etc.
+05 PRODUITS DE LA PECHE ET DE LA PISCICULTURE.
+0501 Produits de la pêche maritime
+050101 Poissons frais :
+Poissons vivants, poissons frais ou réfrigérés
+050102 Crustacés et autres produits de la pêche
+36
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 38
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Crustacées : crevettes, écrevisses, homards, langoustes, crabes, etc.
+Huîtres
+Autres invertébrés aquatiques
+Coraux et coquillages
+Éponges naturelles
+Algues
+Perles naturelles, Perles de culture
+Services annexes à la pêche
+0502 Produits de pêche continentale. et pisciculture
+050200 Poissons d’eau douce et autres produits de la pêche des eaux intérieures
+06 PRODUITS DE L'EXTRACTION D'HYDROCARBURES
+0601 Produits de l'extraction d'hydrocarbures
+060101 Pétrole brut
+y. c. Sables et schistes bitumineux et Liquéfaction aux fins de transport
+060102 Gaz naturel
+y. c. Gazéification aux fins de transport
+060103 Autres produits énergétiques
+Charbon non aggloméré
+Agglomérés de houille
+Lignite
+Tourbe
+Minerais d’uranium
+07 AUTRES PRODUITS D'EXTRACTION
+0701 Minerais métalliques
+070101 Bauxite
+070102 Autres minerais métalliques
+Minerais de fer
+Minerais de métaux non ferreux
+Minerais de cuivre
+Minerais de nickel
+Minerais d’aluminium
+Minerais de métaux précieux (Or argent, platine…)
+Minerais de plomb, zinc et étain
+Autres minerais métalliques
+0702 Minerais non métalliques
+070201 Clinker, Gypse et pierre à ciment (pouzzolane)
+070202 Sel (sel gemme, sel de mer, saumure)
+070203 Autres minerais non métalliques
+Marbres et autres pierres marbrières
+Granit, grès, et autres pierres pour la construction
+Craie et dolomie
+Ardoise en plaque
+Sables
+Granulats
+Enrobés pour revêtements routiers
+Kaolin
+Argiles
+Engrais naturels
+Pyrites et soufre brut
+Autres minerais chimiques naturels
+Bitumes et asphaltes naturels
+Pierres gemmes
+Diamants industriels et abrasifs naturels
+Minéraux divers
+08 VIANDE ET POISSON
+0801 Viandes et produits à base de viande
+080101 Viande de bovins:
+Viandes fraîches de bovins
+Viandes bovines surgelées ou congelées
+080102 Viande d'ovins et de caprins
+Viandes fraîches d’ovins et de caprins
+Viandes d’ovins ou de caprins congelées ou surgelées
+080103 Viande de porc
+Viandes de porc fraîches
+Viandes de porc congelées ou surgelées
+080104 Volaille abattue
+Viandes de volailles, fraîches ou réfrigérées
+Viandes de volailles congelées ou surgelées
+Viandes de lapin
+37
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 39
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+080105 Autres viandes de boucherie & produits d’abattage.
+Viandes de cheval
+Abats comestibles
+Laines et délainages
+Graisses animales comestibles
+Sous produits de la boucherie animale non comestibles (corne, ivoire, ( les poils sont aux
+030303))
+080106 Cuirs et peaux brutes
+Cuirs et peaux brutes de bovins
+Cuirs et peaux brutes d’autres animaux
+080107 Préparations à base de viande
+Viandes et abats salés, séchés, fumés
+Préparations, conserves et charcuteries à base de viandes
+Farines de viandes pour animaux
+Façons de préparations à base de viandes
+0802 Poissons et produits de la pêche
+080201 Poissons frais congelés ou surgelés.
+Poissons frais en morceaux
+Poissons congelés ou surgelés
+080202 Poissons séchés, salés, fumés
+y. c. Crustacés et mollusques séchés, salés, fumés
+080203 Préparations et conserves à base de poissons
+Préparations et conserves à base de poissons
+Coquillages, crustacés et mollusques surgelés ou en conserves
+Farine de poissons pour animaux
+Huile de poisson
+Déchets de l‘industrie du poisson, graisses de poisson
+09 PRODUIT DU TRAVAIL DES GRAINS ET DES PRODUITS AMYLACES
+0901 Farines de céréales
+090101 Farine de blé (froment)
+090102 Farine de maïs
+090103 Farine d'autres céréales et de légumes
+Farine de mil, sorgho, riz, etc.
+Farine de légume (igname, soja pomme de terre…)
+Farine préparée
+090104 Céréales autrement transformées
+Semoule de froment
+Semoule de maïs
+Semoule d’autres céréales
+Son et résidus de meuneries
+0902 Riz décortiqué
+090201 Riz graine décortiqué
+Riz décortiqué
+Riz transformé (brun, semi-blanchi et blanchi)
+090202 Brisure de riz
+0903 Produits à base de manioc
+090301 Farine de manioc
+090302 Tapioca
+090303 Bâton de manioc (ebobolo, myondo, mintoumba)
+090304 Produits de l’hydrolyse de l’amidon
+Amidon et fécules
+Autres produits de l’amidonnerie
+Résidus d’amidonnerie
+10 PRODUITS DU CACAO, DU CAFE, DU THE ET DU SUCRE
+1001 Produit du cacao, chocolaterie et confiseries
+100101 Cacao en masse
+100102 Beurre de cacao
+100103 Poudre (ou tourteaux) de cacao sucré, ou non
+100104 Chocolat et préparations à base de chocolat
+Chocolat préparé pour la consommation (chocolat liquide, sec,
+lacté en poudre, en pâte à tartiner, etc.)
+Préparation à base de chocolat
+100105 Confiseries diverses
+Fruits confits, bonbon, sucrerie, gomme à mâcher
+1002 Café décortiqué et transformé
+100201 Café décortiqué arabica
+100202 Café décortiqué robusta ; Coques et pellicules de café
+100203 Café torréfié
+38
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 40
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+100204 Café conditionné (moulu ou soluble, près à la consommation ; concentré de café, etc.)
+1003 Thé conditionné
+100300 Thé conditionné
+Vert ou noir, y. c. Extraits et essences de thé
+Infusion (tisane de plantes)
+1004 SUCRE
+100401 Sucre brut
+Sucre raffiné ou conditionné
+Sirop de sucre et Sucre divers et pas les sirop de fruits
+100402 Mélasses
+Résidus de sucre
+Succédanés du sucre
+11 OLEAGINEUX ET ALIMENTS POUR ANIMAUX
+1101 Huiles brutes et tourteaux
+110101 Huile brute de palme
+110102 Noix de palmiste
+110103 Huile brute de coton
+110104 Huile brute de maïs, autres huiles brutes (tournesol, olive, soja, arachide, coco, amande de
+palmiste, etc.)
+110105 Tourteaux divers
+Tourteaux de coton, coprah, arachide
+Linters de coton,
+Caséine végétale (protéine de tourteau)
+1102 Huiles raffinées, margarines et matières grasses
+110201 Huile raffinée de palme
+110202 Huile de palmiste
+110203 Huile raffinée de coton
+110204 Huile raffinée d'arachide
+110205 Huile raffinée de maïs
+110206 Autres huiles raffinées végétales et animales ( soja, coco, tournesol, olive, foie de morue,
+navette, moutarde, lin, etc.)
+110207 Margarine et matières grasses diverses
+Huiles et graisses hydrogénées
+Cire végétale et résidus divers
+Margarine
+Pâte d’arachide
+Farines oléagineuses
+1103 Aliments pour animaux
+110300 Provende et autres aliments pour animaux
+Provende
+Aliments composés pour animaux de ferme
+Fourrages déshydratés
+Aliments pour animaux de campagne
+Aliments pour animaux de compagnie
+Foins et paille
+Farines de poisson
+Farine de viande
+Résidus de brasseries et de distilleries
+12 PRODUITS A BASE DE CEREALES
+1201 Pain, Biscuits et Pâtisserie
+120101 Pain et pâtisserie fraîche
+120102 Biscuits et biscottes
+Biscottes et pains grillés
+Biscuits sucrés
+Autres gâteaux de conservation y c pain d’épices et pain grillé
+120103 Beignets de tout genre (farine de blé, de mais, de manioc, de haricot, soufflés de maïs de mil,
+de riz, etc.)
+1202 Pâtes Alimentaires
+120200 Pâtes alimentaires
+Pâtes alimentaires non préparés
+Pâtes alimentaires préparées
+Couscous divers
+13 PRODUIT LAITIERS; PRODUITS A BASE DE FRUITS ET LEGUMES ET
+AUTRES PRODUITS ALIMENTAIRES
+1301 Produits laitiers
+130101 Lait (sous toutes les formes)
+Lait liquide (Entier, écrémé, demi- écrémé)
+39
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 41
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Lait sec
+Lait concentré
+Lait caillé
+130102 Crème de lait, lait fermenté, yaourts et desserts lactés frais
+130103 Beurre et fromage
+130104 Glaces, sucettes, et autres produits laitiers
+Glaces et sorbets
+Sucettes
+Caséine
+Lactose
+Autres produits dérivés du lait
+1302 Produits à base de fruits et légumes et autres produits alimentaires
+130201 Jus naturels de fruits et légumes (orange, mangue, goyave, corossol, raisin, tomate, oseille,
+carotte, ananas, pamplemousse, gingembre, etc.)
+130202 Préparations et conserves de fruits et légumes
+Frites de pommes de terres (ships)
+Autres produits à base de pommes de terres
+Légumes congelés ou surgelés
+Légumes provisoirement conservés
+Légumes déshydratés
+Légumes appertisés
+Légumes conservés dans le vinaigre
+Préparations et conserves de fruits
+Fruits congelés ou surgelés
+Confitures et compotes (marmelade, gelées)
+Fruits à coque grillés ou salés
+Fruits conservés provisoirement
+Conserves de fruits
+Noix d’amande
+Fruits de climats tempérés
+Déchets de fruits et façons de préparations de légumes et fruits
+130203 Condiments et assaisonnements
+Assaisonnements (cubes, etc.)
+Vinaigres
+Sauces et moutardes
+Mayonnaise et Ketchup
+Epices préparées (e.g. curry)
+130204 Produits alimentaires divers
+Aliments adaptés à l’enfant et aliments diététiques
+Soupes et potages
+Œufs en conserves
+Levures, additifs et épaississants alimentaires
+Produits alimentaires n c .a
+14 Boissons
+1401 Bière et Malt
+140101 Bière
+140102 Malt
+1402 Autres boissons alcoolisées
+140201 Vins et champagnes
+Champagnes
+Vins
+Tartre et lie de vin
+140202 Autres boissons alcoolisées moderne
+Spiritueux et liqueurs
+Cidres
+Vermouths
+Alcool éthylique dénaturé ou non
+140203 Boissons alcoolisées artisanales
+Vin de palme ou de raphia
+Odonthol (vin de palme distillé), alcool de maïs distillé : Arki
+Bière de mil : bilbili
+Bière de maïs : kwata
+Autres alcools traditionnels n.c.a.
+1403 Boissons non alcoolisés et eaux minérales
+140301 Eaux minérales
+140302 Boissons non alcoolisées diverses
+y. c Sirops et boissons non alcoolisées gazeuses
+40
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 42
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+15 Tabac
+1501 Tabac préparé
+150100 Tabac coupé, séché, tabac de cape
+y. c. le chanvre
+1502 Produits à base de tabac
+150201 Cigares et cigarettes
+150202 Autres produits à base de tabac
+Autres tabacs manufacturés
+Déchets de tabac
+Tabac à priser
+Tabacs pour la pipe
+16 PRODUITS DE L'INDUSTRIE TEXTILE ET DE L'HABILLEMENT
+1601 Coton égrené
+160101 Coton égrené
+160102 Graine de coton
+16002 Fibres et Fils textiles
+160201 Fibres de cotons préparés
+160202 Fils de coton
+160203 Fibres et fils d'autres textiles
+Fibre de soie
+Fils de laine
+Fils de lin
+Fils à coudre ou à tricoter en fibre naturelle
+Fils de jute
+Fils de sisal
+Fils de chanvre
+Fils de filaments artificiels ou synthétiques
+Fils de fibre synthétiques (Tergal, acrylique)
+Fils de mélange de fibre synthétiques et de laine
+Fils de fibre artificielle
+Fils à coudre ou à tricoter en fibre artificielle ou synthétique
+Déchets de textiles naturels
+Déchets de soie
+Déchets de laine et poils
+Effilochés de laine et poils
+Déchets et effilochés de coton
+1603 Tissus et Maillots
+160301 Tissus et maillots de coton
+Tissus de coton
+Etoffe à maille
+Velours, peluches et étoffes bouclées en bonneterie
+Etoffe en bonneterie (bas, chaussettes, maillot, slips, à mall, etc.)
+Articles chaussants à maille en coton
+Pull-overs et articles similaires en coton
+160302 Tissus et maillots d'autres textiles
+Tissus en laine, soie, et autres textiles
+Tissus en fibres de filaments
+Tissus en en fibres synthétiques
+Tissus en fibres artificielles
+Tissus spéciaux
+Articles chaussants à mailles non coton
+Pull-overs et articles similaires non coton
+1604 Autres produits textiles
+160401 Linge de maison, articles d'ameublement et de literie
+Couvertures
+Linge de lit (draps, taies d’oreillers, tours de lit, etc.)
+Linges de table (nappes et napperons, mouchoirs de table, etc.)
+Linge de toilette ou de cuisine (serviettes, gants de toilette, serpière, etc.)
+Rideau et voilage
+Petits articles textiles (oreiller, couvre-lit, couette, poufs, édredon, couvre-pieds, sac de
+couchage, tentes, voile pour embarquement, articles de campement, chiffons à épousseter,
+etc.)
+160402 Tapis et moquettes
+Tapis à points noués
+Tapis tissés
+Tapis touffetés
+Tapis aiguilletés, nappés ou floqués
+41
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 43
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+160403 Ficelles, filets et cordages
+Ficelles, cordes et cordages
+Filets à maille
+Chiffons, déchets de cordages
+Réparation de filets
+160404 Autres articles confectionnés en textiles
+Articles techniques confectionnés en textiles
+Articles textiles d’emballage (sac en jute, en sisal.)
+Bâches, stores, pavillonneries
+Parachutes
+Sacs de couchages et articles de literie garnis (matelas, oreillers, housses)
+Articles textiles confectionnés divers
+Réparation de bâches
+Articles de rubanerie et passementerie (franges, patchwork, épaulettes, etc.)
+Dentelles et tulles
+Broderie, Feutre
+Produits de l’ouaterie (pansements, serviettes et tampons hygiéniques
+Fils et cordes élastiques
+Fils et filés métallisés
+Tissus en fils et filés métallisés
+Fils guipés, guipures, chenilles et chaînettes
+Nappes tramées pour pneumatique
+Tissus enduits ou imprégnés
+Textiles techniques divers
+Pièces textiles de capitonnages (bourrures de laine, soie, coton...)
+Mèche, manchon à incandescences, tuyaux pour pompes, courroies transporteuses ou de
+transmission, gazes et toiles à bluter, étamines pour filtrer
+Articles confectionnés en oboom
+1605 Articles d'habillement
+160501 Vêtements en textiles
+Ensembles de travail pour homme et femme
+Pantalons et salopettes de travail pour homme et femme
+Blouses et tabliers de travail
+Vêtements de dessus
+Manteaux, costumes, vestes et pantalons en mailles
+Manteaux en tissus pour hommes et femme
+Costumes, vestes en tissus pour homme
+Boubous en tissus pour homme et femme
+Pantalons en tissus pour homme et femme
+Vêtements de dessus pour femme
+Boubous et pagnes pour femme
+Robes et jupes en tissus pour femme
+Pantalons en tissus pour femme
+Chemises et chemisettes en maille pour homme
+Vêtements de dessous, en maille pour homme
+Chemisiers en maille pour femme
+Autres vêtements de dessous en maille pour femme (slips, caleçon, chemises de nuit, robe de
+chambre, soutien - gorge, etc.)
+Chemises et chemisettes en tissus pour homme
+Autres vêtements de dessous en tissus pour homme
+Chemise en tissus pour femme
+Lingerie en tissus pour femme (soutien-gorge et corsets)
+Tee-shirts et maillots de corps
+Layette et vêtements pour enfant
+Vêtements de sport ou de loisir (ski, maillots, culots de bain.)
+Accessoires de l’habillement en tissus (gants, ceintures, châles, cravates, foulard,
+chapeaux....
+Articles de la chapellerie (en maille, tissu, cuir ou fourrure)
+160502 Vêtements en cuir et fourrures
+Vêtements en cuir
+Pelleterie apprêtée (tannage, apprêts, épilation, rasage, blanchiment et teinture)
+Articles en fourrures (tapis, poufs non garnies, peaux à polir pour l’industrie)
+pelleteries factices
+17 CUIRS ET CHAUSSURES
+1701 Cuirs et articles en cuir
+170101 Cuirs et peaux travaillés
+Cuirs et peaux spécialement surfacés
+Cuirs et peaux de bovins et d’équidés
+Cuirs et peaux d’ovins, caprins, ovins, porcins et d’autres animaux
+42
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 44
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Cuirs reconstitués
+Cuirs et peaux de serpent
+Cuirs et peaux de crocodiles
+Peaux de chamois
+déchets de cuir
+170102 Articles de voyages et de maroquinerie
+Fabrication et vente de pièces de harnais
+Articles de sellerie et de bourrellerie
+Bagages, articles de voyage et petits articles de maroquinerie
+bracelet de montre, non métalliques
+Articles techniques en cuir
+1702 Chaussures et articles chaussants
+170200 Chaussures et articles chaussants
+Bottes en caoutchouc ou en matière plastique
+Chaussures en caoutchouc ou en matière plastique
+Chaussures de ville en cuir
+Chaussures à dessus en textile
+Chaussures de tennis, basket, football et similaires
+Chaussures de sécurité
+Autres chaussures (samara...)
+Accessoires et parties de chaussures (guêtres, jambières, semelles, lacets.)
+18 PRODUITS DU TRAVAIL DU BOIS ET ARTICLES EN BOIS
+1801 Produits du sciage
+180101 Bois sciés
+180102 Bois profilés, traités et autres sous-produits du bois
+Bois profilés
+Laine et farine de bois
+Plaquettes et particules de bois
+Poteaux de ligne imprégnés (AES-Sonel, Camtel)
+Traverses en bois imprégnés pour la voie ferrée
+Sciures et déchets de bois (copeaux de bois, etc.)
+Service d’imprégnation à façon des bois
+1802 Placages et panneaux à base de bois
+180200 Placages, contre-plaqués et panneaux à base de bois
+Contre-plaqués
+Panneaux de particules
+Panneaux plaqués revêtus mélaninés ou stratifiés
+Panneaux de fibre
+Feuille de plaquage
+Bois densifié
+1803 Produits en bois assemblés
+180301 Charpentes et menuiseries de bâtiment en bois
+Portes et fenêtres en bois (volets et leur encadrement..)
+Panneaux pour parquets
+comptoirs en bois
+Eléments de menuiserie et charpenterie en bois (poutres, poutrelles, chevron, solive, escalier,
+rampes d’escalier, bardeaux, moulures en bois)
+180302 Emballages et objets divers en bois
+Palettes en bois
+Autres emballages en bois (plateaux de chargement, caisses, caissettes, cageots, tonneaux,
+cuves)
+Manches, montures et outils en bois
+Articles pour la table et la cuisine en bois
+Articles décoratifs en bois
+Autres ouvrages en bois (brosses, balais, cercueils, embouchoir et tendeur pour chaussures,
+tabourets, tire lire, écrins et étuis pour bijouterie en bois cadre, cintre, échelle en bois)
+180303 Ouvrages en liège, vannerie ou sparterie
+Liège naturel débité
+Articles en liège naturel, bouchon en liège
+Demi-produits en liège aggloméré
+Articles en liège aggloméré
+Articles de vannerie et sparterie (corbeilles, paniers, paillasson, natte, articles décoratifs en
+rotin, paille, sparte, etc.)
+19 PAPIERS ET CARTONS ; PRODUITS EDITES ET IMPRIMES
+1901 Papiers, cartons et articles en papier et carton
+190101 Pâte à papier
+Pâte chimique de bois, à dissoudre
+Pâte chimique de bois à la soude
+43
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 45
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Pâte chimique de bois au bisulfite
+Autres pâte à papier (pâte à papier à base de déchets de papier, pâte kraft)
+190102 Papiers à usage graphique et articles de papeterie
+Papier journal
+Papier à la main
+Papier support
+Papier d’impression - écriture ni couché ni enduit
+Papier pour report ou adhésif, conditionné
+Enveloppes et poches postales (carte - lettre, etc.)
+Autres articles de papeterie (boite, pochette, articles de correspondance,
+stencils complets, papier carbone, papier pour impression, etc.)
+190103 Papiers kraft et domestiques, articles à usage sanitaire ou domestique
+Papiers sanitaires et domestiques
+Articles en papiers sanitaires et domestiques (serviettes à maquiller, mouchoirs, essuie-
+mains, serviettes de tables, serviettes et tampons hygiéniques couches pour bébé
+Papier kraftliner
+Papier pour cannelure
+Articles cellulosiques d’hygiène
+Vaisselle en papier carton (plateaux, plat, tasse, gobelet..)
+Papier et carton multicouches
+Autres papiers et cartons kraft
+190104 Papiers et cartons élaborés; Autres papiers et cartons
+Revêtements muraux en papier
+Revêtements muraux en textile
+Papiers spéciaux divers
+Papiers frictionnés
+Papiers et cartons assemblés
+Papiers et cartons crêpés ou plissés
+Papiers couchés d’impression - écriture
+Papiers et cartons kraft couchés
+Papiers pour report
+Papiers et cartons revêtus
+Papiers et cartons décorés
+190105 Emballages en papier ou en carton et autres articles en papier ou en carton
+Emballages en papier ou en carton
+Carton ondulé
+Emballages en papier (sachets, sacs.)
+Emballages en carton ondulé
+Emballages en carton compact
+Autres articles de bureau (classeur, chemise, registre, bloc note, agenda...)
+Autres articles en papier ou en carton
+Couvres - parquets à base de papier ou de carton
+Etiquettes
+Blocs filtrants
+Déchets et débris de papiers et cartons
+Autres articles à bases de pâtes, papier ou carton
+1902 Produits de l'Edition, Produits Imprimés ou Reproduits
+190201 Livres, journaux et revues périodiques
+Livres en feuillets
+Livres thématiques
+Encyclopédies et dictionnaires
+Atlas
+Cartes géographiques
+Partitions musicales
+Journaux
+Revues périodiques (traités et brochures, magazines....)
+190202 Enregistrements sonores
+Enregistrements du son sur disque
+Enregistrements du son sur support magnétique
+190203 Autres produits édités
+Cartes postales illustrées
+Photos, illustrations, gravures
+Produits d’édition divers (affiches, reproductions d’oeuvres d’art, etc.)
+190204 Papeterie scolaire et commerciale
+Livres scolaires, cahiers, carnets, registres scolaires, etc.
+190205 Travaux d'impression de la presse et autres produits de l'imprimerie
+Travaux d’impression de la presse
+Imprimés fiduciaires (timbres, billets chéquiers, etc.)
+Imprimés commerciaux (affiches, magazines et autres périodiques, prospectus, imprimés
+44
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 46
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+publicitaires, formulaires imprimés)
+Travaux d’impression à façon de livre (album, agenda, livres, brochure, catalogues, atlas,
+etc)
+Travaux d’impression à façon d’autres produits (calendriers, cartes géographiques,
+partitions musicales, cartes de visites, cartons d’invitation, papiers à lettre, autres
+imprimés.......)
+190206 Travaux de façonnage, de finition, de reliure travaux de composition et de photogravures
+Façonnage, finition des feuillets imprimés (leur pliage, assemblage, perforage,
+massicotage dorage ; finition des ouvrages de papier et carton imprimés, etc.)
+Façons de compositions et de photogravures (composition de textes et d’images sur film,
+papier ; gravures pour impression sur papier textiles ; typographie.etc.)
+Supports d’impression (matrices typographiques, plaques de cylindres pour impression.)
+Autres travaux graphiques (transparents pour rétroprojecteur, ébauches, maquettes, produits
+de communication graphique
+190207 Reproduction d'enregistrements audio vidéo et informatique
+Reproduction d’enregistrements sonores
+Reproduction d’enregistrements vidéo
+Reproduction d’enregistrements informatiques
+20 PRODUITS DU RAFFINAGE, DE LA COKEFACTION ET DES INDUSTRIES NUCLEAIRES
+2000 Produits pétroliers raffinés
+200001 Essences
+200002 Kérosène
+200003 Gazoles
+200004 Fuel lourd
+200005 Fuel léger
+200006 Autres produits pétroliers raffinés liquides
+Carburéacteurs
+Autres fractions légères
+Autres fractions moyennes
+Huile de pétroles
+pétrole lampant
+raffinage à façon
+200007 Produits pétroliers raffinés gazeux
+Butane et propane
+Autres produits pétroliers raffinés gazeux (éthane, éthylène, propylène etc.)
+200008 Graisses lubrifiantes, coke de pétrole et bitumes
+Graisses lubrifiantes (vaseline, paraffine, etc.)
+Cokes de pétrole et bitumes
+200009 Cokes et goudrons ; produits des industries nucléaires
+Coke
+Goudron
+produits des industries nucléaires
+21 PRODUITS CHIMIQUES
+2101 Produits chimiques de base
+210101 Gaz industriels
+Gaz industriels simples (azote, oxygène, hydrogène, argon, etc.)
+Gaz industriels composés
+Air liquide ou comprimé
+210102 Produits chimiques inorganiques de base
+Métalloïdes
+Composés métalloïdes
+Eléments chimiques métalliques
+Anhydres et acides minéraux
+Oxydes hydroxydes et bases minérales
+Sels métalliques halogènes
+Halogénures métalliques
+Hypochlorites, chlorates et perchlorates (eau de Javel, lessives )
+Sulfures et sulfates métalliques
+Phosphates ou nitrates
+Carbonates
+Autres sels, eau distillée
+Autres produits chimiques inorganiques de base (sels cyanurés et persels, peroxyde
+d’hydrogène, phosphures, carbures, hydrures, métaux des terres rares, soufre raffiné,
+cendres de pyrites, quartz et pierres synthétiques)
+210103 Produits chimiques organiques de base
+Hydrocarbures et dérivés halogénés, sulfonés, nitrés ou nitrosés
+Alcools, phénols et leurs dérivés
+Acides carboxyliques et dérivés
+Composés organiques à fonction azotée
+45
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 47
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Composés organo - inorganiques, hétérocycliques et esters
+Composés organiques à fonction oxygénée n.c.a.
+Composés organiques de filières spécifiques
+Lessives résiduaires de l’industrie de la pâte à papier
+210104 Produits azotés et engrais
+Acide nitrique et ammoniac
+Composés nitrés
+Engrais azotés
+Engrais phosphatés
+Engrais potassiques
+Engrais d’origine animale ou végétale
+Nitrates de sodium
+Engrais complexes et composés
+210105 Matières plastiques et caoutchouc synthétique
+Polyéthylène
+Polystyrène
+Polychlorure de vinyle
+Polymères divers (d’éthylène, de chlorure de vinyle, de styrène, etc.)
+Polypropylène
+Polyacétate de vinyle
+Polyacryliques
+Polyamides
+Résines uréiques et mélaminiques
+Autres résines (phénoliques, époxydes, alkydes polyesters, Thermoplastiques)
+Silicones
+Déchets et débris de matières plastiques
+Caoutchouc synthétique
+210106 Colorant, pigment et agents tannants
+opacifiant et oxydes minéraux, matières colorantes (colorant de synthèse, teinture végétales)
+matières tannantes.
+2102 SAVONS, DETERGENTS ET PRODUITS D'ENTRETIEN
+210201 Savons et détergents
+Agents tensioactifs
+Savons
+Produits de nettoyage
+210202 Glycérine et produits d'entretien ménager
+Glycérine
+Désodorisants ménagers
+Cires artificielles
+Produits à briller
+Produits à récure
+210203 Parfums et produits de toilette
+Parfums et eaux de toilette
+Produits pour les lèvres et les yeux
+Préparations pour manucure et pédicure
+Poudres, fards, fonds de teint
+Produits pour les soins de la peau
+Produits capillaires
+Préparations capillaires n. c. a.
+Dentifrices et produits d’hygiène buccale
+Autres produits de toilette et d’hygiène
+2103 Autres produits chimiques
+210301 Produits agrochimiques
+Insecticides
+Herbicides
+Inhibiteurs de germination
+Désinfectants
+Fongicides et produits phytosanitaires divers
+210302 Peintures, vernis, adjuvants, encres d'imprimerie
+Peintures et vernis en phase acqueuse
+Peintures et vernis en milieu non acqueux
+Autres préparations colorées (adjuvants, encre d’imprimerie, couleurs, etc.)
+Mastics de vitriers
+Colles et gélatines
+210303 Produits pharmaceutiques
+Salicylés
+Substances actives azotées
+Composés hétérocycliques
+Sulfamides
+46
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 48
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Sucres chimiquement purs
+Vitamines
+Hormones
+Alcaloïdes
+Antibiotiques
+Produits opothérapiques
+Médicaments
+Sérums et vaccins
+Contraceptifs chimiques
+Réactifs de laboratoire
+Pansements et catguts
+210304 Allumettes, articles pyrotechniques, produits pour la photographie et autres produits
+chimiques à usage industriel
+Poudres et explosifs
+Accessoires de mise à feu
+Artifices
+Articles pyrotechniques
+Huiles essentielles
+Produits chimiques pour la photographie (plaques, pellicules non exposés, réparations, etc.)
+Supports de données (pour l’enregistrement du son, de l’image, etc.)
+Huiles et graisses modifiées chimiquement
+Encres de bureau et de dessin
+Lubrifiants spéciaux et produits pour l’automobile
+Produits chimiques divers à usage industriel
+210305 Fibres artificielles ou synthétiques
+Fibres et câbles artificiels ou synthétiques
+Fils artificiels ou synthétiques continus de haute ténacité
+Autres fils de filament d artificiels ou synthétiques
+Monofilaments et lames en matières artificielles ou synthétiques
+Déchets de fibres artificiels ou synthétiques
+22 PRODUITS EN CAOUTHOUC ET EN PLASTIQUE
+2201 Caoutchouc sec
+220100 Caoutchouc sec
+2202 Produits et articles en caoutchouc
+220200 Pneumatiques et ouvrages en caoutchouc
+Pneumatiques neufs (Pneumatiques, chambres à air, bandages, profilés…)
+Pneumatiques usagés
+Pneumatiques rechapés
+Caoutchouc régénéré
+Demi - produits en caoutchouc
+Tuyaux et tubes en caoutchouc
+Courroies en caoutchouc
+Tissus caoutchoutés
+Vêtements en caoutchouc
+Articles divers en caoutchouc
+Déchets de caoutchouc
+2203 Produits en matières plastiques
+220301 Tubes, profilés, plaques et autres éléments en matière plastique pour la construction
+Profilés en matières plastiques
+Tubes et tuyaux en matières plastiques
+Plaques, feuilles et films en matières plastiques
+Plaques, feuilles et films en plastiques cellulaires ou renforcées
+220302 Emballages et articles divers en matière plastique
+Sacs, sachets et housses en polyéthylène
+Sacs, sachets et housses en autres matières plastiques
+Boite, caisses, casiers en matières plastiques
+Bouteilles, bidons et bonbonnes en matières plastiques
+Autres articles d’emballage en matières plastiques
+Eléments en matières plastiques pour la construction
+Constructions préfabriquées en matières plastiques
+Vêtements en matières plastiques
+Autres articles en matières plastiques (rubans adhésifs, verreries d’éclairages, articles
+ménagers ou scolaires, casques de sécurités, pièces isolantes)
+Façons de travail des matières plastiques
+23 AUTRES PRODUITS MINERAUX NON METALLIQUES ET MATERIAUX DE CONSTRUCTION
+2301 Ciment
+230100 Ciment
+Clinkers de ciment
+Ciments broyés
+47
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 49
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+2302 Autres produits non métalliques
+230201 Chaux et plâtre
+Chaux
+Plâtre
+230202 Verre et articles en verres
+Verre coulé ou flotté
+Verre plat transformé
+Verre de sécurité
+Miroirs et vitrages isolants
+Verre creux (récipients, bouteilles, verres à boire, verrerie domestique, etc.)
+Fibres de verre
+Tubes et moulages en verre
+Verres techniques (ampoules, tubes, verre optique, verrerie scientifique et de laboratoire,
+etc.)
+230203 Produits en céramique
+Articles céramiques à usage domestique ou ornemental
+Appareils sanitaires en céramique
+Pièces isolantes et isolatrices en céramique
+Produits céramiques à usage technique
+Produits céramiques réfractaires
+Carreaux en céramique
+230204 Autres matériaux de construction
+Briques en terre cuite
+Tuiles en terre cuite
+Produits divers en terre cuite
+Eléments en béton pour la construction
+Constructions préfabriquées en béton
+Eléments en plâtre pour la construction
+Béton prêt à l’emploi
+Mortiers et bétons secs
+Ouvrages en fibre - ciment ( bois - ciment, amiante - ciment, etc.)
+Autres ouvrages en béton ou en plâtre
+Ouvrages en pierre (marbre, travertin, etc.)
+230205 Produits minéraux divers non métalliques
+Produits abrasifs
+Amiante manufacturée
+Produits asphaltés
+Produits bitumineux
+Produits graphités
+Corindon artificiel
+Produits minéraux non métalliques divers
+24 PRODUITS METALLIQUES DE BASE ET OUVRAGES EN METAUX
+2400 Produits métalliques et ouvrages en métaux
+240001 Produits sidérurgiques
+Produits sidérurgiques primaires ( fontes, éponges de fer, ferromanganèse carburé)
+Lingots et demi - produits en acier non allié
+Lingots et demi - produits en acier allié
+Produits plats CECA
+Fil machine
+Barres laminées à chaud
+Profilés laminés à chaud
+Palplanches et rails
+Scories, laitier et battitures ferreuses
+Ferrailles, vieilles fontes et déchets ferreux
+Déchets lingotés
+240002 Tubes et tuyaux en fonte ou en acier
+Tubes en fonte
+Accessoires de tuyauterie en fonte
+Tubes en acier
+Accessoires et tuyauterie en acier
+240003 Produits de la transformation de l'acier
+Barres étirées en acier non allié
+Barres et profilés étirés en acier allié
+Autres barres et profilés étirés en acier inoxydable
+Feuillards laminés à froid en acier non allié
+Laminés plats revêtus non CECA
+Autres laminés à froid non CECA
+Profilés formés à froid
+Fils tréfilés
+48
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 50
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Ferro-alliages de base
+Ferro-alliages particuliers
+Grenailles et poudre de fer
+Demi - produits forgés
+Barres forgées en acier non allié
+Profilés soudés ou moulés
+Barres et profilés divers
+240004 Métaux précieux
+Argent
+Or
+Platine et autres métaux précieux
+Plaqués ou doublés d’or
+Plaqués ou doublés d’argent et de platine
+Déchets et débris de métaux précieux
+240005 Alumine
+240006 Aluminium et demi-produits en aluminium
+Aluminium brut
+Poudres et paillettes d’aluminium
+Barres et profilés en aluminium
+Fils en aluminium
+Tôles et bandes en aluminium
+Feuilles et bandes minces en aluminium
+Tubes et tuyaux en aluminium (cendres, résidus, etc.)
+240007 Autres métaux non ferreux
+Plomb, zinc et étain bruts
+Demi - produits en plomb, zinc ou étain
+Déchets de plomb, zinc ou étain
+Cuivre brut
+Demi - produits en cuivre
+Déchets de cuivre
+Nickel brut (mattes de nickel et sinter, nickel et alliages, etc.)
+Demi - produits en nickel
+Autres métaux non ferreux
+Déchets de métaux non ferreux divers
+Pièces de fonderie en fonte
+Pièces de fonderie en acier
+Pièces de fonderie en métaux légers
+Pièces de fonderie en d’autres métaux non ferreux
+240008 Ouvrages en métaux
+Constructions métalliques (pylônes, ossatures métalliques, tabliers de pont et passerelles,
+etc.)
+Menuiseries et fermetures métalliques
+Réservoirs, radiateurs et chaudières pour le chauffage central
+Entretien et réparation des réservoirs, des chaudières pour le chauffage central
+Produits de la chaudronnerie
+Générateurs de vapeur, non montés
+Réacteurs nucléaires, non montés
+Installation, entretien et réparation de générateurs de vapeur
+Produits de la forge, de l’emboutissage et du frittage
+Traitement et revêtement des métaux
+Opérations de mécanique générale
+Articles de coutellerie (couteaux, ciseaux, rasoirs, couverts pour table, etc.)
+Outillage (outils à main agricoles, lames de scies, outillage pour machine, etc.)
+Serrures et ferrures (barillets, cadenas, verrous, gonds, paumelles, chanières…)
+Récipients métalliques
+Emballages légers métalliques
+Articles en fils métalliques (câbles, grillages, toiles, pointes, clous, aiguilles, épingles)
+Vis, boulons, chaînes et ressorts
+Ouvrages divers en métaux (baignoires, éviers, coffres forts. hélices, armes blanches...)
+25 MACHINES, APPAREILS ELECTRIQUES ET MATERIELS NCA
+2500 Machines, appareils électriques et matériels NCA
+250001 Equipements mécaniques et machines d'usage général
+Moteurs et turbines
+Installation, entretien et réparation de moteurs et turbines
+Pompes, compresseurs et systèmes hydrauliques
+Installation, entretien et réparation de pompes, compresseurs et systèmes hydrauliques
+Articles de robinetterie
+Engrenages et organes mécaniques de transmission
+Fours et brûleurs
+49
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 51
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Matériel de levage et de manutention
+Equipements aérauliques et frigorifiques industriels
+Appareils de distillation et de filtration
+Equipements de conditionnement, pesage ou projection
+Appareils divers d’usage général (centrifugeuses, matériel de calandrage)
+Matériel fonctionnant sur la base d’une différence de température
+Parties d’appareils d’usage général
+Machines à laver la vaisselle
+Installation, entretien et réparation de machines d’usage général
+250002 Machines agricoles et machines-outils
+Motoculteurs
+Tracteurs agricoles ou forestiers
+Matériel agricole de travail du sol (matériel de labour, de semis et de plantation,,
+distributeurs d’engrais)
+Tondeuses à gazon
+Matériel de récolte
+Matériel pour la protection des cultures
+Remorques agricoles
+Matériels agricoles divers (matériel de nettoyage, de tri, de criblage des œufs et des fruits,
+d’exploitation laitière, d’élevage, etc.)
+Pièces et parties de matériel agricole
+Installation, entretien et réparation de matériel agricole
+Machines - outils complexes d’usinage des métaux
+Machines - outils spécifiques travaillant par enlèvement de métaux
+Machines - outils de finition, formage, pressage ou étirage des métaux
+Machines - outils à bois et autres matériaux
+Machines - outils portatives
+Matériel pour le soudage et le brasage
+Parties et accessoires de machines - outils
+Installation, entretien et réparation de machines - outils
+250003 Autres machines d'usage spécifique et armes et munitions
+Machines pour métallurgie
+Installation, entretien et réparation de machines pour métallurgie
+Matériels de mines
+Matériels de terrassement
+Autres matériels de travaux publics
+Matériels pour la préparation des minéraux
+Tracteurs de chantier
+Parties de matériels pour l’extraction ou la construction
+Installation, entretien et réparation de matériels pour l’extraction ou la construction
+Machines pour l’industrie agro-alimentaire (écrémeuses, machines et appareils de laiterie,
+pour la minoterie, la préparation des boissons, etc.)
+Installation, entretien et réparation de machines pour l’industrie agro-alimentaire
+Machines de filature, tissage et tricotage
+Autres machines de l’industrie textiles et de la confection
+Machines pour le travail du cuir
+Machines à coudre domestiques
+Installation, entretien et réparation de machines de l’industrie textiles
+Machines pour les industries du papier et du carton
+Installation, entretien et réparation de machines pour les industries papetières
+Machines d’imprimerie
+Machines spécialisées n. c. a. (essoreuses à linges, séchoirs à papier et à bois, machines
+pour le travail du caoutchouc, moules et modèles, etc.)
+Installation, entretien et réparation de machines spécialisées diverses
+Armes et munitions
+Installation, entretien et réparation d’armes
+250004 Appareils domestiques
+Réfrigérateurs et congélateurs domestiques
+Lave - vaisselles domestiques
+Lave - linges domestiques
+Couvertures chauffantes
+Hottes aspirantes et ventilateurs domestiques
+Autres appareils électriques domestiques ( aspirateurs et robots de cuisine, rasoirs
+électriques, fer à repasser, sèche - cheveux, chauffe - eau électriques, radiateurs, fours à
+micro - ondes, cuisinières électriques, résistances chauffantes, etc.)
+Appareils ménagers non électriques (cuisinières, chauffe - eau et fours à gaz.)
+Parties d’appareils électroménagers divers
+250005 Machines de bureau et matériel informatique
+Machines à écrire et à calculer
+Machines à reproduire et autres machines de bureau
+50
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 52
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Installation de machines de bureau
+Ordinateurs et équipements informatiques
+Installation d’équipements informatiques
+250006 Accumulateurs et piles électriques
+Piles électriques
+Accumulateurs électriques
+250007 Autres machines et matériels électriques
+Moteurs et génératrices à courant continu
+Moteurs et génératrices à courant alternatif
+Groupes électrogènes et convertisseurs rotatifs
+Transformateurs électriques
+Réactances électriques
+Parties de matériels électriques
+Installation, entretien et réparation de matériels et machines électriques
+Matériel de distribution et de commande électrique pour haute tension
+Matériel de distribution et de commande électrique pour basse tension (fusibles, coupe - cuits
+à fusibles, disjoncteurs, interrupteurs, douilles, prises de courants, etc.)
+Armoires de commande électrique
+Parties de matériel de distribution et de commande électrique
+Installation, entretien et réparation de matériel de distribution et de commande électrique
+Fils et câbles isolés
+Appareils d’éclairage, parties de lampes et d’appareils d’éclairage
+Faisceaux d’allumage
+Autres matériels électriques pour moteurs et véhicules
+Matériels électriques divers (isolateurs spéciaux, électrodes de carbone, appareils de
+signalisation électroaimants et aimants permanents, etc.)
+Installation, entretien et réparation de matériels électriques divers
+26 EQUIPEMENTS ET APPAREILS AUDIOVISUELS ET DE COMMUNICATION ; INSTRUMENTS
+MEDICAUX, D'OPTIQUE ET D'HORLOGERIE
+2600 Equipements et appareils audiovisuels et de Communication ; Instruments médicaux,
+d'optique et d'horlogerie
+260001 Equipements, appareils audiovisuels et de communication
+Condensateurs
+Résistances électriques non chauffantes
+Circuits imprimés
+Tubes électroniques
+Diodes et transistors
+Circuits intégrés électroniques
+Parties de composants
+Matériel professionnel de radiocommunication, de radiodiffusion et de télévision
+Matériels de téléphonie
+Parties de matériel téléphonique
+Installation, entretien et réparation de matériel professionnel
+Récepteurs et autoradio
+Récepteurs de télévision
+Electrophones, magnétophones, magnétoscopes
+Matériel électroacoustique
+Parties et accessoires d’appareils de réception, d'enregistrement ou de reproduction du son
+et de l’image
+Installation, entretien et réparation d’appareils de réception, enregistrement ou reproduction
+du son et de l’image
+260002 Instruments médicaux, de précision, d'optique et d'horlogerie
+Matériel de radiologie et médicochirurgical
+Mobilier médicochirurgical
+Installation, entretien et réparation de matériel médicochirurgical
+Instruments de mesure et de contrôle
+Installation, entretien et réparation d’instruments de mesure et de contrôle
+Contrôle automatique de processus industriels
+Matériel optique et photographique
+Installation, entretien et réparation de matériel optique ou photographique professionnel
+Montres, pendules et horloges
+Installation, entretien et réparation d’instruments de mesures de temps
+27 MATERIEL DE TRANSPORT
+2701 Véhicules routiers
+270101 Véhicules automobiles
+Moteurs pour véhicules automobiles
+Voitures particulières
+Autobus et autocars
+Véhicules utilitaires pour le transport des marchandises
+51
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 53
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Véhicules utilitaires spécifiques (tombereaux, automoteurs, camions - grues
+270102 Carrosseries et remorques, pièces et accessoires pour véhicules automobiles (et leurs
+moteurs)
+Carrosseries automobiles
+Remorques et caravanes
+Parties de remorques et semi-remorques
+Equipements pour moteurs thermiques
+Autres équipements mécaniques pour automobiles
+Equipements pour carrosseries automobiles
+270103 Motocycles, cycles et équipements pour cycles
+Cyclomoteurs
+Motocycles de cylindrée supérieure à 50 cm3
+Motocycles spéciaux
+Pièces et équipements pour motocycles
+Cycles
+Equipements pour cycles
+270104 Autres véhicules routiers
+Véhicules pour invalides
+Fauteuils roulants
+Equipements pour fauteuils roulants
+Matériels de transport n.c.a. (brouettes, diables, charrettes à bras, remorques de
+manutention, véhicules à traction animale, etc.)
+2702 Autres matériels de transport
+270201 Matériel de transport naval, entretien et réparation naval
+Bâtiments de guerre
+Navires marchands
+Bateaux de pêche et bateaux divers
+Plates formes
+Structures flottantes
+Bateaux à dépecer
+Réparation navale
+Bateaux de plaisance
+Entretien et réparation de bateaux de plaisance
+270202 Matériel ferroviaire roulant
+Matériel de traction
+Automotrices
+Voitures et wagons
+Pièces et parties de matériel ferroviaire roulant
+Entretien et réparation de matériel ferroviaire roulant
+270203 Matériels aéronautiques, Entretien et réparation des aéronefs
+Moteurs pour aéronefs (turboréacteurs, turbopropulseurs, moteurs à explosion pour avion,
+etc. )
+Planeurs et ballons
+Avions et hélicoptères
+Lanceurs et satellites
+Parties et éléments d’avions
+Entretien et réparation d’aéronefs
+28 MEUBLES, PRODUITS DES INDUSTRIES DIVERSES
+2801 Meubles
+280101 Meubles en bois
+Mobilier de bureau en bois
+Mobilier en bois pour magasins
+Meubles meublants en bois
+Meubles divers en bois
+280102 Autres meubles et prestations connexes à l'ameublement ;
+Sièges (fonctionnels, d’ameublement d’intérieur, partie de sièges)
+Mobilier métallique de bureau et de magasin
+Meubles de cuisine (armoires, buffets, etc.)
+Meubles divers (métalliques, en plastique, etc.) et parties de meubles
+Prestations connexes de l’ameublement
+Sommiers et matelas
+2802 Produits des industries diverses
+280201 Monnaies et bijoux
+Monnaies et médailles
+Diamants, perles fines et pierres précieuses
+Diamants industriels travaillés
+52
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 54
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Articles de bijouterie, joaillerie et orfèvrerie
+Parures en diamant
+280202 Instruments de musique
+Pianos et clavecins
+Instruments à corde
+Orgues et accordéons
+Instruments à vent
+Instruments de musique électroniques
+Instruments de musique divers
+Equipements musicaux divers
+Parties et accessoires d’instruments de musique
+Réparation et entretien d’instruments de musique
+280203 Articles de sport; jeux et jouets
+Articles de sport
+Poupées et peluches
+Trains électriques et modèles réduits
+Jouets divers pour enfants
+Jeux de société et divertissement
+280204 Articles manufacturés divers
+Articles de brosserie
+Manèges et attractions foraines
+Articles d’écriture et de bureau
+Parapluies, boutons et fermetures à glissière
+Linoléum
+Postiches et perruques
+Allumettes et articles à flamme (briquets, allumeurs, etc.)
+Articles divers n. c. a. (landaux, poussettes, bougies, chandelles, cierges, articles de coiffure
+et de toilette, mannequin, vitrine, etc.)
+280205 Services de récupération
+Pas de produits spécifiques
+29 ELECTRICITE, GAZ ET EAU
+2901 Electricité, gaz et supports énergétiques
+290100 Electricité et supports énergétiques
+Electricité
+Combustibles nucléaires irradiés
+Services annexes à la distribution d’électricité
+Supports énergétiques (liquides de réfrigérateurs, glace hydrique, air comprimé)
+2902 Eau distribuée
+290200 Eau distribuée
+Eau potable
+Eaux non potables
+Services annexes à la distribution d’eau
+30 TRAVAUX DE CONSTRUCTION
+3001 Travaux de préparation de sites et de construction d'ouvrages de bâtiment ou de génie
+civil
+300101 Préparation des sites
+Travaux de démolition et de préparation
+Travaux de terrassement
+Travaux de préparation de sites miniers
+Travaux de forages et de sondages
+300102 Logements
+Travaux de construction de maisons individuelles
+Travaux de construction d’immeubles résidentiels
+300103 Bâtiments non résidentiels
+Travaux de construction de bâtiments industriels
+Travaux de construction de bâtiments commerciaux
+Travaux de construction de bâtiments divers
+300104 Autres travaux de construction
+Travaux de construction de ponts ; viaducs et tunnels
+Travaux de construction de réseaux et lignes à longue distance
+Travaux de construction de réseaux urbains ou locaux
+Travaux de construction d’ouvrages industriels
+Travaux de construction d’installations sportives et d’autres structures
+Travaux de montage sur chantier d’éléments préfabriqués
+Travaux sur toiture
+Travaux d’étanchéification
+Travaux de construction de chaussées (voies routières, voies ferrées, piste d’aviation,
+marquage des chaussées)
+Travaux de construction de sols sportifs ou récréatifs
+53
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 55
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Travaux maritimes et fluviaux (ports, barrages, digues, canaux et aqueduc, écluses, etc)
+Montage d’échafaudages
+Travaux de construction spécialisée en fondations et forages
+Travaux de béton
+Montage d’ossatures métalliques
+Travaux courants de maçonnerie
+Travaux de construction spécialisée divers
+3002 Travaux d'installation et de finition
+300201 Travaux d'installation (électrique, plomberie, etc.)
+Travaux d’installation électrique dans les bâtiments
+Travaux d’installation de systèmes d’alarme et d’antennes
+Travaux d’installation d’ascenseurs
+Travaux d’installation de lignes de communication
+Travaux d’isolation
+Travaux d’installation de chauffage et de climatisation
+Travaux d’installation de distribution d’eau
+Travaux d’installation de distribution de gaz
+Montage de clôtures et de grilles
+Travaux d’installation de systèmes électriques divers
+Travaux d’installation divers
+300202 Travaux de finition
+Travaux de plâtrerie
+Travaux de menuiseries et de fermetures de bâtiments
+Montage de menuiseries métalliques
+Aménagement intérieur en bois ou en matière plastique
+Revêtement maçonné des sols et des murs
+Revêtement intérieur des sols et des murs
+Travaux de marbrerie décorative intérieure
+Travaux de vitrerie et de miroiterie de bâtiment
+Travaux de peinture en bâtiment
+Travaux de ferronnerie décorative intérieure
+Travaux de nettoyage extérieur des bâtiments
+Agencement de lieux de vente
+Location avec opérateur de matériel de construction
+31 Vente en gros et en détail
+3101 Vente de véhicules, des accessoires et carburant
+310100 vente de véhicules, des accessoires et carburant
+Vente en gros de véhicules automobiles
+Vente en détail de véhicules automobiles
+Services d’intermédiaires du commerce en véhicules automobiles
+Vente en gros d’équipements automobiles
+Vente en détail d’équipements automobiles
+Services intermédiaires du commerce d’équipements automobiles
+Vente en gros de motocycles
+Vente en détail de motocycles
+Services d’intermédiaire du commerce de motocycles
+Vente au détail de carburants
+3102 Vente en gros de produits agricoles bruts et d'animaux vivants
+310200 Vente en gros de produits agricoles bruts et d'animaux vivants
+Vente en gros de bois bruts
+Vente en gros de céréales et aliments pour le bétail (semences, oléagineux, céréales)
+Vente en gros de fleurs et plantes
+Vente en gros d’animaux vivants
+Vente en gros de peaux et cuirs
+Vente en gros de tabac non manufacture
+Vente en gros de café, cacao, thé et épices
+3103 Autres ventes en gros
+310300 Autres ventes en gros
+Vente en gros de fruits et d’agrumes frais
+Vente en gros de viandes et produits à base de viande
+Vente en gros de produits laitiers, œufs, huiles
+Vente en gros de boissons
+Vente en gros de tabac et cigarettes
+Vente en gros de sucre, chocolat et confiserie
+Vente en gros de poissons, crustacés et mollusques
+Vente en gros alimentaires spécialisées diverses (fruits et légumes de conservation,
+produits de la boulangerie, produits diététiques, aliments pour animaux, etc.)
+Vente en gros de textiles
+Vente en gros d’articles d’habillement et de chaussures
+54
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 56
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Vente en gros d’appareils électroménagers et électriques divers
+Vente en gros d’appareils électroniques domestiques ( radio, télévision, chaînes,
+magnétoscopes, caméscopes, disques, bandes, disques compacts, etc.)
+Vente en gros de céramique, verrerie et de produits d’entretien
+Vente en gros de revêtements muraux
+Vente en gros de parfum et de produits de beauté
+Vente en gros de produits pharmaceutiques
+Vente en gros de biens de consommation non alimentaires divers
+Vente en gros de combustibles
+Vente en gros de minerais
+Vente en gros de produits métallurgiques
+Vente en gros de bois et de produits dérivés
+Vente en gros de matériaux de construction et d’appareils sanitaire
+Vente en gros de quincaillerie et de fournitures pour plomberie et chauffage
+Vente en gros de produits chimiques
+Vente en gros d’autres produits intermédiaires
+Vente en gros de déchets et débris
+Vente en gros de machines - outils
+Vente en gros d’équipements pour la construction
+Vente en gros de machines pour l’industrie textile et l’habillement
+Vente en gros de machines de bureaux et de matériel informatique
+Vente en gros d’autres équipements industriels
+Vente en gros de matériel agricole
+Autres ventes en gros spécialisées
+3104 Ventes au détail
+310400 ventes au détail
+Vente au détail de fruits et légumes frais
+Vente au détail de viandes et produits à base de viandes
+Vente au détail de poissons, crustacés et mollusques
+Vente au détail de pain, pâtisserie et confiserie
+Vente au détail de boissons
+Vente au détail de tabac et cigarettes
+Vente au détail d’autres produits alimentaires
+Vente au détail de produits pharmaceutiques
+Vente au détail d’articles médicaux et orthopédiques
+Vente au détail de parfums et de produits de beauté
+Vente au détail de textiles
+Vente au détail d’articles d’habillement
+Vente au détail de chaussures et d’articles en cuir
+Vente au détail de meubles et d’équipements du foyer
+Vente au détail d’appareils électroménagers et de radiotélévision
+Vente au détail de quincaillerie, peinture et verre
+Vente au détail de livres, journaux et papeterie
+Vente au détail de produits n. c. a.( matériel de bureau, ordinateurs, articles optiques et
+photographiques, articles d’horlogerie ou de bijouterie, articles de sport et de loisir, jeux et
+jouets, revêtements de sols et de murs, fleurs et plantes, animaux de compagnie, bois,
+charbon de bois, combustibles liquides ou gazeux, objets d’art, etc.)
+32 Réparations
+3201 Réparations de véhicules
+320100 Réparations de véhicules et motocycles
+Entretien et réparation mécaniques de voitures particulières
+Entretien et réparation électriques de voitures particulières
+Réparation et échange de pneus de voitures particulières
+Entretien et réparation de la carrosserie de voitures particulières
+Entretien et réparation d’autres véhicules automobiles
+Entretien et réparation de motocycles
+Autres services relatifs aux véhicules automobiles (lavage, vidange, échange de pare - brises,
+réparation de chambres à air, remorquage, assistance, etc.)
+3202 Réparations des biens personnels et domestiques
+320200 Réparations des biens personnels et domestiques
+Réparation de chaussures et articles en cuir
+Réparation d’appareils électriques à usage domestique (téléviseurs, appareils de radio,
+chaînes, magnétoscopes, appareils électroménagers, etc.)
+Réparation de montres, horloges et bijoux
+Réparation d’articles personnels et domestiques n. c. a. (jouets, clés, vêtements en textiles
+33 SERVICES D’HOTELLERIE ET DE RESTAURATION
+3301 Services d’hôtellerie
+330100 Services d’hôtellerie
+55
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 57
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Pensions et demi - pensions
+Hébergement hôtelier
+Hébergement en auberges
+Hébergement sur terrains de camping
+Hébergements divers (centres de vacances, centres de villégiature, logements meublés,
+services des voitures - lits)
+3302 Services de restauration
+330201 Services de restaurants
+Services de restauration ( à la table, en self - service, ambulant, à la sauvette )
+330202 Services des débits de boissons et cafés
+34 TRANSPORTS ET COMMUNICATION
+3401 Transports ferroviaires
+340101 Transport ferroviaire passagers
+340102 Transport ferroviaire marchandises
+Transport ferroviaire frigorifique
+Transport ferroviaire de produits pétroliers
+Transport ferroviaire d’autres vrac liquides et gazeux
+Transport ferroviaire de marchandises conteneurisées
+Transport ferroviaire de courrier
+Transport ferroviaire de marchandises en vrac sec
+Transport ferroviaire d’autres marchandises
+3402 Transport de voyageurs par taxis
+340200 Transport de voyageurs par taxis
+3403 Autres transports routiers de voyageurs
+340301 Autres transports routiers de voyageurs urbains
+Location d’autocars avec conducteurs
+Excursions en autocar
+Transport par véhicules à traction humaine ou animale
+Transport terrestre de passages, non réguliers
+340302 Autres transports routiers de voyageurs interurbains
+Transport routier interurbain de passagers, réguliers
+Transport routier interurbain de passagers, spécial
+3404 Transports routiers de marchandises
+340400 Transports routiers de marchandises
+Transport de marchandises spécialisé ( de produits frigorifiques, de produits pétroliers,
+d’autres vracs liquides et gazeux, de marchandises conteneurisées, de meubles, de
+marchandises en vrac sec, de produits spécialisés n.c.a. )
+Transport de marchandise non spécialisées ( de courrier, de marchandises non spécialisés
+n.c.a )
+3405 Autres transports
+340501 Transports par eau
+Transports maritimes et côtiers
+Transport maritime et côtier de passages
+Transport de passagers par transbordeur
+Transport maritime de passagers
+Transport maritime et côtier de marchandises
+Transport maritime et côtier frigorifique
+Transport maritime et côtier de produits pétroliers
+Transport maritime et côtier d’autres vrac liquides et gazeux
+Transport maritime et côtier de marchandises conteneurisées
+Transport maritime et côtier de courrier
+Transport maritime et côtier de marchandises en vrac sec
+Transport maritime et côtier de marchandises n.c.a.
+Transports fluviaux
+Transports fluviaux de voyageurs
+Transport fluvial de passagers par bac
+Transport fluvial de passagers
+Transport fluvial de marchandises
+Transport fluvial réfrigéré
+Transport fluvial de produits pétroliers
+Transport fluvial d’autres vrac liquides et gazeux
+Transport fluvial conteneurisé
+Transport fluvial de marchandises diverses
+Autres services de transport fluviaux
+Location de péniches avec équipage
+Services poussage ou de remorquage fluvial
+340502 Transports aériens
+Transport aérien régulier
+Transport aérien de passagers
+56
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 58
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Transport aérien régulier de marchandises (courrier, marchandises conteneurisées et
+marchandises diverses)
+Transport aérien non régulier
+Transport aérien non régulier de passagers
+Transport aérien non régulier de marchandises
+Location d’avions avec pilote
+3406 Services annexes et auxiliaires des transports
+340601 Services de manutention, d'entreposage et des infrastructures de transports
+Services de manutention des marchandises conteneurisées
+Services de manutention de marchandises non conteneurisées
+Services d’entreposage
+Services d’entreposage frigorifique
+Services d’entreposage en vrac de liquides et de gaz
+Services d’entreposage en silo
+Autres services de stockage et d’entreposage
+Services des infrastructures de transport
+Services des infrastructures de transport terrestres
+Services des gares ferroviaires de voyageurs
+Services annexes des transports routiers
+Services des gares routières de voyageurs
+Services donnant lieu à des péages autoroutiers
+Services donnant lieu à des péages relatifs à des ouvrages d’art
+Services des parcs de stationnement temporaire
+Autres services annexes des transporst routiers
+Services portuaires, maritimes et fluviaux
+Services des installations portuaires
+Services de pilotage
+Services de remorquage portuaire
+Services d’aide à la navigation
+Services de sauvetage et de renflouement des navires
+Autres services annexes aux transports par eau
+Services aéroportuaires
+Services des installations aéroportuaires
+Contrôle de l’espace aérien
+Autres services annexes des transports aériens
+340602 Services des agences de voyages et organisation du transport de fret
+Services des agences de voyage
+Services organisés autoproduits
+Commercialisation de séjour ou de titres de transport
+Services d’information touristique
+Services des guides touristiques
+Organisation du transport de fret
+Courtage maritime
+Autres services d’agences de transport de fret
+Autres services logistiques spécialisés
+35 SERVICES DES POSTES ET TELECOMMUNICATIONS
+3500 Services des Postes et Télécommunications
+350001 Services des postes et de courrier
+Services de s postes nationales
+Acheminement de la presse
+Acheminement des lettres
+Acheminement des colis
+Services de guichet postal
+Autres services postaux
+Autres services de courrier
+Acheminement, hors postes nationales, de courrier
+Services des coursiers urbains
+350002 Services de télécommunications
+Services de téléphones publics pour appel locaux
+Services de téléphones publics interurbains
+Services de radiotéléphonie mobile
+Services de réseaux spécialisés
+Services de réseau dédiés
+Services de réseau transmission de données
+Services de messagerie électronique
+Autres services de télécommunications
+Services de diffusion d'émissions de télévision
+Services de diffusion d'émissions de radio
+Services d'interconnexion
+57
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 59
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Services de télé avertissement
+Services de téléconférence
+Services de télécommunications n.c.a.
+Transmission par câbles d'émission de radio, et de télévision
+36 Services Financiers
+3601 Services d'intermédiation monétaire et financière
+360101 Services d'intermédiation
+Gestion des grands fonds
+Contrôles des opérations bancaires
+Gestion des réserves de change
+Emission des billets de la banque centrale
+360102 Services sur commission
+Services interbancaires
+Services bancaires à la clientèle
+Autres services d'intermédiation monétaire n.c.a
+3602 Assurance (sauf sécurité sociale)
+360200 Assurance et services auxiliaires
+37 SERVICES IMMOBILIERS
+3701 Location de biens immobiliers
+370101 Services de logement
+Location de logements
+Location de terrains et d’autres biens immobiliers
+370102 Autres locations immobilières
+3702 Autres services immobiliers
+370200 Autres services immobiliers
+38 SERVICES PROFESSIONNELS, SCIENTIFIQUES ET TECHNIQUES
+3801 Location sans opérateurs (conducteurs, ou équipages)
+380100 Location de matériel de transport, de machines, équipements et de biens personnels et
+domestiques sans opérateurs
+Location de véhicules automobiles
+Location de camions
+Location de wagons et conteneurs
+Location de motocycles, caravanes et autres matériels de transport terrestre n.c.a.
+Location de matériels de transport par eau
+Location d’appareils de transport aérien
+Location de matériel agricole
+Location de machines et équipements pour la construction
+Location de machines de bureau et de matériel informatique
+Location de machines et équipements divers
+Location de biens personnels et domestiques : téléviseurs, magnétoscopes et matériels
+audiovisuels, bandes et cassettes vidéo, mobilier et équipements domestique, chaise, bâches,
+équipements récréatifs et de loisir, instruments de musique
+Location d’autres biens de consommation (y compris robes de mariée, chaussures…)
+3802 Services informatiques et Recherche - Développement
+380201 Services informatiques
+Services de conseils en configuration informatique
+Développements logiciels ; progiciels systèmes, utilitaires et applicatifs
+Conseils en développements logiciels
+Travaux d’analyse-programmation ; maintenance logicielle
+Autres services informatiques spécialisées
+Services de gestion et d’installations informatiques
+Traitement sur ordinateur
+Saisie des données et autres services informatiques
+Services des banques de données
+Entretien et réparation de machines de bureau et de matériel informatique
+Autres services rattachés à l’informatique
+380202 Recherche et Développement
+Recherche –développement en sciences physiques et naturelles : chimie et biologie ; sciences
+physiques et de l’ingénieur ; agronomie ; médecine et pharmacie ; sciences naturelles
+Recherche développement en sciences humaines et sociales : sociologie et psychologie, sciences
+culturelles, économie, droit, linguistique et langues, etc.
+3803 Services fournis principalement aux entreprises
+380301 Services juridiques, comptables et conseil de gestion
+Services juridiques
+Services juridiques en droit pénal
+Services juridiques en droit civil
+Services juridiques en droit administratif
+Services juridiques sur marques et brevets
+Rédaction d’actes juridiques (statut de société…)
+Autres services juridiques (avocats, notaires, huissiers de justice…)
+58
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 60
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Services comptables
+Audits et services comptables
+Services d’audit financier
+Services de vérification comptable
+Services d’établissement d’état financiers
+Autres services comptables
+Tenue de livres de comptes
+Service de conseil fiscal
+Etude de marché et sondages
+Etude de marché
+Sondages d’opinion
+Conseil pour les affaires et la gestion
+Conseil en gestion administration générale
+Conseil en gestion financière
+Conseil en gestion commerciale
+Conseil en gestion des ressources
+Conseil en gestion de la production
+Conseil en relations publiques
+Autres conseils en matière de gestion
+Gestion déléguée des projets
+Services d’arbitrage et de conciliation
+Services de gestion n.c.a
+Services d’encadrement agricole
+Administration d’entreprises
+380302 Services d'architecture et d'ingénierie; contrôle et analyses techniques
+Services d’architecture et d’ingénierie
+Plans et dessins techniques
+Services architecturaux
+Etudes et conseils architecturaux
+Etablissements de plans architecturaux
+Autres services architecturaux
+Services d’ingénierie spécialisés
+Etudes et conseils techniques préalables
+Etudes techniques pour la construction des bâtiments
+Etudes techniques pour la construction d’ouvrages de génie civil
+Etudes techniques spécialisés pour l’équipement des bâtiments
+Etudes techniques pour les projets industriels
+Etudes techniques n.c.a
+Services d’ingénierie intégrée
+Services architecturaux urbains et paysagers
+Aménagement urbain
+Architecture paysagère
+Assistance à la maîtrise d’ouvrage de construction
+Prestations scientifiques et techniques liées aux sciences de la terre
+Etudes et conseil en sciences de la terre (géologie)
+Services de prospection souterraine (minière)
+Services de prospection de surface
+Services d’établissement de cartes
+380303 Publicité
+Gestion de support de publicité
+Services des agences publicitaires
+Autres services publicitaires
+380304 Autres services divers fournis aux entreprises
+Sélection et fourniture du personnel
+Services de placement
+Recrutement des cadres
+Autres services de placement
+Mise à disposition de personnel
+Mise à disposition de personnel de bureau
+Mise à disposition de personnel domestique
+Mise à disposition de personnel ouvrier et technique
+Mise à disposition de personnel paramédical
+Mise à disposition de personnel n.c.a
+Enquêtes et sécurité
+Services d’enquête et de recherche
+Conseil en sécurité
+Services en surveillance
+Services de transport de fonds
+Services de gardiennage et protection
+Autres services de sécurité
+59
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 61
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Services de nettoyage
+Services de nettoyage (locaux, véhicules de transport)
+Désinfection, dératisation, désinsectisation
+Nettoyage de vitres
+Nettoyage courant de locaux
+Nettoyage spécialisé
+Ramonage
+Autres services de nettoyage (NC les textiles, pâtis…)
+Services photographiques
+Photographies et films (développement et tirage)
+Surfaces sensibles exposées, non développées
+Surfaces sensibles exposées et développées pour offset
+Microfilms et microfiches
+Autres surfaces sensibles exposées et développées
+Services de prises de vue
+Services de machines automatiques
+Services de studio photographiques
+Services photographiques publicitaires
+Services photographiques pour cérémonie
+Services de photographie aérienne
+Autres services de photographie spécialisée
+Services de développement et de tirage
+Services de développement et de tirage photographique
+Services de développement de films cinématographiques
+Services de restauration, retouche et copie de photographie
+Autres services photographiques
+Services de conditionnement à façon
+Secrétariat, traduction et routage
+Secrétariat et traduction
+Services de réponses téléphoniques
+Services de duplication
+Services de traduction
+Services d’interprétation
+Services de secrétariat à façon
+Routage
+Gestion de listes d’adresse
+Expédition de documents
+Autres services aux entreprises
+Informations financières sur la clientèle
+Recouvrement des factures
+Conception de modèles
+Services des intermédiaires divers
+Organisation de foires et salons
+Services rendus principalement aux entreprises n.c.a
+39 SERVICES D'ADMINISTRATION PUBLIQUE ET DE SECURITE SOCIALE
+3901 Services d'administration publique générale et services fournis à la collectivité
+390101 Administration publique générale, économique et sociale
+Services exécutifs et législatifs
+Services budgétaires et fiscaux
+Planification économique et sociale
+Autres services d’administration publique générale
+Tutelle des activités sociales : éducation, santé, urbanisme, services culturels, récréatifs et
+sportifs
+Tutelle des activités économiques
+Services de soutien aux administrations y c administration et gestion du personnel
+390102 Services de prérogative publique
+Services diplomatiques et consulaires à l’étranger
+Aide économique fourni à l’étranger
+Aide militaire fourni à l’étranger
+Service des forces armées et de défense civile
+Services de police et autres services de maintien de l’ordre et de sécurité
+Service d’administration de la justice et services d’administration pénitentiaire
+Lutte contre l’incendie et autres services de protection civile y c lutte cotre désertification
+3902 Service de sécurité sociale
+390200 Service de sécurité sociale
+Service des prestations maladie, maternité et invalidité
+Service des pensions retraites
+Service des prestations de chômage ***
+Services des prestations familiales
+60
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 62
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+40 Education
+4000 Education
+400001 Enseignement primaire et maternelle
+Enseignement préscolaire
+Enseignement primaire
+400002 Enseignement secondaire
+Enseignement secondaire général
+Enseignement secondaire technique et professionnel
+400003 Enseignement supérieur
+Enseignement technique et professionnel post secondaire
+Enseignement supérieur général
+400004 Autres enseignements
+Services des écoles de conduite : auto-écoles et écoles de pilotage
+Formation des adultes et formation continue
+Autres enseignements n.c.a : enseignement religieux, artistique, etc.
+41 SERVICES DE SANTE ET D'ACTION SOCIALE
+4101 Services de santé humaine
+410101 Services hospitaliers
+Hospitalisation chirurgicale et médicale
+Hospitalisation en gynécologie-obstétrique
+Hospitalisation en moyen séjour
+Hospitalisation en psychiatrie
+Autres services hospitaliers
+410102 Soins médicaux et dentaires; Autres services de santé humaine
+Consultations et traitements par des praticiens généralistes ou spécialistes
+Soins orthodontiques et autres soins dentaires
+Soins des sages-femmes ; soins infirmiers ; rééducation fonctionnelle et thérapies diverses
+Services d’ambulances
+Services des maisons de santé
+Analyses biologiques médicales
+Services des banques d’organes
+Autres services concernant la santé humaine
+Soins et thérapies des praticiens traditionnels
+4102 Services vétérinaires
+410200 Services vétérinaires
+Services vétérinaires pour animaux de compagnie
+Services vétérinaires pour animaux d’élevage
+4103 Services d'action sociale
+410300 Services d'action sociale
+Services d’action sociale avec hébergement
+Accueil des personnes âgées
+Accueil des handicapés
+Accueil des enfants en difficultés
+Accueil d’adultes en difficulté et autres hébergements sociaux
+Services d’action sociale sans hébergement :
+Services des crèches et garderies d’enfants
+Services des centres de jour pour handicapés
+Services d’action sociale en faveur des enfants
+Services d’assistance sociale
+Services de réadaptation professionnelle
+Autres services sociaux sans hébergement
+42 SERVICES COLLECTIFS, SOCIAUX ET PERSONNELS
+4201 Assainissement, voirie et gestion des déchets
+420100 Assainissement, voirie et gestion des déchets
+Epuration des eaux usées
+Vidanges des fosses sceptiques
+Collecte et traitements des déchets
+Services de voirie : balayage des rues, Entretien de l’éclairage public etc.
+4202 Services fournis par les organisations associatives
+420201 Services fournis par les organismes économiques
+Services fournis par les organisations patronales et consulaires
+Services fournis par les organisations professionnelles
+Services fournis par les syndicats de salariés
+420202 Services fournis par les organisations religieuses, politiques et autres organisations
+associatives n.c.a
+Services fournis par les organisations religieuses
+Services fournis par les organisations politiques
+Services militants pour une cause d’intérêt général
+61
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 63
+Branche Classe Produit NOMENCLATURE DES PRODUITS
+Services de défense d’intérêt spéciaux
+Services fournis par les associations de jeunes
+Autres services fournis par des organisations associatives n.c.a.
+4203 Services récréatifs, culturels et sportifs
+420301 Services de radio et de télévision; films et services cinématographiques
+Films cinématographiques
+Films vidéo enregistrés
+Services de production et de réalisation de films
+Prestations techniques pour le cinéma et la télévision : prise de son, effets spéciaux,
+montage, etc.
+Distributions de films
+Projections de films et de bandes vidéo
+Service de radio
+Service de télévision
+420302 Services de spectacle
+Art dramatique et musique
+Présentation des spectacles
+Gestion des salles de spectacles
+Manèges forains et parcs d’attraction
+Services de bals et discothèques
+Cirques et autres services de spectacles
+420303 Autres services culturels (y. c. les agences de presse)
+Services des agences de presse
+Services des bibliothèques, de médiathèques et d’archivage
+Services des musées, monuments et expositions
+Services des zoos et réserves et jardins botaniques
+420304 Services liés au sport
+Gestion d’installation sportive
+Autres services sportifs
+Promotion de manifestations sportives
+Organisation de manifestations sportives
+Services sportifs divers
+420305 Services récréatifs
+Jeux de hasard et d’argent
+Services récréatifs des infrastructures de plage
+Services récréatifs et loisirs divers
+4204 Services personnels
+420401 Services de coiffure, soins de beauté et entretien corporel
+Services de coiffure
+Soins esthétiques et autres soins de beauté
+Entretien corporel : soins thermaux et thalassothérapie
+420402 Autres services personnels
+Services de blanchisserie, teinturerie
+Services funéraires
+Autres services personnels : agences matrimoniales, activités des astrologues, voyants,
+écrivains publics, porteur, cireur etc.
+4205 Services domestiques Autoproduits par le ménage en tant qu’employeur de personnel
+domestique
+420500 Services domestiques (cuisinière, jardiniers, répétiteurs, chauffeurs, femme de ménage)
+43 SERVICES EXTRA- TERRITORIAUX
+4300 Services Extra- territoriaux
+430000 Services extra- territoriaux
+Ambassades, consulats étrangers, institutions communautaires, organismes internationaux à
+statut diplomatique.
+62
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 64
+NOMENCLATURE DES ZONES DE RECENSEMENT
+Code
+Nombre d'entreprises
+Région de recensement Code Région Département Départ Numéro de la ZS Numéro de ZC Numéro de la ZR
+estimé en 2007
+ement
+001 150
+002 150
+003 150
+01 004 150
+005 150
+006 150
+007 150
+008 150
+009 150
+010 150
+011 150
+02 012 150
+013 150
+014 150
+015 150
+016 150
+017 150
+018 150
+DOUALA 01 WOURI 01 019 150
+03 020 150
+021 150
+022 150
+023 150
+01 024 150
+025 150
+026 150
+027 150
+028 150
+04 029 150
+030 150
+031 150
+032 150
+033 150
+034 150
+035 150
+036 150
+05 037 150
+038 150
+039 150
+040 150
+041 150
+042 150
+043 150
+06 044 150
+045 150
+046 150
+047 150
+63
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 65
+Code
+Nombre d'entreprises
+Région de recensement Code Région Département Départ Numéro de la ZS Numéro de ZC Numéro de la ZR
+estimé en 2007
+ement
+048 150
+049 150
+050 150
+051 150
+052 150
+07 053 150
+054 150
+055 150
+056 150
+057 150
+058 150
+059 150
+060 150
+08 061 150
+062 150
+063 150
+064 150
+DOUALA 01 WOURI 01 065 150
+066 150
+067 150
+09 068 150
+069 150
+070 150
+071 150
+072 150
+073 150
+074 150
+075 150
+10 076 150
+077 150
+078 150
+079 150
+080 150
+01
+081 150
+082 150
+083 150
+11 084 150
+085 150
+086 149
+087 150
+088 150
+089 150
+090 150
+091 150
+092 151
+12 093 151
+094 157
+095 150
+096 150
+097 91
+64
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 66
+Code
+Nombre d'entreprises
+Région de recensement Code Région Département Départ Numéro de la ZS Numéro de ZC Numéro de la ZR
+estimé en 2007
+ement
+13 098 151
+099 150
+100 151
+13 101 150
+102 150
+103 150
+104 150
+105 150
+106 150
+107 150
+108 150
+14 109 150
+DOUALA 01 WOURI 01 110 150
+111 150
+112 150
+113 150
+114 150
+115 150
+15 116 151
+117 150
+118 150
+119 150
+120 73
+121 131
+122 150
+16 123 150
+124 55
+125 108
+126 294
+127 295
+128 295
+129 295
+17 130 295
+131 295
+132 295
+133 295
+134 273
+135 283
+02 136 295
+YAOUNDE 02 MFOUNDI 02 18 137 295
+138 295
+139 295
+140 295
+141 295
+142 295
+143 296
+144 295
+19 145 298
+146 296
+65
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 67
+Code
+Nombre d'entreprises
+Région de recensement Code Région Département Départ Numéro de la ZS Numéro de ZC Numéro de la ZR
+estimé en 2007
+ement
+147 296
+148 296
+149 296
+150 293
+151 274
+152 292
+20 153 294
+154 251
+155 280
+156 295
+157 295
+158 295
+159 295
+160 295
+161 311
+21 162 295
+163 295
+164 295
+165 295
+YAOUNDE 02 MFOUNDI 02 166 295
+167 295
+168 295
+169 295
+22 170 295
+171 295
+172 295
+173 295
+174 295
+175 295
+176 295
+177 295
+23 178 295
+179 295
+180 313
+181 297
+182 297
+183 297
+02
+184 297
+185 297
+186 286
+24 187 290
+188 290
+189 283
+190 293
+191 293
+192 293
+193 293
+25 194 244
+195 279
+196 279
+66
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 68
+Code
+Nombre d'entreprises
+Région de recensement Code Région Département Départ Numéro de la ZS Numéro de ZC Numéro de la ZR
+estimé en 2007
+ement
+197 363
+198 312
+199 309
+200 218
+201 206
+202 206
+203 203
+26 204 303
+205 303
+206 303
+YAOUNDE 02 MFOUNDI 02 207 294
+208 254
+209 307
+345
+210 160
+211 160
+212 100
+VINA 03 213 100
+214 159
+28 215 120
+ADAMAOUA 03 03
+MBERE 04
+FARO-ET-
+05
+DEO
+216 237
+MAYO-
+06
+BANYO
+DJEREM 07
+HAUTE-
+08 217 118
+SANAGA
+218 194
+LEKIE 09 219 90
+220 195
+MBAM-ET-
+10 221 192
+INOUBOU
+MBAM-ET-
+11 222 56
+KIM
+MEFOU-ET-
+12 223 100
+AFAMBA
+CENTRE MEFOU-ET-
+12
+HORS 04 AFAMBA, 04
+29 224 126
+YAOUNDE NYONG-ET-
+15
+MFOUMOU
+NYONG-ET-
+14 225 129
+KELE
+MEFOU-ET-
+13
+AKONO,
+226 73
+NYONG-ET-
+14
+KELE
+NYONG-ET-
+227 151
+SO'O
+16
+NYONG-ET-
+228 150
+SO'O
+67
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 69
+Code
+Nombre d'entreprises
+Région de recensement Code Région Département Départ Numéro de la ZS Numéro de ZC Numéro de la ZR
+estimé en 2007
+ement
+BOUMBA-
+17 229 121
+ET-NGOKO
+HAUT- 230 179
+18
+NYONG 231 36
+KADEY 19 30 232 158
+EST 05 05
+233 100
+234 86
+LOM-ET-
+20 235 188
+DJEREM
+236 188
+237 182
+238 131
+239 130
+240 130
+DIAMARE 21
+241 130
+242 130
+31 243 128
+LOGONE-
+22 244 176
+ET-CHARI
+EXTREME- 06 06
+MAYO-
+NORD 23 245 58
+DANAY
+MAYO-
+24 246 69
+TSANAGA
+MAYO-
+25 247 115
+SAVA
+MAYO-
+26 248 88
+KANI
+249 154
+250 151
+MOUNGO 27
+251 173
+32 252 53
+NKAM, 28
+LITTORAL
+07 SANAGA 07 253 144
+HORS DOUALA
+MARITIME 29
+254 150
+SANAGA-
+29
+MARITIME
+255 150
+256 169
+257 169
+258 169
+BENOUE 30 259 169
+33 260 169
+NORD 08 08 261 169
+262 180
+FARO, 31
+263 89
+MAYO-REY 32
+MAYO-
+33 33 264 149
+LOUTI
+68
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 70
+Code
+Nombre d'entreprises
+Région de recensement Code Région Département Départ Numéro de la ZS Numéro de ZC Numéro de la ZR
+estimé en 2007
+ement
+BUI 34 265 112
+MENCHUM 35 34 266 54
+BOYO 36 267 84
+268 101
+269 101
+270 101
+35 271 101
+272 101
+MEZAM 37
+273 101
+NORD-OUEST 09
+09 274 101
+275 101
+276 101
+277 121
+NGO- 38
+KETUNJIA, 278 123
+MOMO 39
+DONGA-
+40 34 279 140
+MANTUNG
+BAMBOUTOS 41 280 168
+HAUT- 281 99
+42
+NKAM 36 282 103
+283 131
+MENOUA 43
+284 131
+285 100
+286 100
+287 68
+288 70
+289 129
+MIFI 44
+290 129
+OUEST 10 10 37 291 129
+292 129
+293 129
+294 129
+HAUTS-
+45 295 79
+PLATEAUX
+KOUNG- 46 36
+KHI, 296 94
+NDE 47
+297 68
+NOUN 48 298 123
+299 124
+DJA-ET-
+49 300 209
+LOBO
+MVILA, 50
+VALLEE DU 301 190
+SUD 11 NTEM 51 11
+38
+MVILA, 50
+VALLEE DU 302 100
+NTEM 51
+OCEAN 52 303 223
+69
+Recensement Général des Entreprises (RGE) : document de Nomenclatures
+
+PDF PAGE 71
+Code
+Nombre d'entreprises
+Région de recensement Code Région Département Départ Numéro de la ZS Numéro de ZC Numéro de la ZR
+estimé en 2007
+ement
+304 92
+305 208
+39 306 206
+307 158
+40 308 158
+309 158
+310 158
+FAKO 53 311 158
+39 312 158
+313 103
+314 160
+SUD OUEST 12 12 315 147
+MANYU,
+54 316 74
+LEBIALEM
+317 176
+MEME 56 318 170
+40 319 173
+57
+KOUPE-ET-
+MANENGOUBA , 320 122
+NDIAN 58
+70
+Recensement Général des Entreprises (RGE) : document de Nomenclatures

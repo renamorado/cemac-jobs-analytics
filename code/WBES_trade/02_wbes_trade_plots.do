@@ -278,8 +278,8 @@ foreach metric in exporter_share export_intensity import_participation two_way_t
             plotregion(color(white)) graphregion(color(white)) ///
             bgcolor(white) xsize(7.5) ysize(4.8)
 
-        graph export "${OUTPUTDIR}/figures/cemac_wbes_trade_`metric'.pdf", replace
-        graph export "${OUTPUTDIR}/figures/cemac_wbes_trade_`metric'.png", replace
+        graph export "${OUTPUTDIR}/figures/cemac_wbes_trade_`metric'.pdf", name(Graph) replace
+        graph export "${OUTPUTDIR}/figures/cemac_wbes_trade_`metric'.png", name(Graph) replace
     restore
 }
 

@@ -1,0 +1,22 @@
+isic4_section,broad_sector,broad_sector_label,plot_color,plot_symbol
+A,1,Agriculture,27 158 119,circle
+B,2,Mining,117 112 179,diamond
+C,3,Manufacturing,44 123 182,square
+D,4,Utilities,230 171 2,triangle
+E,4,Utilities,230 171 2,triangle
+F,5,Construction,208 28 139,Oh
+G,6,Trade,217 95 2,Th
+H,7,Transport,102 166 30,Sh
+I,10,Other services,102 102 102,Dh
+J,8,Information,102 166 30,plus
+K,9,Finance,117 112 179,x
+L,10,Other services,102 102 102,Dh
+M,10,Other services,102 102 102,Dh
+N,10,Other services,102 102 102,Dh
+O,10,Other services,102 102 102,Dh
+P,10,Other services,102 102 102,Dh
+Q,10,Other services,102 102 102,Dh
+R,10,Other services,102 102 102,Dh
+S,10,Other services,102 102 102,Dh
+T,10,Other services,102 102 102,Dh
+U,10,Other services,102 102 102,Dh

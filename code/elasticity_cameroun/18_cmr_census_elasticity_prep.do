@@ -10,7 +10,7 @@ set more off
         Data/Analysis/CMR_census_cleaned.dta
 
     Outputs:
-        Data/Analysis/cmr_census_elasticity_clean.dta
+        Data/Analysis/cmr_census_isic4_division_elasticity_clean.dta
 
     Notes:
         This file creates the log variables, sample flags, and sector support
@@ -47,8 +47,11 @@ if "${PROJECT_ROOT}" == "" {
     do "code/01_setup.do"
 }
 
+capture log close cmrcensusprep
+log using "${LOGDIR}/18_cmr_census_isic4_division_prep.log", text replace name(cmrcensusprep)
+
 local input_file "${DATADIR}/Analysis/CMR_census_cleaned.dta"
-local output_file "${DATADIR}/Analysis/cmr_census_elasticity_clean.dta"
+local output_file "${DATADIR}/Analysis/cmr_census_isic4_division_elasticity_clean.dta"
 local min_sector_firms 30
 local min_group_firms 10
 
@@ -56,17 +59,11 @@ confirm file "`input_file'"
 
 use "`input_file'", clear
 
-foreach var in firmid_census hq_sample employment annual_turnover nacam ///
-    nacam_label_short_display nacam_label_display data_export review_flag ///
+foreach var in firmid_census hq_sample employment annual_turnover isic4_sector_id ///
+    isic4_label_short_display isic4_label_display broad_sector review_flag ///
     census_exporter {
     confirm variable `var'
 }
-
-keep firmid_census hq_sample employment annual_turnover nacam ///
-    nacam_label_display nacam_label_short_display data_export review_flag ///
-    census_exporter employment_missing employment_zero employment_negative ///
-    turnover_missing turnover_zero turnover_negative ///
-    census_export_turnover census_export_zero census_export_missing
 
 assert !missing(firmid_census)
 isid firmid_census
@@ -77,21 +74,25 @@ assert inlist(census_exporter, 0, 1) if !missing(census_exporter)
 generate double ln_emp = ln(employment) if employment > 0
 generate double ln_annual_turnover = ln(annual_turnover) if annual_turnover > 0
 
-* The elasticity sample is restricted to headquarters with a harmonized NACAM
-* sector and positive employment and turnover.
+* Headquarters with reviewed ISIC divisions and positive employment/turnover.
+* NACAM overlap is retained only as an audit flag, not a sample restriction.
 generate byte admin_overlap_hq = hq_sample == 1 & !missing(nacam)
-generate byte sample_elasticity = admin_overlap_hq == 1 ///
+generate byte legacy_sample_elasticity = admin_overlap_hq == 1 ///
+    & employment > 0 & annual_turnover > 0 ///
+    & !missing(ln_emp, ln_annual_turnover, nacam, nacam_label_short_display, data_export)
+generate byte classified_hq = hq_sample == 1 & !missing(isic4_sector_id)
+generate byte sample_elasticity = classified_hq == 1 ///
     & employment > 0 ///
     & annual_turnover > 0 ///
-    & !missing(ln_emp, ln_annual_turnover, nacam, ///
-        nacam_label_short_display, data_export)
+    & !missing(ln_emp, ln_annual_turnover, isic4_sector_id, ///
+        isic4_label_short_display, broad_sector)
 generate byte sample_exporter_elasticity = sample_elasticity == 1 ///
     & inlist(census_exporter, 0, 1)
 
 * Sector support keeps the workbook and production scripts from reporting slopes
 * for sectors with too little sample or no within-sector variation.
 preserve
-keep if admin_overlap_hq == 1
+keep if classified_hq == 1
 
 generate byte hq_row = 1
 generate byte usable_row = sample_elasticity == 1
@@ -127,7 +128,7 @@ collapse ///
         sd_ln_annual_turnover = ln_turnover_supported ///
         sd_ln_turnover_exporter = ln_turnover_exporter ///
         sd_ln_turnover_nonexporter = ln_turnover_nonexporter, ///
-    by(nacam nacam_label_display nacam_label_short_display data_export)
+    by(isic4_division isic4_sector_id isic4_label_display isic4_label_short_display broad_sector)
 
 replace sd_ln_turnover_exporter = 0 if exporter_firms <= 1
 replace sd_ln_turnover_nonexporter = 0 if nonexporter_firms <= 1
@@ -169,12 +170,15 @@ replace exporter_support_reason = "No supported exporter/non-exporter variation"
     if include_census_exporter_sector == 0 ///
     & exporter_support_reason == ""
 
-isid nacam
+isid isic4_sector_id
 tempfile sector_support
 save "`sector_support'"
 restore
 
-merge m:1 nacam using "`sector_support'", nogen keep(master match)
+merge m:1 isic4_sector_id using "`sector_support'", keep(master match) generate(support_merge)
+tab support_merge, missing
+assert support_merge == 3 if classified_hq
+drop support_merge
 
 label variable ln_emp "Log employment"
 label variable ln_annual_turnover "Log annual turnover"
@@ -193,7 +197,13 @@ order firmid_census hq_sample admin_overlap_hq nacam nacam_label_display ///
     include_census_exporter_sector hq_firms usable_firms exporter_firms ///
     nonexporter_firms
 
+display as text "Old NACAM overlap and new ISIC sample coverage (before support)"
+tab legacy_sample_elasticity sample_elasticity if hq_sample == 1, missing
+count if sample_elasticity == 1 & include_census_sector == 1
+display as result "Supported ISIC division sample: " r(N)
 compress
 save "`output_file'", replace
 
 display as result "Saved Census elasticity clean dataset to `output_file'."
+
+log close cmrcensusprep

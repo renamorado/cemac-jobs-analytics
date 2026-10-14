@@ -1,5 +1,16 @@
 # Codex Handoff
 
+## Classification correction — 2026-09-29
+
+The raw tax `CODEBRANCHE` / BDF `nacam` uses **NACAM Rev.1**, established from
+the official ECOFIN methodology and matching branch-count/employment profiles.
+Use the Rev.1 or section assessment modes; the older legacy labels, default tax
+route and slide labels have not all been replaced. Code 030 is water/waste, 031
+construction, and 032 trade/vehicle repair. See
+[the evidence and scope](docs/cmr_tax_ecofin2019_comparison.md) and
+[current tax instructions](docs/cmr_tax_isic4_workflow.md). The dated handoff
+below describes the earlier implementation and does not establish classification.
+
 ## Date
 
 2026-05-25

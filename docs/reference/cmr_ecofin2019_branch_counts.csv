@@ -1,0 +1,186 @@
+nacam,report_label,fin_yr,report_firms,report_page
+1,Agriculture,2015,7,80
+1,Agriculture,2016,7,80
+1,Agriculture,2017,7,80
+1,Agriculture,2018,7,80
+1,Agriculture,2019,7,80
+2,Elevage et chasse,2015,24,80
+2,Elevage et chasse,2016,24,80
+2,Elevage et chasse,2017,29,80
+2,Elevage et chasse,2018,23,80
+2,Elevage et chasse,2019,20,80
+3,Sylviculture et exploitation forestière,2015,33,80
+3,Sylviculture et exploitation forestière,2016,33,80
+3,Sylviculture et exploitation forestière,2017,33,80
+3,Sylviculture et exploitation forestière,2018,33,80
+3,Sylviculture et exploitation forestière,2019,32,80
+5,Extraction des produits des hydrocarbures et d’autres produits énergétiques,2015,17,80
+5,Extraction des produits des hydrocarbures et d’autres produits énergétiques,2016,17,80
+5,Extraction des produits des hydrocarbures et d’autres produits énergétiques,2017,17,80
+5,Extraction des produits des hydrocarbures et d’autres produits énergétiques,2018,15,80
+5,Extraction des produits des hydrocarbures et d’autres produits énergétiques,2019,13,80
+6,Extraction des minerais,2015,7,80
+6,Extraction des minerais,2016,7,80
+6,Extraction des minerais,2017,7,80
+6,Extraction des minerais,2018,7,80
+6,Extraction des minerais,2019,7,80
+7,Industrie de la viande et du poisson,2015,2,80
+7,Industrie de la viande et du poisson,2016,2,80
+7,Industrie de la viande et du poisson,2017,2,80
+7,Industrie de la viande et du poisson,2018,2,80
+7,Industrie de la viande et du poisson,2019,2,80
+8,Travail des grains et fabrication des produits amylacés,2015,10,80
+8,Travail des grains et fabrication des produits amylacés,2016,10,80
+8,Travail des grains et fabrication des produits amylacés,2017,10,80
+8,Travail des grains et fabrication des produits amylacés,2018,10,80
+8,Travail des grains et fabrication des produits amylacés,2019,8,80
+9,"Industrie du cacao, du café, du thé et du sucre",2015,10,80
+9,"Industrie du cacao, du café, du thé et du sucre",2016,10,80
+9,"Industrie du cacao, du café, du thé et du sucre",2017,10,80
+9,"Industrie du cacao, du café, du thé et du sucre",2018,10,80
+9,"Industrie du cacao, du café, du thé et du sucre",2019,9,80
+10,Industrie des oléagineux et d'aliments pour animaux,2015,9,80
+10,Industrie des oléagineux et d'aliments pour animaux,2016,9,80
+10,Industrie des oléagineux et d'aliments pour animaux,2017,9,80
+10,Industrie des oléagineux et d'aliments pour animaux,2018,9,80
+10,Industrie des oléagineux et d'aliments pour animaux,2019,9,80
+11,Fabrication de produits à base de céréales,2015,16,80
+11,Fabrication de produits à base de céréales,2016,16,80
+11,Fabrication de produits à base de céréales,2017,16,80
+11,Fabrication de produits à base de céréales,2018,16,80
+11,Fabrication de produits à base de céréales,2019,16,80
+12,"Industrie du lait, des fruits et légumes et des autres produits alimentaires",2015,6,80
+12,"Industrie du lait, des fruits et légumes et des autres produits alimentaires",2016,6,80
+12,"Industrie du lait, des fruits et légumes et des autres produits alimentaires",2017,6,80
+12,"Industrie du lait, des fruits et légumes et des autres produits alimentaires",2018,6,80
+12,"Industrie du lait, des fruits et légumes et des autres produits alimentaires",2019,6,80
+13,Industrie de boissons,2015,10,80
+13,Industrie de boissons,2016,10,80
+13,Industrie de boissons,2017,10,80
+13,Industrie de boissons,2018,10,80
+13,Industrie de boissons,2019,10,80
+15,Industries du textile et de la confection,2015,6,80
+15,Industries du textile et de la confection,2016,6,80
+15,Industries du textile et de la confection,2017,6,80
+15,Industries du textile et de la confection,2018,6,80
+15,Industries du textile et de la confection,2019,6,80
+16,Industries du cuir et fabrication des chaussures,2015,5,80
+16,Industries du cuir et fabrication des chaussures,2016,5,80
+16,Industries du cuir et fabrication des chaussures,2017,5,80
+16,Industries du cuir et fabrication des chaussures,2018,5,80
+16,Industries du cuir et fabrication des chaussures,2019,3,80
+17,Industries du bois sauf fabrication des meubles,2015,22,80
+17,Industries du bois sauf fabrication des meubles,2016,22,80
+17,Industries du bois sauf fabrication des meubles,2017,22,80
+17,Industries du bois sauf fabrication des meubles,2018,22,80
+17,Industries du bois sauf fabrication des meubles,2019,22,80
+18,"Fabrication de papier, carton et d'articles en papier ou en carton; imprimerie et reproduction",2015,24,80
+18,"Fabrication de papier, carton et d'articles en papier ou en carton; imprimerie et reproduction",2016,24,80
+18,"Fabrication de papier, carton et d'articles en papier ou en carton; imprimerie et reproduction",2017,24,80
+18,"Fabrication de papier, carton et d'articles en papier ou en carton; imprimerie et reproduction",2018,24,80
+18,"Fabrication de papier, carton et d'articles en papier ou en carton; imprimerie et reproduction",2019,24,80
+19,Raffinage du pétrole et cokéfaction,2015,2,80
+19,Raffinage du pétrole et cokéfaction,2016,2,80
+19,Raffinage du pétrole et cokéfaction,2017,2,80
+19,Raffinage du pétrole et cokéfaction,2018,2,80
+19,Raffinage du pétrole et cokéfaction,2019,2,80
+20,Fabrication de produits chimiques et pharmaceutiques,2015,26,80
+20,Fabrication de produits chimiques et pharmaceutiques,2016,26,80
+20,Fabrication de produits chimiques et pharmaceutiques,2017,26,80
+20,Fabrication de produits chimiques et pharmaceutiques,2018,26,80
+20,Fabrication de produits chimiques et pharmaceutiques,2019,28,80
+21,Production de caoutchouc et fabrication d'articles en caoutchouc et en matières plastiques,2015,16,80
+21,Production de caoutchouc et fabrication d'articles en caoutchouc et en matières plastiques,2016,16,80
+21,Production de caoutchouc et fabrication d'articles en caoutchouc et en matières plastiques,2017,16,80
+21,Production de caoutchouc et fabrication d'articles en caoutchouc et en matières plastiques,2018,15,80
+21,Production de caoutchouc et fabrication d'articles en caoutchouc et en matières plastiques,2019,14,80
+22,Fabrication de produits minéraux non métalliques,2015,6,80
+22,Fabrication de produits minéraux non métalliques,2016,6,80
+22,Fabrication de produits minéraux non métalliques,2017,6,80
+22,Fabrication de produits minéraux non métalliques,2018,6,80
+22,Fabrication de produits minéraux non métalliques,2019,6,80
+23,Fabrication des produits métallurgiques de base et d'ouvrages en métaux,2015,30,80
+23,Fabrication des produits métallurgiques de base et d'ouvrages en métaux,2016,30,80
+23,Fabrication des produits métallurgiques de base et d'ouvrages en métaux,2017,29,80
+23,Fabrication des produits métallurgiques de base et d'ouvrages en métaux,2018,29,80
+23,Fabrication des produits métallurgiques de base et d'ouvrages en métaux,2019,29,80
+24,"Fabrication de machines, d'appareils électriques et matériels n.c.a",2015,9,80
+24,"Fabrication de machines, d'appareils électriques et matériels n.c.a",2016,9,80
+24,"Fabrication de machines, d'appareils électriques et matériels n.c.a",2017,9,80
+24,"Fabrication de machines, d'appareils électriques et matériels n.c.a",2018,9,80
+24,"Fabrication de machines, d'appareils électriques et matériels n.c.a",2019,9,80
+27,Fabrication de meubles ; activités de fabrication n.c.a.,2015,24,80
+27,Fabrication de meubles ; activités de fabrication n.c.a.,2016,24,80
+27,Fabrication de meubles ; activités de fabrication n.c.a.,2017,24,80
+27,Fabrication de meubles ; activités de fabrication n.c.a.,2018,24,80
+27,Fabrication de meubles ; activités de fabrication n.c.a.,2019,18,80
+28,Réparation et installation des machines et équipements,2015,7,80
+28,Réparation et installation des machines et équipements,2016,7,80
+28,Réparation et installation des machines et équipements,2017,7,80
+28,Réparation et installation des machines et équipements,2018,7,80
+28,Réparation et installation des machines et équipements,2019,7,80
+29,"Production et distribution d'électricité, de gaz et d'air conditionne",2015,7,80
+29,"Production et distribution d'électricité, de gaz et d'air conditionne",2016,7,80
+29,"Production et distribution d'électricité, de gaz et d'air conditionne",2017,7,80
+29,"Production et distribution d'électricité, de gaz et d'air conditionne",2018,7,80
+29,"Production et distribution d'électricité, de gaz et d'air conditionne",2019,8,80
+30,"Production et distribution d’eau, assainissement et traitement de déchets",2015,5,80
+30,"Production et distribution d’eau, assainissement et traitement de déchets",2016,5,80
+30,"Production et distribution d’eau, assainissement et traitement de déchets",2017,5,80
+30,"Production et distribution d’eau, assainissement et traitement de déchets",2018,5,80
+30,"Production et distribution d’eau, assainissement et traitement de déchets",2019,4,80
+31,Construction,2015,93,81
+31,Construction,2016,94,81
+31,Construction,2017,94,81
+31,Construction,2018,92,81
+31,Construction,2019,102,81
+32,Commerce de gros et de détail et Réparation de véhicules,2015,248,81
+32,Commerce de gros et de détail et Réparation de véhicules,2016,246,81
+32,Commerce de gros et de détail et Réparation de véhicules,2017,246,81
+32,Commerce de gros et de détail et Réparation de véhicules,2018,221,81
+32,Commerce de gros et de détail et Réparation de véhicules,2019,214,81
+33,Hébergement et restauration,2015,31,81
+33,Hébergement et restauration,2016,31,81
+33,Hébergement et restauration,2017,32,81
+33,Hébergement et restauration,2018,32,81
+33,Hébergement et restauration,2019,29,81
+34,Transport et entreposage,2015,114,81
+34,Transport et entreposage,2016,112,81
+34,Transport et entreposage,2017,113,81
+34,Transport et entreposage,2018,113,81
+34,Transport et entreposage,2019,109,81
+35,Activité d’information et de télécommunications,2015,38,81
+35,Activité d’information et de télécommunications,2016,38,81
+35,Activité d’information et de télécommunications,2017,38,81
+35,Activité d’information et de télécommunications,2018,36,81
+35,Activité d’information et de télécommunications,2019,38,81
+36,Activités financières et d’assurance,2015,45,81
+36,Activités financières et d’assurance,2016,44,81
+36,Activités financières et d’assurance,2017,44,81
+36,Activités financières et d’assurance,2018,44,81
+36,Activités financières et d’assurance,2019,37,81
+37,Activités immobilières,2015,44,81
+37,Activités immobilières,2016,44,81
+37,Activités immobilières,2017,45,81
+37,Activités immobilières,2018,44,81
+37,Activités immobilières,2019,42,81
+38,Activités fournies principalement aux entreprises,2015,200,81
+38,Activités fournies principalement aux entreprises,2016,200,81
+38,Activités fournies principalement aux entreprises,2017,198,81
+38,Activités fournies principalement aux entreprises,2018,196,81
+38,Activités fournies principalement aux entreprises,2019,195,81
+40,Activités éducatives,2015,62,81
+40,Activités éducatives,2016,63,81
+40,Activités éducatives,2017,66,81
+40,Activités éducatives,2018,63,81
+40,Activités éducatives,2019,58,81
+41,Activité pour la santé humaine et action sociale,2015,33,81
+41,Activité pour la santé humaine et action sociale,2016,34,81
+41,Activité pour la santé humaine et action sociale,2017,35,81
+41,Activité pour la santé humaine et action sociale,2018,35,81
+41,Activité pour la santé humaine et action sociale,2019,35,81
+42,"Autres activités fournies à la collectivité, activités sociales et personnelles",2015,10,81
+42,"Autres activités fournies à la collectivité, activités sociales et personnelles",2016,10,81
+42,"Autres activités fournies à la collectivité, activités sociales et personnelles",2017,10,81
+42,"Autres activités fournies à la collectivité, activités sociales et personnelles",2018,10,81
+42,"Autres activités fournies à la collectivité, activités sociales et personnelles",2019,7,81

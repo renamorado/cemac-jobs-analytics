@@ -1,5 +1,13 @@
 # TASKS.md
 
+**Classification update, 2026-09-29:** raw tax `CODEBRANCHE` / BDF `nacam`
+uses **NACAM Rev.1**. Official ECOFIN methodology, matching branch counts and
+employment rankings establish this decision. Earlier legacy labels are
+superseded; remaining ISIC boundary questions are separate. See
+[the evidence](docs/cmr_tax_ecofin2019_comparison.md) and
+[tax workflow](docs/cmr_tax_isic4_workflow.md). Historical completion marks below
+do not mean the old tax labels or cross-source sector bridges have been corrected.
+
 Working list for the current Cameroon-first Phase I agenda from `Analytics - trade and jobs - Cameroon.docx`: estimate sub-sector employment elasticities from firm-level data, starting with the cleaned tax-panel file in `Data/Cameroon/Clean/CMR_BDF.dta`.
 
 ## Immediate objective
@@ -22,7 +30,7 @@ Working list for the current Cameroon-first Phase I agenda from `Analytics - tra
 
 ## Sector harmonization
 
-- [ ] Treat `nacam` as the starting sector code for the Cameroon elasticity workflow and document what classification level it represents.
+- [x] Identify tax `nacam` as NACAM Rev.1 branch codes (first level, displayed with three digits); 37 observed branches. Verified 2026-09-29 using official ECOFIN evidence.
 - [ ] Look in the web for nacam to isic rev 4 crosss walk 
 - [ ] Write `code/elasticity_cameroun/01_cmr_sector_crosswalk.do` to create and validate the sector mapping.
 - [ ] Report mapping coverage overall and by year, with an explicit list of any unmapped or ambiguous sector codes.

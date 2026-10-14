@@ -1,5 +1,12 @@
 # Marina Meeting Tasks - 2026-06-01
 
+> **Later correction, 2026-09-29:** tax `nacam` uses NACAM Rev.1, established by
+> [official ECOFIN evidence and data checks](../docs/cmr_tax_ecofin2019_comparison.md).
+> The earlier tax label review below used legacy numbering and is superseded:
+> 030 is water/waste, 031 construction, and 032 trade/vehicle repair. Historical
+> completion statuses do not mean those generated labels or cross-source bridges
+> have been corrected. No estimates or figures were changed by this note.
+
 Source: Meeting with Marina.
 
 Purpose: Organize the next Cameroon elasticity and Phase III follow-up tasks so they can be implemented in later coding sessions under the repo's Stata-first reproducibility standards.

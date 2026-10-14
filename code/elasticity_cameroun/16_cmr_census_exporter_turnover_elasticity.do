@@ -7,14 +7,14 @@ set more off
         respect to annual turnover by embedded Census exporter status.
 
     Inputs:
-        Data/Analysis/CMR_census_cleaned.dta
+        Data/Analysis/cmr_census_isic4_division_elasticity_clean.dta
 
     Outputs:
-        Data/Analysis/cmr_census_exporter_turnover_elasticity.dta
-        output/tables/cmr_census_exporter_turnover_elasticity.tex
-        output/tables/cmr_census_exporter_turnover_elasticity_audit.tex
-        output/figures/cmr_census_exporter_turnover_elasticity_coefficients.pdf
-        output/figures/cmr_census_exporter_turnover_elasticity_coefficients.png
+        Data/Analysis/cmr_census_isic4_division_exporter_turnover_elasticity.dta
+        output/tables/cmr_census_isic4_division_exporter_turnover_elasticity.tex
+        output/tables/cmr_census_isic4_division_exporter_turnover_elasticity_audit.tex
+        output/figures/cmr_census_isic4_division_exporter_turnover_elasticity_coefficients.pdf
+        output/figures/cmr_census_isic4_division_exporter_turnover_elasticity_coefficients.png
 
     Notes:
         Exporter status is defined from the embedded Census export turnover
@@ -61,11 +61,11 @@ local log_stamp = subinstr(c(current_time), ":", "", .)
 local log_stamp = subinstr("`log_stamp'", " ", "", .)
 
 capture log close cmrcensusexporterelasticity
-capture log using "${LOGDIR}/16_cmr_census_exporter_turnover_elasticity_`log_stamp'.log", ///
+capture log using "${LOGDIR}/16_cmr_census_isic4_division_exporter_turnover_elasticity_`log_stamp'.log", ///
     text name(cmrcensusexporterelasticity)
 if _rc {
     sleep `sleep_ms'
-    capture log using "${LOGDIR}/16_cmr_census_exporter_turnover_elasticity_`log_stamp'.log", ///
+    capture log using "${LOGDIR}/16_cmr_census_isic4_division_exporter_turnover_elasticity_`log_stamp'.log", ///
         text name(cmrcensusexporterelasticity)
 }
 if _rc {
@@ -73,8 +73,8 @@ if _rc {
     error _rc
 }
 
-local census_clean "${DATADIR}/Analysis/CMR_census_cleaned.dta"
-local output_stub "cmr_census_exporter_turnover_elasticity"
+local census_clean "${DATADIR}/Analysis/cmr_census_isic4_division_elasticity_clean.dta"
+local output_stub "cmr_census_isic4_division_exporter_turnover_elasticity"
 local min_sector_firms 30
 local min_group_firms 10
 
@@ -87,41 +87,12 @@ tempfile census_analysis sector_support sector_estimates
 *******************************************************************************/
 
 use "`census_clean'", clear
-
-confirm variable firmid_census
-confirm variable hq_sample
-confirm variable employment
-confirm variable annual_turnover
-confirm variable nacam
-confirm variable nacam_label_short_display
-confirm variable nacam_label_display
-confirm variable data_export
-confirm variable census_exporter
-
-keep firmid_census hq_sample employment annual_turnover nacam ///
-    nacam_label_display nacam_label_short_display data_export census_exporter ///
-    employment_missing employment_zero employment_negative ///
-    turnover_missing turnover_zero turnover_negative ///
-    census_export_turnover census_export_zero census_export_missing
-
-assert !missing(firmid_census)
+keep firmid_census hq_sample employment annual_turnover isic4_division ///
+    isic4_sector_id isic4_label_display isic4_label_short_display broad_sector ///
+    isic4_section_compare review_flag census_exporter ln_emp ln_annual_turnover ///
+    classified_hq sample_elasticity sample_exporter_elasticity
 isid firmid_census
-assert inlist(census_exporter, 0, 1) if !missing(census_exporter)
-
-generate double ln_emp = ln(employment) if employment > 0
-generate double ln_annual_turnover = ln(annual_turnover) if annual_turnover > 0
-
-generate byte admin_overlap_hq = hq_sample == 1 & !missing(nacam)
-generate byte sample_elasticity = admin_overlap_hq == 1 ///
-    & employment > 0 ///
-    & annual_turnover > 0 ///
-    & inlist(census_exporter, 0, 1) ///
-    & !missing(ln_emp, ln_annual_turnover, nacam, ///
-        nacam_label_short_display, data_export)
-
-label variable ln_emp "Log employment"
-label variable ln_annual_turnover "Log annual turnover"
-label variable sample_elasticity "Census exporter-turnover estimation sample"
+replace sample_elasticity = sample_exporter_elasticity
 
 save "`census_analysis'", replace
 
@@ -130,7 +101,7 @@ save "`census_analysis'", replace
 *******************************************************************************/
 
 preserve
-keep if admin_overlap_hq == 1
+keep if classified_hq == 1
 
 generate byte hq_row = 1
 generate byte usable_row = sample_elasticity == 1
@@ -151,7 +122,7 @@ collapse ///
         sd_ln_turnover = ln_turnover_supported ///
         sd_ln_turnover_exporter = ln_turnover_exporter ///
         sd_ln_turnover_nonexporter = ln_turnover_nonexporter, ///
-    by(nacam nacam_label_display nacam_label_short_display data_export)
+    by(isic4_division isic4_sector_id isic4_label_display isic4_label_short_display broad_sector)
 
 replace sd_ln_turnover_exporter = 0 if exporter_firms <= 1
 replace sd_ln_turnover_nonexporter = 0 if nonexporter_firms <= 1
@@ -204,18 +175,18 @@ replace suppression_reason = "No non-exporter log turnover variation" ///
     & sd_ln_turnover_nonexporter <= 0
 replace suppression_reason = "Reported" if include_sector == 1
 
-label variable hq_firms "Headquarters firms with admin-overlap NACAM sector"
+label variable hq_firms "Headquarters firms with admin-overlap ISIC Rev.4 division sector"
 label variable usable_firms "Positive employment and annual turnover firms"
 label variable exporter_firms "Usable firms with positive embedded Census export turnover"
 label variable nonexporter_firms "Usable firms without positive embedded Census export turnover"
 label variable include_sector "Reported in exporter-turnover elasticity plot"
 label variable suppression_reason "Reason sector is reported or suppressed"
 
-sort nacam
-isid nacam
+sort isic4_sector_id
+isid isic4_sector_id
 save "`sector_support'", replace
 
-generate str16 rowname = "nacam_" + string(nacam)
+generate str16 rowname = "division_" + string(isic4_sector_id)
 mkmat hq_firms usable_firms exporter_firms nonexporter_firms include_sector, ///
     matrix(audit_table) rownames(rowname)
 matrix colnames audit_table = HQFirms UsableFirms Exporters NonExporters Reported
@@ -224,10 +195,10 @@ local audit_rowlabels
 quietly count
 local audit_n = r(N)
 forvalues i = 1/`audit_n' {
-    local code = nacam[`i']
-    local audit_label = subinstr(nacam_label_short_display[`i'], "&", "\&", .)
+    local code = isic4_sector_id[`i']
+    local audit_label = subinstr(isic4_label_short_display[`i'], "&", "\&", .)
     local audit_label = subinstr("`audit_label'", char(34), "'", .)
-    local audit_rowlabels `audit_rowlabels' nacam_`code' "`audit_label'"
+    local audit_rowlabels `audit_rowlabels' division_`code' "`audit_label'"
 }
 
 esttab matrix(audit_table, fmt(%12.0fc %12.0fc %12.0fc %12.0fc %9.0f)) ///
@@ -242,7 +213,7 @@ restore
 *******************************************************************************/
 
 use "`census_analysis'", clear
-merge m:1 nacam using "`sector_support'", nogen keep(master match) ///
+merge m:1 isic4_sector_id using "`sector_support'", nogen keep(master match) ///
     keepusing(hq_firms usable_firms exporter_firms nonexporter_firms ///
         include_sector suppression_reason)
 
@@ -254,7 +225,7 @@ if `supported_sample' == 0 {
 }
 
 tempname estimates_handle
-postfile `estimates_handle' int nacam ///
+postfile `estimates_handle' int isic4_sector_id ///
     double total_elasticity total_se total_lb total_ub ///
     double nonexporter_elasticity nonexporter_se nonexporter_lb nonexporter_ub ///
     double exporter_elasticity exporter_se exporter_lb exporter_ub ///
@@ -262,14 +233,14 @@ postfile `estimates_handle' int nacam ///
     long observations exporters nonexporters byte estimated ///
     using "`sector_estimates'", replace
 
-levelsof nacam if sample_elasticity == 1 & include_sector == 1, local(codes)
+levelsof isic4_sector_id if sample_elasticity == 1 & include_sector == 1, local(codes)
 
 foreach code of local codes {
-    quietly summarize usable_firms if nacam == `code', meanonly
+    quietly summarize usable_firms if isic4_sector_id == `code', meanonly
     local sector_obs = r(mean)
-    quietly summarize exporter_firms if nacam == `code', meanonly
+    quietly summarize exporter_firms if isic4_sector_id == `code', meanonly
     local sector_exporters = r(mean)
-    quietly summarize nonexporter_firms if nacam == `code', meanonly
+    quietly summarize nonexporter_firms if isic4_sector_id == `code', meanonly
     local sector_nonexporters = r(mean)
 
     scalar total_b = .
@@ -293,7 +264,7 @@ foreach code of local codes {
 
     capture quietly regress ln_emp c.ln_annual_turnover ///
         if sample_elasticity == 1 & include_sector == 1 ///
-        & nacam == `code', vce(robust)
+        & isic4_sector_id == `code', vce(robust)
 
     if !_rc {
         scalar total_b = _b[ln_annual_turnover]
@@ -304,7 +275,7 @@ foreach code of local codes {
         capture quietly regress ln_emp ///
             c.ln_annual_turnover##ib0.census_exporter ///
             if sample_elasticity == 1 & include_sector == 1 ///
-            & nacam == `code', vce(robust)
+            & isic4_sector_id == `code', vce(robust)
 
         if !_rc {
             capture quietly lincom ln_annual_turnover
@@ -345,7 +316,7 @@ foreach code of local codes {
 postclose `estimates_handle'
 
 use "`sector_support'", clear
-merge 1:1 nacam using "`sector_estimates'", nogen
+merge 1:1 isic4_sector_id using "`sector_estimates'", nogen
 
 replace estimated = 0 if missing(estimated)
 replace observations = usable_firms if missing(observations)
@@ -373,14 +344,14 @@ label variable exporters "Usable embedded-Census exporters"
 label variable nonexporters "Usable embedded-Census non-exporters"
 label variable estimated "Exporter-interaction elasticity estimated"
 
-order nacam nacam_label_short_display data_export estimated include_sector ///
+order isic4_sector_id isic4_label_short_display broad_sector estimated include_sector ///
     total_elasticity total_se total_lb total_ub ///
     nonexporter_elasticity nonexporter_se nonexporter_lb nonexporter_ub ///
     exporter_elasticity exporter_se exporter_lb exporter_ub ///
     exporter_difference difference_se difference_lb difference_ub difference_p ///
     observations exporters nonexporters hq_firms usable_firms suppression_reason
-sort nacam
-isid nacam
+sort isic4_sector_id
+isid isic4_sector_id
 
 capture save "${DATADIR}/Analysis/`output_stub'.dta", replace
 if _rc {
@@ -398,8 +369,8 @@ if _rc {
 
 preserve
 keep if estimated == 1 & include_sector == 1
-gsort -total_elasticity nacam
-generate str16 rowname = "nacam_" + string(nacam)
+gsort -total_elasticity isic4_sector_id
+generate str16 rowname = "division_" + string(isic4_sector_id)
 
 mkmat total_elasticity total_se nonexporter_elasticity nonexporter_se ///
     exporter_elasticity exporter_se exporter_difference difference_p ///
@@ -412,10 +383,10 @@ local table_rowlabels
 quietly count
 local table_n = r(N)
 forvalues i = 1/`table_n' {
-    local code = nacam[`i']
-    local table_label = subinstr(nacam_label_short_display[`i'], "&", "\&", .)
+    local code = isic4_sector_id[`i']
+    local table_label = subinstr(isic4_label_short_display[`i'], "&", "\&", .)
     local table_label = subinstr("`table_label'", char(34), "'", .)
-    local table_rowlabels `table_rowlabels' nacam_`code' "`table_label'"
+    local table_rowlabels `table_rowlabels' division_`code' "`table_label'"
 }
 
 esttab matrix(exporter_table, ///
@@ -429,7 +400,7 @@ esttab matrix(exporter_table, ///
 restore
 
 keep if estimated == 1 & include_sector == 1
-gsort -total_elasticity nacam
+gsort -total_elasticity isic4_sector_id
 generate int plot_order = _n
 generate double y_total = plot_order - 0.24
 generate double y_nonexporter = plot_order
@@ -439,7 +410,7 @@ capture label drop census_exporter_elasticity_axis
 quietly count
 local plot_n = r(N)
 forvalues i = 1/`plot_n' {
-    local plot_label = subinstr(nacam_label_short_display[`i'], "&", "\&", .)
+    local plot_label = isic4_label_short_display[`i']
     local plot_label = subinstr("`plot_label'", char(34), "'", .)
     if `i' == 1 {
         label define census_exporter_elasticity_axis `i' `"`plot_label'"'
@@ -475,14 +446,14 @@ twoway ///
     ytitle("") ///
     xtitle("Employment elasticity with respect to annual turnover", size(small)) ///
     title("Census turnover-employment elasticities by exporter status", size(medsmall)) ///
-    subtitle("Exporter status uses positive embedded Census export turnover", size(small)) ///
+    subtitle("ISIC Rev.4 divisions; exporters have positive Census export turnover", size(small)) ///
     note("Cross-sectional Census headquarters firms. Robust 95 percent confidence intervals.", ///
         size(vsmall)) ///
     plotregion(color(white)) graphregion(color(white)) bgcolor(white) ///
     xsize(8.5) ysize(5.5)
 
-graph export "${OUTPUTDIR}/figures/`output_stub'_coefficients.pdf", replace
-graph export "${OUTPUTDIR}/figures/`output_stub'_coefficients.png", replace
+graph export "${OUTPUTDIR}/figures/`output_stub'_coefficients.pdf", name(Graph) replace
+graph export "${OUTPUTDIR}/figures/`output_stub'_coefficients.png", name(Graph) replace
 
 display as result "Saved Census exporter-turnover elasticity outputs."
 display as result "Reported sectors: `plot_n'"

@@ -1,5 +1,11 @@
 # Marina Meeting Follow-Up Tasks - 2026-05-22
 
+> **Later correction, 2026-09-29:** raw tax codes use NACAM Rev.1; see
+> [the ECOFIN evidence](../docs/cmr_tax_ecofin2019_comparison.md). The NACAM
+> harmonization and tax labels described below are historical. Their older
+> legacy interpretation is superseded; cross-source sector equivalence requires
+> review before reuse. This note does not change census or slide outputs.
+
 ## Objective
 
 Incorporate Marina's meeting feedback into the Cameroon/CEMAC jobs and trade analysis workflow. The tasks below focus on strengthening the sector diagnostics, extending the elasticity analysis, and documenting methodological choices around WBES trade variables.

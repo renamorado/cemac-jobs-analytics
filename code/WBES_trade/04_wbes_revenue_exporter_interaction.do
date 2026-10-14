@@ -12,10 +12,10 @@ set more off
     Outputs:
         Data/Analysis/cemac_wbes_revenue_exporter_interaction_estimates.dta
         output/tables/cemac_wbes_revenue_exporter_interaction_country.tex
-        output/tables/cemac_wbes_revenue_exporter_interaction_cameroon_activity.tex
+        output/tables/cemac_wbes_revenue_exporter_interaction_cameroon_isic4_division.tex
         output/tables/cemac_wbes_revenue_exporter_interaction_sample_audit.tex
         output/figures/cemac_wbes_revenue_exporter_interaction_country.{pdf,png}
-        output/figures/cemac_wbes_revenue_exporter_interaction_cameroon_activity.{pdf,png}
+        output/figures/cemac_wbes_revenue_exporter_interaction_cameroon_isic4_division.{pdf,png}
         logs/04_wbes_revenue_exporter_interaction.log
 
     Notes:
@@ -72,7 +72,7 @@ foreach var in ///
     firm_id country_name cemac_country wb_region wb_income_group weight ///
     employment sales_w export_status isic4_section ///
     ln_firm_age foreign_own_share gov_own_share retained_cemac ///
-    ssa_excl_cemac high_income display_name activity_group ///
+    ssa_excl_cemac high_income display_name division_group ///
     isic4_section_fe ln_emp ln_revenue revenue_interaction_sample {
     confirm variable `var'
 }
@@ -95,7 +95,7 @@ tempfile country_estimates
 tempname country_handle
 
 postfile `country_handle' ///
-    str24 panel str60 group_name str40 display_name ///
+    str24 panel str180 group_name str180 display_name ///
     byte retained_cemac byte ssa_excl_cemac byte high_income ///
     byte benchmark_row byte eligible_support byte estimated ///
     str48 suppression_reason ///
@@ -195,13 +195,13 @@ foreach country of local country_list {
 postclose `country_handle'
 
 /*******************************************************************************
-    Estimate Cameroon activity-group models and retain every attempted group
+    Estimate Cameroon ISIC division models and retain every attempted group
 *******************************************************************************/
 tempfile activity_estimates
 tempname activity_handle
 
 postfile `activity_handle' ///
-    str24 panel str60 group_name str40 display_name ///
+    str24 panel str180 group_name str180 display_name ///
     byte retained_cemac byte ssa_excl_cemac byte high_income ///
     byte benchmark_row byte eligible_support byte estimated ///
     str48 suppression_reason ///
@@ -211,18 +211,18 @@ postfile `activity_handle' ///
     double n_total n_exporters n_nonexporters n_countries ///
     using "`activity_estimates'", replace
 
-levelsof activity_group if country_name == "Cameroon", local(activity_list)
+levelsof division_group if country_name == "Cameroon" & !missing(division_group), local(activity_list)
 
 foreach activity of local activity_list {
     quietly count if country_name == "Cameroon" ///
-        & activity_group == "`activity'" & interaction_sample == 1
+        & division_group == "`activity'" & interaction_sample == 1
     local n_total = r(N)
     quietly count if country_name == "Cameroon" ///
-        & activity_group == "`activity'" & interaction_sample == 1 ///
+        & division_group == "`activity'" & interaction_sample == 1 ///
         & export_status == 1
     local n_exporters = r(N)
     quietly count if country_name == "Cameroon" ///
-        & activity_group == "`activity'" & interaction_sample == 1 ///
+        & division_group == "`activity'" & interaction_sample == 1 ///
         & export_status == 0
     local n_nonexporters = r(N)
 
@@ -251,7 +251,7 @@ foreach activity of local activity_list {
         capture quietly regress ln_emp c.ln_revenue##ib0.export_status ///
             `firm_controls' ///
             [pweight = weight] if country_name == "Cameroon" ///
-            & activity_group == "`activity'" & interaction_sample == 1, ///
+            & division_group == "`activity'" & interaction_sample == 1, ///
             vce(robust)
 
         if !_rc {
@@ -276,14 +276,20 @@ foreach activity of local activity_list {
                 scalar difference_ub = r(ub)
                 scalar difference_p = r(p)
 
-                local estimated = 1
-                local reason ""
+                if !missing(nonexporter_se, exporter_se, difference_se) ///
+                    & nonexporter_se > 0 & exporter_se > 0 & difference_se > 0 {
+                    local estimated = 1
+                    local reason ""
+                }
+                else {
+                    local reason "Slope or difference not identified"
+                }
             }
         }
     }
 
     post `activity_handle' ///
-        ("cameroon_activity") ("`activity'") ("`activity'") ///
+        ("cameroon_isic4_division") ("`activity'") ("`activity'") ///
         (1) (0) (0) (0) ///
         (`eligible_support') (`estimated') ("`reason'") ///
         (nonexporter_b) (nonexporter_se) (nonexporter_lb) (nonexporter_ub) ///
@@ -303,7 +309,7 @@ tempfile benchmark_estimates
 tempname benchmark_handle
 
 postfile `benchmark_handle' ///
-    str24 panel str60 group_name str40 display_name ///
+    str24 panel str180 group_name str180 display_name ///
     byte retained_cemac byte ssa_excl_cemac byte high_income ///
     byte benchmark_row byte eligible_support byte estimated ///
     str48 suppression_reason ///
@@ -421,9 +427,17 @@ use "`country_estimates'", clear
 append using "`benchmark_estimates'"
 append using "`activity_estimates'"
 
+* INSEE-based English labels match the Census helper; group_name retains the official label.
+replace display_name = "10 - Food manufacturing" if panel == "cameroon_isic4_division" & substr(group_name, 1, 2) == "10"
+replace display_name = "46 - Wholesale excl. vehicles & motorcycles" if panel == "cameroon_isic4_division" & substr(group_name, 1, 2) == "46"
+replace display_name = "47 - Retail excl. vehicles & motorcycles" if panel == "cameroon_isic4_division" & substr(group_name, 1, 2) == "47"
+replace display_name = "55 - Accommodation" if panel == "cameroon_isic4_division" & substr(group_name, 1, 2) == "55"
+replace display_name = "56 - Food & beverage services" if panel == "cameroon_isic4_division" & substr(group_name, 1, 2) == "56"
+
+
 generate byte displayed_candidate = ///
     (panel == "country" & (retained_cemac == 1 | benchmark_row == 1)) ///
-    | panel == "cameroon_activity"
+    | panel == "cameroon_isic4_division"
 
 assert estimated == 0 if eligible_support == 0
 assert n_total == n_exporters + n_nonexporters if benchmark_row == 0
@@ -438,7 +452,7 @@ assert abs(exporter_slope - nonexporter_slope - slope_difference) < 1e-8 ///
 assert inrange(difference_p, 0, 1) if estimated == 1
 
 label variable panel "Estimate panel"
-label variable group_name "Country or Cameroon activity group"
+label variable group_name "Country or Cameroon ISIC division"
 label variable eligible_support "Meets minimum sample support rule"
 label variable estimated "Regression estimated successfully"
 label variable suppression_reason "Reason estimate was not produced"
@@ -456,22 +470,31 @@ save "${DATADIR}/Analysis/cemac_wbes_revenue_exporter_interaction_estimates.dta"
     replace
 
 /*******************************************************************************
-    Export country and Cameroon activity result tables
+    Export country and Cameroon ISIC division result tables
 *******************************************************************************/
-foreach table_panel in country cameroon_activity {
+foreach table_panel in country cameroon_isic4_division {
     preserve
         if "`table_panel'" == "country" {
             keep if panel == "country" & displayed_candidate == 1 & estimated == 1
             local table_file "cemac_wbes_revenue_exporter_interaction_country.tex"
         }
         else {
-            keep if panel == "cameroon_activity" & estimated == 1
-            local table_file "cemac_wbes_revenue_exporter_interaction_cameroon_activity.tex"
+            keep if panel == "cameroon_isic4_division" & estimated == 1
+            local table_file "cemac_wbes_revenue_exporter_interaction_cameroon_isic4_division.tex"
         }
 
         gsort benchmark_row display_name
         generate str16 rowname = "row_" + string(_n)
 
+        quietly count
+        if r(N) == 0 {
+            matrix interaction_table = J(1, 10, .)
+            matrix rownames interaction_table = no_estimates
+            esttab matrix(interaction_table) using "${OUTPUTDIR}/tables/`table_file'", ///
+                replace booktabs fragment nomtitles nonumbers ///
+                varlabels(no_estimates "No division meets the estimation support rules")
+        }
+        else {
         mkmat nonexporter_slope exporter_slope slope_difference difference_se ///
             difference_lb difference_ub difference_p ///
             n_total n_exporters n_nonexporters, ///
@@ -496,6 +519,8 @@ foreach table_panel in country cameroon_activity {
                 "Lower 95" "Upper 95" "P-value" "N" "Exporters" ///
                 "Non-exporters") ///
             varlabels(`table_rowlabels')
+        }
+
     restore
 }
 
@@ -519,8 +544,8 @@ preserve
     local audit_n = r(N)
     forvalues i = 1/`audit_n' {
         local prefix "Country: "
-        if panel[`i'] == "cameroon_activity" {
-            local prefix "Cameroon activity: "
+        if panel[`i'] == "cameroon_isic4_division" {
+            local prefix "Cameroon division: "
         }
         if benchmark_row[`i'] == 1 {
             local prefix "Benchmark: "
@@ -541,9 +566,9 @@ restore
     Plot implied group slopes and the focal exporter slope difference
 *******************************************************************************/
 local plot_note ///
-    "Weighted WBES cross-section. Controls: firm age, ownership shares, and ISIC section FE."
+    "Weighted WBES cross-section."
 
-foreach plot_panel in country cameroon_activity {
+foreach plot_panel in country cameroon_isic4_division {
     preserve
         if "`plot_panel'" == "country" {
             keep if panel == "country" & displayed_candidate == 1 & estimated == 1
@@ -552,14 +577,22 @@ foreach plot_panel in country cameroon_activity {
             local legend_rows 2
         }
         else {
-            keep if panel == "cameroon_activity" & estimated == 1
-            local plot_title "Cameroon WBES activity responses to revenue"
-            local output_file "cemac_wbes_revenue_exporter_interaction_cameroon_activity"
+            keep if panel == "cameroon_isic4_division" & estimated == 1
+            local plot_title "Cameroon WBES ISIC division responses to revenue"
+            local output_file "cemac_wbes_revenue_exporter_interaction_cameroon_isic4_division"
             local legend_rows 3
         }
 
         quietly count
         if r(N) == 0 {
+            twoway function y=0, range(0 1) lcolor(white) ///
+                text(0.5 0.5 "No supported ISIC division estimates", size(medium)) ///
+                yscale(range(0 1) off) xscale(off) legend(off) ///
+                title("`plot_title'", size(medsmall)) ///
+                note("Minimum N=30 and at least 10 exporters and 10 non-exporters.", size(small)) ///
+                graphregion(color(white)) plotregion(color(white))
+            graph export "${OUTPUTDIR}/figures/`output_file'.pdf", name(Graph) replace
+            graph export "${OUTPUTDIR}/figures/`output_file'.png", name(Graph) replace
             restore
             continue
         }
@@ -605,12 +638,12 @@ foreach plot_panel in country cameroon_activity {
                 4 "Employment response to revenue: exporters" ///
                 6 "Exporter-non-exporter difference") rows(`legend_rows') pos(6) ///
                 size(small) region(lcolor(none) fcolor(none))) ///
-            note("`plot_note'", size(vsmall)) ///
+            note("`plot_note'" "Controls: firm age, ownership shares, and ISIC section FE.", size(vsmall)) ///
             plotregion(color(white)) graphregion(color(white)) ///
             bgcolor(white) xsize(8.5) ysize(5.2)
 
-        graph export "${OUTPUTDIR}/figures/`output_file'.pdf", replace
-        graph export "${OUTPUTDIR}/figures/`output_file'.png", replace
+        graph export "${OUTPUTDIR}/figures/`output_file'.pdf", name(Graph) replace
+        graph export "${OUTPUTDIR}/figures/`output_file'.png", name(Graph) replace
     restore
 }
 

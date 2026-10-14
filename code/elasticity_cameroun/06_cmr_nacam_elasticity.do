@@ -4,37 +4,37 @@ set more off
 /*******************************************************************************
     Purpose:
         Run a standalone Cameroon Phase I employment elasticity analysis using
-        the cleaned firm-year panel and native NACAM sectors.
+        the cleaned firm-year panel and agreed ISIC Rev.4 sections.
 
     Inputs:
-        Data/Analysis/CMR_BDF_cleaned.dta
+        Data/Analysis/CMR_BDF_isic4_section_prepared.dta
 
     Outputs:
-        output/tables/cmr_nacam_results_en_labels_va_elasticity.tex
-        output/tables/cmr_nacam_results_en_labels_tot_rev_elasticity.tex
-        output/tables/cmr_nacam_results_en_labels_ranking.tex
-        output/tables/cmr_nacam_results_en_labels_highlights.tex
-        output/figures/cmr_nacam_results_en_labels_ln_emp_density_by_year.pdf
-        output/figures/cmr_nacam_results_en_labels_ln_emp_density_by_year.png
-        output/figures/cmr_nacam_results_en_labels_va_coefficients.pdf
-        output/figures/cmr_nacam_results_en_labels_va_coefficients.png
-        output/figures/cmr_nacam_results_en_labels_tot_rev_coefficients.pdf
-        output/figures/cmr_nacam_results_en_labels_tot_rev_coefficients.png
-        output/figures/cmr_nacam_results_en_labels_scatter.pdf
-        output/figures/cmr_nacam_results_en_labels_scatter.png
-        output/figures/cmr_nacam_results_en_labels_elasticities_vs_avg_log_employment.pdf
-        output/figures/cmr_nacam_results_en_labels_elasticities_vs_avg_log_employment.png
-        output/figures/cmr_nacam_results_en_labels_elasticities_vs_avg_log_revenue.pdf
-        output/figures/cmr_nacam_results_en_labels_elasticities_vs_avg_log_revenue.png
-        Data/Analysis/cmr_nacam_elasticity_performance_scale.dta
-        output/figures/cmr_elasticities_va_worker_bubble_total_revenue.pdf
-        output/figures/cmr_elasticities_va_worker_bubble_total_revenue.png
-        output/figures/cmr_elasticities_va_worker_bubble_total_employment.pdf
-        output/figures/cmr_elasticities_va_worker_bubble_total_employment.png
-        output/figures/cmr_elasticities_va_worker_bubble_avg_revenue.pdf
-        output/figures/cmr_elasticities_va_worker_bubble_avg_revenue.png
-        output/figures/cmr_elasticities_va_worker_bubble_avg_employment.pdf
-        output/figures/cmr_elasticities_va_worker_bubble_avg_employment.png
+        output/tables/cmr_isic4_section_results_en_labels_va_elasticity.tex
+        output/tables/cmr_isic4_section_results_en_labels_tot_rev_elasticity.tex
+        output/tables/cmr_isic4_section_results_en_labels_ranking.tex
+        output/tables/cmr_isic4_section_results_en_labels_highlights.tex
+        output/figures/cmr_isic4_section_results_en_labels_ln_emp_density_by_year.pdf
+        output/figures/cmr_isic4_section_results_en_labels_ln_emp_density_by_year.png
+        output/figures/cmr_isic4_section_results_en_labels_va_coefficients.pdf
+        output/figures/cmr_isic4_section_results_en_labels_va_coefficients.png
+        output/figures/cmr_isic4_section_results_en_labels_tot_rev_coefficients.pdf
+        output/figures/cmr_isic4_section_results_en_labels_tot_rev_coefficients.png
+        output/figures/cmr_isic4_section_results_en_labels_scatter.pdf
+        output/figures/cmr_isic4_section_results_en_labels_scatter.png
+        output/figures/cmr_isic4_section_results_en_labels_elasticities_vs_avg_log_employment.pdf
+        output/figures/cmr_isic4_section_results_en_labels_elasticities_vs_avg_log_employment.png
+        output/figures/cmr_isic4_section_results_en_labels_elasticities_vs_avg_log_revenue.pdf
+        output/figures/cmr_isic4_section_results_en_labels_elasticities_vs_avg_log_revenue.png
+        Data/Analysis/cmr_isic4_section_elasticity_performance_scale.dta
+        output/figures/cmr_isic4_section_elasticities_va_worker_bubble_total_revenue.pdf
+        output/figures/cmr_isic4_section_elasticities_va_worker_bubble_total_revenue.png
+        output/figures/cmr_isic4_section_elasticities_va_worker_bubble_total_employment.pdf
+        output/figures/cmr_isic4_section_elasticities_va_worker_bubble_total_employment.png
+        output/figures/cmr_isic4_section_elasticities_va_worker_bubble_avg_revenue.pdf
+        output/figures/cmr_isic4_section_elasticities_va_worker_bubble_avg_revenue.png
+        output/figures/cmr_isic4_section_elasticities_va_worker_bubble_avg_employment.pdf
+        output/figures/cmr_isic4_section_elasticities_va_worker_bubble_avg_employment.png
 
     Notes:
         This file is intentionally standalone, but it still bootstraps
@@ -79,10 +79,10 @@ do "code/01_setup.do"
 local min_sector_obs 30
 local min_sector_firms 10
 local label_elasticity_threshold 0.20
-local output_stub "cmr_nacam_results_en_labels"
+local output_stub "cmr_isic4_section_results_en_labels"
 
 ***# Some descriptive stats
-*Table with number of firms and by NACAM sector.
+*Table with number of firms and by ISIC Rev.4 section.
 
 
 
@@ -91,19 +91,19 @@ local output_stub "cmr_nacam_results_en_labels"
     - The unit of observation is a firm-year.
     - Keep only the variables needed for the elasticity exercise.
 *******************************************************************************/
-use "${DATADIR}/Analysis/CMR_BDF_cleaned.dta", clear
+use "${DATADIR}/Analysis/CMR_BDF_isic4_section_prepared.dta", clear
 
-keep firmid fin_yr nacam nacam_label_display nacam_label_short_display data_export totemp va tot_rev
+keep firmid fin_yr isic4_section isic4_sector_id isic4_label_display isic4_label_short_display isic4_broad_label totemp va tot_rev
 
 tempfile sector_labels
 preserve
-keep nacam nacam_label_display nacam_label_short_display data_export
-drop if missing(nacam)
-bysort nacam (nacam_label_display): assert nacam_label_display == nacam_label_display[1]
-bysort nacam (nacam_label_short_display): assert nacam_label_short_display == nacam_label_short_display[1]
-bysort nacam (data_export): assert data_export == data_export[1]
-by nacam: keep if _n == 1
-isid nacam
+keep isic4_section isic4_sector_id isic4_label_display isic4_label_short_display isic4_broad_label
+drop if missing(isic4_sector_id)
+bysort isic4_sector_id (isic4_label_display): assert isic4_label_display == isic4_label_display[1]
+bysort isic4_sector_id (isic4_label_short_display): assert isic4_label_short_display == isic4_label_short_display[1]
+bysort isic4_sector_id (isic4_broad_label): assert isic4_broad_label == isic4_broad_label[1]
+by isic4_sector_id: keep if _n == 1
+isid isic4_sector_id
 save "`sector_labels'"
 restore
 
@@ -156,8 +156,8 @@ twoway ///
     plotregion(color(white)) graphregion(color(white)) ///
     bgcolor(white) xsize(7.5) ysize(4.8)
 
-    graph export "output/figures/`output_stub'_ln_emp_density_by_year.pdf", replace
-    graph export "output/figures/`output_stub'_ln_emp_density_by_year.png", replace
+    graph export "output/figures/`output_stub'_ln_emp_density_by_year.pdf", name(Graph) replace
+    graph export "output/figures/`output_stub'_ln_emp_density_by_year.png", name(Graph) replace
 
 *Prepare log regressors and outcomes for both models, ensuring that we only take logs of positive values.
 *log of value added
@@ -169,29 +169,29 @@ generate double ln_tot_rev = .
 replace ln_tot_rev = ln(tot_rev) if tot_rev > 0
 
 
-generate byte sample_va = employment > 0 & va > 0 & !missing(firm_fe, fin_yr, nacam)
-generate byte sample_tot_rev = employment > 0 & tot_rev > 0 & !missing(firm_fe, fin_yr, nacam)
+generate byte sample_va = employment > 0 & va > 0 & !missing(firm_fe, fin_yr, isic4_sector_id)
+generate byte sample_tot_rev = employment > 0 & tot_rev > 0 & !missing(firm_fe, fin_yr, isic4_sector_id)
 
 
 
 /*******************************************************************************
-    Count usable observations and firms by NACAM sector
+    Count usable observations and firms by ISIC Rev.4 section
     - A sector stays in the analysis only if it has enough observations and
       enough distinct firms in both model samples.
 *******************************************************************************/
 preserve
-keep nacam firm_fe sample_va sample_tot_rev
+keep isic4_sector_id firm_fe sample_va sample_tot_rev
 
-egen tag_va_firm = tag(nacam firm_fe) if sample_va == 1
-egen tag_tot_rev_firm = tag(nacam firm_fe) if sample_tot_rev == 1
+egen tag_va_firm = tag(isic4_sector_id firm_fe) if sample_va == 1
+egen tag_tot_rev_firm = tag(isic4_sector_id firm_fe) if sample_tot_rev == 1
 
-by nacam, sort: egen va_obs = total(sample_va)
-by nacam: egen tot_rev_obs = total(sample_tot_rev)
-by nacam: egen va_firms = total(tag_va_firm)
-by nacam: egen tot_rev_firms = total(tag_tot_rev_firm)
+by isic4_sector_id, sort: egen va_obs = total(sample_va)
+by isic4_sector_id: egen tot_rev_obs = total(sample_tot_rev)
+by isic4_sector_id: egen va_firms = total(tag_va_firm)
+by isic4_sector_id: egen tot_rev_firms = total(tag_tot_rev_firm)
 
-keep nacam va_obs tot_rev_obs va_firms tot_rev_firms
-by nacam: keep if _n == 1
+keep isic4_sector_id va_obs tot_rev_obs va_firms tot_rev_firms
+by isic4_sector_id: keep if _n == 1
 
 generate byte include_sector = va_obs >= `min_sector_obs' ///
     & va_firms >= `min_sector_firms' ///
@@ -203,7 +203,7 @@ save "`sector_counts'"
 restore
 
 * Bring the sector-eligibility counts back to the main firm-year dataset.
-merge m:1 nacam using "`sector_counts'", nogen
+merge m:1 isic4_sector_id using "`sector_counts'", nogen
 
 /*******************************************************************************
     Build sector performance and scale measures for elasticity scatter plots
@@ -213,18 +213,18 @@ merge m:1 nacam using "`sector_counts'", nogen
 *******************************************************************************/
 preserve
 keep if employment > 0 & va > 0 & tot_rev > 0 & include_sector == 1 ///
-    & !missing(employment, va, tot_rev, firm_fe, fin_yr, nacam, ///
+    & !missing(employment, va, tot_rev, firm_fe, fin_yr, isic4_sector_id, ///
         ln_emp, ln_va, ln_tot_rev)
-assert !missing(nacam, firm_fe, ln_emp, ln_va, ln_tot_rev)
+assert !missing(isic4_sector_id, firm_fe, ln_emp, ln_va, ln_tot_rev)
 
 collapse ///
     (sum) sector_year_total_employment = employment ///
           sector_year_total_va = va ///
           sector_year_total_revenue = tot_rev ///
     (count) sector_year_firms = firm_fe, ///
-    by(nacam fin_yr)
+    by(isic4_sector_id fin_yr)
 
-isid nacam fin_yr
+isid isic4_sector_id fin_yr
 assert sector_year_total_employment > 0
 assert sector_year_total_va > 0
 assert sector_year_total_revenue > 0
@@ -245,7 +245,7 @@ collapse ///
            sector_va_per_worker = sector_year_va_per_worker ///
            avg_annual_firms = sector_year_firms ///
     (count) contributing_years = fin_yr, ///
-    by(nacam)
+    by(isic4_sector_id)
 
 generate double ln_sector_va_per_worker = ln(sector_va_per_worker)
 
@@ -258,7 +258,7 @@ label variable ln_sector_va_per_worker "Log sector value added per worker"
 label variable avg_annual_firms "Average firms per contributing sector-year"
 label variable contributing_years "Contributing sector-years"
 
-isid nacam
+isid isic4_sector_id
 assert avg_annual_total_employment > 0
 assert avg_annual_total_revenue > 0
 assert avg_firm_employment > 0
@@ -272,22 +272,22 @@ restore
 
 /*******************************************************************************
     Estimate sector-specific value-added elasticities
-    - The interaction c.ln_va##i.nacam allows each NACAM sector to have its own
+    - The interaction c.ln_va##i.isic4_sector_id allows each ISIC Rev.4 section to have its own
       elasticity.
     - Firm fixed effects absorb time-invariant firm differences.
-    - NACAM-by-year effects absorb sector-specific common shocks over time.
+    - ISIC section-by-year effects absorb sector-specific common shocks over time.
 *******************************************************************************/
-areg ln_emp c.ln_va##i.nacam i.nacam#i.fin_yr ///
+areg ln_emp c.ln_va##i.isic4_sector_id i.isic4_sector_id#i.fin_yr ///
     if sample_va == 1 & include_sector == 1, ///
     absorb(firm_fe) vce(cluster firm_fe)
 
 tempfile va_results
 tempname va_handle
-postfile `va_handle' int nacam double va_elasticity va_se va_lb va_ub ///
+postfile `va_handle' int isic4_sector_id double va_elasticity va_se va_lb va_ub ///
     using "`va_results'", replace
 
 * Identify included sectors and recover each sector's implied elasticity.
-levelsof nacam if sample_va == 1 & include_sector == 1, local(va_codes)
+levelsof isic4_sector_id if sample_va == 1 & include_sector == 1, local(va_codes)
 local va_base : word 1 of `va_codes'
 
 foreach code of local va_codes {
@@ -297,7 +297,7 @@ foreach code of local va_codes {
     }
     else {
         * Other sectors add their interaction term to the base coefficient.
-        lincom _b[ln_va] + _b[`code'.nacam#c.ln_va]
+        lincom _b[ln_va] + _b[`code'.isic4_sector_id#c.ln_va]
     }
 
     post `va_handle' (`code') (r(estimate)) (r(se)) (r(lb)) (r(ub))
@@ -309,16 +309,16 @@ postclose `va_handle'
     Estimate sector-specific total-revenue elasticities
     - This repeats the same structure, replacing value added with total revenue.
 *******************************************************************************/
-areg ln_emp c.ln_tot_rev##i.nacam i.nacam#i.fin_yr ///
+areg ln_emp c.ln_tot_rev##i.isic4_sector_id i.isic4_sector_id#i.fin_yr ///
     if sample_tot_rev == 1 & include_sector == 1, ///
     absorb(firm_fe) vce(cluster firm_fe)
 
 tempfile tot_rev_results
 tempname tot_rev_handle
-postfile `tot_rev_handle' int nacam double tot_rev_elasticity tot_rev_se ///
+postfile `tot_rev_handle' int isic4_sector_id double tot_rev_elasticity tot_rev_se ///
     tot_rev_lb tot_rev_ub using "`tot_rev_results'", replace
 
-levelsof nacam if sample_tot_rev == 1 & include_sector == 1, local(tot_rev_codes)
+levelsof isic4_sector_id if sample_tot_rev == 1 & include_sector == 1, local(tot_rev_codes)
 local tot_rev_base : word 1 of `tot_rev_codes'
 
 foreach code of local tot_rev_codes {
@@ -327,7 +327,7 @@ foreach code of local tot_rev_codes {
         lincom _b[ln_tot_rev]
     }
     else {
-        lincom _b[ln_tot_rev] + _b[`code'.nacam#c.ln_tot_rev]
+        lincom _b[ln_tot_rev] + _b[`code'.isic4_sector_id#c.ln_tot_rev]
     }
 
     post `tot_rev_handle' (`code') (r(estimate)) (r(se)) (r(lb)) (r(ub))
@@ -340,14 +340,14 @@ postclose `tot_rev_handle'
     - Re-attach sector counts, build a matrix, and send it to LaTeX with esttab.
 *******************************************************************************/
 use "`va_results'", clear
-merge 1:1 nacam using "`sector_counts'", nogen keep(match)
-merge m:1 nacam using "`sector_labels'", nogen keep(match)
+merge 1:1 isic4_sector_id using "`sector_counts'", nogen keep(match)
+merge m:1 isic4_sector_id using "`sector_labels'", nogen keep(match)
 keep if include_sector == 1
-sort nacam
-assert !missing(nacam_label_display)
-assert !missing(nacam_label_short_display)
+sort isic4_sector_id
+assert !missing(isic4_label_display)
+assert !missing(isic4_label_short_display)
 
-generate str16 rowname = "nacam_" + string(nacam)
+generate str16 rowname = "section_" + string(isic4_sector_id)
 
 * Convert the stored results into a matrix because esttab handles matrix export neatly.
 mkmat va_elasticity va_se va_lb va_ub va_firms va_obs, ///
@@ -358,10 +358,10 @@ local va_rowlabels
 quietly count
 local va_n = r(N)
 forvalues i = 1/`va_n' {
-    local code = nacam[`i']
-    local va_label = subinstr(nacam_label_short_display[`i'], "&", "\&", .)
+    local code = isic4_sector_id[`i']
+    local va_label = subinstr(isic4_label_short_display[`i'], "&", "\&", .)
     local va_label = subinstr("`va_label'", char(34), "'", .)
-    local va_rowlabels `va_rowlabels' nacam_`code' "`va_label'"
+    local va_rowlabels `va_rowlabels' section_`code' "`va_label'"
 }
 
 esttab matrix(va_table, fmt(%9.3f %9.3f %9.3f %9.3f %9.0fc %9.0fc)) ///
@@ -371,21 +371,21 @@ esttab matrix(va_table, fmt(%9.3f %9.3f %9.3f %9.3f %9.0fc %9.0fc)) ///
 
 * Save a compact copy so it can later be merged with the revenue results.
 tempfile va_table_data
-keep nacam va_elasticity va_se va_lb va_ub va_firms va_obs
+keep isic4_sector_id va_elasticity va_se va_lb va_ub va_firms va_obs
 save "`va_table_data'"
 
 /*******************************************************************************
     Export the total-revenue elasticity table
 *******************************************************************************/
 use "`tot_rev_results'", clear
-merge 1:1 nacam using "`sector_counts'", nogen keep(match)
-merge m:1 nacam using "`sector_labels'", nogen keep(match)
+merge 1:1 isic4_sector_id using "`sector_counts'", nogen keep(match)
+merge m:1 isic4_sector_id using "`sector_labels'", nogen keep(match)
 keep if include_sector == 1
-sort nacam
-assert !missing(nacam_label_display)
-assert !missing(nacam_label_short_display)
+sort isic4_sector_id
+assert !missing(isic4_label_display)
+assert !missing(isic4_label_short_display)
 
-generate str16 rowname = "nacam_" + string(nacam)
+generate str16 rowname = "section_" + string(isic4_sector_id)
 
 mkmat tot_rev_elasticity tot_rev_se tot_rev_lb tot_rev_ub tot_rev_firms tot_rev_obs, ///
     matrix(tot_rev_table) rownames(rowname)
@@ -395,10 +395,10 @@ local tot_rev_rowlabels
 quietly count
 local tot_rev_n = r(N)
 forvalues i = 1/`tot_rev_n' {
-    local code = nacam[`i']
-    local tot_rev_label = subinstr(nacam_label_short_display[`i'], "&", "\&", .)
+    local code = isic4_sector_id[`i']
+    local tot_rev_label = subinstr(isic4_label_short_display[`i'], "&", "\&", .)
     local tot_rev_label = subinstr("`tot_rev_label'", char(34), "'", .)
-    local tot_rev_rowlabels `tot_rev_rowlabels' nacam_`code' "`tot_rev_label'"
+    local tot_rev_rowlabels `tot_rev_rowlabels' section_`code' "`tot_rev_label'"
 }
 
 esttab matrix(tot_rev_table, fmt(%9.3f %9.3f %9.3f %9.3f %9.0fc %9.0fc)) ///
@@ -410,16 +410,16 @@ esttab matrix(tot_rev_table, fmt(%9.3f %9.3f %9.3f %9.3f %9.0fc %9.0fc)) ///
     Combine both models into a ranking table
     - Sectors are sorted by value-added elasticity from highest to lowest.
 *******************************************************************************/
-merge 1:1 nacam using "`va_table_data'", nogen
-merge m:1 nacam using "`sector_labels'", nogen keep(match)
-merge 1:1 nacam using "`sector_performance'", nogen keep(match)
-assert !missing(nacam_label_display)
-assert !missing(nacam_label_short_display)
+merge 1:1 isic4_sector_id using "`va_table_data'", nogen
+merge m:1 isic4_sector_id using "`sector_labels'", nogen keep(match)
+merge 1:1 isic4_sector_id using "`sector_performance'", nogen keep(match)
+assert !missing(isic4_label_display)
+assert !missing(isic4_label_short_display)
 assert !missing(ln_sector_va_per_worker, avg_annual_total_employment, ///
     avg_annual_total_revenue, avg_firm_employment, avg_firm_revenue)
 
 preserve
-keep nacam nacam_label_display nacam_label_short_display data_export ///
+keep isic4_section isic4_sector_id isic4_label_display isic4_label_short_display isic4_broad_label ///
     va_elasticity va_se va_lb va_ub va_firms va_obs ///
     tot_rev_elasticity tot_rev_se tot_rev_lb tot_rev_ub ///
     tot_rev_firms tot_rev_obs ///
@@ -427,16 +427,16 @@ keep nacam nacam_label_display nacam_label_short_display data_export ///
     avg_annual_total_employment avg_annual_total_revenue ///
     avg_firm_employment avg_firm_revenue ///
     avg_annual_firms contributing_years
-sort nacam
-isid nacam
-save "${DATADIR}/Analysis/cmr_nacam_elasticity_performance_scale.dta", replace
+sort isic4_sector_id
+isid isic4_sector_id
+save "${DATADIR}/Analysis/cmr_isic4_section_elasticity_performance_scale.dta", replace
 restore
 
 generate double sort_value = va_elasticity
 replace sort_value = -1e10 if missing(sort_value)
-gsort -sort_value nacam
+gsort -sort_value isic4_sector_id
 
-generate str16 ranking_rowname = "nacam_" + string(nacam)
+generate str16 ranking_rowname = "section_" + string(isic4_sector_id)
 generate double average_obs = (va_obs + tot_rev_obs) / 2
 
 mkmat va_elasticity va_se va_obs tot_rev_elasticity tot_rev_se tot_rev_obs, ///
@@ -447,10 +447,10 @@ local ranking_rowlabels
 quietly count
 local ranking_n = r(N)
 forvalues i = 1/`ranking_n' {
-    local code = nacam[`i']
-    local ranking_label = subinstr(nacam_label_short_display[`i'], "&", "\&", .)
+    local code = isic4_sector_id[`i']
+    local ranking_label = subinstr(isic4_label_short_display[`i'], "&", "\&", .)
     local ranking_label = subinstr("`ranking_label'", char(34), "'", .)
-    local ranking_rowlabels `ranking_rowlabels' nacam_`code' "`ranking_label'"
+    local ranking_rowlabels `ranking_rowlabels' section_`code' "`ranking_label'"
 }
 
 esttab matrix(ranking_table, fmt(%9.3f %9.3f %9.0fc %9.3f %9.3f %9.0fc)) ///
@@ -483,9 +483,9 @@ local decile1_max = r(max)
 quietly summarize tot_rev_elasticity if revenue_decile > 1
 assert `decile1_max' <= r(min)
 
-gsort -revenue_decile -tot_rev_elasticity nacam
+gsort -revenue_decile -tot_rev_elasticity isic4_sector_id
 
-generate str16 decile_rowname = "nacam_" + string(nacam)
+generate str16 decile_rowname = "section_" + string(isic4_sector_id)
 
 mkmat revenue_decile tot_rev_elasticity va_elasticity tot_rev_obs va_obs, ///
     matrix(decile_table) rownames(decile_rowname)
@@ -495,10 +495,10 @@ local decile_rowlabels
 quietly count
 local decile_n = r(N)
 forvalues i = 1/`decile_n' {
-    local code = nacam[`i']
-    local decile_label = subinstr(nacam_label_short_display[`i'], "&", "\&", .)
+    local code = isic4_sector_id[`i']
+    local decile_label = subinstr(isic4_label_short_display[`i'], "&", "\&", .)
     local decile_label = subinstr("`decile_label'", char(34), "'", .)
-    local decile_rowlabels `decile_rowlabels' nacam_`code' "`decile_label'"
+    local decile_rowlabels `decile_rowlabels' section_`code' "`decile_label'"
 }
 
 esttab matrix(decile_table, fmt(%9.0fc %9.3f %9.3f %9.0fc %9.0fc)) ///
@@ -512,12 +512,12 @@ esttab matrix(decile_table, fmt(%9.0fc %9.3f %9.3f %9.0fc %9.0fc)) ///
 generate byte high_elasticity = revenue_decile >= 7
 label variable revenue_decile "Total-revenue employment-elasticity decile"
 label variable high_elasticity "1 if total-revenue elasticity decile is 7-10"
-keep nacam nacam_label_display nacam_label_short_display data_export ///
+keep isic4_section isic4_sector_id isic4_label_display isic4_label_short_display isic4_broad_label ///
     va_elasticity va_se va_obs tot_rev_elasticity tot_rev_se tot_rev_obs ///
     revenue_decile high_elasticity
-sort nacam
-isid nacam
-save "${DATADIR}/Analysis/cmr_nacam_elasticity_ranking.dta", replace
+sort isic4_sector_id
+isid isic4_sector_id
+save "${DATADIR}/Analysis/cmr_isic4_section_elasticity_ranking.dta", replace
 restore
 
 /*******************************************************************************
@@ -532,7 +532,7 @@ generate byte highlight_sector = _n <= 3
 replace highlight_sector = 1 if _n > `sector_count' - 2
 keep if highlight_sector == 1
 
-generate str16 highlight_rowname = "nacam_" + string(nacam)
+generate str16 highlight_rowname = "section_" + string(isic4_sector_id)
 
 mkmat va_elasticity tot_rev_elasticity va_obs tot_rev_obs, ///
     matrix(highlight_table) rownames(highlight_rowname)
@@ -542,10 +542,10 @@ local highlight_rowlabels
 quietly count
 local highlight_n = r(N)
 forvalues i = 1/`highlight_n' {
-    local code = nacam[`i']
-    local highlight_label = subinstr(nacam_label_short_display[`i'], "&", "\&", .)
+    local code = isic4_sector_id[`i']
+    local highlight_label = subinstr(isic4_label_short_display[`i'], "&", "\&", .)
     local highlight_label = subinstr("`highlight_label'", char(34), "'", .)
-    local highlight_rowlabels `highlight_rowlabels' nacam_`code' "`highlight_label'"
+    local highlight_rowlabels `highlight_rowlabels' section_`code' "`highlight_label'"
 }
 
 esttab matrix(highlight_table, fmt(%9.3f %9.3f %9.0fc %9.0fc)) ///
@@ -558,50 +558,50 @@ restore
     Coefficient plots across sectors
     - Plot point estimates and 95% confidence intervals separately for value
       added and total revenue.
-    - Colors identify the label-based data_export aggregate sector group.
+    - Colors identify the label-based isic4_broad_label aggregate sector group.
 *******************************************************************************/
 preserve
-gsort -va_elasticity nacam
+gsort -va_elasticity isic4_sector_id
 generate int plot_order = _n
 
-capture label drop nacam_sector_plot
+capture label drop section_sector_plot
 quietly count
 local plot_n = r(N)
 
 forvalues i = 1/`plot_n' {
-    local sector_label = subinstr(nacam_label_short_display[`i'], char(34), "'", .)
+    local sector_label = subinstr(isic4_label_short_display[`i'], char(34), "'", .)
 
     if `i' == 1 {
-        label define nacam_sector_plot `i' `"`sector_label'"'
+        label define section_sector_plot `i' `"`sector_label'"'
     }
     else {
-        label define nacam_sector_plot `i' `"`sector_label'"', modify
+        label define section_sector_plot `i' `"`sector_label'"', modify
     }
 }
 
-label values plot_order nacam_sector_plot
+label values plot_order section_sector_plot
 
 twoway ///
-    (rcap va_lb va_ub plot_order if data_export == "A – Agriculture, Forestry and Fishing", horizontal lcolor("102 194 165")) ///
-    (scatter plot_order va_elasticity if data_export == "A – Agriculture, Forestry and Fishing", msymbol(circle) mcolor("27 158 119")) ///
-    (rcap va_lb va_ub plot_order if data_export == "B – Mining and Quarrying", horizontal lcolor("190 174 212")) ///
-    (scatter plot_order va_elasticity if data_export == "B – Mining and Quarrying", msymbol(diamond) mcolor("117 112 179")) ///
-    (rcap va_lb va_ub plot_order if data_export == "C – Manufacturing", horizontal lcolor("141 160 203")) ///
-    (scatter plot_order va_elasticity if data_export == "C – Manufacturing", msymbol(square) mcolor("44 123 182")) ///
-    (rcap va_lb va_ub plot_order if data_export == "Utilities", horizontal lcolor("252 217 142")) ///
-    (scatter plot_order va_elasticity if data_export == "Utilities", msymbol(triangle) mcolor("230 171 2")) ///
-    (rcap va_lb va_ub plot_order if data_export == "F – Construction", horizontal lcolor("231 138 195")) ///
-    (scatter plot_order va_elasticity if data_export == "F – Construction", msymbol(Oh) mcolor("208 28 139")) ///
-    (rcap va_lb va_ub plot_order if data_export == "G – Wholesale and Retail Trade; Repair of Motor Vehicles", horizontal lcolor("247 194 145")) ///
-    (scatter plot_order va_elasticity if data_export == "G – Wholesale and Retail Trade; Repair of Motor Vehicles", msymbol(Th) mcolor("217 95 2")) ///
-    (rcap va_lb va_ub plot_order if data_export == "H – Transportation and Storage", horizontal lcolor("179 222 105")) ///
-    (scatter plot_order va_elasticity if data_export == "H – Transportation and Storage", msymbol(Sh) mcolor("102 166 30")) ///
-    (rcap va_lb va_ub plot_order if data_export == "J – Information and Communication", horizontal lcolor("166 216 84")) ///
-    (scatter plot_order va_elasticity if data_export == "J – Information and Communication", msymbol(plus) mcolor("102 166 30")) ///
-    (rcap va_lb va_ub plot_order if data_export == "K – Financial and Insurance Activities", horizontal lcolor("188 128 189")) ///
-    (scatter plot_order va_elasticity if data_export == "K – Financial and Insurance Activities", msymbol(x) mcolor("117 112 179")) ///
-    (rcap va_lb va_ub plot_order if data_export == "Other services", horizontal lcolor("190 190 190")) ///
-    (scatter plot_order va_elasticity if data_export == "Other services", msymbol(Dh) mcolor("102 102 102")), ///
+    (rcap va_lb va_ub plot_order if isic4_broad_label == "Agriculture", horizontal lcolor("102 194 165")) ///
+    (scatter plot_order va_elasticity if isic4_broad_label == "Agriculture", msymbol(circle) mcolor("27 158 119")) ///
+    (rcap va_lb va_ub plot_order if isic4_broad_label == "Mining", horizontal lcolor("190 174 212")) ///
+    (scatter plot_order va_elasticity if isic4_broad_label == "Mining", msymbol(diamond) mcolor("117 112 179")) ///
+    (rcap va_lb va_ub plot_order if isic4_broad_label == "Manufacturing", horizontal lcolor("141 160 203")) ///
+    (scatter plot_order va_elasticity if isic4_broad_label == "Manufacturing", msymbol(square) mcolor("44 123 182")) ///
+    (rcap va_lb va_ub plot_order if isic4_broad_label == "Utilities", horizontal lcolor("252 217 142")) ///
+    (scatter plot_order va_elasticity if isic4_broad_label == "Utilities", msymbol(triangle) mcolor("230 171 2")) ///
+    (rcap va_lb va_ub plot_order if isic4_broad_label == "Construction", horizontal lcolor("231 138 195")) ///
+    (scatter plot_order va_elasticity if isic4_broad_label == "Construction", msymbol(Oh) mcolor("208 28 139")) ///
+    (rcap va_lb va_ub plot_order if isic4_broad_label == "Trade", horizontal lcolor("247 194 145")) ///
+    (scatter plot_order va_elasticity if isic4_broad_label == "Trade", msymbol(Th) mcolor("217 95 2")) ///
+    (rcap va_lb va_ub plot_order if isic4_broad_label == "Transport", horizontal lcolor("179 222 105")) ///
+    (scatter plot_order va_elasticity if isic4_broad_label == "Transport", msymbol(Sh) mcolor("102 166 30")) ///
+    (rcap va_lb va_ub plot_order if isic4_broad_label == "Information", horizontal lcolor("166 216 84")) ///
+    (scatter plot_order va_elasticity if isic4_broad_label == "Information", msymbol(plus) mcolor("102 166 30")) ///
+    (rcap va_lb va_ub plot_order if isic4_broad_label == "Finance", horizontal lcolor("188 128 189")) ///
+    (scatter plot_order va_elasticity if isic4_broad_label == "Finance", msymbol(x) mcolor("117 112 179")) ///
+    (rcap va_lb va_ub plot_order if isic4_broad_label == "Other services", horizontal lcolor("190 190 190")) ///
+    (scatter plot_order va_elasticity if isic4_broad_label == "Other services", msymbol(Dh) mcolor("102 102 102")), ///
     ylabel(1(1)`plot_n', valuelabel angle(0) labsize(tiny) nogrid) ///
     xlabel(, grid glpattern(dash) glcolor(gs13)) ///
     yscale(reverse) ///
@@ -614,55 +614,56 @@ twoway ///
     xtitle("Employment elasticity", size(small)) ///
     title("Employment elasticities with respect to value added", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
-    bgcolor(white) xsize(7.5) ysize(5.5)
+    bgcolor(white) xsize(7.5) ysize(5.5) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny))
 
-graph export "output/figures/`output_stub'_va_coefficients.pdf", replace
-graph export "output/figures/`output_stub'_va_coefficients.png", replace
+graph export "output/figures/`output_stub'_va_coefficients.pdf", name(Graph) replace
+graph export "output/figures/`output_stub'_va_coefficients.png", name(Graph) replace
 
 restore
 
 preserve
-gsort -tot_rev_elasticity nacam
+gsort -tot_rev_elasticity isic4_sector_id
 generate int plot_order = _n
 
-capture label drop nacam_sector_plot
+capture label drop section_sector_plot
 quietly count
 local plot_n = r(N)
 
 forvalues i = 1/`plot_n' {
-    local sector_label = subinstr(nacam_label_short_display[`i'], char(34), "'", .)
+    local sector_label = subinstr(isic4_label_short_display[`i'], char(34), "'", .)
 
     if `i' == 1 {
-        label define nacam_sector_plot `i' `"`sector_label'"'
+        label define section_sector_plot `i' `"`sector_label'"'
     }
     else {
-        label define nacam_sector_plot `i' `"`sector_label'"', modify
+        label define section_sector_plot `i' `"`sector_label'"', modify
     }
 }
 
-label values plot_order nacam_sector_plot
+label values plot_order section_sector_plot
 
 twoway ///
-    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "A – Agriculture, Forestry and Fishing", horizontal lcolor("102 194 165")) ///
-    (scatter plot_order tot_rev_elasticity if data_export == "A – Agriculture, Forestry and Fishing", msymbol(circle) mcolor("27 158 119")) ///
-    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "B – Mining and Quarrying", horizontal lcolor("190 174 212")) ///
-    (scatter plot_order tot_rev_elasticity if data_export == "B – Mining and Quarrying", msymbol(diamond) mcolor("117 112 179")) ///
-    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "C – Manufacturing", horizontal lcolor("141 160 203")) ///
-    (scatter plot_order tot_rev_elasticity if data_export == "C – Manufacturing", msymbol(square) mcolor("44 123 182")) ///
-    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "Utilities", horizontal lcolor("252 217 142")) ///
-    (scatter plot_order tot_rev_elasticity if data_export == "Utilities", msymbol(triangle) mcolor("230 171 2")) ///
-    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "F – Construction", horizontal lcolor("231 138 195")) ///
-    (scatter plot_order tot_rev_elasticity if data_export == "F – Construction", msymbol(Oh) mcolor("208 28 139")) ///
-    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "G – Wholesale and Retail Trade; Repair of Motor Vehicles", horizontal lcolor("247 194 145")) ///
-    (scatter plot_order tot_rev_elasticity if data_export == "G – Wholesale and Retail Trade; Repair of Motor Vehicles", msymbol(Th) mcolor("217 95 2")) ///
-    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "H – Transportation and Storage", horizontal lcolor("179 222 105")) ///
-    (scatter plot_order tot_rev_elasticity if data_export == "H – Transportation and Storage", msymbol(Sh) mcolor("102 166 30")) ///
-    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "J – Information and Communication", horizontal lcolor("166 216 84")) ///
-    (scatter plot_order tot_rev_elasticity if data_export == "J – Information and Communication", msymbol(plus) mcolor("102 166 30")) ///
-    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "K – Financial and Insurance Activities", horizontal lcolor("188 128 189")) ///
-    (scatter plot_order tot_rev_elasticity if data_export == "K – Financial and Insurance Activities", msymbol(x) mcolor("117 112 179")) ///
-    (rcap tot_rev_lb tot_rev_ub plot_order if data_export == "Other services", horizontal lcolor("190 190 190")) ///
-    (scatter plot_order tot_rev_elasticity if data_export == "Other services", msymbol(Dh) mcolor("102 102 102")), ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if isic4_broad_label == "Agriculture", horizontal lcolor("102 194 165")) ///
+    (scatter plot_order tot_rev_elasticity if isic4_broad_label == "Agriculture", msymbol(circle) mcolor("27 158 119")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if isic4_broad_label == "Mining", horizontal lcolor("190 174 212")) ///
+    (scatter plot_order tot_rev_elasticity if isic4_broad_label == "Mining", msymbol(diamond) mcolor("117 112 179")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if isic4_broad_label == "Manufacturing", horizontal lcolor("141 160 203")) ///
+    (scatter plot_order tot_rev_elasticity if isic4_broad_label == "Manufacturing", msymbol(square) mcolor("44 123 182")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if isic4_broad_label == "Utilities", horizontal lcolor("252 217 142")) ///
+    (scatter plot_order tot_rev_elasticity if isic4_broad_label == "Utilities", msymbol(triangle) mcolor("230 171 2")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if isic4_broad_label == "Construction", horizontal lcolor("231 138 195")) ///
+    (scatter plot_order tot_rev_elasticity if isic4_broad_label == "Construction", msymbol(Oh) mcolor("208 28 139")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if isic4_broad_label == "Trade", horizontal lcolor("247 194 145")) ///
+    (scatter plot_order tot_rev_elasticity if isic4_broad_label == "Trade", msymbol(Th) mcolor("217 95 2")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if isic4_broad_label == "Transport", horizontal lcolor("179 222 105")) ///
+    (scatter plot_order tot_rev_elasticity if isic4_broad_label == "Transport", msymbol(Sh) mcolor("102 166 30")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if isic4_broad_label == "Information", horizontal lcolor("166 216 84")) ///
+    (scatter plot_order tot_rev_elasticity if isic4_broad_label == "Information", msymbol(plus) mcolor("102 166 30")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if isic4_broad_label == "Finance", horizontal lcolor("188 128 189")) ///
+    (scatter plot_order tot_rev_elasticity if isic4_broad_label == "Finance", msymbol(x) mcolor("117 112 179")) ///
+    (rcap tot_rev_lb tot_rev_ub plot_order if isic4_broad_label == "Other services", horizontal lcolor("190 190 190")) ///
+    (scatter plot_order tot_rev_elasticity if isic4_broad_label == "Other services", msymbol(Dh) mcolor("102 102 102")), ///
     ylabel(1(1)`plot_n', valuelabel angle(0) labsize(tiny) nogrid) ///
     xlabel(, grid glpattern(dash) glcolor(gs13)) ///
     yscale(reverse) ///
@@ -675,10 +676,11 @@ twoway ///
     xtitle("Employment elasticity", size(small)) ///
     title("Employment elasticities with respect to total revenue", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
-    bgcolor(white) xsize(7.5) ysize(5.5)
+    bgcolor(white) xsize(7.5) ysize(5.5) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny))
 
-graph export "output/figures/`output_stub'_tot_rev_coefficients.pdf", replace
-graph export "output/figures/`output_stub'_tot_rev_coefficients.png", replace
+graph export "output/figures/`output_stub'_tot_rev_coefficients.pdf", name(Graph) replace
+graph export "output/figures/`output_stub'_tot_rev_coefficients.png", name(Graph) replace
 
 restore
 
@@ -698,38 +700,42 @@ local y_max = r(max)
 local diagonal_min = min(`x_min', `y_min')
 local diagonal_max = max(`x_max', `y_max')
 
+* Alternate crowded labels across the points; elasticities remain unchanged.
+generate byte scatter_label_position = 3
+replace scatter_label_position = 9 if inlist(isic4_section, "B", "F", "G", "H")
+
 twoway ///
     (function y = x, range(`diagonal_min' `diagonal_max') lpattern(dash) lcolor(gs8)) ///
-    (scatter tot_rev_elasticity va_elasticity if data_export == "A – Agriculture, Forestry and Fishing", ///
+    (scatter tot_rev_elasticity va_elasticity if isic4_broad_label == "Agriculture", ///
         msymbol(circle) mcolor("27 158 119") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
-    (scatter tot_rev_elasticity va_elasticity if data_export == "B – Mining and Quarrying", ///
+        mlabel(isic4_label_short_display) mlabsize(vsmall) mlabvposition(scatter_label_position)) ///
+    (scatter tot_rev_elasticity va_elasticity if isic4_broad_label == "Mining", ///
         msymbol(diamond) mcolor("117 112 179") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
-    (scatter tot_rev_elasticity va_elasticity if data_export == "C – Manufacturing", ///
+        mlabel(isic4_label_short_display) mlabsize(vsmall) mlabvposition(scatter_label_position)) ///
+    (scatter tot_rev_elasticity va_elasticity if isic4_broad_label == "Manufacturing", ///
         msymbol(square) mcolor("44 123 182") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
-    (scatter tot_rev_elasticity va_elasticity if data_export == "Utilities", ///
+        mlabel(isic4_label_short_display) mlabsize(vsmall) mlabvposition(scatter_label_position)) ///
+    (scatter tot_rev_elasticity va_elasticity if isic4_broad_label == "Utilities", ///
         msymbol(triangle) mcolor("230 171 2") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
-    (scatter tot_rev_elasticity va_elasticity if data_export == "F – Construction", ///
+        mlabel(isic4_label_short_display) mlabsize(vsmall) mlabvposition(scatter_label_position)) ///
+    (scatter tot_rev_elasticity va_elasticity if isic4_broad_label == "Construction", ///
         msymbol(Oh) mcolor("208 28 139") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
-    (scatter tot_rev_elasticity va_elasticity if data_export == "G – Wholesale and Retail Trade; Repair of Motor Vehicles", ///
+        mlabel(isic4_label_short_display) mlabsize(vsmall) mlabvposition(scatter_label_position)) ///
+    (scatter tot_rev_elasticity va_elasticity if isic4_broad_label == "Trade", ///
         msymbol(Th) mcolor("217 95 2") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
-    (scatter tot_rev_elasticity va_elasticity if data_export == "H – Transportation and Storage", ///
+        mlabel(isic4_label_short_display) mlabsize(vsmall) mlabvposition(scatter_label_position)) ///
+    (scatter tot_rev_elasticity va_elasticity if isic4_broad_label == "Transport", ///
         msymbol(Sh) mcolor("102 166 30") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
-    (scatter tot_rev_elasticity va_elasticity if data_export == "J – Information and Communication", ///
+        mlabel(isic4_label_short_display) mlabsize(vsmall) mlabvposition(scatter_label_position)) ///
+    (scatter tot_rev_elasticity va_elasticity if isic4_broad_label == "Information", ///
         msymbol(plus) mcolor("102 166 30") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
-    (scatter tot_rev_elasticity va_elasticity if data_export == "K – Financial and Insurance Activities", ///
+        mlabel(isic4_label_short_display) mlabsize(vsmall) mlabvposition(scatter_label_position)) ///
+    (scatter tot_rev_elasticity va_elasticity if isic4_broad_label == "Finance", ///
         msymbol(x) mcolor("117 112 179") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(vsmall)) ///
-    (scatter tot_rev_elasticity va_elasticity if data_export == "Other services", ///
+        mlabel(isic4_label_short_display) mlabsize(vsmall) mlabvposition(scatter_label_position)) ///
+    (scatter tot_rev_elasticity va_elasticity if isic4_broad_label == "Other services", ///
         msymbol(Dh) mcolor("102 102 102") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(vsmall)), ///
+        mlabel(isic4_label_short_display) mlabsize(vsmall) mlabvposition(scatter_label_position)), ///
     xline(0, lpattern(dash) lcolor(black)) ///
     yline(0, lpattern(dash) lcolor(black)) ///
     xlabel(, grid glpattern(dash) glcolor(gs13)) ///
@@ -742,10 +748,11 @@ twoway ///
         10 "Finance" 11 "Other services") cols(1) pos(3) ring(1) size(tiny) ///
         region(lcolor(none) fcolor(none))) ///
     plotregion(color(white)) graphregion(color(white)) ///
-    bgcolor(white) xsize(7.5) ysize(5.5)
+    bgcolor(white) xsize(7.5) ysize(5.5) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny))
 
-graph export "output/figures/`output_stub'_scatter.pdf", replace
-graph export "output/figures/`output_stub'_scatter.png", replace
+graph export "output/figures/`output_stub'_scatter.pdf", name(Graph) replace
+graph export "output/figures/`output_stub'_scatter.png", name(Graph) replace
 
 * Keep the superseded scale-plot code for reference without regenerating it.
 if 0 {
@@ -755,36 +762,36 @@ if 0 {
     - Scale is computed from the common valid sample for both elasticity models.
 *******************************************************************************/
 twoway ///
-    (scatter va_elasticity avg_firm_ln_emp if strpos(data_export, "Agriculture") > 0, ///
+    (scatter va_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Agriculture") > 0, ///
         msymbol(circle) mcolor("27 158 119") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_emp if strpos(data_export, "Mining") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Mining") > 0, ///
         msymbol(diamond) mcolor("117 112 179") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_emp if strpos(data_export, "Manufacturing") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Manufacturing") > 0, ///
         msymbol(square) mcolor("44 123 182") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_emp if data_export == "Utilities", ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_emp if isic4_broad_label == "Utilities", ///
         msymbol(triangle) mcolor("230 171 2") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_emp if strpos(data_export, "Construction") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Construction") > 0, ///
         msymbol(Oh) mcolor("208 28 139") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_emp if strpos(data_export, "Wholesale") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Trade") > 0, ///
         msymbol(Th) mcolor("217 95 2") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_emp if strpos(data_export, "Transportation") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Transport") > 0, ///
         msymbol(Sh) mcolor("102 166 30") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_emp if strpos(data_export, "Information") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Information") > 0, ///
         msymbol(plus) mcolor("102 166 30") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_emp if strpos(data_export, "Financial") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Finance") > 0, ///
         msymbol(x) mcolor("117 112 179") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_emp if data_export == "Other services", ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_emp if isic4_broad_label == "Other services", ///
         msymbol(Dh) mcolor("102 102 102") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)), ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)), ///
     yline(0, lpattern(dash) lcolor(black)) ///
     xlabel(, grid glpattern(dash) glcolor(gs13)) ///
     ylabel(, grid glpattern(dash) glcolor(gs13)) ///
@@ -793,39 +800,40 @@ twoway ///
     title("Value added", size(medsmall)) ///
     legend(off) ///
     plotregion(color(white)) graphregion(color(white)) ///
-    bgcolor(white) name(scale_va_emp, replace)
+    bgcolor(white) name(scale_va_emp, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny))
 
 twoway ///
-    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(data_export, "Agriculture") > 0, ///
+    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Agriculture") > 0, ///
         msymbol(circle) mcolor("27 158 119") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(data_export, "Mining") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Mining") > 0, ///
         msymbol(diamond) mcolor("117 112 179") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(data_export, "Manufacturing") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Manufacturing") > 0, ///
         msymbol(square) mcolor("44 123 182") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_emp if data_export == "Utilities", ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_emp if isic4_broad_label == "Utilities", ///
         msymbol(triangle) mcolor("230 171 2") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(data_export, "Construction") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Construction") > 0, ///
         msymbol(Oh) mcolor("208 28 139") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(data_export, "Wholesale") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Trade") > 0, ///
         msymbol(Th) mcolor("217 95 2") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(data_export, "Transportation") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Transport") > 0, ///
         msymbol(Sh) mcolor("102 166 30") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(data_export, "Information") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Information") > 0, ///
         msymbol(plus) mcolor("102 166 30") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(data_export, "Financial") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_emp if strpos(isic4_broad_label, "Finance") > 0, ///
         msymbol(x) mcolor("117 112 179") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_emp if data_export == "Other services", ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_emp if isic4_broad_label == "Other services", ///
         msymbol(Dh) mcolor("102 102 102") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)), ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)), ///
     yline(0, lpattern(dash) lcolor(black)) ///
     xlabel(, grid glpattern(dash) glcolor(gs13)) ///
     ylabel(, grid glpattern(dash) glcolor(gs13)) ///
@@ -837,47 +845,49 @@ twoway ///
         9 "Finance" 10 "Other services") cols(1) pos(3) ring(1) size(tiny) ///
         region(lcolor(none) fcolor(none))) ///
     plotregion(color(white)) graphregion(color(white)) ///
-    bgcolor(white) name(scale_tot_emp, replace)
+    bgcolor(white) name(scale_tot_emp, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny))
 
 graph combine scale_va_emp scale_tot_emp, ///
     rows(1) xsize(11.5) ysize(4.8) graphregion(color(white)) ///
     title("Employment elasticities by sector employment scale", size(medsmall)) ///
-    name(scale_emp_combined, replace)
+    name(scale_emp_combined, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny))
 graph display scale_emp_combined
-graph export "output/figures/`output_stub'_elasticities_vs_avg_log_employment.pdf", replace
-graph export "output/figures/`output_stub'_elasticities_vs_avg_log_employment.png", replace
+graph export "output/figures/`output_stub'_elasticities_vs_avg_log_employment.pdf", name(scale_emp_combined) replace
+graph export "output/figures/`output_stub'_elasticities_vs_avg_log_employment.png", name(scale_emp_combined) replace
 
 twoway ///
-    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Agriculture") > 0, ///
+    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Agriculture") > 0, ///
         msymbol(circle) mcolor("27 158 119") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Mining") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Mining") > 0, ///
         msymbol(diamond) mcolor("117 112 179") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Manufacturing") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Manufacturing") > 0, ///
         msymbol(square) mcolor("44 123 182") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_tot_rev if data_export == "Utilities", ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_tot_rev if isic4_broad_label == "Utilities", ///
         msymbol(triangle) mcolor("230 171 2") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Construction") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Construction") > 0, ///
         msymbol(Oh) mcolor("208 28 139") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Wholesale") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Trade") > 0, ///
         msymbol(Th) mcolor("217 95 2") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Transportation") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Transport") > 0, ///
         msymbol(Sh) mcolor("102 166 30") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Information") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Information") > 0, ///
         msymbol(plus) mcolor("102 166 30") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Financial") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Finance") > 0, ///
         msymbol(x) mcolor("117 112 179") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter va_elasticity avg_firm_ln_tot_rev if data_export == "Other services", ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter va_elasticity avg_firm_ln_tot_rev if isic4_broad_label == "Other services", ///
         msymbol(Dh) mcolor("102 102 102") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)), ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)), ///
     yline(0, lpattern(dash) lcolor(black)) ///
     xlabel(, grid glpattern(dash) glcolor(gs13)) ///
     ylabel(, grid glpattern(dash) glcolor(gs13)) ///
@@ -886,39 +896,40 @@ twoway ///
     title("Value added", size(medsmall)) ///
     legend(off) ///
     plotregion(color(white)) graphregion(color(white)) ///
-    bgcolor(white) name(scale_va_rev, replace)
+    bgcolor(white) name(scale_va_rev, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny))
 
 twoway ///
-    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Agriculture") > 0, ///
+    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Agriculture") > 0, ///
         msymbol(circle) mcolor("27 158 119") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Mining") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Mining") > 0, ///
         msymbol(diamond) mcolor("117 112 179") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Manufacturing") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Manufacturing") > 0, ///
         msymbol(square) mcolor("44 123 182") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if data_export == "Utilities", ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if isic4_broad_label == "Utilities", ///
         msymbol(triangle) mcolor("230 171 2") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Construction") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Construction") > 0, ///
         msymbol(Oh) mcolor("208 28 139") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Wholesale") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Trade") > 0, ///
         msymbol(Th) mcolor("217 95 2") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Transportation") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Transport") > 0, ///
         msymbol(Sh) mcolor("102 166 30") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Information") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Information") > 0, ///
         msymbol(plus) mcolor("102 166 30") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(data_export, "Financial") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if strpos(isic4_broad_label, "Finance") > 0, ///
         msymbol(x) mcolor("117 112 179") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if data_export == "Other services", ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter tot_rev_elasticity avg_firm_ln_tot_rev if isic4_broad_label == "Other services", ///
         msymbol(Dh) mcolor("102 102 102") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)), ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)), ///
     yline(0, lpattern(dash) lcolor(black)) ///
     xlabel(, grid glpattern(dash) glcolor(gs13)) ///
     ylabel(, grid glpattern(dash) glcolor(gs13)) ///
@@ -930,15 +941,17 @@ twoway ///
         9 "Finance" 10 "Other services") cols(1) pos(3) ring(1) size(tiny) ///
         region(lcolor(none) fcolor(none))) ///
     plotregion(color(white)) graphregion(color(white)) ///
-    bgcolor(white) name(scale_tot_rev, replace)
+    bgcolor(white) name(scale_tot_rev, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny))
 
 graph combine scale_va_rev scale_tot_rev, ///
     rows(1) xsize(11.5) ysize(4.8) graphregion(color(white)) ///
     title("Employment elasticities by sector revenue scale", size(medsmall)) ///
-    name(scale_rev_combined, replace)
+    name(scale_rev_combined, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny))
 graph display scale_rev_combined
-graph export "output/figures/`output_stub'_elasticities_vs_avg_log_revenue.pdf", replace
-graph export "output/figures/`output_stub'_elasticities_vs_avg_log_revenue.png", replace
+graph export "output/figures/`output_stub'_elasticities_vs_avg_log_revenue.pdf", name(scale_rev_combined) replace
+graph export "output/figures/`output_stub'_elasticities_vs_avg_log_revenue.png", name(scale_rev_combined) replace
 }
 
 /*******************************************************************************
@@ -946,13 +959,13 @@ graph export "output/figures/`output_stub'_elasticities_vs_avg_log_revenue.png",
     - The x-axis is aggregate sector value added per worker, averaged equally
       across contributing sector-years and shown in logs.
     - Bubble sizes are transparent tercile categories calculated separately for
-      each scale measure across the common 29-sector plotting sample.
+      each scale measure across the common eligible-section plotting sample.
     - Sectors are labelled when the absolute value of the relevant employment
       elasticity meets the common threshold or they rank among the two most
       productive sectors.
 *******************************************************************************/
-isid nacam
-assert _N == 29
+isid isic4_sector_id
+assert _N >= 3 & _N <= 16
 assert !missing(ln_sector_va_per_worker, va_elasticity, tot_rev_elasticity, ///
     avg_annual_total_revenue, avg_annual_total_employment, ///
     avg_firm_revenue, avg_firm_employment)
@@ -1024,9 +1037,9 @@ foreach measure in total_revenue total_employment avg_revenue avg_employment {
 }
 
 * Label economically large elasticities and the two most productive sectors.
-gsort -ln_sector_va_per_worker nacam
+gsort -ln_sector_va_per_worker isic4_sector_id
 generate byte top_productivity = _n <= 2
-sort nacam
+sort isic4_sector_id
 quietly count if top_productivity == 1
 assert r(N) == 2
 
@@ -1043,45 +1056,17 @@ quietly count if annotate_totrev == 1
 assert r(N) > 0
 
 * Default anchors allow the threshold-selected set to change with the estimates.
-* Tailored overrides keep the current leader-line layout readable.
+* Label anchors use the re-estimated section coordinates.
 generate double label_x_va = ln_sector_va_per_worker if annotate_va == 1
 generate double label_y_va = va_elasticity if annotate_va == 1
 generate byte label_pos_va = 3 if annotate_va == 1
-replace label_x_va = 15.60 if nacam == 17
-replace label_y_va =  0.47 if nacam == 17
-replace label_pos_va = 3 if nacam == 17
-replace label_x_va = 15.55 if nacam == 27
-replace label_y_va =  0.34 if nacam == 27
-replace label_pos_va = 3 if nacam == 27
-replace label_x_va = 17.55 if nacam == 29
-replace label_y_va = -0.31 if nacam == 29
-replace label_pos_va = 3 if nacam == 29
-replace label_x_va = 15.85 if nacam == 41
-replace label_y_va = -0.24 if nacam == 41
-replace label_pos_va = 3 if nacam == 41
-replace label_x_va = 19.20 if nacam == 5
-replace label_y_va =  0.01 if nacam == 5
-replace label_pos_va = 9 if nacam == 5
 
 generate double label_x_totrev = ln_sector_va_per_worker ///
     if annotate_totrev == 1
 generate double label_y_totrev = tot_rev_elasticity if annotate_totrev == 1
 generate byte label_pos_totrev = 3 if annotate_totrev == 1
-replace label_x_totrev = 15.64 if nacam == 17
-replace label_y_totrev =  0.67 if nacam == 17
-replace label_pos_totrev = 3 if nacam == 17
-replace label_x_totrev = 17.05 if nacam == 9
-replace label_y_totrev =  0.66 if nacam == 9
-replace label_pos_totrev = 3 if nacam == 9
-replace label_x_totrev = 16.20 if nacam == 6
-replace label_y_totrev = -0.32 if nacam == 6
-replace label_pos_totrev = 3 if nacam == 6
-replace label_x_totrev = 15.10 if nacam == 2
-replace label_y_totrev = -0.14 if nacam == 2
-replace label_pos_totrev = 3 if nacam == 2
-replace label_x_totrev = 19.20 if nacam == 5
-replace label_y_totrev =  0.21 if nacam == 5
-replace label_pos_totrev = 9 if nacam == 5
+replace label_pos_totrev = 12 if isic4_section == "R+S+T" & annotate_totrev
+replace label_pos_totrev = 6 if isic4_section == "A" & annotate_totrev
 
 assert !missing(label_x_va, label_y_va, label_pos_va) if annotate_va == 1
 assert !missing(label_x_totrev, label_y_totrev, label_pos_totrev) ///
@@ -1128,8 +1113,8 @@ program define cmr_elasticity_bubble_panel
     else {
         local legend_options ///
             legend(order(1 `legend1' 2 `legend2' 3 `legend3') ///
-                title("Bubble-size terciles across 29 sectors", size(tiny)) ///
-                cols(1) pos(4) ring(0) size(tiny) ///
+                title("Bubble-size terciles across eligible groups", size(tiny)) ///
+                cols(1) pos(6) ring(0) size(tiny) ///
                 region(lcolor(gs14) fcolor(white%85)))
     }
 
@@ -1170,7 +1155,7 @@ program define cmr_elasticity_bubble_panel
         (pcspike `label_y' `label_x' `varlist' ln_sector_va_per_worker ///
             if `annotation_flag' == 1, lcolor(gs7) lwidth(vthin)) ///
         (scatter `label_y' `label_x' if `annotation_flag' == 1, ///
-            msymbol(none) mlabel(nacam_label_short_display) ///
+            msymbol(none) mlabel(isic4_label_short_display) ///
             mlabvposition(`label_position') mlabsize(vsmall) mlabcolor(black)), ///
         xline(`xmedian', lpattern(shortdash) lcolor(gs8) lwidth(thin)) ///
         yline(0, lpattern(solid) lcolor(gs6) lwidth(thin)) ///
@@ -1212,10 +1197,10 @@ graph combine bubble_va_total_revenue bubble_totrev_total_revenue, ///
     rows(1) xsize(11.5) ysize(5.2) graphregion(color(white)) ///
     title("Where are Cameroon's employment-expanding sectors?", size(medsmall)) ///
     subtitle("Employment response, productivity, and sector scale", size(small)) ///
-    note("Vertical line marks median log sector value added per worker.", size(vsmall)) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes." "Vertical line marks median log sector value added per worker.", size(vsmall)) ///
     name(bubble_total_revenue_combined, replace)
-graph export "output/figures/cmr_elasticities_va_worker_bubble_total_revenue.pdf", replace
-graph export "output/figures/cmr_elasticities_va_worker_bubble_total_revenue.png", replace
+graph export "output/figures/cmr_isic4_section_elasticities_va_worker_bubble_total_revenue.pdf", name(bubble_total_revenue_combined) replace
+graph export "output/figures/cmr_isic4_section_elasticities_va_worker_bubble_total_revenue.png", name(bubble_total_revenue_combined) replace
 
 cmr_elasticity_bubble_panel va_elasticity, ///
     tercilevar(tercile_total_employment) model(va) ///
@@ -1235,10 +1220,10 @@ graph combine bubble_va_total_employment bubble_totrev_total_employment, ///
     rows(1) xsize(11.5) ysize(5.2) graphregion(color(white)) ///
     title("Where are Cameroon's employment-expanding sectors?", size(medsmall)) ///
     subtitle("Employment response, productivity, and sector scale", size(small)) ///
-    note("Vertical line marks median log sector value added per worker.", size(vsmall)) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes." "Vertical line marks median log sector value added per worker.", size(vsmall)) ///
     name(bubble_total_employment_combined, replace)
-graph export "output/figures/cmr_elasticities_va_worker_bubble_total_employment.pdf", replace
-graph export "output/figures/cmr_elasticities_va_worker_bubble_total_employment.png", replace
+graph export "output/figures/cmr_isic4_section_elasticities_va_worker_bubble_total_employment.pdf", name(bubble_total_employment_combined) replace
+graph export "output/figures/cmr_isic4_section_elasticities_va_worker_bubble_total_employment.png", name(bubble_total_employment_combined) replace
 
 cmr_elasticity_bubble_panel va_elasticity, ///
     tercilevar(tercile_avg_revenue) model(va) ///
@@ -1258,10 +1243,10 @@ graph combine bubble_va_avg_revenue bubble_totrev_avg_revenue, ///
     rows(1) xsize(11.5) ysize(5.2) graphregion(color(white)) ///
     title("Where are Cameroon's employment-expanding sectors?", size(medsmall)) ///
     subtitle("Employment response, productivity, and sector scale", size(small)) ///
-    note("Vertical line marks median log sector value added per worker.", size(vsmall)) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes." "Vertical line marks median log sector value added per worker.", size(vsmall)) ///
     name(bubble_avg_revenue_combined, replace)
-graph export "output/figures/cmr_elasticities_va_worker_bubble_avg_revenue.pdf", replace
-graph export "output/figures/cmr_elasticities_va_worker_bubble_avg_revenue.png", replace
+graph export "output/figures/cmr_isic4_section_elasticities_va_worker_bubble_avg_revenue.pdf", name(bubble_avg_revenue_combined) replace
+graph export "output/figures/cmr_isic4_section_elasticities_va_worker_bubble_avg_revenue.png", name(bubble_avg_revenue_combined) replace
 
 cmr_elasticity_bubble_panel va_elasticity, ///
     tercilevar(tercile_avg_employment) model(va) ///
@@ -1281,10 +1266,10 @@ graph combine bubble_va_avg_employment bubble_totrev_avg_employment, ///
     rows(1) xsize(11.5) ysize(5.2) graphregion(color(white)) ///
     title("Where are Cameroon's employment-expanding sectors?", size(medsmall)) ///
     subtitle("Employment response, productivity, and sector scale", size(small)) ///
-    note("Vertical line marks median log sector value added per worker.", size(vsmall)) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes." "Vertical line marks median log sector value added per worker.", size(vsmall)) ///
     name(bubble_avg_employment_combined, replace)
-graph export "output/figures/cmr_elasticities_va_worker_bubble_avg_employment.pdf", replace
-graph export "output/figures/cmr_elasticities_va_worker_bubble_avg_employment.png", replace
+graph export "output/figures/cmr_isic4_section_elasticities_va_worker_bubble_avg_employment.pdf", name(bubble_avg_employment_combined) replace
+graph export "output/figures/cmr_isic4_section_elasticities_va_worker_bubble_avg_employment.png", name(bubble_avg_employment_combined) replace
 
 
 

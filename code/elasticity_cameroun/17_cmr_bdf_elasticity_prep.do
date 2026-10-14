@@ -6,10 +6,11 @@ set more off
         Prepare the Tax/BDF firm-year dataset used by the elasticity models.
 
     Inputs:
-        Data/Analysis/CMR_BDF_cleaned.dta
+        Data/Analysis/CMR_BDF_isic4_sections_assessment.dta
 
     Outputs:
-        Data/Analysis/cmr_bdf_elasticity_clean.dta
+        Data/Analysis/CMR_BDF_isic4_section_prepared.dta
+        Data/Analysis/cmr_bdf_isic4_section_elasticity_clean.dta
 
     Notes:
         This file stops before regressions, tables, or figures. It creates the
@@ -46,8 +47,8 @@ if "${PROJECT_ROOT}" == "" {
     do "code/01_setup.do"
 }
 
-local input_file "${DATADIR}/Analysis/CMR_BDF_cleaned.dta"
-local output_file "${DATADIR}/Analysis/cmr_bdf_elasticity_clean.dta"
+local input_file "${DATADIR}/Analysis/CMR_BDF_isic4_sections_assessment.dta"
+local output_file "${DATADIR}/Analysis/cmr_bdf_isic4_section_elasticity_clean.dta"
 local min_sector_obs 30
 local min_sector_firms 10
 
@@ -55,19 +56,37 @@ confirm file "`input_file'"
 
 use "`input_file'", clear
 
-* Keep the variables used by the current Tax/BDF elasticity and fixed-asset
-* specifications so later do-files start from a compact analysis dataset.
-keep firmid fin_yr nacam nacam_label_display nacam_label_short_display ///
-    data_export totemp va tot_rev fa_net sog sls_prod sls_svcs
+* Validate that classification has preserved every original field and row.
+tempfile original_panel
+preserve
+use "${DATADIR}/Analysis/CMR_BDF_cleaned.dta", clear
+isid firmid fin_yr
+sort firmid fin_yr
+unab original_variables : _all
+save `original_panel'
+restore
+sort firmid fin_yr
+cf `original_variables' using `original_panel'
+do "${CODEDIR}/02_construct/02_cmr_tax_section_fields.do"
+
+* Keep the full classified panel for scripts with different accounting inputs.
+* Regression preparation below adds convenience fields without changing this file.
+save "${DATADIR}/Analysis/CMR_BDF_isic4_section_prepared.dta", replace
+bysort firmid isic4_sector_id: generate byte section_tag = _n == 1
+bysort firmid: egen byte firm_sections = total(section_tag)
+egen byte firm_tag = tag(firmid)
+count if firm_tag & firm_sections > 1
+display as result "Firms reporting more than one section group: " r(N)
+drop section_tag firm_sections firm_tag
 
 isid firmid fin_yr
-assert !missing(firmid, fin_yr, nacam, nacam_label_display, ///
-    nacam_label_short_display, data_export)
+assert !missing(firmid, fin_yr, isic4_sector_id, isic4_label_display, ///
+    isic4_label_short_display, isic4_broad_label)
 
 * The fixed-effect identifiers are encoded once here because all Tax/BDF models
 * use firm fixed effects and some robustness checks use broad-sector-year FE.
 encode firmid, generate(firm_fe)
-encode data_export, generate(data_export_fe)
+encode isic4_broad_label, generate(isic4_broad_label_fe)
 
 * Convert the accounting and employment fields to numeric Stata variables before
 * taking logs. Positive-value restrictions define the elasticity samples.
@@ -92,28 +111,28 @@ generate double ln_sales_turnover = ln(sales_turnover) if sales_turnover > 0
 * These flags make the production and workbook regressions explicit about which
 * firm-years enter each elasticity model.
 generate byte sample_va = employment > 0 & va > 0 ///
-    & !missing(ln_emp, ln_va, firm_fe, fin_yr, nacam)
+    & !missing(ln_emp, ln_va, firm_fe, fin_yr, isic4_sector_id)
 generate byte sample_tot_rev = employment > 0 & tot_rev > 0 ///
-    & !missing(ln_emp, ln_tot_rev, firm_fe, fin_yr, nacam)
+    & !missing(ln_emp, ln_tot_rev, firm_fe, fin_yr, isic4_sector_id)
 generate byte sample_fixed_asset_employment = employment > 0 ///
     & fixed_assets > 0 ///
-    & !missing(ln_emp, ln_fixed_assets, firm_fe, fin_yr, nacam)
+    & !missing(ln_emp, ln_fixed_assets, firm_fe, fin_yr, isic4_sector_id)
 generate byte sample_fixed_asset_sales = sales_turnover > 0 ///
     & fixed_assets > 0 ///
-    & !missing(ln_sales_turnover, ln_fixed_assets, firm_fe, fin_yr, nacam)
+    & !missing(ln_sales_turnover, ln_fixed_assets, firm_fe, fin_yr, isic4_sector_id)
 
 * Sector support is calculated once so every Tax/BDF model uses the same
 * minimum-observation and minimum-firm rule as the current production scripts.
 preserve
-keep nacam firm_fe sample_va sample_tot_rev ///
+keep isic4_sector_id firm_fe sample_va sample_tot_rev ///
     sample_fixed_asset_employment sample_fixed_asset_sales ///
     ln_emp ln_va ln_tot_rev ln_fixed_assets ln_sales_turnover
 
-egen tag_va_firm = tag(nacam firm_fe) if sample_va == 1
-egen tag_tot_rev_firm = tag(nacam firm_fe) if sample_tot_rev == 1
-egen tag_fixed_asset_employment_firm = tag(nacam firm_fe) ///
+egen tag_va_firm = tag(isic4_sector_id firm_fe) if sample_va == 1
+egen tag_tot_rev_firm = tag(isic4_sector_id firm_fe) if sample_tot_rev == 1
+egen tag_fixed_asset_employment_firm = tag(isic4_sector_id firm_fe) ///
     if sample_fixed_asset_employment == 1
-egen tag_fixed_asset_sales_firm = tag(nacam firm_fe) ///
+egen tag_fixed_asset_sales_firm = tag(isic4_sector_id firm_fe) ///
     if sample_fixed_asset_sales == 1
 
 generate double ln_emp_fixed_asset = ln_emp if sample_fixed_asset_employment == 1
@@ -137,7 +156,7 @@ collapse ///
          sd_ln_sales_fixed_asset = ln_sales_fixed_asset ///
          sd_ln_fixed_assets_employment = ln_fixed_assets_employment ///
          sd_ln_fixed_assets_sales = ln_fixed_assets_sales, ///
-    by(nacam)
+    by(isic4_sector_id)
 
 generate byte include_sector = va_obs >= `min_sector_obs' ///
     & va_firms >= `min_sector_firms' ///
@@ -154,19 +173,19 @@ generate byte include_fixed_asset_sector = ///
     & sd_ln_fixed_assets_employment > 0 ///
     & sd_ln_fixed_assets_sales > 0
 
-isid nacam
+isid isic4_sector_id
 tempfile sector_support
 save "`sector_support'"
 restore
 
-merge m:1 nacam using "`sector_support'", nogen
-assert !missing(include_sector, include_fixed_asset_sector) if !missing(nacam)
+merge m:1 isic4_sector_id using "`sector_support'", nogen
+assert !missing(include_sector, include_fixed_asset_sector) if !missing(isic4_sector_id)
 
 * Sector scale measures support the opportunity-map figures but are still
 * constructed before any regression or plotting step.
 preserve
 keep if employment > 0 & va > 0 & tot_rev > 0 & include_sector == 1 ///
-    & !missing(employment, va, tot_rev, firm_fe, fin_yr, nacam, ///
+    & !missing(employment, va, tot_rev, firm_fe, fin_yr, isic4_sector_id, ///
         ln_emp, ln_va, ln_tot_rev)
 
 collapse ///
@@ -174,9 +193,9 @@ collapse ///
           sector_year_total_va = va ///
           sector_year_total_revenue = tot_rev ///
     (count) sector_year_firms = firm_fe, ///
-    by(nacam fin_yr)
+    by(isic4_sector_id fin_yr)
 
-isid nacam fin_yr
+isid isic4_sector_id fin_yr
 assert sector_year_total_employment > 0
 assert sector_year_total_va > 0
 assert sector_year_total_revenue > 0
@@ -197,18 +216,18 @@ collapse ///
            sector_va_per_worker = sector_year_va_per_worker ///
            avg_annual_firms = sector_year_firms ///
     (count) contributing_years = fin_yr, ///
-    by(nacam)
+    by(isic4_sector_id)
 
 generate double ln_sector_va_per_worker = ln(sector_va_per_worker)
-isid nacam
+isid isic4_sector_id
 tempfile sector_scale
 save "`sector_scale'"
 restore
 
-merge m:1 nacam using "`sector_scale'", nogen keep(master match)
+merge m:1 isic4_sector_id using "`sector_scale'", nogen keep(master match)
 
 label variable firm_fe "Firm fixed-effect identifier"
-label variable data_export_fe "Broad sector fixed-effect identifier"
+label variable isic4_broad_label_fe "Broad sector fixed-effect identifier"
 label variable employment "Employment"
 label variable fixed_assets "Net fixed assets"
 label variable sales_turnover "Sales turnover"
@@ -225,8 +244,8 @@ label variable include_sector "Sector meets VA and revenue elasticity support ru
 label variable include_fixed_asset_sector "Sector meets fixed-asset support rules"
 label variable ln_sector_va_per_worker "Log sector value added per worker"
 
-order firmid firm_fe fin_yr nacam nacam_label_display ///
-    nacam_label_short_display data_export data_export_fe employment va ///
+order firmid firm_fe fin_yr isic4_sector_id isic4_label_display ///
+    isic4_label_short_display isic4_broad_label isic4_broad_label_fe employment va ///
     tot_rev fixed_assets sales_turnover ln_emp ln_va ln_tot_rev ///
     ln_fixed_assets ln_sales_turnover sample_va sample_tot_rev ///
     sample_fixed_asset_employment sample_fixed_asset_sales include_sector ///

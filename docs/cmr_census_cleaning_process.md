@@ -1,12 +1,21 @@
 # Cameroon Census Cleaning Process
 
+> **Tax comparison correction, 2026-09-29:** raw tax/BDF codes use NACAM Rev.1,
+> as established by [the ECOFIN checks](cmr_tax_ecofin2019_comparison.md). The
+> legacy/admin vocabulary described below is the older implemented census bridge;
+> it does not establish equivalence with the corrected tax meanings. Review that
+> bridge before using any historical cross-source sector comparisons. Current
+> analysis uses the [census ISIC workflow](cmr_census_isic4_workflow.md), based on
+> original activity text, and the [ISIC slide workflow](isic4_slides_workflow.md).
+> NACAM-specific diagnostic descriptions below document the earlier workflow.
+
 Date documented: 2026-05-26
 
 ## Purpose
 
 This note documents the cleaning process used for the Cameroon 2024 RGE Census dataset in the current CEMAC project pipeline. The active Stata workflow is split between `code/elasticity_cameroun/08_cmr_census_cleaning.do` and `code/elasticity_cameroun/08_cmr_census_sector_figures.do`.
 
-The cleaned Census data are used to produce sector-level diagnostics that align the Census activity information with the NACAM sectors used in the Cameroon administrative-data elasticity analysis.
+The cleaned Census data now produce ISIC division diagnostics and elasticity estimates. Separate section estimates provide the comparison with the administrative tax panel. Original NACAM fields remain available for historical checks.
 
 ## Source Data
 

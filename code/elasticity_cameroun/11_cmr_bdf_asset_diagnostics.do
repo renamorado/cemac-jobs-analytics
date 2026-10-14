@@ -3,20 +3,20 @@ set more off
 
 /*******************************************************************************
     Purpose:
-        Build administrative tax/BDF asset diagnostics by NACAM sector.
+        Build administrative tax/BDF asset diagnostics by ISIC Rev.4 section.
 
     Inputs:
-        Data/Analysis/CMR_BDF_cleaned.dta
+        Data/Analysis/CMR_BDF_isic4_section_prepared.dta
 
     Outputs:
-        Data/Analysis/CMR_BDF_asset_diagnostics.dta
-        output/tables/cmr_bdf_asset_availability_audit.tex
-        output/figures/cmr_bdf_net_fixed_assets_by_nacam.pdf
-        output/figures/cmr_bdf_net_fixed_assets_by_nacam.png
-        output/figures/cmr_bdf_net_total_assets_by_nacam.pdf
-        output/figures/cmr_bdf_net_total_assets_by_nacam.png
-        output/figures/cmr_bdf_assets_vs_employment_by_nacam.pdf
-        output/figures/cmr_bdf_assets_vs_employment_by_nacam.png
+        Data/Analysis/CMR_BDF_isic4_section_asset_diagnostics.dta
+        output/tables/cmr_bdf_isic4_section_asset_availability_audit.tex
+        output/figures/cmr_bdf_net_fixed_assets_by_isic4_section.pdf
+        output/figures/cmr_bdf_net_fixed_assets_by_isic4_section.png
+        output/figures/cmr_bdf_net_total_assets_by_isic4_section.pdf
+        output/figures/cmr_bdf_net_total_assets_by_isic4_section.png
+        output/figures/cmr_bdf_assets_vs_employment_by_isic4_section.pdf
+        output/figures/cmr_bdf_assets_vs_employment_by_isic4_section.png
 *******************************************************************************/
 
 if "${PROJECT_ROOT}" == "" {
@@ -64,17 +64,17 @@ if _rc {
     log using "${LOGDIR}/11_cmr_bdf_asset_diagnostics_`log_stamp'.log", text name(cmrbdfassets)
 }
 
-local input_file "${DATADIR}/Analysis/CMR_BDF_cleaned.dta"
-local diagnostics_out "${DATADIR}/Analysis/CMR_BDF_asset_diagnostics.dta"
+local input_file "${DATADIR}/Analysis/CMR_BDF_isic4_section_prepared.dta"
+local diagnostics_out "${DATADIR}/Analysis/CMR_BDF_isic4_section_asset_diagnostics.dta"
 
 confirm file "`input_file'"
 use "`input_file'", clear
 
-keep firmid fin_yr nacam nacam_label_display nacam_label_short_display ///
-    data_export totemp tot_rev fa_net tot_assets_net ta_net share_k
+keep firmid fin_yr isic4_section isic4_sector_id isic4_label_display isic4_label_short_display ///
+    isic4_broad_label totemp tot_rev fa_net tot_assets_net ta_net share_k
 
 isid firmid fin_yr
-assert !missing(nacam, nacam_label_display, nacam_label_short_display, data_export)
+assert !missing(isic4_sector_id, isic4_label_display, isic4_label_short_display, isic4_broad_label)
 
 capture confirm numeric variable totemp
 if !_rc {
@@ -110,8 +110,8 @@ foreach var in fa_net tot_assets_net ta_net share_k {
     local `var'_negative = r(N)
 
     preserve
-    keep if `var' > 0 & !missing(nacam)
-    keep nacam
+    keep if `var' > 0 & !missing(isic4_sector_id)
+    keep isic4_sector_id
     duplicates drop
     quietly count
     local `var'_sectors = r(N)
@@ -128,7 +128,7 @@ matrix colnames asset_audit = Nonmissing Positive Zero Negative SectorsPositive
 matrix rownames asset_audit = fa_net tot_assets_net ta_net share_k
 
 esttab matrix(asset_audit, fmt(%12.0fc)) ///
-    using "${OUTPUTDIR}/tables/cmr_bdf_asset_availability_audit.tex", ///
+    using "${OUTPUTDIR}/tables/cmr_bdf_isic4_section_asset_availability_audit.tex", ///
     replace booktabs fragment nomtitles nonumbers ///
     varlabels( ///
         fa_net "Net fixed assets" ///
@@ -145,7 +145,7 @@ save "`analysis_base'"
 *******************************************************************************/
 
 use "`analysis_base'", clear
-keep if fa_net > 0 & !missing(firmid, fin_yr, nacam)
+keep if fa_net > 0 & !missing(firmid, fin_yr, isic4_sector_id)
 gsort firmid -fin_yr
 by firmid: keep if _n == 1
 
@@ -161,7 +161,7 @@ collapse ///
     (mean) average_fixed_assets = fa_net ///
         average_employment_latest = employment_positive ///
         average_revenue_latest = revenue_positive, ///
-    by(nacam nacam_label_display nacam_label_short_display data_export)
+    by(isic4_section isic4_sector_id isic4_label_display isic4_label_short_display isic4_broad_label)
 
 generate double total_fixed_assets_bil = total_fixed_assets / 1000000000
 generate double average_fixed_assets_mil = average_fixed_assets / 1000000
@@ -182,12 +182,12 @@ label variable log_average_fixed_assets "Log average net fixed assets"
 label variable log_total_employment_latest "Log total employment"
 label variable log_total_revenue_latest "Log total revenue"
 
-sort nacam
-isid nacam
+sort isic4_sector_id
+isid isic4_sector_id
 save "`sector_fixed'"
 
 use "`analysis_base'", clear
-keep if tot_assets_net > 0 & !missing(firmid, fin_yr, nacam)
+keep if tot_assets_net > 0 & !missing(firmid, fin_yr, isic4_sector_id)
 gsort firmid -fin_yr
 by firmid: keep if _n == 1
 
@@ -197,7 +197,7 @@ collapse ///
     (sum) total_asset_firms = total_asset_firm ///
         total_net_total_assets = tot_assets_net ///
     (mean) average_net_total_assets = tot_assets_net, ///
-    by(nacam)
+    by(isic4_sector_id)
 
 generate double total_net_total_assets_bil = total_net_total_assets / 1000000000
 generate double average_net_total_assets_mil = average_net_total_assets / 1000000
@@ -212,18 +212,18 @@ label variable average_net_total_assets_mil "Average net total assets, CFAF mill
 label variable log_total_net_total_assets "Log total net total assets"
 label variable log_average_net_total_assets "Log average net total assets"
 
-sort nacam
-isid nacam
+sort isic4_sector_id
+isid isic4_sector_id
 save "`sector_total'"
 
 use "`sector_fixed'", clear
-merge 1:1 nacam using "`sector_total'", nogen keep(match)
-assert !missing(nacam_label_display, nacam_label_short_display, data_export)
+merge 1:1 isic4_sector_id using "`sector_total'", nogen keep(match)
+assert !missing(isic4_label_display, isic4_label_short_display, isic4_broad_label)
 assert fixed_asset_firms > 0
 assert total_asset_firms > 0
 
-sort nacam
-isid nacam
+sort isic4_sector_id
+isid isic4_sector_id
 save "`diagnostics_out'", replace
 
 /*******************************************************************************
@@ -272,12 +272,12 @@ program define bdf_asset_colored_dotplot
         exit 2000
     }
 
-    gsort -`varlist' nacam
+    gsort -`varlist' isic4_sector_id
     generate int plot_order = _n
 
     capture label drop bdf_asset_sector_axis
     forvalues i = 1/`=_N' {
-        local sector_label = subinstr(nacam_label_short_display[`i'], char(34), "'", .)
+        local sector_label = subinstr(isic4_label_short_display[`i'], char(34), "'", .)
         if `i' == 1 {
             label define bdf_asset_sector_axis `i' `"`sector_label'"'
         }
@@ -290,25 +290,25 @@ program define bdf_asset_colored_dotplot
     local last_order = _N
 
     twoway ///
-        (scatter plot_order `varlist' if strpos(data_export, "Agriculture") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Agriculture") > 0, ///
             msymbol(circle) mcolor("27 158 119") msize(medlarge)) ///
-        (scatter plot_order `varlist' if strpos(data_export, "Mining") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Mining") > 0, ///
             msymbol(diamond) mcolor("117 112 179") msize(medlarge)) ///
-        (scatter plot_order `varlist' if strpos(data_export, "Manufacturing") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Manufacturing") > 0, ///
             msymbol(square) mcolor("44 123 182") msize(medlarge)) ///
-        (scatter plot_order `varlist' if data_export == "Utilities", ///
+        (scatter plot_order `varlist' if isic4_broad_label == "Utilities", ///
             msymbol(triangle) mcolor("230 171 2") msize(medlarge)) ///
-        (scatter plot_order `varlist' if strpos(data_export, "Construction") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Construction") > 0, ///
             msymbol(Oh) mcolor("208 28 139") msize(medlarge)) ///
-        (scatter plot_order `varlist' if strpos(data_export, "Wholesale") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Trade") > 0, ///
             msymbol(Th) mcolor("217 95 2") msize(medlarge)) ///
-        (scatter plot_order `varlist' if strpos(data_export, "Transportation") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Transport") > 0, ///
             msymbol(Sh) mcolor("102 166 30") msize(medlarge)) ///
-        (scatter plot_order `varlist' if strpos(data_export, "Information") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Information") > 0, ///
             msymbol(plus) mcolor("102 166 30") msize(medlarge)) ///
-        (scatter plot_order `varlist' if strpos(data_export, "Financial") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Finance") > 0, ///
             msymbol(x) mcolor("117 112 179") msize(medlarge)) ///
-        (scatter plot_order `varlist' if data_export == "Other services", ///
+        (scatter plot_order `varlist' if isic4_broad_label == "Other services", ///
             msymbol(Dh) mcolor("102 102 102") msize(medlarge)), ///
         ylabel(1(1)`last_order', valuelabel angle(horizontal) ///
             labsize(`labsz') noticks) ///
@@ -334,12 +334,13 @@ bdf_asset_colored_dotplot log_average_fixed_assets if !missing(log_average_fixed
     name(bdf_fa_average) xdim(5.4)
 
 graph combine bdf_fa_total bdf_fa_average, ///
-    cols(2) title("BDF log net fixed assets by NACAM sector", size(medsmall)) ///
+    cols(2) title("BDF log net fixed assets by ISIC Rev.4 section", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
-    ysize(6.2) xsize(11.5) name(bdf_fa_combined, replace)
+    ysize(6.2) xsize(11.5) name(bdf_fa_combined, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny))
 graph display bdf_fa_combined
-graph export "${OUTPUTDIR}/figures/cmr_bdf_net_fixed_assets_by_nacam.pdf", replace
-graph export "${OUTPUTDIR}/figures/cmr_bdf_net_fixed_assets_by_nacam.png", replace
+graph export "${OUTPUTDIR}/figures/cmr_bdf_net_fixed_assets_by_isic4_section.pdf", name(bdf_fa_combined) replace
+graph export "${OUTPUTDIR}/figures/cmr_bdf_net_fixed_assets_by_isic4_section.png", name(bdf_fa_combined) replace
 
 bdf_asset_colored_dotplot log_total_net_total_assets if !missing(log_total_net_total_assets), ///
     title("Aggregate sector total") ///
@@ -352,44 +353,45 @@ bdf_asset_colored_dotplot log_average_net_total_assets if !missing(log_average_n
     name(bdf_ta_average) xdim(5.4)
 
 graph combine bdf_ta_total bdf_ta_average, ///
-    cols(2) title("BDF log net total assets by NACAM sector", size(medsmall)) ///
+    cols(2) title("BDF log net total assets by ISIC Rev.4 section", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
-    ysize(6.2) xsize(11.5) name(bdf_ta_combined, replace)
+    ysize(6.2) xsize(11.5) name(bdf_ta_combined, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny))
 graph display bdf_ta_combined
-graph export "${OUTPUTDIR}/figures/cmr_bdf_net_total_assets_by_nacam.pdf", replace
-graph export "${OUTPUTDIR}/figures/cmr_bdf_net_total_assets_by_nacam.png", replace
+graph export "${OUTPUTDIR}/figures/cmr_bdf_net_total_assets_by_isic4_section.pdf", name(bdf_ta_combined) replace
+graph export "${OUTPUTDIR}/figures/cmr_bdf_net_total_assets_by_isic4_section.png", name(bdf_ta_combined) replace
 
 twoway ///
-    (scatter log_total_fixed_assets log_total_employment_latest if strpos(data_export, "Agriculture") > 0, ///
+    (scatter log_total_fixed_assets log_total_employment_latest if strpos(isic4_broad_label, "Agriculture") > 0, ///
         msymbol(circle) mcolor("27 158 119") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter log_total_fixed_assets log_total_employment_latest if strpos(data_export, "Mining") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter log_total_fixed_assets log_total_employment_latest if strpos(isic4_broad_label, "Mining") > 0, ///
         msymbol(diamond) mcolor("117 112 179") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter log_total_fixed_assets log_total_employment_latest if strpos(data_export, "Manufacturing") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter log_total_fixed_assets log_total_employment_latest if strpos(isic4_broad_label, "Manufacturing") > 0, ///
         msymbol(square) mcolor("44 123 182") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter log_total_fixed_assets log_total_employment_latest if data_export == "Utilities", ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter log_total_fixed_assets log_total_employment_latest if isic4_broad_label == "Utilities", ///
         msymbol(triangle) mcolor("230 171 2") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter log_total_fixed_assets log_total_employment_latest if strpos(data_export, "Construction") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter log_total_fixed_assets log_total_employment_latest if strpos(isic4_broad_label, "Construction") > 0, ///
         msymbol(Oh) mcolor("208 28 139") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter log_total_fixed_assets log_total_employment_latest if strpos(data_export, "Wholesale") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter log_total_fixed_assets log_total_employment_latest if strpos(isic4_broad_label, "Trade") > 0, ///
         msymbol(Th) mcolor("217 95 2") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter log_total_fixed_assets log_total_employment_latest if strpos(data_export, "Transportation") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter log_total_fixed_assets log_total_employment_latest if strpos(isic4_broad_label, "Transport") > 0, ///
         msymbol(Sh) mcolor("102 166 30") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter log_total_fixed_assets log_total_employment_latest if strpos(data_export, "Information") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter log_total_fixed_assets log_total_employment_latest if strpos(isic4_broad_label, "Information") > 0, ///
         msymbol(plus) mcolor("102 166 30") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter log_total_fixed_assets log_total_employment_latest if strpos(data_export, "Financial") > 0, ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter log_total_fixed_assets log_total_employment_latest if strpos(isic4_broad_label, "Finance") > 0, ///
         msymbol(x) mcolor("117 112 179") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)) ///
-    (scatter log_total_fixed_assets log_total_employment_latest if data_export == "Other services", ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)) ///
+    (scatter log_total_fixed_assets log_total_employment_latest if isic4_broad_label == "Other services", ///
         msymbol(Dh) mcolor("102 102 102") mlabcolor(black) ///
-        mlabel(nacam_label_short_display) mlabsize(tiny)), ///
+        mlabel(isic4_label_short_display) mlabsize(tiny)), ///
     xlabel(, grid glpattern(dash) glcolor(gs13)) ///
     ylabel(, grid glpattern(dash) glcolor(gs13)) ///
     xtitle("Log total employment") ///
@@ -400,10 +402,11 @@ twoway ///
         9 "Finance" 10 "Other services") cols(1) pos(3) ring(1) size(tiny) ///
         region(lcolor(none) fcolor(none))) ///
     plotregion(color(white)) graphregion(color(white)) bgcolor(white) ///
-    xsize(7.5) ysize(5.5)
+    xsize(7.5) ysize(5.5) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny))
 
-graph export "${OUTPUTDIR}/figures/cmr_bdf_assets_vs_employment_by_nacam.pdf", replace
-graph export "${OUTPUTDIR}/figures/cmr_bdf_assets_vs_employment_by_nacam.png", replace
+graph export "${OUTPUTDIR}/figures/cmr_bdf_assets_vs_employment_by_isic4_section.pdf", name(Graph) replace
+graph export "${OUTPUTDIR}/figures/cmr_bdf_assets_vs_employment_by_isic4_section.png", name(Graph) replace
 
 display as result "Saved BDF asset diagnostics to `diagnostics_out'"
 

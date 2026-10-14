@@ -6,8 +6,8 @@ set more off
         User-friendly workbook for the current elasticity model specifications.
 
     Inputs:
-        Data/Analysis/cmr_census_elasticity_clean.dta
-        Data/Analysis/cmr_bdf_elasticity_clean.dta
+        Data/Analysis/cmr_census_isic4_division_elasticity_clean.dta
+        Data/Analysis/cmr_bdf_isic4_section_elasticity_clean.dta
         Data/Analysis/wbes_elasticity_clean.dta
 
     Outputs:
@@ -81,51 +81,51 @@ end
     Part A. Census data
 *******************************************************************************/
 
-use "${DATADIR}/Analysis/cmr_census_elasticity_clean.dta", clear
+use "${DATADIR}/Analysis/cmr_census_isic4_division_elasticity_clean.dta", clear
 
 * A.1 Common Census turnover-employment elasticity
-* Clean dataset: Data/Analysis/cmr_census_elasticity_clean.dta
+* Clean dataset: Data/Analysis/cmr_census_isic4_division_elasticity_clean.dta
 * Unit of observation: Census/RGE headquarters firm.
 * Outcome/regressor: log employment on log annual turnover.
-* Controls/fixed effects: NACAM sector fixed effects, robust standard errors.
-* Affected outputs: output/figures/cmr_census_turnover_employment_elasticity_coefficients.pdf;
-*   output/figures/cmr_census_turnover_employment_elasticity_scatter.pdf;
-*   output/tables/cmr_census_turnover_employment_elasticity.tex.
+* Controls/fixed effects: ISIC division fixed effects, robust standard errors.
+* Affected outputs: output/figures/cmr_census_isic4_division_turnover_employment_elasticity_coefficients.pdf;
+*   output/figures/cmr_census_isic4_division_turnover_employment_elasticity_scatter.pdf;
+*   output/tables/cmr_census_isic4_division_turnover_employment_elasticity.tex.
 * Production source: code/elasticity_cameroun/13_cmr_census_turnover_employment_elasticity.do.
-regress ln_emp c.ln_annual_turnover i.nacam ///
+regress ln_emp c.ln_annual_turnover i.isic4_sector_id ///
     if sample_elasticity == 1 & include_census_sector == 1, vce(robust)
 
 * A.2 Sector-specific Census turnover-employment elasticities
-* The interaction lets each NACAM sector have its own turnover-employment slope.
+* The interaction lets each ISIC division have its own turnover-employment slope.
 * The lincom calls below print the implied elasticity sector by sector.
-regress ln_emp c.ln_annual_turnover##i.nacam ///
+regress ln_emp c.ln_annual_turnover##i.isic4_sector_id ///
     if sample_elasticity == 1 & include_census_sector == 1, vce(robust)
-print_sector_slopes, regressor(ln_annual_turnover) sectorvar(nacam) ///
+print_sector_slopes, regressor(ln_annual_turnover) sectorvar(isic4_sector_id) ///
     sampleif("sample_elasticity == 1 & include_census_sector == 1")
 
 * A.3 Census exporter and non-exporter turnover-employment elasticities
-* Clean dataset: Data/Analysis/cmr_census_elasticity_clean.dta
+* Clean dataset: Data/Analysis/cmr_census_isic4_division_elasticity_clean.dta
 * Unit of observation: Census/RGE headquarters firm.
 * Outcome/regressor: log employment on log annual turnover by exporter status.
-* Controls/fixed effects: estimated separately within each eligible NACAM sector.
-* Affected outputs: output/figures/cmr_census_exporter_turnover_elasticity_coefficients.pdf;
-*   output/tables/cmr_census_exporter_turnover_elasticity.tex.
+* Controls/fixed effects: estimated separately within each eligible ISIC division.
+* Affected outputs: output/figures/cmr_census_isic4_division_exporter_turnover_elasticity_coefficients.pdf;
+*   output/tables/cmr_census_isic4_division_exporter_turnover_elasticity.tex.
 * Production source: code/elasticity_cameroun/16_cmr_census_exporter_turnover_elasticity.do.
-levelsof nacam if sample_exporter_elasticity == 1 ///
+levelsof isic4_sector_id if sample_exporter_elasticity == 1 ///
     & include_census_exporter_sector == 1, local(census_exporter_codes)
 
 foreach code of local census_exporter_codes {
-    display as text "Census exporter specification for NACAM sector `code'"
+    display as text "Census exporter specification for ISIC division `code'"
 
     regress ln_emp c.ln_annual_turnover ///
         if sample_exporter_elasticity == 1 ///
         & include_census_exporter_sector == 1 ///
-        & nacam == `code', vce(robust)
+        & isic4_sector_id == `code', vce(robust)
 
     regress ln_emp c.ln_annual_turnover##ib0.census_exporter ///
         if sample_exporter_elasticity == 1 ///
         & include_census_exporter_sector == 1 ///
-        & nacam == `code', vce(robust)
+        & isic4_sector_id == `code', vce(robust)
 
     * Non-exporter slope, exporter slope, and exporter minus non-exporter gap.
     lincom ln_annual_turnover
@@ -137,79 +137,79 @@ foreach code of local census_exporter_codes {
     Part B. Tax/BDF data
 *******************************************************************************/
 
-use "${DATADIR}/Analysis/cmr_bdf_elasticity_clean.dta", clear
+use "${DATADIR}/Analysis/cmr_bdf_isic4_section_elasticity_clean.dta", clear
 
-* B.1 Baseline value-added employment elasticities by NACAM sector
-* Clean dataset: Data/Analysis/cmr_bdf_elasticity_clean.dta
+* B.1 Baseline value-added employment elasticities by ISIC section group
+* Clean dataset: Data/Analysis/cmr_bdf_isic4_section_elasticity_clean.dta
 * Unit of observation: firm-year.
 * Outcome/regressor: log employment on log value added.
-* Controls/fixed effects: firm fixed effects and NACAM-by-year fixed effects;
+* Controls/fixed effects: firm fixed effects and ISIC section-group-by-year fixed effects;
 *   standard errors clustered by firm.
-* Affected outputs: output/figures/cmr_nacam_results_en_labels_va_coefficients.pdf;
-*   output/tables/cmr_nacam_results_en_labels_va_elasticity.tex.
+* Affected outputs: output/figures/cmr_isic4_section_results_en_labels_va_coefficients.pdf;
+*   output/tables/cmr_isic4_section_results_en_labels_va_elasticity.tex.
 * Production source: code/elasticity_cameroun/06_cmr_nacam_elasticity.do.
-areg ln_emp c.ln_va##i.nacam i.nacam#i.fin_yr ///
+areg ln_emp c.ln_va##i.isic4_sector_id i.isic4_sector_id#i.fin_yr ///
     if sample_va == 1 & include_sector == 1, ///
     absorb(firm_fe) vce(cluster firm_fe)
-print_sector_slopes, regressor(ln_va) sectorvar(nacam) ///
+print_sector_slopes, regressor(ln_va) sectorvar(isic4_sector_id) ///
     sampleif("sample_va == 1 & include_sector == 1")
 
-* B.2 Baseline total-revenue employment elasticities by NACAM sector
+* B.2 Baseline total-revenue employment elasticities by ISIC section group
 * This is the administrative tax/BDF elasticity used in the Census comparison
-* and in the downstream B-READY/WBES opportunity plots.
-* Affected outputs: output/figures/cmr_nacam_results_en_labels_tot_rev_coefficients.pdf;
-*   output/figures/cmr_census_vs_bdf_turnover_employment_elasticity.pdf;
-*   output/tables/cmr_nacam_results_en_labels_tot_rev_elasticity.tex.
-areg ln_emp c.ln_tot_rev##i.nacam i.nacam#i.fin_yr ///
+* and in the linked B-READY/WBES opportunity plots.
+* Affected outputs: output/figures/cmr_isic4_section_results_en_labels_tot_rev_coefficients.pdf;
+*   output/figures/cmr_census_vs_bdf_isic4_section_turnover_employment_elasticity.pdf;
+*   output/tables/cmr_isic4_section_results_en_labels_tot_rev_elasticity.tex.
+areg ln_emp c.ln_tot_rev##i.isic4_sector_id i.isic4_sector_id#i.fin_yr ///
     if sample_tot_rev == 1 & include_sector == 1, ///
     absorb(firm_fe) vce(cluster firm_fe)
-print_sector_slopes, regressor(ln_tot_rev) sectorvar(nacam) ///
+print_sector_slopes, regressor(ln_tot_rev) sectorvar(isic4_sector_id) ///
     sampleif("sample_tot_rev == 1 & include_sector == 1")
 
 * B.3 Fixed-effect robustness: value added
 * These specifications show whether sector elasticities are sensitive to the
 * fixed-effect structure.
-* Affected output: output/figures/cmr_nacam_fe_robustness_va_coefficients.pdf.
+* Affected output: output/figures/cmr_isic4_section_fe_robustness_va_coefficients.pdf.
 * Production source: code/elasticity_cameroun/10_cmr_fe_robustness_plots.do.
-areg ln_emp c.ln_va##i.nacam i.nacam#i.fin_yr ///
+areg ln_emp c.ln_va##i.isic4_sector_id i.isic4_sector_id#i.fin_yr ///
     if sample_va == 1 & include_sector == 1, ///
     absorb(firm_fe) vce(cluster firm_fe)
-areg ln_emp c.ln_va##i.nacam i.fin_yr ///
+areg ln_emp c.ln_va##i.isic4_sector_id i.fin_yr ///
     if sample_va == 1 & include_sector == 1, ///
     absorb(firm_fe) vce(cluster firm_fe)
-areg ln_emp c.ln_va##i.nacam i.data_export_fe#i.fin_yr ///
+areg ln_emp c.ln_va##i.isic4_sector_id i.isic4_broad_label_fe#i.fin_yr ///
     if sample_va == 1 & include_sector == 1, ///
     absorb(firm_fe) vce(cluster firm_fe)
 
 * B.4 Fixed-effect robustness: total revenue
-* Affected output: output/figures/cmr_nacam_fe_robustness_tot_rev_coefficients.pdf.
-areg ln_emp c.ln_tot_rev##i.nacam i.nacam#i.fin_yr ///
+* Affected output: output/figures/cmr_isic4_section_fe_robustness_tot_rev_coefficients.pdf.
+areg ln_emp c.ln_tot_rev##i.isic4_sector_id i.isic4_sector_id#i.fin_yr ///
     if sample_tot_rev == 1 & include_sector == 1, ///
     absorb(firm_fe) vce(cluster firm_fe)
-areg ln_emp c.ln_tot_rev##i.nacam i.fin_yr ///
+areg ln_emp c.ln_tot_rev##i.isic4_sector_id i.fin_yr ///
     if sample_tot_rev == 1 & include_sector == 1, ///
     absorb(firm_fe) vce(cluster firm_fe)
-areg ln_emp c.ln_tot_rev##i.nacam i.data_export_fe#i.fin_yr ///
+areg ln_emp c.ln_tot_rev##i.isic4_sector_id i.isic4_broad_label_fe#i.fin_yr ///
     if sample_tot_rev == 1 & include_sector == 1, ///
     absorb(firm_fe) vce(cluster firm_fe)
 
 * B.5 Fixed-asset elasticities
 * These models ask how employment and sales turnover move with net fixed assets.
-* Affected outputs: output/figures/cmr_fixed_asset_elasticity_employment_coefficients.pdf;
-*   output/figures/cmr_fixed_asset_elasticity_sales_coefficients.pdf.
+* Affected outputs: output/figures/cmr_isic4_section_fixed_asset_elasticity_employment_coefficients.pdf;
+*   output/figures/cmr_isic4_section_fixed_asset_elasticity_sales_coefficients.pdf.
 * Production source: code/elasticity_cameroun/15_cmr_fixed_asset_elasticity_figures.do.
-areg ln_emp c.ln_fixed_assets##i.nacam i.nacam#i.fin_yr ///
+areg ln_emp c.ln_fixed_assets##i.isic4_sector_id i.isic4_sector_id#i.fin_yr ///
     if sample_fixed_asset_employment == 1 ///
     & include_fixed_asset_sector == 1, ///
     absorb(firm_fe) vce(cluster firm_fe)
-print_sector_slopes, regressor(ln_fixed_assets) sectorvar(nacam) ///
+print_sector_slopes, regressor(ln_fixed_assets) sectorvar(isic4_sector_id) ///
     sampleif("sample_fixed_asset_employment == 1 & include_fixed_asset_sector == 1")
 
-areg ln_sales_turnover c.ln_fixed_assets##i.nacam i.nacam#i.fin_yr ///
+areg ln_sales_turnover c.ln_fixed_assets##i.isic4_sector_id i.isic4_sector_id#i.fin_yr ///
     if sample_fixed_asset_sales == 1 ///
     & include_fixed_asset_sector == 1, ///
     absorb(firm_fe) vce(cluster firm_fe)
-print_sector_slopes, regressor(ln_fixed_assets) sectorvar(nacam) ///
+print_sector_slopes, regressor(ln_fixed_assets) sectorvar(isic4_sector_id) ///
     sampleif("sample_fixed_asset_sales == 1 & include_fixed_asset_sector == 1")
 
 /*******************************************************************************
@@ -259,21 +259,21 @@ foreach country of local wbes_countries {
     }
 }
 
-* C.2 Cameroon WBES activity-group export-value/employment associations
-* Affected outputs: output/figures/cemac_wbes_trade_elasticity_cameroon_activity_all_firms.pdf;
-*   output/figures/cemac_wbes_trade_elasticity_cameroon_activity_exporters_only.pdf.
-levelsof activity_group if country_name == "Cameroon", local(wbes_activities)
+* C.2 Cameroon WBES division export-value/employment associations
+* Affected outputs: output/figures/cemac_wbes_trade_elasticity_cameroon_isic4_division_all_firms.pdf;
+*   output/figures/cemac_wbes_trade_elasticity_cameroon_isic4_division_exporters_only.pdf.
+levelsof division_group if country_name == "Cameroon" & !missing(division_group), local(wbes_activities)
 
 foreach activity of local wbes_activities {
     quietly count if country_name == "Cameroon" ///
-        & activity_group == "`activity'" & all_firm_sample == 1
+        & division_group == "`activity'" & all_firm_sample == 1
     local n_all = r(N)
     quietly count if country_name == "Cameroon" ///
-        & activity_group == "`activity'" & all_firm_sample == 1 ///
+        & division_group == "`activity'" & all_firm_sample == 1 ///
         & export_status == 1
     local exporters_all = r(N)
     quietly count if country_name == "Cameroon" ///
-        & activity_group == "`activity'" & all_firm_sample == 1 ///
+        & division_group == "`activity'" & all_firm_sample == 1 ///
         & export_status == 0
     local nonexporters_all = r(N)
 
@@ -282,12 +282,12 @@ foreach activity of local wbes_activities {
         regress ln_emp ln_export_value_all export_status ///
             `wbes_controls' [pweight = weight] ///
             if country_name == "Cameroon" ///
-            & activity_group == "`activity'" & all_firm_sample == 1, ///
+            & division_group == "`activity'" & all_firm_sample == 1, ///
             vce(robust)
     }
 
     quietly count if country_name == "Cameroon" ///
-        & activity_group == "`activity'" & exporter_only_sample == 1
+        & division_group == "`activity'" & exporter_only_sample == 1
     local n_exporter = r(N)
 
     if `n_exporter' >= 30 {
@@ -295,7 +295,7 @@ foreach activity of local wbes_activities {
         regress ln_emp ln_export_value ///
             `wbes_controls' [pweight = weight] ///
             if country_name == "Cameroon" ///
-            & activity_group == "`activity'" & exporter_only_sample == 1, ///
+            & division_group == "`activity'" & exporter_only_sample == 1, ///
             vce(robust)
     }
 }
@@ -304,7 +304,7 @@ foreach activity of local wbes_activities {
 * These models compare the employment-revenue slope for exporters and
 * non-exporters. They are cross-sectional associations, not causal effects.
 * Affected outputs: output/figures/cemac_wbes_revenue_exporter_interaction_country.pdf;
-*   output/figures/cemac_wbes_revenue_exporter_interaction_cameroon_activity.pdf.
+*   output/figures/cemac_wbes_revenue_exporter_interaction_cameroon_isic4_division.pdf.
 * Production source: code/WBES_trade/04_wbes_revenue_exporter_interaction.do.
 foreach country of local wbes_countries {
     quietly count if country_name == "`country'" & revenue_interaction_sample == 1
@@ -331,14 +331,14 @@ foreach country of local wbes_countries {
 
 foreach activity of local wbes_activities {
     quietly count if country_name == "Cameroon" ///
-        & activity_group == "`activity'" & revenue_interaction_sample == 1
+        & division_group == "`activity'" & revenue_interaction_sample == 1
     local n_total = r(N)
     quietly count if country_name == "Cameroon" ///
-        & activity_group == "`activity'" & revenue_interaction_sample == 1 ///
+        & division_group == "`activity'" & revenue_interaction_sample == 1 ///
         & export_status == 1
     local n_exporters = r(N)
     quietly count if country_name == "Cameroon" ///
-        & activity_group == "`activity'" & revenue_interaction_sample == 1 ///
+        & division_group == "`activity'" & revenue_interaction_sample == 1 ///
         & export_status == 0
     local n_nonexporters = r(N)
 
@@ -347,7 +347,7 @@ foreach activity of local wbes_activities {
         regress ln_emp c.ln_revenue##ib0.export_status ///
             `wbes_controls' [pweight = weight] ///
             if country_name == "Cameroon" ///
-            & activity_group == "`activity'" ///
+            & division_group == "`activity'" ///
             & revenue_interaction_sample == 1, vce(robust)
 
         lincom ln_revenue

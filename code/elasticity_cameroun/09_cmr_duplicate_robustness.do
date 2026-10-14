@@ -3,7 +3,7 @@ set more off
 
 /*******************************************************************************
     Purpose:
-        Estimate a duplicate-inclusive robustness check for the Cameroon NACAM
+        Estimate a duplicate-inclusive robustness check for the Cameroon ISIC section
         employment elasticities and compare it with the baseline cleaned panel.
 
     Inputs:
@@ -14,10 +14,10 @@ set more off
 
     Outputs:
         Data/Analysis/CMR_BDF_duplicate_robustness.dta
-        output/tables/cmr_nacam_results_duplicate_robustness_va_elasticity.tex
-        output/tables/cmr_nacam_results_duplicate_robustness_tot_rev_elasticity.tex
-        output/figures/cmr_nacam_results_duplicate_robustness_comparison.pdf
-        output/figures/cmr_nacam_results_duplicate_robustness_comparison.png
+        output/tables/cmr_isic4_section_results_duplicate_robustness_va_elasticity.tex
+        output/tables/cmr_isic4_section_results_duplicate_robustness_tot_rev_elasticity.tex
+        output/figures/cmr_isic4_section_results_duplicate_robustness_comparison.pdf
+        output/figures/cmr_isic4_section_results_duplicate_robustness_comparison.png
 *******************************************************************************/
 
 if "${PROJECT_ROOT}" == "" {
@@ -71,7 +71,7 @@ if _rc {
 
 local min_sector_obs 30
 local min_sector_firms 10
-local output_stub "cmr_nacam_results_duplicate_robustness"
+local output_stub "cmr_isic4_section_results_duplicate_robustness"
 
 capture program drop cmr_add_data_export_group
 program define cmr_add_data_export_group
@@ -199,6 +199,8 @@ label variable duplicate_class "Firm-year duplicate class"
 
 drop original_order firmyear_n tag_firmyear tag_full_record distinct_record_profiles
 
+do "${CODEDIR}/02_construct/02_cmr_tax_section_fields.do"
+
 capture save "${DATADIR}/Analysis/CMR_BDF_duplicate_robustness.dta", replace
 if _rc {
     sleep `sleep_ms'
@@ -226,24 +228,21 @@ program define cmr_dup_robust_estimate
         local idvar firmid_original
     }
 
-    capture confirm variable data_export
-    if _rc {
-        cmr_add_data_export_group
-    }
+    assert !missing(isic4_section, isic4_sector_id, isic4_broad_label)
 
-    keep `idvar' fin_yr nacam nacam_label_display nacam_label_short_display ///
-        data_export totemp va tot_rev
+    keep `idvar' fin_yr isic4_section isic4_sector_id isic4_label_display isic4_label_short_display ///
+        isic4_broad_label totemp va tot_rev
 
     tempfile sector_labels sector_counts va_results tot_rev_results va_table_data
 
     preserve
-    keep nacam nacam_label_display nacam_label_short_display data_export
-    drop if missing(nacam)
-    bysort nacam (nacam_label_display): assert nacam_label_display == nacam_label_display[1]
-    bysort nacam (nacam_label_short_display): assert nacam_label_short_display == nacam_label_short_display[1]
-    bysort nacam (data_export): assert data_export == data_export[1]
-    by nacam: keep if _n == 1
-    isid nacam
+    keep isic4_section isic4_sector_id isic4_label_display isic4_label_short_display isic4_broad_label
+    drop if missing(isic4_sector_id)
+    bysort isic4_sector_id (isic4_label_display): assert isic4_label_display == isic4_label_display[1]
+    bysort isic4_sector_id (isic4_label_short_display): assert isic4_label_short_display == isic4_label_short_display[1]
+    bysort isic4_sector_id (isic4_broad_label): assert isic4_broad_label == isic4_broad_label[1]
+    by isic4_sector_id: keep if _n == 1
+    isid isic4_sector_id
     save "`sector_labels'"
     restore
 
@@ -266,22 +265,22 @@ program define cmr_dup_robust_estimate
     generate double ln_tot_rev = .
     replace ln_tot_rev = ln(tot_rev) if tot_rev > 0
 
-    generate byte sample_va = employment > 0 & va > 0 & !missing(firm_fe, fin_yr, nacam)
-    generate byte sample_tot_rev = employment > 0 & tot_rev > 0 & !missing(firm_fe, fin_yr, nacam)
+    generate byte sample_va = employment > 0 & va > 0 & !missing(firm_fe, fin_yr, isic4_sector_id)
+    generate byte sample_tot_rev = employment > 0 & tot_rev > 0 & !missing(firm_fe, fin_yr, isic4_sector_id)
 
     preserve
-    keep nacam firm_fe sample_va sample_tot_rev
+    keep isic4_sector_id firm_fe sample_va sample_tot_rev
 
-    egen tag_va_firm = tag(nacam firm_fe) if sample_va == 1
-    egen tag_tot_rev_firm = tag(nacam firm_fe) if sample_tot_rev == 1
+    egen tag_va_firm = tag(isic4_sector_id firm_fe) if sample_va == 1
+    egen tag_tot_rev_firm = tag(isic4_sector_id firm_fe) if sample_tot_rev == 1
 
-    by nacam, sort: egen va_obs = total(sample_va)
-    by nacam: egen tot_rev_obs = total(sample_tot_rev)
-    by nacam: egen va_firms = total(tag_va_firm)
-    by nacam: egen tot_rev_firms = total(tag_tot_rev_firm)
+    by isic4_sector_id, sort: egen va_obs = total(sample_va)
+    by isic4_sector_id: egen tot_rev_obs = total(sample_tot_rev)
+    by isic4_sector_id: egen va_firms = total(tag_va_firm)
+    by isic4_sector_id: egen tot_rev_firms = total(tag_tot_rev_firm)
 
-    keep nacam va_obs tot_rev_obs va_firms tot_rev_firms
-    by nacam: keep if _n == 1
+    keep isic4_sector_id va_obs tot_rev_obs va_firms tot_rev_firms
+    by isic4_sector_id: keep if _n == 1
 
     generate byte include_sector = va_obs >= $cmr_dup_min_sector_obs ///
         & va_firms >= $cmr_dup_min_sector_firms ///
@@ -291,17 +290,17 @@ program define cmr_dup_robust_estimate
     save "`sector_counts'"
     restore
 
-    merge m:1 nacam using "`sector_counts'", nogen
+    merge m:1 isic4_sector_id using "`sector_counts'", nogen
 
-    areg ln_emp c.ln_va##i.nacam i.nacam#i.fin_yr ///
+    areg ln_emp c.ln_va##i.isic4_sector_id i.isic4_sector_id#i.fin_yr ///
         if sample_va == 1 & include_sector == 1, ///
         absorb(firm_fe) vce(cluster firm_fe)
 
     tempname va_handle
-    postfile `va_handle' int nacam double va_elasticity va_se va_lb va_ub ///
+    postfile `va_handle' int isic4_sector_id double va_elasticity va_se va_lb va_ub ///
         using "`va_results'", replace
 
-    levelsof nacam if sample_va == 1 & include_sector == 1, local(va_codes)
+    levelsof isic4_sector_id if sample_va == 1 & include_sector == 1, local(va_codes)
     local va_base : word 1 of `va_codes'
 
     foreach code of local va_codes {
@@ -309,7 +308,7 @@ program define cmr_dup_robust_estimate
             lincom _b[ln_va]
         }
         else {
-            lincom _b[ln_va] + _b[`code'.nacam#c.ln_va]
+            lincom _b[ln_va] + _b[`code'.isic4_sector_id#c.ln_va]
         }
 
         post `va_handle' (`code') (r(estimate)) (r(se)) (r(lb)) (r(ub))
@@ -317,15 +316,15 @@ program define cmr_dup_robust_estimate
 
     postclose `va_handle'
 
-    areg ln_emp c.ln_tot_rev##i.nacam i.nacam#i.fin_yr ///
+    areg ln_emp c.ln_tot_rev##i.isic4_sector_id i.isic4_sector_id#i.fin_yr ///
         if sample_tot_rev == 1 & include_sector == 1, ///
         absorb(firm_fe) vce(cluster firm_fe)
 
     tempname tot_rev_handle
-    postfile `tot_rev_handle' int nacam double tot_rev_elasticity ///
+    postfile `tot_rev_handle' int isic4_sector_id double tot_rev_elasticity ///
         tot_rev_se tot_rev_lb tot_rev_ub using "`tot_rev_results'", replace
 
-    levelsof nacam if sample_tot_rev == 1 & include_sector == 1, local(tot_rev_codes)
+    levelsof isic4_sector_id if sample_tot_rev == 1 & include_sector == 1, local(tot_rev_codes)
     local tot_rev_base : word 1 of `tot_rev_codes'
 
     foreach code of local tot_rev_codes {
@@ -333,7 +332,7 @@ program define cmr_dup_robust_estimate
             lincom _b[ln_tot_rev]
         }
         else {
-            lincom _b[ln_tot_rev] + _b[`code'.nacam#c.ln_tot_rev]
+            lincom _b[ln_tot_rev] + _b[`code'.isic4_sector_id#c.ln_tot_rev]
         }
 
         post `tot_rev_handle' (`code') (r(estimate)) (r(se)) (r(lb)) (r(ub))
@@ -342,15 +341,15 @@ program define cmr_dup_robust_estimate
     postclose `tot_rev_handle'
 
     use "`va_results'", clear
-    merge 1:1 nacam using "`sector_counts'", nogen keep(match)
-    merge m:1 nacam using "`sector_labels'", nogen keep(match)
+    merge 1:1 isic4_sector_id using "`sector_counts'", nogen keep(match)
+    merge m:1 isic4_sector_id using "`sector_labels'", nogen keep(match)
     keep if include_sector == 1
-    sort nacam
-    assert !missing(nacam_label_display)
-    assert !missing(nacam_label_short_display)
+    sort isic4_sector_id
+    assert !missing(isic4_label_display)
+    assert !missing(isic4_label_short_display)
 
     if "`tableprefix'" != "" {
-        generate str16 rowname = "nacam_" + string(nacam)
+        generate str16 rowname = "section_" + string(isic4_sector_id)
         mkmat va_elasticity va_se va_lb va_ub va_firms va_obs, ///
             matrix(va_table) rownames(rowname)
         matrix colnames va_table = Elasticity StdErr Lower95 Upper95 Firms Obs
@@ -359,10 +358,10 @@ program define cmr_dup_robust_estimate
         quietly count
         local va_n = r(N)
         forvalues i = 1/`va_n' {
-            local code = nacam[`i']
-            local va_label = subinstr(nacam_label_short_display[`i'], "&", "\&", .)
+            local code = isic4_sector_id[`i']
+            local va_label = subinstr(isic4_label_short_display[`i'], "&", "\&", .)
             local va_label = subinstr("`va_label'", char(34), "'", .)
-            local va_rowlabels `va_rowlabels' nacam_`code' "`va_label'"
+            local va_rowlabels `va_rowlabels' section_`code' "`va_label'"
         }
 
         esttab matrix(va_table, fmt(%9.3f %9.3f %9.3f %9.3f %9.0fc %9.0fc)) ///
@@ -371,20 +370,20 @@ program define cmr_dup_robust_estimate
             varlabels(`va_rowlabels')
     }
 
-    keep nacam nacam_label_display nacam_label_short_display data_export ///
+    keep isic4_section isic4_sector_id isic4_label_display isic4_label_short_display isic4_broad_label ///
         va_elasticity va_se va_lb va_ub va_firms va_obs include_sector
     save "`va_table_data'"
 
     use "`tot_rev_results'", clear
-    merge 1:1 nacam using "`sector_counts'", nogen keep(match)
-    merge m:1 nacam using "`sector_labels'", nogen keep(match)
+    merge 1:1 isic4_sector_id using "`sector_counts'", nogen keep(match)
+    merge m:1 isic4_sector_id using "`sector_labels'", nogen keep(match)
     keep if include_sector == 1
-    sort nacam
-    assert !missing(nacam_label_display)
-    assert !missing(nacam_label_short_display)
+    sort isic4_sector_id
+    assert !missing(isic4_label_display)
+    assert !missing(isic4_label_short_display)
 
     if "`tableprefix'" != "" {
-        generate str16 rowname = "nacam_" + string(nacam)
+        generate str16 rowname = "section_" + string(isic4_sector_id)
         mkmat tot_rev_elasticity tot_rev_se tot_rev_lb tot_rev_ub ///
             tot_rev_firms tot_rev_obs, matrix(tot_rev_table) rownames(rowname)
         matrix colnames tot_rev_table = Elasticity StdErr Lower95 Upper95 Firms Obs
@@ -393,10 +392,10 @@ program define cmr_dup_robust_estimate
         quietly count
         local tot_rev_n = r(N)
         forvalues i = 1/`tot_rev_n' {
-            local code = nacam[`i']
-            local tot_rev_label = subinstr(nacam_label_short_display[`i'], "&", "\&", .)
+            local code = isic4_sector_id[`i']
+            local tot_rev_label = subinstr(isic4_label_short_display[`i'], "&", "\&", .)
             local tot_rev_label = subinstr("`tot_rev_label'", char(34), "'", .)
-            local tot_rev_rowlabels `tot_rev_rowlabels' nacam_`code' "`tot_rev_label'"
+            local tot_rev_rowlabels `tot_rev_rowlabels' section_`code' "`tot_rev_label'"
         }
 
         esttab matrix(tot_rev_table, fmt(%9.3f %9.3f %9.3f %9.3f %9.0fc %9.0fc)) ///
@@ -405,9 +404,9 @@ program define cmr_dup_robust_estimate
             varlabels(`tot_rev_rowlabels')
     }
 
-    merge 1:1 nacam using "`va_table_data'", nogen
-    merge m:1 nacam using "`sector_labels'", nogen keep(match)
-    keep nacam nacam_label_display nacam_label_short_display data_export ///
+    merge 1:1 isic4_sector_id using "`va_table_data'", nogen
+    merge m:1 isic4_sector_id using "`sector_labels'", nogen keep(match)
+    keep isic4_section isic4_sector_id isic4_label_display isic4_label_short_display isic4_broad_label ///
         va_elasticity va_se va_lb va_ub va_firms va_obs ///
         tot_rev_elasticity tot_rev_se tot_rev_lb tot_rev_ub ///
         tot_rev_firms tot_rev_obs
@@ -420,7 +419,7 @@ global cmr_dup_min_sector_firms `min_sector_firms'
 
 tempfile baseline_results robustness_results
 
-cmr_dup_robust_estimate using "${DATADIR}/Analysis/CMR_BDF_cleaned.dta", ///
+cmr_dup_robust_estimate using "${DATADIR}/Analysis/CMR_BDF_isic4_section_prepared.dta", ///
     resultfile("`baseline_results'")
 
 cmr_dup_robust_estimate using "${DATADIR}/Analysis/CMR_BDF_duplicate_robustness.dta", ///
@@ -444,7 +443,7 @@ rename tot_rev_ub baseline_tot_rev_ub
 rename tot_rev_firms baseline_tot_rev_firms
 rename tot_rev_obs baseline_tot_rev_obs
 
-merge 1:1 nacam using "`robustness_results'", keep(match) nogen
+merge 1:1 isic4_sector_id using "`robustness_results'", keep(match) nogen
 rename va_elasticity robustness_va_elasticity
 rename va_se robustness_va_se
 rename va_lb robustness_va_lb
@@ -461,25 +460,25 @@ rename tot_rev_obs robustness_tot_rev_obs
 assert !missing(baseline_va_elasticity, robustness_va_elasticity)
 assert !missing(baseline_tot_rev_elasticity, robustness_tot_rev_elasticity)
 
-gsort -baseline_tot_rev_elasticity nacam
+gsort -baseline_tot_rev_elasticity isic4_sector_id
 generate int plot_order = _n
 
-capture label drop nacam_duplicate_robustness_plot
+capture label drop section_dup_plot
 quietly count
 local plot_n = r(N)
 
 forvalues i = 1/`plot_n' {
-    local sector_label = subinstr(nacam_label_short_display[`i'], char(34), "'", .)
+    local sector_label = subinstr(isic4_label_short_display[`i'], char(34), "'", .)
 
     if `i' == 1 {
-        label define nacam_duplicate_robustness_plot `i' `"`sector_label'"'
+        label define section_dup_plot `i' `"`sector_label'"'
     }
     else {
-        label define nacam_duplicate_robustness_plot `i' `"`sector_label'"', modify
+        label define section_dup_plot `i' `"`sector_label'"', modify
     }
 }
 
-label values plot_order nacam_duplicate_robustness_plot
+label values plot_order section_dup_plot
 
 twoway ///
     (pcspike plot_order baseline_va_elasticity plot_order robustness_va_elasticity, ///
@@ -498,7 +497,8 @@ twoway ///
     xtitle("Employment elasticity", size(small)) ///
     title("Value added", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
-    bgcolor(white) name(dup_robust_va, replace)
+    bgcolor(white) name(dup_robust_va, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny))
 
 twoway ///
     (pcspike plot_order baseline_tot_rev_elasticity plot_order robustness_tot_rev_elasticity, ///
@@ -517,16 +517,18 @@ twoway ///
     xtitle("Employment elasticity", size(small)) ///
     title("Total revenue", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
-    bgcolor(white) name(dup_robust_tot_rev, replace)
+    bgcolor(white) name(dup_robust_tot_rev, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny))
 
 graph combine dup_robust_va dup_robust_tot_rev, ///
     rows(1) xsize(11) ysize(5.8) graphregion(color(white)) ///
     title("Baseline vs duplicate-inclusive employment elasticities", size(medsmall)) ///
-    name(dup_robust_comparison, replace)
+    name(dup_robust_comparison, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny))
 graph display dup_robust_comparison
 
-graph export "${OUTPUTDIR}/figures/`output_stub'_comparison.pdf", replace
-graph export "${OUTPUTDIR}/figures/`output_stub'_comparison.png", replace
+graph export "${OUTPUTDIR}/figures/`output_stub'_comparison.pdf", name(dup_robust_comparison) replace
+graph export "${OUTPUTDIR}/figures/`output_stub'_comparison.png", name(dup_robust_comparison) replace
 
 display as result "Duplicate robustness comparison exported to ${OUTPUTDIR}/figures/`output_stub'_comparison.*"
 

@@ -7,17 +7,17 @@ set more off
         scale plots: firm counts, employment, revenue, and revenue per worker.
 
     Input:
-        Data/Analysis/CMR_BDF_cleaned.dta
+        Data/Analysis/CMR_BDF_isic4_section_prepared.dta
 
     Outputs:
-        output/figures/cmr_bdf_firm_count_by_nacam.pdf
-        output/figures/cmr_bdf_firm_count_by_nacam.png
-        output/figures/cmr_bdf_total_employment_by_nacam.pdf
-        output/figures/cmr_bdf_total_employment_by_nacam.png
-        output/figures/cmr_bdf_total_revenue_by_nacam.pdf
-        output/figures/cmr_bdf_total_revenue_by_nacam.png
-        output/figures/cmr_bdf_revenue_per_worker_by_nacam.pdf
-        output/figures/cmr_bdf_revenue_per_worker_by_nacam.png
+        output/figures/cmr_bdf_firm_count_by_isic4_section.pdf
+        output/figures/cmr_bdf_firm_count_by_isic4_section.png
+        output/figures/cmr_bdf_total_employment_by_isic4_section.pdf
+        output/figures/cmr_bdf_total_employment_by_isic4_section.png
+        output/figures/cmr_bdf_total_revenue_by_isic4_section.pdf
+        output/figures/cmr_bdf_total_revenue_by_isic4_section.png
+        output/figures/cmr_bdf_revenue_per_worker_by_isic4_section.pdf
+        output/figures/cmr_bdf_revenue_per_worker_by_isic4_section.png
 
     Notes:
         The BDF data are a firm-year panel. Sector figures first collapse to
@@ -72,16 +72,16 @@ if _rc {
         text name(cmrbdfscale)
 }
 
-local input_file "${DATADIR}/Analysis/CMR_BDF_cleaned.dta"
+local input_file "${DATADIR}/Analysis/CMR_BDF_isic4_section_prepared.dta"
 local figure_dir "${OUTPUTDIR}/figures"
 
 confirm file "`input_file'"
 use "`input_file'", clear
 
-keep firmid fin_yr nacam nacam_label_short_display data_export totemp tot_rev
+keep firmid fin_yr isic4_section isic4_sector_id isic4_label_short_display isic4_broad_label totemp tot_rev
 
 isid firmid fin_yr
-assert !missing(firmid, fin_yr, nacam, nacam_label_short_display, data_export)
+assert !missing(firmid, fin_yr, isic4_sector_id, isic4_label_short_display, isic4_broad_label)
 
 capture confirm numeric variable totemp
 if !_rc {
@@ -109,6 +109,11 @@ generate double revenue_scale = tot_rev if tot_rev >= 0
 generate double firm_revenue_per_worker = revenue_scale / employment_scale ///
     if revenue_scale >= 0 & employment_scale > 0
 
+quietly summarize employment_scale, meanonly
+local original_employment_total = r(sum)
+quietly summarize revenue_scale, meanonly
+local original_revenue_total = r(sum)
+
 collapse ///
     (sum) sector_year_firms = firm_year ///
           sector_year_total_employment = employment_scale ///
@@ -116,9 +121,13 @@ collapse ///
     (mean) sector_year_average_employment = employment_scale ///
            sector_year_average_revenue = revenue_scale ///
            sector_year_avg_rev_worker = firm_revenue_per_worker, ///
-    by(nacam fin_yr nacam_label_short_display data_export)
+    by(isic4_section isic4_sector_id fin_yr isic4_label_short_display isic4_broad_label)
 
-isid nacam fin_yr
+isid isic4_sector_id fin_yr
+quietly summarize sector_year_total_employment, meanonly
+assert reldif(r(sum), `original_employment_total') < 1e-12
+quietly summarize sector_year_total_revenue, meanonly
+assert reldif(r(sum), `original_revenue_total') < 1e-12
 assert sector_year_firms > 0
 assert sector_year_total_employment >= 0
 assert sector_year_total_revenue >= 0
@@ -136,12 +145,12 @@ collapse ///
            aggregate_revenue_per_worker = sector_year_revenue_per_worker ///
            avg_firm_revenue_per_worker = sector_year_avg_rev_worker ///
     (count) contributing_years = fin_yr, ///
-    by(nacam nacam_label_short_display data_export)
+    by(isic4_section isic4_sector_id isic4_label_short_display isic4_broad_label)
 
-isid nacam
+isid isic4_sector_id
 assert avg_annual_firms > 0
 assert contributing_years > 0
-assert !missing(nacam_label_short_display, data_export)
+assert !missing(isic4_label_short_display, isic4_broad_label)
 
 generate double log_avg_annual_total_employment = ///
     ln(avg_annual_total_employment) if avg_annual_total_employment > 0
@@ -164,6 +173,8 @@ generate double avg_firm_revenue_per_worker_mil = ///
     avg_firm_revenue_per_worker / 1000000
 
 
+save "${DATADIR}/Analysis/cmr_bdf_isic4_section_scale.dta", replace
+
 /*******************************************************************************
     Export helper
 *******************************************************************************/
@@ -171,15 +182,15 @@ generate double avg_firm_revenue_per_worker_mil = ///
 capture program drop cmr_bdf_export_graph
 program define cmr_bdf_export_graph
     version 17.0
-    args stub
+    args stub graph_name
 
     local pdf_file "`stub'.pdf"
     local png_file "`stub'.png"
     local png_stub "`stub'"
 
-    graph export "`pdf_file'", replace
+    graph export "`pdf_file'", name(`graph_name') replace
 
-    capture noisily graph export "`png_file'", replace
+    capture noisily graph export "`png_file'", name(`graph_name') width(2400) replace
     if _rc {
         local png_rc = _rc
         display as text "Stata PNG export failed with return code `png_rc'."
@@ -237,8 +248,11 @@ program define cmr_bdf_colored_dotplot
 
     if "`legendoff'" == "legendoff" {
         local legend_options legend(off)
+        local group_note
     }
     else {
+        local group_note note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." ///
+         "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny) span)
         local legend_options ///
             legend(order(1 "Agriculture" 2 "Mining" 3 "Manufacturing" ///
                 4 "Utilities" 5 "Construction" 6 "Wholesale/retail + repair" ///
@@ -256,17 +270,17 @@ program define cmr_bdf_colored_dotplot
         exit 2000
     }
 
-    gsort -`varlist' nacam
+    gsort -`varlist' isic4_sector_id
     generate int plot_order = _n
 
     capture label drop bdf_sector_plot
     forvalues i = 1/`=_N' {
-        local sector_label = subinstr(nacam_label_short_display[`i'], char(34), "'", .)
+        local sector_label = subinstr(isic4_label_short_display[`i'], char(34), "'", .)
         if `i' == 1 {
-            label define bdf_sector_plot `i' `"`sector_label'"'
+            label define bdf_sector_plot `i' `"{stSans:`sector_label'}"'
         }
         else {
-            label define bdf_sector_plot `i' `"`sector_label'"', modify
+            label define bdf_sector_plot `i' `"{stSans:`sector_label'}"', modify
         }
     }
     label values plot_order bdf_sector_plot
@@ -274,25 +288,25 @@ program define cmr_bdf_colored_dotplot
     local last_order = _N
 
     twoway ///
-        (scatter plot_order `varlist' if strpos(data_export, "Agriculture") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Agriculture") > 0, ///
             msymbol(circle) mcolor("27 158 119") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if strpos(data_export, "Mining") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Mining") > 0, ///
             msymbol(diamond) mcolor("117 112 179") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if strpos(data_export, "Manufacturing") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Manufacturing") > 0, ///
             msymbol(square) mcolor("44 123 182") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if data_export == "Utilities", ///
+        (scatter plot_order `varlist' if isic4_broad_label == "Utilities", ///
             msymbol(triangle) mcolor("230 171 2") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if strpos(data_export, "Construction") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Construction") > 0, ///
             msymbol(Oh) mcolor("208 28 139") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if strpos(data_export, "Wholesale") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Trade") > 0, ///
             msymbol(Th) mcolor("217 95 2") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if strpos(data_export, "Transportation") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Transport") > 0, ///
             msymbol(Sh) mcolor("102 166 30") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if strpos(data_export, "Information") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Information") > 0, ///
             msymbol(plus) mcolor("102 166 30") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if strpos(data_export, "Financial") > 0, ///
+        (scatter plot_order `varlist' if strpos(isic4_broad_label, "Finance") > 0, ///
             msymbol(x) mcolor("117 112 179") msize(`marker_size')) ///
-        (scatter plot_order `varlist' if data_export == "Other services", ///
+        (scatter plot_order `varlist' if isic4_broad_label == "Other services", ///
             msymbol(Dh) mcolor("102 102 102") msize(`marker_size')), ///
         ylabel(1(1)`last_order', valuelabel angle(horizontal) ///
             labsize(`labsz') noticks) ///
@@ -303,15 +317,16 @@ program define cmr_bdf_colored_dotplot
         title(`title', size(`titlesz')) ///
         `legend_options' ///
         plotregion(color(white)) graphregion(color(white)) bgcolor(white) ///
-        ysize(`ydim') xsize(`xdim') name(`name', replace)
+        ysize(`ydim') xsize(`xdim') name(`name', replace) ///
+        `group_note'
     restore
 end
 
-local standalone_label_size "tiny"
+local standalone_label_size "vsmall"
 local standalone_title_size "medsmall"
 local standalone_ysize "6.2"
 local standalone_xsize "7.5"
-local panel_label_size "tiny"
+local panel_label_size "vsmall"
 local panel_title_size "small"
 local panel_ysize "6.2"
 local panel_xsize "5.2"
@@ -319,12 +334,12 @@ local combined_ysize "6.2"
 local combined_xsize "11.5"
 
 cmr_bdf_colored_dotplot avg_annual_firms, ///
-    title("Ecofin firm counts by NACAM sector") ///
+    title("Ecofin firm counts by ISIC Rev.4 section") ///
     xtitle("Average annual firms") ///
     name(bdf_firms) labsz(`standalone_label_size') ///
     titlesz(`standalone_title_size') ydim(`standalone_ysize') ///
     xdim(`standalone_xsize')
-cmr_bdf_export_graph "`figure_dir'/cmr_bdf_firm_count_by_nacam"
+cmr_bdf_export_graph "`figure_dir'/cmr_bdf_firm_count_by_isic4_section" bdf_firms
 
 cmr_bdf_colored_dotplot log_avg_annual_total_employment ///
     if !missing(log_avg_annual_total_employment), ///
@@ -343,11 +358,13 @@ cmr_bdf_colored_dotplot log_avg_firm_employment ///
     xdim(`panel_xsize') legendoff
 
 graph combine bdf_emp_total bdf_emp_average, ///
-    cols(2) title("Ecofin log employment by NACAM sector", size(medsmall)) ///
+    cols(2) title("Ecofin log employment by ISIC Rev.4 section", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
-    ysize(`combined_ysize') xsize(`combined_xsize') name(bdf_emp_combined, replace)
+    ysize(`combined_ysize') xsize(`combined_xsize') name(bdf_emp_combined, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." ///
+         "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny) span)
 graph display bdf_emp_combined
-cmr_bdf_export_graph "`figure_dir'/cmr_bdf_total_employment_by_nacam"
+cmr_bdf_export_graph "`figure_dir'/cmr_bdf_total_employment_by_isic4_section" bdf_emp_combined
 
 cmr_bdf_colored_dotplot avg_annual_total_employment ///
     if !missing(avg_annual_total_employment), ///
@@ -366,12 +383,14 @@ cmr_bdf_colored_dotplot avg_firm_employment ///
     xdim(`panel_xsize') legendoff
 
 graph combine bdf_emp_total_levels bdf_emp_average_levels, ///
-    cols(2) title("Ecofin employment by NACAM sector, levels", size(medsmall)) ///
+    cols(2) title("Ecofin employment by ISIC Rev.4 section, levels", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
     ysize(`combined_ysize') xsize(`combined_xsize') ///
-    name(bdf_emp_combined_levels, replace)
+    name(bdf_emp_combined_levels, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." ///
+         "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny) span)
 graph display bdf_emp_combined_levels
-cmr_bdf_export_graph "`figure_dir'/cmr_bdf_total_employment_by_nacam_levels"
+cmr_bdf_export_graph "`figure_dir'/cmr_bdf_total_employment_by_isic4_section_levels" bdf_emp_combined_levels
 
 cmr_bdf_colored_dotplot log_avg_annual_total_revenue ///
     if !missing(log_avg_annual_total_revenue), ///
@@ -390,11 +409,13 @@ cmr_bdf_colored_dotplot log_avg_firm_revenue ///
     xdim(`panel_xsize') legendoff
 
 graph combine bdf_rev_total bdf_rev_average, ///
-    cols(2) title("Ecofin log annual revenue by NACAM sector", size(medsmall)) ///
+    cols(2) title("Ecofin log annual revenue by ISIC Rev.4 section", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
-    ysize(`combined_ysize') xsize(`combined_xsize') name(bdf_rev_combined, replace)
+    ysize(`combined_ysize') xsize(`combined_xsize') name(bdf_rev_combined, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." ///
+         "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny) span)
 graph display bdf_rev_combined
-cmr_bdf_export_graph "`figure_dir'/cmr_bdf_total_revenue_by_nacam"
+cmr_bdf_export_graph "`figure_dir'/cmr_bdf_total_revenue_by_isic4_section" bdf_rev_combined
 
 cmr_bdf_colored_dotplot avg_annual_total_revenue_bil ///
     if !missing(avg_annual_total_revenue_bil), ///
@@ -413,12 +434,14 @@ cmr_bdf_colored_dotplot avg_firm_revenue_mil ///
     xdim(`panel_xsize') legendoff
 
 graph combine bdf_rev_total_levels bdf_rev_average_levels, ///
-    cols(2) title("Ecofin annual revenue by NACAM sector, levels", size(medsmall)) ///
+    cols(2) title("Ecofin annual revenue by ISIC Rev.4 section, levels", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
     ysize(`combined_ysize') xsize(`combined_xsize') ///
-    name(bdf_rev_combined_levels, replace)
+    name(bdf_rev_combined_levels, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." ///
+         "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny) span)
 graph display bdf_rev_combined_levels
-cmr_bdf_export_graph "`figure_dir'/cmr_bdf_total_revenue_by_nacam_levels"
+cmr_bdf_export_graph "`figure_dir'/cmr_bdf_total_revenue_by_isic4_section_levels" bdf_rev_combined_levels
 
 cmr_bdf_colored_dotplot log_aggregate_revenue_per_worker ///
     if !missing(log_aggregate_revenue_per_worker), ///
@@ -437,11 +460,13 @@ cmr_bdf_colored_dotplot log_avg_firm_revenue_per_worker ///
     xdim(`panel_xsize') legendoff
 
 graph combine bdf_rpw_total bdf_rpw_average, ///
-    cols(2) title("Ecofin log annual revenue per worker by NACAM sector", size(medsmall)) ///
+    cols(2) title("Ecofin log annual revenue per worker by ISIC Rev.4 section", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
-    ysize(`combined_ysize') xsize(`combined_xsize') name(bdf_rpw_combined, replace)
+    ysize(`combined_ysize') xsize(`combined_xsize') name(bdf_rpw_combined, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." ///
+         "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny) span)
 graph display bdf_rpw_combined
-cmr_bdf_export_graph "`figure_dir'/cmr_bdf_revenue_per_worker_by_nacam"
+cmr_bdf_export_graph "`figure_dir'/cmr_bdf_revenue_per_worker_by_isic4_section" bdf_rpw_combined
 
 cmr_bdf_colored_dotplot aggregate_revenue_per_worker_mil ///
     if !missing(aggregate_revenue_per_worker_mil), ///
@@ -460,12 +485,14 @@ cmr_bdf_colored_dotplot avg_firm_revenue_per_worker_mil ///
     xdim(`panel_xsize') legendoff
 
 graph combine bdf_rpw_total_levels bdf_rpw_average_levels, ///
-    cols(2) title("Ecofin annual revenue per worker by NACAM sector, levels", size(medsmall)) ///
+    cols(2) title("Ecofin annual revenue per worker by ISIC Rev.4 section, levels", size(medsmall)) ///
     plotregion(color(white)) graphregion(color(white)) ///
     ysize(`combined_ysize') xsize(`combined_xsize') ///
-    name(bdf_rpw_combined_levels, replace)
+    name(bdf_rpw_combined_levels, replace) ///
+    note("ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." ///
+         "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "* Includes branches spanning sections; see classification notes.", size(tiny) span)
 graph display bdf_rpw_combined_levels
-cmr_bdf_export_graph "`figure_dir'/cmr_bdf_revenue_per_worker_by_nacam_levels"
+cmr_bdf_export_graph "`figure_dir'/cmr_bdf_revenue_per_worker_by_isic4_section_levels" bdf_rpw_combined_levels
 
 display as result "BDF sector scale figures completed successfully."
 log close cmrbdfscale

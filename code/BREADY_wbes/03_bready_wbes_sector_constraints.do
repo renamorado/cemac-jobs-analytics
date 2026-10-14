@@ -5,30 +5,30 @@ set more off
 /*******************************************************************************
     Purpose:
         Construct weighted Cameroon WBES constraint indicators selected in the
-        B-READY review workbook and compare harmonized NACAM sectors in
+        B-READY review workbook and compare agreed ISIC Rev.4 section groups in
         employment-opportunity bubble charts.
 
     Unit of observation:
         Input: latest-wave Cameroon WBES firm.
-        Output: indicator-by-NACAM-sector and indicator-by-high-elasticity group.
+        Output: indicator-by-ISIC-section-group and indicator-by-high-elasticity group.
 
     Inputs:
         Data/B-Ready/Raw/2025/bready_enterprise_survey_questions.xlsx
         Data/World Bank Enterprise Survey/New_Comprehensive_July_21_2025.dta
-        docs/reference/cmr_wbes_isic4_nacam_crosswalk.xlsx
-        Data/Analysis/cmr_nacam_elasticity_ranking.dta
-        Data/Analysis/cmr_nacam_elasticity_performance_scale.dta
+        Data/Intermediate/isic4_broad_groups_codes.dta
+        Data/Analysis/cmr_isic4_section_elasticity_ranking.dta
+        Data/Analysis/cmr_isic4_section_elasticity_performance_scale.dta
 
     Outputs:
-        Data/Analysis/bready_wbes_sector_constraints_cmr.dta
-        output/tables/bready_wbes_sector_constraints_cmr_audit.tex
-        output/tables/bready_wbes_indicator_validation_cmr.tex
-        output/figures/bready_wbes_cmr_*_high_elasticity.{pdf,png}
+        Data/Analysis/bready_wbes_isic4_section_cmr_constraints.dta
+        output/tables/bready_wbes_isic4_section_cmr_constraints_audit.tex
+        output/tables/bready_wbes_isic4_section_cmr_indicator_validation.tex
+        output/figures/bready_wbes_isic4_section_cmr_*_high_elasticity.{pdf,png}
         logs/03_bready_wbes_sector_constraints.log
 
     Notes:
         Results are weighted descriptive comparisons, not causal estimates.
-        Bubble area represents average annual total sector employment, not WBES
+        Bubble size represents terciles of average annual total employment, not WBES
         precision. Confidence intervals remain in the analytical dataset but
         are intentionally omitted from the figures.
 *******************************************************************************/
@@ -59,12 +59,12 @@ if "${PROJECT_ROOT}" == "" {
 
 local priority_workbook "${DATADIR}/B-Ready/Raw/2025/bready_enterprise_survey_questions.xlsx"
 local wbes_source "${DATADIR}/World Bank Enterprise Survey/New_Comprehensive_July_21_2025.dta"
-local sector_crosswalk "${PROJECT_ROOT}/docs/reference/cmr_wbes_isic4_nacam_crosswalk.xlsx"
-local elasticity_ranking "${DATADIR}/Analysis/cmr_nacam_elasticity_ranking.dta"
-local elasticity_performance "${DATADIR}/Analysis/cmr_nacam_elasticity_performance_scale.dta"
-local analysis_out "${DATADIR}/Analysis/bready_wbes_sector_constraints_cmr.dta"
+local sector_crosswalk "${DATADIR}/Intermediate/isic4_broad_groups_codes.dta"
+local elasticity_ranking "${DATADIR}/Analysis/cmr_isic4_section_elasticity_ranking.dta"
+local elasticity_performance "${DATADIR}/Analysis/cmr_isic4_section_elasticity_performance_scale.dta"
+local analysis_out "${DATADIR}/Analysis/bready_wbes_isic4_section_cmr_constraints.dta"
 
-foreach file in "`priority_workbook'" "`wbes_source'" ///
+foreach file in "`wbes_source'" ///
     "`sector_crosswalk'" "`elasticity_ranking'" ///
     "`elasticity_performance'" {
     confirm file "`file'"
@@ -78,29 +78,44 @@ log using "${LOGDIR}/03_bready_wbes_sector_constraints.log", ///
     1. Assert the live, hand-selected priority universe
 *******************************************************************************/
 
-import excel using "`priority_workbook'", ///
-    sheet("enterprise_survey_questions") firstrow clear
-confirm variable Priority
-count if lower(ustrtrim(Priority)) == "yes"
-assert r(N) == 16
-local priority_indicator_count = r(N)
+* The reviewed indicators and published benchmarks are coded below. The private
+* review workbook supplies an additional selection-count check when available.
+local priority_indicators "reg12 disp6 fin27 fin26 fin30 fin33 tr18_u tr20 tr24_u tr25 tr26 in23 wk28 comp1 tax6 in2"
+local priority_indicator_count : word count `priority_indicators'
+assert `priority_indicator_count' == 16
+if fileexists("`priority_workbook'") {
+    import excel using "`priority_workbook'", ///
+        sheet("enterprise_survey_questions") firstrow clear
+    confirm variable Priority
+    count if lower(ustrtrim(Priority)) == "yes"
+    assert r(N) == `priority_indicator_count'
+}
+else {
+    display as text "Review workbook unavailable: using the 16 reviewed indicators explicitly coded here."
+    display as text "National indicator values are still checked against the published benchmarks."
+}
 
 /*******************************************************************************
-    2. Import the reviewed four-digit ISIC-to-NACAM crosswalk
+    2. Read official ISIC classes and derive the agreed section comparison groups
 *******************************************************************************/
 
 tempfile sector_bridge validation long_firms sector_roster ///
     sector_opportunity sector_results pooled_results
 
-import excel using "`sector_crosswalk'", ///
-    sheet("isic4_nacam_crosswalk") cellrange(A4) firstrow clear
-confirm variable isic4_code cameroon_firms nacam mapping_status review_flag
+use "`sector_crosswalk'", clear
+keep if isic4_level == 4
+rename isic4_code class_code
+generate int isic4_code = real(class_code)
+generate byte isic4_division = real(substr(class_code, 1, 2))
+rename isic4_section isic4_official_section
+generate str5 isic4_section = isic4_official_section
+replace isic4_section = "M+N" if inlist(isic4_official_section, "M", "N")
+replace isic4_section = "R+S+T" ///
+    if inlist(isic4_official_section, "R", "S") | isic4_division == 97
+replace isic4_section = "" if isic4_official_section == "T" & isic4_division != 97
+assert missing(isic4_section) if isic4_division == 98
+keep isic4_code isic4_division isic4_official_section isic4_section
 isid isic4_code
-assert inlist(review_flag, 0, 1)
-assert missing(nacam) if review_flag == 1
-assert !missing(nacam, nacam_label_short_display) if review_flag == 0
-quietly summarize cameroon_firms, meanonly
-assert r(sum) == 615
 save "`sector_bridge'"
 
 /*******************************************************************************
@@ -124,13 +139,26 @@ rename wt weight
 generate int isic4_code = d1a2_v4
 assert isic4_code == d1a2_v4
 
-merge m:1 isic4_code using "`sector_bridge'", generate(sector_bridge_merge)
-assert sector_bridge_merge == 3
+merge m:1 isic4_code using "`sector_bridge'", keep(master match) generate(sector_bridge_merge)
+tabulate sector_bridge_merge, missing
+assert sector_bridge_merge != 2
+isid firm_id
+assert _N == 615
+generate byte review_flag = sector_bridge_merge != 3 | missing(isic4_section)
+generate str48 mapping_status = cond(review_flag, "Unknown or outside comparison scope", "Official ISIC section comparison group")
 drop sector_bridge_merge
 
-merge m:1 nacam using "`elasticity_ranking'", ///
+merge m:1 isic4_section using "`elasticity_ranking'", ///
+    keepusing(isic4_sector_id isic4_label_short_display revenue_decile high_elasticity) ///
     keep(master match) generate(elasticity_merge)
+tabulate elasticity_merge, missing
 assert elasticity_merge != 2
+isid firm_id
+preserve
+    keep firm_id isic4_code isic4_division isic4_official_section isic4_section ///
+        mapping_status review_flag elasticity_merge
+    save "${DATADIR}/Analysis/bready_wbes_isic4_section_cmr_mapping_audit.dta", replace
+restore
 assert elasticity_merge == 1 if review_flag == 1
 assert inrange(revenue_decile, 1, 10) if elasticity_merge == 3
 assert high_elasticity == (revenue_decile >= 7) if elasticity_merge == 3
@@ -151,10 +179,10 @@ local high_firms = r(N)
 
 preserve
     keep if elasticity_eligible == 1
-    egen byte nacam_tag = tag(nacam)
-    quietly count if nacam_tag == 1
+    egen byte isic4_sector_id_tag = tag(isic4_sector_id)
+    quietly count if isic4_sector_id_tag == 1
     local ranked_sectors = r(N)
-    quietly count if nacam_tag == 1 & high_elasticity == 1
+    quietly count if isic4_sector_id_tag == 1 & high_elasticity == 1
     local high_sectors = r(N)
 restore
 
@@ -173,16 +201,16 @@ matrix colnames mapping_audit = Value
 matrix rownames mapping_audit = priority_indicators wb_firms mapped_firms review_excluded_firms outside_ranking_firms ranked_firms ranked_sectors high_firms high_sectors
 
 esttab matrix(mapping_audit, fmt(%12.0fc)) ///
-    using "${OUTPUTDIR}/tables/bready_wbes_sector_constraints_cmr_audit.tex", ///
+    using "${OUTPUTDIR}/tables/bready_wbes_isic4_section_cmr_constraints_audit.tex", ///
     replace booktabs fragment nomtitles nonumbers ///
     varlabels( ///
         priority_indicators "Selected priority indicators" ///
         wb_firms "Cameroon latest-wave WBES firms" ///
-        mapped_firms "Firms with unique NACAM mapping" ///
-        review_excluded_firms "Firms excluded for mapping review" ///
-        outside_ranking_firms "Uniquely mapped firms outside elasticity ranking" ///
+        mapped_firms "Firms with official ISIC comparison groups" ///
+        review_excluded_firms "Firms with unknown or out-of-scope codes" ///
+        outside_ranking_firms "Classified firms outside elasticity ranking" ///
         ranked_firms "Firms eligible for elasticity comparison" ///
-        ranked_sectors "NACAM sectors in elasticity comparison" ///
+        ranked_sectors "ISIC sections in elasticity comparison" ///
         high_firms "Firms in elasticity deciles 7--10" ///
         high_sectors "Mapped sectors in elasticity deciles 7--10" ///
     )
@@ -230,7 +258,7 @@ generate double value_tax6 = 100 * inlist(j40, 1, 2) ///
     if inlist(j40, 1, 2, 4)
 generate double value_in2 = c7 if !missing(c7)
 
-keep firm_id weight isic4_code nacam nacam_label_short_display ///
+keep firm_id weight isic4_code isic4_section isic4_sector_id isic4_label_short_display ///
     revenue_decile high_elasticity review_flag mapping_status elasticity_eligible ///
     value_reg12 value_disp6 value_fin27 value_fin26 value_fin30 value_fin33 ///
     value_tr18_u value_tr20 value_tr24_u value_tr25 value_tr26 value_in23 ///
@@ -238,6 +266,13 @@ keep firm_id weight isic4_code nacam nacam_label_short_display ///
 
 reshape long value_, i(firm_id) j(indicator) string
 rename value_ value
+levelsof indicator, local(constructed_indicators)
+local constructed_count : word count `constructed_indicators'
+assert `constructed_count' == `priority_indicator_count'
+foreach item of local priority_indicators {
+    quietly count if indicator == "`item'"
+    assert r(N) == `wb_firms'
+}
 
 generate double benchmark = .
 replace benchmark = 40.21287004 if indicator == "reg12"
@@ -325,7 +360,7 @@ preserve
     }
 
     esttab matrix(indicator_validation, fmt(%9.0fc %9.2f %9.2f %9.2f %9.0f)) ///
-        using "${OUTPUTDIR}/tables/bready_wbes_indicator_validation_cmr.tex", ///
+        using "${OUTPUTDIR}/tables/bready_wbes_isic4_section_cmr_indicator_validation.tex", ///
         replace booktabs fragment nomtitles nonumbers ///
         collabels("N" "WBES estimate" "B-READY value" "Absolute difference" "Validated") ///
         varlabels(`validation_rowlabels')
@@ -337,30 +372,30 @@ restore
 
 use "`long_firms'", clear
 keep if elasticity_eligible == 1
-assert !missing(nacam, revenue_decile, high_elasticity)
+assert !missing(isic4_sector_id, revenue_decile, high_elasticity)
 save "`long_firms'", replace
 
 preserve
-    keep indicator topic indicator_label unit benchmark nacam ///
-        nacam_label_short_display revenue_decile high_elasticity
-    bysort indicator nacam: keep if _n == 1
-    isid indicator nacam
+    keep indicator topic indicator_label unit benchmark isic4_section isic4_sector_id ///
+        isic4_label_short_display revenue_decile high_elasticity
+    bysort indicator isic4_sector_id: keep if _n == 1
+    isid indicator isic4_sector_id
     quietly count
-    assert r(N) == 16 * 16
+    assert r(N) == `priority_indicator_count' * `ranked_sectors'
     save "`sector_roster'"
 restore
 
-* Fix employment-size groups once on the 16-sector comparison universe. These
+* Fix employment-size groups once on the observed section-group comparison universe. These
 * groups and their legend ranges are therefore identical for every indicator.
 preserve
-    keep nacam nacam_label_short_display
-    bysort nacam: keep if _n == 1
-    sort nacam
-    isid nacam
+    keep isic4_section isic4_sector_id isic4_label_short_display
+    bysort isic4_sector_id: keep if _n == 1
+    sort isic4_sector_id
+    isid isic4_sector_id
     quietly count
-    assert r(N) == 16
+    assert r(N) == `ranked_sectors'
 
-    merge 1:1 nacam using "`elasticity_performance'", ///
+    merge 1:1 isic4_section using "`elasticity_performance'", ///
         keepusing(tot_rev_elasticity avg_annual_total_employment) ///
         keep(master match) generate(performance_merge)
     assert performance_merge == 3
@@ -369,7 +404,7 @@ preserve
     assert avg_annual_total_employment > 0 ///
         & !missing(avg_annual_total_employment)
 
-    sort avg_annual_total_employment nacam
+    sort avg_annual_total_employment isic4_sector_id
     generate byte employment_size_tercile = ceil(3 * _n / _N)
     assert inrange(employment_size_tercile, 1, 3)
 
@@ -388,22 +423,22 @@ preserve
     label variable avg_annual_total_employment ///
         "Average annual total sector employment"
     label variable employment_size_tercile ///
-        "Fixed employment-size tercile among 16 overlapping sectors"
+        "Fixed employment-size tercile among overlapping section groups"
     save "`sector_opportunity'"
 restore
 
 local zcrit = invnormal(.975)
 levelsof indicator, local(estimate_indicators)
-levelsof nacam, local(estimate_sectors)
+levelsof isic4_sector_id, local(estimate_sectors)
 
 tempname sector_handle
-postfile `sector_handle' str12 indicator int nacam ///
+postfile `sector_handle' str12 indicator int isic4_sector_id ///
     double estimate se ci_low ci_high int sample_n ///
     using "`sector_results'", replace
 
 foreach item of local estimate_indicators {
     foreach sector of local estimate_sectors {
-        quietly count if indicator == "`item'" & nacam == `sector' ///
+        quietly count if indicator == "`item'" & isic4_sector_id == `sector' ///
             & !missing(value) & weight > 0
         local cell_n = r(N)
         local cell_estimate = .
@@ -414,7 +449,7 @@ foreach item of local estimate_indicators {
 
         if `cell_n' > 0 {
             capture quietly mean value [pweight = weight] ///
-                if indicator == "`item'" & nacam == `sector' ///
+                if indicator == "`item'" & isic4_sector_id == `sector' ///
                 & !missing(value) & weight > 0
 
             if !_rc {
@@ -437,7 +472,7 @@ foreach item of local estimate_indicators {
                 * A one-observation cell can have a weighted mean but no
                 * estimable sampling variance.
                 quietly summarize value [aweight = weight] ///
-                    if indicator == "`item'" & nacam == `sector' ///
+                    if indicator == "`item'" & isic4_sector_id == `sector' ///
                     & !missing(value) & weight > 0, meanonly
                 local cell_estimate = r(mean)
             }
@@ -451,10 +486,10 @@ foreach item of local estimate_indicators {
 postclose `sector_handle'
 
 use "`sector_results'", clear
-merge 1:1 indicator nacam using "`sector_roster'", assert(match) nogen
+merge 1:1 indicator isic4_sector_id using "`sector_roster'", assert(match) nogen
 merge m:1 indicator using "`validation'", ///
     keepusing(national_estimate abs_difference validated) assert(match) nogen
-merge m:1 nacam using "`sector_opportunity'", ///
+merge m:1 isic4_sector_id using "`sector_opportunity'", ///
     keepusing(tot_rev_elasticity avg_annual_total_employment ///
         employment_size_tercile) assert(match) nogen
 assert !missing(tot_rev_elasticity, avg_annual_total_employment, ///
@@ -466,8 +501,8 @@ generate byte ci_available = !missing(se, ci_low, ci_high)
 generate byte small_cell = inrange(sample_n, 1, 9)
 generate byte suppressed = missing(estimate) | validated != 1
 generate str12 result_level = "sector"
-sort indicator nacam
-isid indicator nacam
+sort indicator isic4_sector_id
+isid indicator isic4_sector_id
 save "`sector_results'", replace
 
 use "`long_firms'", clear
@@ -536,27 +571,27 @@ generate byte ci_available = !missing(se, ci_low, ci_high)
 generate byte small_cell = inrange(sample_n, 1, 9)
 generate byte suppressed = missing(estimate) | validated != 1
 generate str12 result_level = "pooled"
-generate int nacam = .
+generate int isic4_sector_id = .
 generate byte revenue_decile = .
-generate str40 nacam_label_short_display = ///
+generate str100 isic4_label_short_display = ///
     cond(high_elasticity == 1, "High elasticity (deciles 7-10)", "Other mapped sectors")
 
 append using "`sector_results'"
 recast double estimate se ci_low ci_high
-order result_level indicator topic indicator_label unit nacam ///
-    nacam_label_short_display revenue_decile high_elasticity estimate se ///
+order result_level indicator topic indicator_label unit isic4_sector_id ///
+    isic4_label_short_display revenue_decile high_elasticity estimate se ///
     ci_low ci_high ci_available sample_n small_cell benchmark ///
     national_estimate abs_difference validated suppressed ///
     tot_rev_elasticity avg_annual_total_employment employment_size_tercile
-sort indicator result_level high_elasticity nacam
+sort indicator result_level high_elasticity isic4_sector_id
 save "`analysis_out'", replace
 
-* Every indicator keeps the complete 16-sector comparison roster.
+* Every indicator keeps the complete observed section-group comparison roster.
 quietly count if result_level == "sector"
-assert r(N) == 16 * 16
-bysort indicator result_level: assert _N == 16 if result_level == "sector"
+assert r(N) == `priority_indicator_count' * `ranked_sectors'
+bysort indicator result_level: assert _N == `ranked_sectors' if result_level == "sector"
 assert high_elasticity == (revenue_decile >= 7) if result_level == "sector"
-bysort nacam (employment_size_tercile): assert ///
+bysort isic4_sector_id (employment_size_tercile): assert ///
     employment_size_tercile == employment_size_tercile[1] ///
     if result_level == "sector"
 assert !missing(tot_rev_elasticity, avg_annual_total_employment, ///
@@ -602,17 +637,17 @@ matrix rownames final_audit = priority_indicators validated_indicators ///
     points_without_intervals
 
 esttab matrix(final_audit, fmt(%12.0fc)) ///
-    using "${OUTPUTDIR}/tables/bready_wbes_sector_constraints_cmr_audit.tex", ///
+    using "${OUTPUTDIR}/tables/bready_wbes_isic4_section_cmr_constraints_audit.tex", ///
     replace booktabs fragment nomtitles nonumbers ///
     varlabels( ///
         priority_indicators "Selected priority indicators" ///
         validated_indicators "Nationally validated indicators plotted" ///
         wb_firms "Cameroon latest-wave WBES firms" ///
-        mapped_firms "Firms with unique NACAM mapping" ///
-        review_excluded_firms "Firms excluded for mapping review" ///
-        outside_ranking_firms "Uniquely mapped firms outside elasticity ranking" ///
+        mapped_firms "Firms with official ISIC comparison groups" ///
+        review_excluded_firms "Firms with unknown or out-of-scope codes" ///
+        outside_ranking_firms "Classified firms outside elasticity ranking" ///
         ranked_firms "Firms eligible for elasticity comparison" ///
-        ranked_sectors "NACAM sectors in elasticity comparison" ///
+        ranked_sectors "ISIC sections in elasticity comparison" ///
         high_firms "Firms in elasticity deciles 7--10" ///
         high_sectors "Mapped sectors in elasticity deciles 7--10" ///
         sector_result_rows "Indicator-sector rows retained" ///
@@ -626,18 +661,18 @@ esttab matrix(final_audit, fmt(%12.0fc)) ///
 *******************************************************************************/
 
 keep if result_level == "sector" & validated == 1
-bysort indicator: assert _N == 16
+bysort indicator: assert _N == `ranked_sectors'
 levelsof indicator, local(plot_indicators)
 local plotted_indicator_count : word count `plot_indicators'
 assert `plotted_indicator_count' == 14
 
 * Calculate the three employment legend ranges once from unique sectors.
 preserve
-    keep nacam avg_annual_total_employment employment_size_tercile
-    bysort nacam: keep if _n == 1
-    isid nacam
+    keep isic4_sector_id avg_annual_total_employment employment_size_tercile
+    bysort isic4_sector_id: keep if _n == 1
+    isid isic4_sector_id
     quietly count
-    assert r(N) == 16
+    assert r(N) == `ranked_sectors'
     forvalues size_group = 1/3 {
         quietly summarize avg_annual_total_employment ///
             if employment_size_tercile == `size_group', meanonly
@@ -659,26 +694,26 @@ foreach item of local plot_indicators {
             avg_annual_total_employment, employment_size_tercile, benchmark) ///
             if plot_ready == 1
         quietly count if plot_ready == 1
-        assert r(N) > 0
+        local usable_groups = r(N)
+        assert `usable_groups' > 0
 
         generate byte opportunity = plot_ready == 1 & high_elasticity == 1
-        gsort -plot_ready -avg_annual_total_employment nacam
+        gsort -plot_ready -avg_annual_total_employment isic4_sector_id
         generate int employment_rank = _n if plot_ready == 1
         generate byte label_sector = plot_ready == 1 ///
             & (opportunity == 1 | employment_rank <= 2)
         quietly count if plot_ready == 1 & employment_rank <= 2
-        assert r(N) == 2
-        generate str40 plot_label = nacam_label_short_display ///
+        assert r(N) == min(2, `usable_groups')
+        generate str100 plot_label = isic4_label_short_display ///
             if label_sector == 1
-        generate byte label_position = 12 if label_sector == 1
-        replace label_position = 9 if employment_rank == 1
-        replace label_position = 3 if employment_rank == 2
-        replace label_position = 3 if opportunity == 1 ///
-            & employment_rank > 2 & mod(nacam, 4) == 0
-        replace label_position = 9 if opportunity == 1 ///
-            & employment_rank > 2 & mod(nacam, 4) == 2
-        replace label_position = 6 if opportunity == 1 ///
-            & employment_rank > 2 & mod(nacam, 4) == 3
+        * Keep labels inside the panel; right-side points use left-facing labels.
+        quietly summarize estimate if plot_ready == 1, meanonly
+        local label_midpoint = (r(min) + r(max))/2
+        local xpadding = max((r(max) - r(min))*.08, 1)
+        local plot_xmin = r(min) - `xpadding'
+        local plot_xmax = r(max) + `xpadding'
+        generate byte label_position = 3 if label_sector == 1
+        replace label_position = 9 if label_sector == 1 & estimate >= `label_midpoint'
 
         local benchmark_value = benchmark[1]
         local plot_title = indicator_label[1]
@@ -720,10 +755,11 @@ foreach item of local plot_indicators {
             xline(`benchmark_value', lcolor("0 114 178") ///
                 lpattern(dash) lwidth(medthin)) ///
             yline(0, lcolor(gs8) lpattern(shortdash) lwidth(thin)) ///
+            xscale(range(`plot_xmin' `plot_xmax')) ///
             xlabel(, grid glpattern(dash) glcolor(gs13)) ///
             ylabel(, grid glpattern(dash) glcolor(gs13)) ///
-            ytitle("Administrative revenue elasticity", size(small)) ///
-            xtitle("WBES-weighted sector estimate (`plot_unit')", size(small)) ///
+            ytitle("Ecofin section revenue elasticity", size(small)) ///
+            xtitle("WBES-weighted section estimate (`plot_unit')", size(small)) ///
             title("`plot_title'", size(medsmall)) ///
             legend(order(1 "Small: `employment_min_1'-`employment_max_1'" ///
                 2 "Middle: `employment_min_2'-`employment_max_2'" ///
@@ -732,19 +768,20 @@ foreach item of local plot_indicators {
                 rows(1) pos(6) size(vsmall) ///
                 region(lcolor(none) fcolor(none))) ///
             note("Dashed vertical line: published Cameroon B-READY benchmark. Orange: revenue elasticity deciles 7-10." ///
-                "Descriptive; sectors without indicator responses omitted.", ///
+                "Descriptive; sections without responses omitted. Sector coverage may differ across datasets." ///
+                "ISIC Rev.4 sections based on the NACAM-ISIC Rev.4 crosswalk." "Combined: professional & admin. support; arts/recreation, other services & household employers (division 97)." "Sizes are employment terciles. * Includes branches spanning sections; see classification notes.", ///
                 size(tiny)) ///
             graphregion(color(white)) plotregion(color(white)) ///
             bgcolor(white) xsize(7.5) ysize(5.5)
 
         graph export ///
-            "${OUTPUTDIR}/figures/bready_wbes_cmr_`item'_high_elasticity.pdf", replace
-        graph export "${OUTPUTDIR}/figures/bready_wbes_cmr_`item'_high_elasticity.png", ///
+            "${OUTPUTDIR}/figures/bready_wbes_isic4_section_cmr_`item'_high_elasticity.pdf", name(Graph) replace
+        graph export "${OUTPUTDIR}/figures/bready_wbes_isic4_section_cmr_`item'_high_elasticity.png", name(Graph) ///
             replace width(2400)
         confirm file ///
-            "${OUTPUTDIR}/figures/bready_wbes_cmr_`item'_high_elasticity.pdf"
+            "${OUTPUTDIR}/figures/bready_wbes_isic4_section_cmr_`item'_high_elasticity.pdf"
         confirm file ///
-            "${OUTPUTDIR}/figures/bready_wbes_cmr_`item'_high_elasticity.png"
+            "${OUTPUTDIR}/figures/bready_wbes_isic4_section_cmr_`item'_high_elasticity.png"
         local ++exported_figure_pairs
     restore
 }

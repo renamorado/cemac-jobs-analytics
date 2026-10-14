@@ -11,11 +11,11 @@ set more off
     Outputs:
         Data/Analysis/cemac_wbes_trade_elasticity_estimates.dta
         output/tables/cemac_wbes_trade_elasticity_country.tex
-        output/tables/cemac_wbes_trade_elasticity_cameroon_activity.tex
+        output/tables/cemac_wbes_trade_elasticity_cameroon_isic4_division.tex
         output/figures/cemac_wbes_trade_elasticity_country_all_firms.{pdf,png}
         output/figures/cemac_wbes_trade_elasticity_country_exporters_only.{pdf,png}
-        output/figures/cemac_wbes_trade_elasticity_cameroon_activity_all_firms.{pdf,png}
-        output/figures/cemac_wbes_trade_elasticity_cameroon_activity_exporters_only.{pdf,png}
+        output/figures/cemac_wbes_trade_elasticity_cameroon_isic4_division_all_firms.{pdf,png}
+        output/figures/cemac_wbes_trade_elasticity_cameroon_isic4_division_exporters_only.{pdf,png}
         logs/03_wbes_trade_elasticity.log
 
     Notes:
@@ -69,7 +69,7 @@ foreach var in ///
     firm_id country_name cemac_country wb_region wb_income_group weight ///
     employment export_value export_status isic4_section ///
     ln_firm_age foreign_own_share gov_own_share retained_cemac ///
-    ssa_excl_cemac high_income display_name activity_group ///
+    ssa_excl_cemac high_income display_name division_group ///
     isic4_section_fe ln_emp ln_export_value ln_export_value_all ///
     all_firm_sample exporter_only_sample {
     confirm variable `var'
@@ -89,7 +89,7 @@ tempfile country_estimates
 tempname country_handle
 
 postfile `country_handle' ///
-    str24 panel str24 spec str80 spec_label str60 group_name str40 display_name ///
+    str24 panel str24 spec str80 spec_label str180 group_name str180 display_name ///
     byte retained_cemac byte ssa_excl_cemac byte high_income byte benchmark_row ///
     double elasticity se lb ub exporter_dummy exporter_dummy_se ///
     double n_unweighted n_exporters n_countries ///
@@ -177,82 +177,92 @@ foreach country of local country_list {
 postclose `country_handle'
 
 /*******************************************************************************
-    Cameroon activity-group estimates
+    Cameroon ISIC division estimates
 *******************************************************************************/
 tempfile activity_estimates
 tempname activity_handle
 
 postfile `activity_handle' ///
-    str24 panel str24 spec str80 spec_label str60 group_name str40 display_name ///
+    str24 panel str24 spec str80 spec_label str180 group_name str180 display_name ///
     byte retained_cemac byte ssa_excl_cemac byte high_income byte benchmark_row ///
     double elasticity se lb ub exporter_dummy exporter_dummy_se ///
     double n_unweighted n_exporters n_countries ///
     using "`activity_estimates'", replace
 
-levelsof activity_group if country_name == "Cameroon", local(activity_list)
+tempfile division_support
+tempname support_handle
+postfile `support_handle' str180 division_group str24 spec ///
+    long sample_n exporters nonexporters byte eligible estimated ///
+    str48 suppression_reason using "`division_support'", replace
 
+levelsof division_group if country_name == "Cameroon" & !missing(division_group), local(activity_list)
 foreach activity of local activity_list {
-    quietly count if country_name == "Cameroon" & activity_group == "`activity'" & all_firm_sample == 1
-    local n_all = r(N)
-    quietly count if country_name == "Cameroon" & activity_group == "`activity'" & all_firm_sample == 1 & export_status == 1
-    local exporters_all = r(N)
-    quietly count if country_name == "Cameroon" & activity_group == "`activity'" & all_firm_sample == 1 & export_status == 0
-    local nonexporters_all = r(N)
-
-    if `n_all' >= `min_obs' & `exporters_all' > 0 & `nonexporters_all' > 0 {
-        capture quietly regress ln_emp ln_export_value_all export_status ///
-            `firm_controls' ///
-            [pweight = weight] if country_name == "Cameroon" ///
-            & activity_group == "`activity'" & all_firm_sample == 1, ///
-            vce(robust)
-
-        if !_rc {
-            capture scalar b_trade = _b[ln_export_value_all]
-            if !_rc & !missing(b_trade) {
-                scalar se_trade = _se[ln_export_value_all]
-                scalar lb_trade = b_trade - `zcrit' * se_trade
-                scalar ub_trade = b_trade + `zcrit' * se_trade
-                scalar b_exporter = _b[export_status]
-                scalar se_exporter = _se[export_status]
-
-                post `activity_handle' ///
-                    ("cameroon_activity") ("all_firms") ("All firms, controls") ///
-                    ("`activity'") ("`activity'") ///
-                    (1) (0) (0) (0) ///
-                    (b_trade) (se_trade) (lb_trade) (ub_trade) ///
-                    (b_exporter) (se_exporter) ///
-                    (`n_all') (`exporters_all') (1)
+    foreach specification in all_firms exporters_only {
+        local sample_flag all_firm_sample
+        local regressor ln_export_value_all
+        local exporter_control export_status
+        local specification_label "All firms, controls"
+        if "`specification'" == "exporters_only" {
+            local sample_flag exporter_only_sample
+            local regressor ln_export_value
+            local exporter_control
+            local specification_label "Exporters only, controls"
+        }
+        quietly count if country_name == "Cameroon" ///
+            & division_group == "`activity'" & `sample_flag' == 1
+        local sample_n = r(N)
+        quietly count if country_name == "Cameroon" ///
+            & division_group == "`activity'" & `sample_flag' == 1 & export_status == 1
+        local exporters = r(N)
+        local nonexporters = `sample_n' - `exporters'
+        local eligible = `sample_n' >= `min_obs'
+        if "`specification'" == "all_firms" {
+            local eligible = `eligible' & `exporters' > 0 & `nonexporters' > 0
+        }
+        local estimated = 0
+        local reason "Below sample or export-status support rule"
+        if `eligible' {
+            local reason "Regression failed or slope not identified"
+            capture quietly regress ln_emp `regressor' `exporter_control' ///
+                `firm_controls' [pweight = weight] if country_name == "Cameroon" ///
+                & division_group == "`activity'" & `sample_flag' == 1, vce(robust)
+            if !_rc {
+                capture scalar b_trade = _b[`regressor']
+                if !_rc {
+                    scalar se_trade = _se[`regressor']
+                    if !missing(b_trade, se_trade) & se_trade > 0 {
+                        scalar lb_trade = b_trade - `zcrit' * se_trade
+                        scalar ub_trade = b_trade + `zcrit' * se_trade
+                        scalar b_exporter = .
+                        scalar se_exporter = .
+                        if "`specification'" == "all_firms" {
+                            scalar b_exporter = _b[export_status]
+                            scalar se_exporter = _se[export_status]
+                        }
+                        post `activity_handle' ///
+                            ("cameroon_isic4_division") ("`specification'") ("`specification_label'") ///
+                            ("`activity'") ("`activity'") (1) (0) (0) (0) ///
+                            (b_trade) (se_trade) (lb_trade) (ub_trade) ///
+                            (b_exporter) (se_exporter) (`sample_n') (`exporters') (1)
+                        local estimated = 1
+                        local reason ""
+                    }
+                }
             }
         }
-    }
-
-    quietly count if country_name == "Cameroon" & activity_group == "`activity'" & exporter_only_sample == 1
-    local n_exporter = r(N)
-
-    if `n_exporter' >= `min_obs' {
-        capture quietly regress ln_emp ln_export_value ///
-            `firm_controls' ///
-            [pweight = weight] if country_name == "Cameroon" ///
-            & activity_group == "`activity'" & exporter_only_sample == 1, ///
-            vce(robust)
-
-        if !_rc {
-            capture scalar b_trade = _b[ln_export_value]
-            if !_rc & !missing(b_trade) {
-                scalar se_trade = _se[ln_export_value]
-                scalar lb_trade = b_trade - `zcrit' * se_trade
-                scalar ub_trade = b_trade + `zcrit' * se_trade
-
-                post `activity_handle' ///
-                    ("cameroon_activity") ("exporters_only") ("Exporters only, controls") ///
-                    ("`activity'") ("`activity'") ///
-                    (1) (0) (0) (0) ///
-                    (b_trade) (se_trade) (lb_trade) (ub_trade) ///
-                    (.) (.) (`n_exporter') (`n_exporter') (1)
-            }
-        }
+        post `support_handle' ("`activity'") ("`specification'") ///
+            (`sample_n') (`exporters') (`nonexporters') (`eligible') (`estimated') ("`reason'")
     }
 }
+postclose `support_handle'
+preserve
+    use "`division_support'", clear
+    isid division_group spec
+    assert estimated == 0 if eligible == 0
+    save "${DATADIR}/Analysis/cemac_wbes_trade_isic4_division_support.dta", replace
+    capture mkdir "${OUTPUTDIR}/checks"
+    export delimited using "${OUTPUTDIR}/checks/cemac_wbes_trade_isic4_division_support.csv", replace
+restore
 
 postclose `activity_handle'
 
@@ -265,7 +275,7 @@ save "`base_country_estimates'", replace
 
 tempname benchmark_handle
 postfile `benchmark_handle' ///
-    str24 panel str24 spec str80 spec_label str60 group_name str40 display_name ///
+    str24 panel str24 spec str80 spec_label str180 group_name str180 display_name ///
     byte retained_cemac byte ssa_excl_cemac byte high_income byte benchmark_row ///
     double elasticity se lb ub exporter_dummy exporter_dummy_se ///
     double n_unweighted n_exporters n_countries ///
@@ -319,6 +329,14 @@ postclose `benchmark_handle'
 use "`base_country_estimates'", clear
 append using "`benchmark_estimates'"
 append using "`activity_estimates'"
+
+* INSEE-based English labels match the Census helper; group_name retains the official label.
+replace display_name = "10 - Food manufacturing" if panel == "cameroon_isic4_division" & substr(group_name, 1, 2) == "10"
+replace display_name = "46 - Wholesale excl. vehicles & motorcycles" if panel == "cameroon_isic4_division" & substr(group_name, 1, 2) == "46"
+replace display_name = "47 - Retail excl. vehicles & motorcycles" if panel == "cameroon_isic4_division" & substr(group_name, 1, 2) == "47"
+replace display_name = "55 - Accommodation" if panel == "cameroon_isic4_division" & substr(group_name, 1, 2) == "55"
+replace display_name = "56 - Food & beverage services" if panel == "cameroon_isic4_division" & substr(group_name, 1, 2) == "56"
+
 
 label variable panel "Estimate panel"
 label variable spec "WBES cross-sectional specification"
@@ -384,10 +402,10 @@ preserve
 restore
 
 /*******************************************************************************
-    Cameroon activity table
+    Cameroon ISIC division table
 *******************************************************************************/
 preserve
-    keep if panel == "cameroon_activity"
+    keep if panel == "cameroon_isic4_division"
     keep spec group_name display_name elasticity se n_unweighted n_exporters
 
     tempfile activity_table_base activity_all
@@ -413,6 +431,16 @@ preserve
     replace display_name = group_name if missing(display_name)
     generate str16 rowname = "row_" + string(_n)
 
+    quietly count
+    if r(N) == 0 {
+        matrix activity_table = J(1, 7, .)
+        matrix rownames activity_table = no_estimates
+        esttab matrix(activity_table) ///
+            using "${OUTPUTDIR}/tables/cemac_wbes_trade_elasticity_cameroon_isic4_division.tex", ///
+            replace booktabs fragment nomtitles nonumbers ///
+            varlabels(no_estimates "No division meets the estimation support rules")
+    }
+    else {
     mkmat all_elasticity all_se all_n all_exporters exporters_elasticity exporters_se exporters_n, ///
         matrix(activity_table) rownames(rowname)
     matrix colnames activity_table = AllElasticity AllSE AllN AllExporters ExporterElasticity ExporterSE ExporterN
@@ -426,18 +454,20 @@ preserve
     }
 
     esttab matrix(activity_table, fmt(%9.3f %9.3f %9.0fc %9.0fc %9.3f %9.3f %9.0fc)) ///
-        using "${OUTPUTDIR}/tables/cemac_wbes_trade_elasticity_cameroon_activity.tex", ///
+        using "${OUTPUTDIR}/tables/cemac_wbes_trade_elasticity_cameroon_isic4_division.tex", ///
         replace booktabs fragment nomtitles nonumbers ///
         collabels("All-firm slope" "SE" "N" "Exporters" "Exporter-only slope" "SE" "N") ///
         varlabels(`activity_rowlabels')
+    }
+
 restore
 
 /*******************************************************************************
     Dot-and-interval plots
 *******************************************************************************/
-local plot_note "Weighted WBES cross-section. Points show log employment/log export-value associations; rows with N<30 suppressed."
+local plot_note "Weighted WBES cross-section: log employment/log export-value associations."
 
-foreach panel in country cameroon_activity {
+foreach panel in country cameroon_isic4_division {
     foreach spec in all_firms exporters_only {
         preserve
             if "`panel'" == "country" {
@@ -451,19 +481,27 @@ foreach panel in country cameroon_activity {
                 }
             }
             else {
-                keep if panel == "cameroon_activity" & spec == "`spec'"
-                local output_panel "cameroon_activity"
+                keep if panel == "cameroon_isic4_division" & spec == "`spec'"
+                local output_panel "cameroon_isic4_division"
                 if "`spec'" == "all_firms" {
-                    local title "Cameroon WBES activity associations: all firms"
+                    local title "Cameroon WBES ISIC division associations: all firms"
                 }
                 else {
-                    local title "Cameroon WBES activity associations: exporters only"
+                    local title "Cameroon WBES ISIC division associations: exporters only"
                 }
             }
 
             drop if missing(elasticity, lb, ub)
             quietly count
             if r(N) == 0 {
+                twoway function y=0, range(0 1) lcolor(white) ///
+                    text(0.5 0.5 "No supported ISIC division estimates", size(medium)) ///
+                    yscale(range(0 1) off) xscale(off) legend(off) ///
+                    title("`title'", size(medsmall)) ///
+                    note("Minimum N=30; all-firm models require both export statuses.", size(small)) ///
+                    graphregion(color(white)) plotregion(color(white))
+                graph export "${OUTPUTDIR}/figures/cemac_wbes_trade_elasticity_`output_panel'_`spec'.pdf", name(Graph) replace
+                graph export "${OUTPUTDIR}/figures/cemac_wbes_trade_elasticity_`output_panel'_`spec'.png", name(Graph) replace
                 restore
                 continue
             }
@@ -480,6 +518,8 @@ foreach panel in country cameroon_activity {
             }
             label values plot_order elasticity_plot_labels
 
+            local plot_legend `"order(2 "Country" 4 "Benchmark") rows(1) pos(6) size(small) region(lcolor(none) fcolor(none))"'
+            if "`panel'" == "cameroon_isic4_division" local plot_legend "off"
             twoway ///
                 (rcap lb ub plot_order if benchmark_row == 0, ///
                     horizontal lcolor("86 180 233") lwidth(medthin)) ///
@@ -495,14 +535,13 @@ foreach panel in country cameroon_activity {
                 xtitle("Employment/export-value elasticity", size(small)) ///
                 ytitle("") ///
                 title("`title'", size(medsmall)) ///
-                legend(order(2 "Country or activity" 4 "Benchmark") rows(1) pos(6) ///
-                    size(small) region(lcolor(none) fcolor(none))) ///
-                note("`plot_note'", size(vsmall)) ///
+                legend(`plot_legend') ///
+                note("`plot_note'" "Rows with N<30 suppressed; controls: age, ownership, and ISIC section FE.", size(vsmall)) ///
                 plotregion(color(white)) graphregion(color(white)) ///
                 bgcolor(white) xsize(7.5) ysize(4.8)
 
-            graph export "${OUTPUTDIR}/figures/cemac_wbes_trade_elasticity_`output_panel'_`spec'.pdf", replace
-            graph export "${OUTPUTDIR}/figures/cemac_wbes_trade_elasticity_`output_panel'_`spec'.png", replace
+            graph export "${OUTPUTDIR}/figures/cemac_wbes_trade_elasticity_`output_panel'_`spec'.pdf", name(Graph) replace
+            graph export "${OUTPUTDIR}/figures/cemac_wbes_trade_elasticity_`output_panel'_`spec'.png", name(Graph) replace
         restore
     }
 }

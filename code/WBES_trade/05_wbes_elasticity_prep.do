@@ -55,6 +55,7 @@ use "`input_file'", clear
 foreach var in ///
     firm_id country_name cemac_country wb_region wb_income_group weight ///
     employment export_value sales_w export_status isic4_section ///
+    isic4_division isic4_division_code isic4_division_label ///
     ln_firm_age foreign_own_share gov_own_share {
     confirm variable `var'
 }
@@ -77,17 +78,30 @@ replace display_name = "Central Afr. Rep." ///
     if country_name == "Central African Republic"
 replace display_name = "Eq. Guinea" if country_name == "Equatorial Guinea"
 
-* Cameroon activity groups keep the workbook readable and match the production
-* WBES figures that aggregate detailed ISIC sections.
-generate str36 activity_group = ""
-replace activity_group = "Manufacturing" if isic4_section == "C"
-replace activity_group = "Construction/utilities" if inlist(isic4_section, "E", "F")
-replace activity_group = "Trade/hospitality/transport" ///
-    if inlist(isic4_section, "G", "H", "I")
-replace activity_group = "Other services" ///
-    if inlist(isic4_section, "J", "K", "M", "N", "S")
-replace activity_group = "Other/unclear activity" ///
-    if missing(activity_group) | activity_group == ""
+* Retain official two-digit divisions for Cameroon reporting. Unknown
+* classifications stay in prepared data and country models, but not division fits.
+generate str180 division_group = isic4_division_code + ": " + isic4_division_label ///
+    if !missing(isic4_division_code, isic4_division_label)
+quietly count if country_name == "Cameroon" & missing(division_group)
+display as text "Cameroon firms without a reportable ISIC division: " r(N)
+
+* Attach the shared display style without changing observations or values.
+local prepared_n = _N
+merge m:1 isic4_section using ///
+    "${DATADIR}/Intermediate/isic4_broad_groups_sections.dta", ///
+    keepusing(broad_sector broad_sector_label plot_color plot_symbol) ///
+    keep(master match) generate(display_merge)
+tabulate display_merge, missing
+assert display_merge == 3 if !missing(isic4_section)
+assert _N == `prepared_n'
+drop display_merge
+
+* String keys for the linked Ecofin comparisons; its T coverage is division 97.
+generate str5 isic4_section_comparison = isic4_section
+replace isic4_section_comparison = "M+N" if inlist(isic4_section, "M", "N")
+replace isic4_section_comparison = "R+S+T" ///
+    if inlist(isic4_section, "R", "S") | isic4_division == 97
+replace isic4_section_comparison = "" if isic4_section == "T" & isic4_division != 97
 
 generate str16 isic4_section_fe_label = isic4_section
 replace isic4_section_fe_label = "Unknown" if isic4_section_fe_label == ""
@@ -116,7 +130,8 @@ keep if wbes_display_sample == 1
 label variable retained_cemac "Retained CEMAC country"
 label variable ssa_excl_cemac "Sub-Saharan Africa excluding CEMAC"
 label variable high_income "High-income benchmark economy"
-label variable activity_group "Cameroon activity group"
+label variable division_group "ISIC Rev.4 division code and label"
+label variable isic4_section_comparison "ISIC group for comparison with Ecofin"
 label variable isic4_section_fe "ISIC Rev.4 section fixed effect"
 label variable ln_emp "Log employment"
 label variable ln_export_value "Log export value among exporters"

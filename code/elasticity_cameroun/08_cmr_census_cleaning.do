@@ -4,18 +4,21 @@ set more off
 /*******************************************************************************
     Purpose:
         Clean Cameroon RGE 2024 census data, merge the reviewed NACAM
-        crosswalk, export audits, and build sector-level diagnostics.
+        crosswalk, attach the separate ISIC Rev.4 activity/firm decisions,
+        export audits, and build sector-level diagnostics.
 
     Inputs:
         Data/Cameroon/Raw/CENSUS 2024 with exports BASE RGE 3 BANQUE MONDIALE exp.xlsx
         docs/reference/nacam_rev1_citi_bridge_extracted.xlsx
         docs/reference/cmr_census_activity_nacam_crosswalk.xlsx
         Data/Intermediate/cmr_nacam_data_export_mapping.dta
+        docs/reference/cmr_census_activity_isic4_crosswalk.csv
+        Data/Cameroon/Reference/cmr_census_firm_isic4_decisions.csv
 
     Outputs:
         Data/Intermediate/cmr_census_activity_nacam_crosswalk.dta
         Data/Analysis/CMR_census_cleaned.dta
-        Data/Analysis/CMR_census_nacam_diagnostics.dta
+        Data/Analysis/CMR_census_isic4_division_diagnostics.dta
         output/tables/cmr_census_asset_availability_audit.tex
         output/tables/cmr_census_export_field_audit.tex
         output/tables/cmr_census_sector_audit.tex
@@ -62,7 +65,7 @@ local census_crosswalk_xlsx "${PROJECT_ROOT}/docs/reference/cmr_census_activity_
 local data_export_mapping "${DATADIR}/Intermediate/cmr_nacam_data_export_mapping.dta"
 local activity_crosswalk "${DATADIR}/Intermediate/cmr_census_activity_nacam_crosswalk.dta"
 local clean_out "${DATADIR}/Analysis/CMR_census_cleaned.dta"
-local diagnostics_out "${DATADIR}/Analysis/CMR_census_nacam_diagnostics.dta"
+local diagnostics_out "${DATADIR}/Analysis/CMR_census_isic4_division_diagnostics.dta"
 local sleep_ms = real("${SLEEP_MS}")
 
 * Use a short retry delay for local file-lock issues when Stata writes logs or
@@ -77,6 +80,23 @@ confirm file "`raw_file'"
 confirm file "`official_bridge'"
 confirm file "`census_crosswalk_xlsx'"
 confirm file "`data_export_mapping'"
+
+* Regenerate classifications from the current census and saved CSV decisions.
+* This avoids silently attaching an assessment made before a reviewed decision.
+do "${CODEDIR}/isic4_assessment/00_run_census_crosswalk.do"
+tempfile census_isic4_mapping
+use "${DATADIR}/Analysis/cmr_census_isic4_firm_assessment.dta", clear
+keep firmid_census citi_branch activity_detail final_division final_division_label ///
+    mapping_source review_status assigned
+isid firmid_census
+rename citi_branch isic4_source_branch
+rename activity_detail isic4_source_activity
+rename final_division isic4_division
+rename final_division_label isic4_division_label
+rename mapping_source isic4_mapping_source
+rename review_status isic4_review_status
+rename assigned isic4_assigned
+save "`census_isic4_mapping'"
 
 * Create a timestamped step log. If the file is briefly locked, sleep once and
 * retry rather than leaving this diagnostic stage unlogged.
@@ -442,6 +462,71 @@ label variable census_export_zero "Embedded Census export turnover equals zero"
 label variable census_export_negative "Embedded Census export turnover is negative"
 label variable census_exporter "Embedded Census export turnover is positive"
 
+* Attach the independent ISIC fields without changing NACAM or economic variables.
+local census_rows_before_isic4 = _N
+merge 1:1 firmid_census using "`census_isic4_mapping'", generate(isic4_merge)
+tab isic4_merge, missing
+assert isic4_merge == 3
+assert _N == `census_rows_before_isic4'
+assert citi_branch == isic4_source_branch
+assert activity_detail == isic4_source_activity
+assert isic4_assigned == !missing(isic4_division)
+assert isic4_division == "" if isic4_mapping_source == "unknown_unclassified"
+isid firmid_census
+drop isic4_merge isic4_source_branch isic4_source_activity
+label variable isic4_division "ISIC Rev.4 two-digit division; blank if unclassified"
+label variable isic4_division_label "Official English ISIC Rev.4 division label"
+label variable isic4_mapping_source "Activity crosswalk, firm review, or unknown/unclassified"
+label variable isic4_review_status "ISIC decision status; reviewed assumptions remain explicit"
+label variable isic4_assigned "ISIC Rev.4 division assigned"
+
+* Attach official divisions, sections and the agreed display groups without
+* changing the original NACAM or economic fields.
+preserve
+use "${DATADIR}/Intermediate/isic4_broad_groups_codes.dta", clear
+keep if isic4_level == 2
+rename isic4_code isic4_division
+keep isic4_division isic4_section broad_sector broad_sector_label plot_color plot_symbol
+isid isic4_division
+tempfile division_display
+save "`division_display'"
+restore
+merge m:1 isic4_division using "`division_display'", keep(master match) generate(display_merge)
+tab display_merge, missing
+assert display_merge == 3 if isic4_assigned == 1
+assert display_merge == 1 if isic4_assigned == 0
+drop display_merge
+assert _N == `census_rows_before_isic4'
+generate int isic4_sector_id = real(isic4_division)
+generate str244 isic4_label_display = isic4_division + " - " + isic4_division_label if isic4_assigned
+generate str244 isic4_label_short_display = isic4_division_label if isic4_assigned
+replace isic4_label_short_display = subinstr(isic4_label_short_display, "Manufacture of ", "", .)
+replace isic4_label_short_display = subinstr(isic4_label_short_display, " activities", "", .)
+replace isic4_label_short_display = subinstr(isic4_label_short_display, " and related service", "", .)
+replace isic4_label_short_display = subinstr(isic4_label_short_display, " except ", " excl. ", .)
+replace isic4_label_short_display = isic4_division + " - " + isic4_label_short_display if isic4_assigned
+do "${CODEDIR}/elasticity_cameroun/_cmr_census_isic4_labels.do"
+generate str5 isic4_section_compare = isic4_section
+replace isic4_section_compare = "M+N" if inlist(isic4_section, "M", "N")
+replace isic4_section_compare = "R+S+T" if inlist(isic4_section, "R", "S") | isic4_division == "97"
+replace isic4_section_compare = "" if isic4_division == "98"
+label variable isic4_section_compare "Section comparison groups; T restricted to division 97"
+replace plotted_sample = hq_sample == 1 & isic4_assigned == 1
+label variable plotted_sample "Headquarters firm with reviewed ISIC division"
+* Unknown firms remain in the cleaned file; show their economic coverage.
+tab isic4_assigned if hq_sample == 1, missing
+preserve
+keep if hq_sample == 1
+collapse (count) firms=source_excel_row (sum) employment annual_turnover, by(isic4_assigned)
+generate str12 coverage = cond(isic4_assigned, "classified", "unknown")
+mkmat firms employment annual_turnover, matrix(isic_coverage) rownames(coverage)
+esttab matrix(isic_coverage, fmt(%15.0fc %15.0fc %18.0fc)) ///
+    using "${OUTPUTDIR}/tables/cmr_census_isic4_division_coverage.tex", replace ///
+    booktabs fragment nomtitles nonumbers ///
+    collabels("HQ firms" "Employment" "Turnover (CFAF)") ///
+    varlabels(classified "Assigned ISIC division" unknown "Unknown division")
+restore
+
 * Save the firm-level cleaned Census file before sector aggregation.
 capture save "`clean_out'", replace
 if _rc {
@@ -574,7 +659,7 @@ esttab matrix(census_audit, fmt(%12.0fc)) ///
         hq_review_rows "Headquarters rows flagged for review" ///
         hq_outside_elasticity_rows "Headquarters rows outside elasticity NACAM sectors" ///
         hq_unmapped_rows "Headquarters rows without official/admin NACAM" ///
-        plotted_rows "Headquarters rows used in Census NACAM plots" ///
+        plotted_rows "Headquarters rows used in Census ISIC division plots" ///
     )
 
 * Provide a small, fixed set of mapping examples for the deck/note. These are
@@ -606,10 +691,14 @@ esttab matrix(crosswalk_examples, fmt(%9.0f %9.0f %9.0f)) ///
 *******************************************************************************/
 
 preserve
-* Sector diagnostics are based on headquarters rows with an official/admin NACAM
+* Sector diagnostics are based on headquarters rows with an reviewed ISIC division
 * sector. The firm-level cleaned data saved above still retains all rows.
 keep if plotted_sample == 1
-assert !missing(census_nacam, census_nacam_label_short_display, data_export)
+assert !missing(isic4_sector_id, isic4_label_short_display, broad_sector)
+quietly summarize employment, meanonly
+local expected_employment = r(sum)
+quietly summarize annual_turnover, meanonly
+local expected_turnover = r(sum)
 
 * Firm-level turnover per worker is computed before collapsing so the sector
 * average captures the average firm ratio, distinct from aggregate revenue per
@@ -618,7 +707,7 @@ generate double turnover_per_worker_firm = annual_turnover / employment ///
     if !missing(annual_turnover, employment) & annual_turnover >= 0 ///
     & employment > 0
 
-* Collapse from firm rows to one row per Census NACAM sector, carrying both
+* Collapse from firm rows to one row per Census ISIC division, carrying both
 * aggregate scale measures and simple sector firm averages.
 collapse ///
     (count) firms = source_excel_row ///
@@ -626,14 +715,15 @@ collapse ///
     (mean) average_employment = employment ///
         average_revenue = annual_turnover ///
         average_turnover_per_worker = turnover_per_worker_firm, ///
-    by(census_nacam census_nacam_label_display census_nacam_label_short_display data_export)
+    by(isic4_division isic4_sector_id isic4_label_display isic4_label_short_display broad_sector broad_sector_label plot_color plot_symbol)
 
 * Harmonize names with the elasticity sector outputs so downstream figure code
 * can use the same label vocabulary.
-rename census_nacam nacam
-rename census_nacam_label_display nacam_label_display
-rename census_nacam_label_short_display nacam_label_short_display
 rename annual_turnover total_turnover
+quietly summarize total_employment, meanonly
+assert reldif(r(sum), `expected_employment') < 1e-10
+quietly summarize total_turnover, meanonly
+assert reldif(r(sum), `expected_turnover') < 1e-10
 
 * Construct scale, ratio, and log variables used in the diagnostic figures.
 generate double total_revenue_bil = total_turnover / 1000000000
@@ -666,8 +756,8 @@ label variable log_average_employment "Log average firm employment"
 label variable log_average_revenue "Log average firm annual turnover"
 label variable log_average_turnover_per_worker "Log average annual turnover per worker"
 
-sort nacam
-isid nacam
+sort isic4_sector_id
+isid isic4_sector_id
 
 * Save the sector-level dataset that directly feeds the Census figures.
 save "`diagnostics_out'", replace
@@ -675,7 +765,7 @@ save "`diagnostics_out'", replace
 restore
 
 display as result "Saved census cleaned data to `clean_out'"
-display as result "Saved census NACAM diagnostics to `diagnostics_out'"
+display as result "Saved census ISIC division diagnostics to `diagnostics_out'"
 display as result "Saved census activity crosswalk to `activity_crosswalk'"
 display as result "Cameroon Census cleaning completed successfully."
 

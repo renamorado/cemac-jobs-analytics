@@ -8,6 +8,12 @@ origin: tasks/Meeting 06-11-2026.md
 
 # Census Turnover-Employment Elasticity Robustness Check
 
+> **Tax classification correction, 2026-09-29:** raw tax/BDF codes use NACAM
+> Rev.1, established by [the ECOFIN evidence](../cmr_tax_ecofin2019_comparison.md).
+> This earlier plan's legacy/admin-NACAM sector comparisons require review against
+> corrected tax meanings. The census specification and data are unchanged; this
+> correction does not validate or regenerate the cross-source comparisons below.
+
 ## Overview
 
 Implement Task 1.2 from `tasks/Meeting 06-11-2026.md`: estimate Census/RGE cross-sectional annual-turnover/employment elasticities as a robustness and coverage check against the existing Cameroon administrative tax/BDF employment elasticities.

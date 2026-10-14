@@ -37,9 +37,9 @@
 }
 \newcommand{\censusfigsource}{\figsource{Source: INS Cameroon, RGE3 (2023-2024); calculations by authors.}}
 \newcommand{\bdffigsource}{\figsource{Source: Cameroon administrative Ecofin panel; calculations by authors.}}
-\newcommand{\censusbdffigsource}{\figsource{Sources: INS Cameroon, RGE3 (2023-2024), and Cameroon administrative Ecofin panel; calculations by authors.}}
+\newcommand{\censusbdffigsource}{\figsource{Sources: INS Cameroon, RGE3 (2023-2024), and Ecofin. ISIC Rev.4 sections based on the NACAM--ISIC Rev.4 crosswalk. Sector coverage may differ across datasets.}}
 \newcommand{\wbesfigsource}{\figsource{Source: World Bank Enterprise Surveys, latest available CEMAC waves; calculations by authors.}}
-\newcommand{\cmrwbesfigsource}{\figsource{Sources: World Bank Enterprise Surveys, Cameroon 2024, and Cameroon administrative Ecofin panel; calculations by authors.}}
+\newcommand{\cmrwbesfigsource}{\figsource{Sources: Cameroon WBES 2024 and Ecofin. ISIC Rev.4 sections based on the NACAM--ISIC Rev.4 crosswalk. Sector coverage may differ across datasets.}}
 \newcommand{\appendixtwin}[1]{%
     \par\vspace{0.01cm}
     {\centering\tiny\hyperlink{#1}{Appendix: same figure in levels}\par}
@@ -69,8 +69,8 @@
 \begin{frame}{Data cleaning overview}
     \begin{itemize}
         \item The working panel is organized at the firm-year level, so duplicate handling changes both sample size and identification.
-        \item Economic sector is based on the NACAM variable, which according to documentation its based on a Regional harmonized classifier linked to ISIC.
-        \item The cleaning note isolates the two steps that most affect downstream interpretation: duplicate resolution and the NACAM-to-ISIC crosswalk.
+        \item Source sectors are three-digit NACAM Rev.1 branches. The reviewed crosswalk assigns them to 16 categories based on the NACAM--ISIC Rev.4 crosswalk.
+        \item Duplicate treatment and the documented section assignments determine the analysis sample and sector interpretation.
     \end{itemize}
 \end{frame}
 
@@ -90,36 +90,13 @@
         \end{tabular}
     }
 \end{frame}
-\begin{comment}
-    % Lets confirm this but I think that we are not using the ISIC codes for the elasticity analysis, so we can skip this slide if we want to save time.
-    % We can also move it to the appendix if we want to keep it for reference but not spend time on it in the main presentation.
-\begin{frame}{NACAM-to-ISIC Crosswalk}
-    \small
-    \begin{itemize}
-        \item Observed legacy NACAM codes are audited directly from the Cameroon BDF file.
-        \item Legacy branch labels are recovered from the INS RGE nomenclature document, while the mapping to \texttt{NACAM rev.1} and ISIC comes from the official \texttt{NACAM rev.1} passage tables.
-        \item ISIC Rev.4 divisions are assigned only when the official mapping is one-to-one.
-        \item Ambiguous branches remain flagged for manual review rather than being forced into a noisy division code.
-        \item Since the NACAM is already based on the ISIC structure, the analysis file retains the original NACAM variable for elasticity estimation and reporting, while the ISIC variable is used for sectoral aggregation and cross-country comparisons.
-    \end{itemize}
 
-    \vspace{0.4cm}
-    \centering
-    \resizebox{0.75\textwidth}{!}{
-        \begin{tabular}{lr}
-            \input{../output/tables/cmr_bdf_cleaning_note_crosswalk_summary.tex}
-        \end{tabular}
-    }
-\end{frame}
-\end{comment}
 
 \begin{frame}{Cleaning Takeaways}
     \begin{itemize}
         \item The cleaned panel resizes the sample from 9,325 to 9,068 observations after removing duplicate firm-years.
         \item There are 127 conflicting firm-years, accounting for 257 dropped obs. Those observations are excluded rather than resolved ad hoc.
-        %\item The crosswalk covers 37 observed legacy NACAM codes, but only 17 map cleanly to a single ISIC Rev.4 division.
-        \item To avoid introducing unwanted noise we keep the analysis using NACAM classification and link it to ISIC aggregates when possible.
-        %\item The remaining 20 codes are explicitly flagged for manual review, which keeps sector harmonization transparent before pooled industry comparisons.
+        \item Ecofin uses ISIC Rev.4 sections based on the NACAM--ISIC Rev.4 crosswalk. The combinations are professional \& admin. support, and arts/recreation, other services \& household employers (division 97). Crosswalk qualifications are listed in the appendix.
     \end{itemize}
 \end{frame}
 
@@ -128,62 +105,116 @@
 \begin{frame}{Cameroun Census Context}
     \begin{itemize}
         \item The 2024 RGE census gives a whole-economy snapshot of establishments in Cameroon.
-        \item Census activity labels are harmonized to the same NACAM sectors used in the administrative elasticity analysis.
+        \item Reviewed activity and firm-specific decisions assign Census firms to two-digit ISIC Rev.4 divisions. Unknown activities remain unclassified. Short English labels follow \href{https://www.insee.fr/fr/information/2120875}{INSEE NAF Rev.2}, which shares the same 88 divisions.
         \item The next slides use headquarter-level data to show sector scale in firm counts, log employment, log annual revenue, and log revenue per worker.
         \item After this economy-wide view, the administrative tax panel focuses on formal firms observed over time, using the administrative data.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Census Firm Counts by Harmonized NACAM Sector}
+\begin{frame}{Census Firm Counts by ISIC Rev.4 Division (1/3)}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_firm_count_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_firm_count_by_isic4_division_part1.pdf}
     \censusfigsource
 \end{frame}
 
-\begin{frame}{Ecofin Firm Counts by Harmonized NACAM Sector}
+\begin{frame}{Census Firm Counts by ISIC Rev.4 Division (2/3)}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_firm_count_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_firm_count_by_isic4_division_part2.pdf}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}{Census Firm Counts by ISIC Rev.4 Division (3/3)}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_firm_count_by_isic4_division_part3.pdf}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}{Ecofin Firm Counts by ISIC Rev.4 Section}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_firm_count_by_isic4_section.pdf}
     \bdffigsource
 \end{frame}
 
-\begin{frame}[label=main-census-employment-log]{Census Log Employment by Harmonized NACAM Sector}
+\begin{frame}[label=main-census-employment-log]{Census Log Employment by ISIC Rev.4 Division (1/3)}
     \centering
-    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_employment_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_employment_by_isic4_division_part1.pdf}
     \appendixtwin{app-census-employment-levels}
     \censusfigsource
 \end{frame}
 
-\begin{frame}[label=main-bdf-employment-log]{Ecofin Log Employment by Harmonized NACAM Sector}
+\begin{frame}[label=main-census-employment-log-part2]{Census Log Employment by ISIC Rev.4 Division (2/3)}
     \centering
-    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_employment_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_employment_by_isic4_division_part2.pdf}
+    \appendixtwin{app-census-employment-levels-part2}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}[label=main-census-employment-log-part3]{Census Log Employment by ISIC Rev.4 Division (3/3)}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_employment_by_isic4_division_part3.pdf}
+    \appendixtwin{app-census-employment-levels-part3}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}[label=main-bdf-employment-log]{Ecofin Log Employment by ISIC Rev.4 Section}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_employment_by_isic4_section.pdf}
     \appendixtwin{app-bdf-employment-levels}
     \bdffigsource
 \end{frame}
 
-\begin{frame}[label=main-census-revenue-log]{Census Log Revenue by Harmonized NACAM Sector}
+\begin{frame}[label=main-census-revenue-log]{Census Log Revenue by ISIC Rev.4 Division (1/3)}
     \centering
-    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_revenue_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_revenue_by_isic4_division_part1.pdf}
     \appendixtwin{app-census-revenue-levels}
     \censusfigsource
 \end{frame}
 
-\begin{frame}[label=main-bdf-revenue-log]{Ecofin Log Revenue by Harmonized NACAM Sector}
+\begin{frame}[label=main-census-revenue-log-part2]{Census Log Revenue by ISIC Rev.4 Division (2/3)}
     \centering
-    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_revenue_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_revenue_by_isic4_division_part2.pdf}
+    \appendixtwin{app-census-revenue-levels-part2}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}[label=main-census-revenue-log-part3]{Census Log Revenue by ISIC Rev.4 Division (3/3)}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_revenue_by_isic4_division_part3.pdf}
+    \appendixtwin{app-census-revenue-levels-part3}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}[label=main-bdf-revenue-log]{Ecofin Log Revenue by ISIC Rev.4 Section}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_revenue_by_isic4_section.pdf}
     \appendixtwin{app-bdf-revenue-levels}
     \bdffigsource
 \end{frame}
 
-\begin{frame}[label=main-census-rpw-log]{Census Log Revenue per Worker by Harmonized NACAM Sector}
+\begin{frame}[label=main-census-rpw-log]{Census Log Revenue per Worker by ISIC Rev.4 Division (1/3)}
     \centering
-    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_per_worker_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_per_worker_by_isic4_division_part1.pdf}
     \appendixtwin{app-census-rpw-levels}
     \censusfigsource
 \end{frame}
 
-\begin{frame}[label=main-bdf-rpw-log]{Ecofin Log Revenue per Worker by Harmonized NACAM Sector}
+\begin{frame}[label=main-census-rpw-log-part2]{Census Log Revenue per Worker by ISIC Rev.4 Division (2/3)}
     \centering
-    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_revenue_per_worker_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_per_worker_by_isic4_division_part2.pdf}
+    \appendixtwin{app-census-rpw-levels-part2}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}[label=main-census-rpw-log-part3]{Census Log Revenue per Worker by ISIC Rev.4 Division (3/3)}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_per_worker_by_isic4_division_part3.pdf}
+    \appendixtwin{app-census-rpw-levels-part3}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}[label=main-bdf-rpw-log]{Ecofin Log Revenue per Worker by ISIC Rev.4 Section}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_revenue_per_worker_by_isic4_section.pdf}
     \appendixtwin{app-bdf-rpw-levels}
     \bdffigsource
 \end{frame}
@@ -193,17 +224,17 @@
 \begin{frame}{Specification and Sample}
     \footnotesize
     \begin{equation}
-        \ln(E_{it}) = \alpha_i + \delta_{st} + \sum_s \beta_s \left( \ln(X_{it}) \times D_{is} \right) + \varepsilon_{it}
+        \ln(E_{it}) = \alpha_i + \delta_{st} + \sum_s \beta_s \left( \ln(X_{it}) \times D_{ist} \right) + \varepsilon_{it}
     \end{equation}
 
     \begin{itemize}
         \item The unit of observation is a firm-year $(i,t)$.
         \item $E_{it}$ is employment for firm $i$ in year $t$.
         \item $X_{it}$ is either value added or total revenue, estimated in separate regressions.
-        \item $D_{is}$ equals 1 if firm $i$ belongs to NACAM sector $s$, and 0 otherwise.
-        \item Sector is treated as a firm characteristic, so each firm contributes to one NACAM interaction term.
-        \item $\alpha_i$ are firm fixed effects; $\delta_{st}$ are NACAM-sector-by-fiscal-year fixed effects.
-        \item $\beta_s$ is the elasticity for firms in sector $s$, identified through the interaction between $\ln(X_{it})$ and the sector indicator $D_{is}$.
+        \item $D_{ist}$ equals 1 if firm $i$ belongs to ISIC section $s$ in year $t$, and 0 otherwise.
+        \item Group membership follows the reported classification in each firm-year; firms may change groups over time.
+        \item $\alpha_i$ are firm fixed effects; $\delta_{st}$ are section--by-fiscal-year fixed effects.
+        \item $\beta_s$ is the elasticity for firms in sector $s$, identified through the interaction between $\ln(X_{it})$ and the sector indicator $D_{ist}$.
         \item No additional firm-level controls are included beyond these fixed effects.
         \item Standard errors are clustered at the firm level; reported sectors have at least 30 observations and 10 firms in both outcome samples.
     \end{itemize}
@@ -211,55 +242,55 @@
 
 \begin{frame}{Employment Distribution by Fiscal Year}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_ln_emp_density_by_year.pdf}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_isic4_section_results_en_labels_ln_emp_density_by_year.pdf}
     \bdffigsource
 \end{frame}
 
 \begin{frame}{Value-Added Elasticity Specification}
     \small
     \begin{equation}
-        \ln(E_{it}) = \alpha_i + \delta_{st} + \sum_s \beta^{VA}_s \left( \ln(VA_{it}) \times D_{is} \right) + \varepsilon_{it}
+        \ln(E_{it}) = \alpha_i + \delta_{st} + \sum_s \beta^{VA}_s \left( \ln(VA_{it}) \times D_{ist} \right) + \varepsilon_{it}
     \end{equation}
 
     \begin{itemize}
         \item Estimates use the Cameroon administrative firm-year panel.
         \item Firm fixed effects absorb time-invariant firm differences at the taxpayer/firm level.
-        \item NACAM-sector-by-fiscal-year fixed effects absorb annual shocks common to firms in the same detailed activity.
+        \item Section--by-fiscal-year fixed effects absorb annual shocks common to firms in the same section.
         \item No age, ownership, exporter-status, or other firm controls are included.
         \item The plotted point for each sector is $\beta^{VA}_s$ with a firm-clustered 95 percent interval.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Value-Added Elasticities Across NACAM Sectors}
+\begin{frame}{Value-Added Elasticities Across ISIC Rev.4 Sections}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_va_coefficients.pdf}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_isic4_section_results_en_labels_va_coefficients.pdf}
     \bdffigsource
 \end{frame}
 
 \begin{frame}{Total-Revenue Elasticity Specification}
     \small
     \begin{equation}
-        \ln(E_{it}) = \alpha_i + \delta_{st} + \sum_s \beta^{R}_s \left( \ln(R_{it}) \times D_{is} \right) + \varepsilon_{it}
+        \ln(E_{it}) = \alpha_i + \delta_{st} + \sum_s \beta^{R}_s \left( \ln(R_{it}) \times D_{ist} \right) + \varepsilon_{it}
     \end{equation}
 
     \begin{itemize}
         \item $R_{it}$ is total revenue, estimated in a separate regression from value added.
-        \item Fixed effects are at the firm level and NACAM-sector-by-fiscal-year level.
+        \item Fixed effects are at the firm level and section--by-fiscal-year level.
         \item No additional firm-level controls are included beyond these fixed effects.
         \item The plotted point for each sector is $\beta^{R}_s$ with standard errors clustered at the firm level.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Total-Revenue Elasticities Across NACAM Sectors}
+\begin{frame}{Total-Revenue Elasticities Across ISIC Rev.4 Sections}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_tot_rev_coefficients.pdf}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_isic4_section_results_en_labels_tot_rev_coefficients.pdf}
     \bdffigsource
 \end{frame}
 
 \begin{frame}{Cross-Model Comparison}
     \begin{itemize}
         \item The next plot compares the sector-specific value-added and total-revenue elasticities.
-        \item Each point is one NACAM sector retained by the common inclusion rule.
+        \item Each point is one ISIC section retained by the common inclusion rule.
         \item Points near the 45-degree line indicate sectors where both revenue proxies give similar employment responses.
         \item Large gaps flag sectors where value added and gross revenue tell different stories.
     \end{itemize}
@@ -267,14 +298,14 @@
 
 \begin{frame}{Cross-Model Consistency}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_en_labels_scatter.pdf}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_isic4_section_results_en_labels_scatter.pdf}
     \bdffigsource
 \end{frame}
 
 \begin{frame}{Fixed-Effect Robustness Check}
     \begin{itemize}
         \item FE means fixed effects. All robustness specifications keep taxpayer/firm fixed effects and firm-clustered standard errors.
-        \item Baseline: firm FE plus detailed NACAM-sector-by-fiscal-year FE.
+        \item Baseline: firm FE plus detailed section--by-fiscal-year FE.
         \item Looser alternative: firm FE plus fiscal-year FE only.
         \item Intermediate alternative: firm FE plus broad-activity-group-by-fiscal-year FE.
         \item No age, ownership, exporter-status, or other firm-level controls are added in these robustness checks.
@@ -283,13 +314,13 @@
 
 \begin{frame}{Value-Added Elasticity Robustness}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_fe_robustness_va_coefficients.pdf}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_isic4_section_fe_robustness_va_coefficients.pdf}
     \bdffigsource
 \end{frame}
 
 \begin{frame}{Total-Revenue Elasticity Robustness}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_fe_robustness_tot_rev_coefficients.pdf}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_isic4_section_fe_robustness_tot_rev_coefficients.pdf}
     \bdffigsource
 \end{frame}
 
@@ -303,17 +334,29 @@
     \begin{itemize}
         \item The unit of observation is a Census headquarters firm $i$.
         \item $E_i$ is employment and $R_i$ is annual turnover from RGE3.
-        \item $D_{is}$ equals 1 if firm $i$ belongs to NACAM sector $s$.
-        \item $\alpha_s$ are detailed NACAM sector intercepts.
+        \item $D_{is}$ equals 1 if firm $i$ belongs to ISIC Rev.4 division $s$.
+        \item $\alpha_s$ are detailed ISIC Rev.4 division intercepts.
         \item $\beta_s$ is the cross-sectional employment elasticity with respect to annual turnover in sector $s$.
-        \item There are no firm fixed effects, year fixed effects, or NACAM-year fixed effects because the Census has no panel time variation.
+        \item There are no firm fixed effects, year fixed effects, or division--year fixed effects because the Census has no panel time variation.
         \item Standard errors are heteroskedasticity-robust; reported sectors have at least 30 positive-employment and positive-turnover headquarters firms.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Census Turnover-Employment Elasticities}
+\begin{frame}{Census Turnover-Employment Elasticities (1/3)}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_employment_elasticity_coefficients.pdf}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_isic4_division_turnover_employment_elasticity_coefficients_part1.pdf}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}{Census Turnover-Employment Elasticities (2/3)}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_isic4_division_turnover_employment_elasticity_coefficients_part2.pdf}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}{Census Turnover-Employment Elasticities (3/3)}
+    \centering
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_isic4_division_turnover_employment_elasticity_coefficients_part3.pdf}
     \censusfigsource
 \end{frame}
 
@@ -326,7 +369,7 @@
     \end{equation}
 
     \begin{itemize}
-        \item The unit of observation is a Census headquarters firm $i$ in NACAM sector $s$.
+        \item The unit of observation is a Census headquarters firm $i$ in ISIC Rev.4 division $s$.
         \item $E_i$ is employment and $R_i$ is annual turnover from RGE3.
         \item $Exporter_i$ equals 1 when embedded Census export turnover is positive.
         \item $\beta_s$ is the non-exporter elasticity; $\beta_s+\delta_s$ is the exporter elasticity.
@@ -338,19 +381,19 @@
 
 \begin{frame}{Census Turnover Elasticities by Exporter Status}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_exporter_turnover_elasticity_coefficients.pdf}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_census_isic4_division_exporter_turnover_elasticity_coefficients.pdf}
     \censusfigsource
 \end{frame}
 
-\begin{frame}{Census Turnover-Employment Robustness}
+\begin{frame}{Census--Ecofin Section-Level Comparison}
     \footnotesize
     \begin{itemize}
-        \item Census estimates are cross-sectional slopes; Ecofin estimates are panel total-revenue elasticities with firm and NACAM-year fixed effects.
-        \item The solid black line marks equality between the two estimates; the dashed grey line shows the fitted relationship across overlapping NACAM sectors.
+        \item Census slopes are re-estimated at the section level; Ecofin estimates use firm and section--year fixed effects.
+        \item The lines show equality and the fitted relationship across overlapping groups. This is a descriptive comparison of different populations and sources of variation.
     \end{itemize}
     \vspace{-0.12cm}
     \centering
-    \includegraphics[width=\textwidth,height=0.56\textheight,keepaspectratio]{../output/figures/cmr_census_vs_bdf_turnover_employment_elasticity.pdf}
+    \includegraphics[width=\textwidth,height=0.56\textheight,keepaspectratio]{../output/figures/cmr_census_vs_bdf_isic4_section_turnover_employment_elasticity.pdf}
     \censusbdffigsource
 \end{frame}
 
@@ -365,40 +408,40 @@
 
 \begin{frame}{Baseline vs Duplicate-Inclusive Elasticities}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_nacam_results_duplicate_robustness_comparison.pdf}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_isic4_section_results_duplicate_robustness_comparison.pdf}
     \bdffigsource
 \end{frame}
 
 \begin{frame}{Elasticity, Productivity, and Sector Scale}
     \begin{itemize}
         \item The opportunity maps compare sector employment elasticities with log sector value added per worker.
-        \item The solid horizontal line separates employment-expanding and employment-contracting sectors; the dashed vertical line marks median productivity.
-        \item Bubble size identifies the lower, middle, or upper tercile of each scale measure across the 29 plotted sectors; legends report the numerical ranges.
-        \item Labels identify the two highest and two lowest elasticities in each panel plus the highest-productivity sector.
+        \item The horizontal line marks zero estimated elasticity; the vertical line marks median productivity.
+        \item Bubble size identifies the lower, middle, or upper tercile of each scale measure across reported sections; legends report the ranges.
+        \item Labels identify extreme elasticities and the highest-productivity groups.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Opportunity Map: Total Sector Revenue}
     \centering
-    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cmr_elasticities_va_worker_bubble_total_revenue.pdf}
+    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cmr_isic4_section_elasticities_va_worker_bubble_total_revenue.pdf}
     \bdffigsource
 \end{frame}
 
 \begin{frame}{Opportunity Map: Total Sector Employment}
     \centering
-    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cmr_elasticities_va_worker_bubble_total_employment.pdf}
+    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cmr_isic4_section_elasticities_va_worker_bubble_total_employment.pdf}
     \bdffigsource
 \end{frame}
 
 \begin{frame}{Opportunity Map: Average Firm Revenue}
     \centering
-    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cmr_elasticities_va_worker_bubble_avg_revenue.pdf}
+    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cmr_isic4_section_elasticities_va_worker_bubble_avg_revenue.pdf}
     \bdffigsource
 \end{frame}
 
 \begin{frame}{Opportunity Map: Average Firm Employment}
     \centering
-    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cmr_elasticities_va_worker_bubble_avg_employment.pdf}
+    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{../output/figures/cmr_isic4_section_elasticities_va_worker_bubble_avg_employment.pdf}
     \bdffigsource
 \end{frame}
 
@@ -411,26 +454,26 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{BDF Net Fixed Assets by Harmonized NACAM Sector}
+\begin{frame}{BDF Net Fixed Assets by ISIC Rev.4 Section}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_net_fixed_assets_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_net_fixed_assets_by_isic4_section.pdf}
     \bdffigsource
 \end{frame}
 
-\begin{frame}{BDF Net Total Assets by Harmonized NACAM Sector}
+\begin{frame}{BDF Net Total Assets by ISIC Rev.4 Section}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_net_total_assets_by_nacam.pdf}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_bdf_net_total_assets_by_isic4_section.pdf}
     \bdffigsource
 \end{frame}
 \begin{frame}{Employment Response to Net Fixed Assets}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_fixed_asset_elasticity_employment_coefficients.pdf}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_isic4_section_fixed_asset_elasticity_employment_coefficients.pdf}
     \bdffigsource
 \end{frame}
 
 \begin{frame}{Sales-Turnover Response to Net Fixed Assets}
     \centering
-    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_fixed_asset_elasticity_sales_coefficients.pdf}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{../output/figures/cmr_isic4_section_fixed_asset_elasticity_sales_coefficients.pdf}
     \bdffigsource
 \end{frame}
 
@@ -440,19 +483,19 @@
     \tiny
     \resizebox{\textwidth}{0.38\textheight}{
         \begin{tabular}{lrrrrr}
-            \input{../output/tables/cmr_nacam_results_en_labels_tot_rev_decile_ranking.tex}
+            \input{../output/tables/cmr_isic4_section_results_en_labels_tot_rev_decile_ranking.tex}
         \end{tabular}
     }
     \vspace{0.03cm}
 
     {\scriptsize Decile 10 is highest; decile 1 is lowest.}
+    \figsource{ISIC Rev.4 sections based on the NACAM--ISIC Rev.4 crosswalk. Combined: professional \& admin. support; arts/recreation, other services \& household employers (division 97). * Includes branches spanning sections; see classification notes.}
 \end{frame}
 
 \begin{frame}{Main Takeaways}
     \begin{itemize}
         \item Elasticities vary meaningfully across sectors rather than lining up around a single Cameroon-wide coefficient.
-        %\item Several sectors show positive employment responses under both value added and total revenue, with NACAM 17 standing out most clearly.
-        \item Negative or weak value-added elasticities remain concentrated in a small set of sectors, which is useful for prioritizing follow-up diagnostics.
+        \item Interpret sector differences alongside their confidence intervals and sample support; these estimates describe associations.
         %\item The cleaning and harmonization steps are not bookkeeping only; they determine which firm-years and sector codes enter the elasticity analysis.
     \end{itemize}
 \end{frame}
@@ -462,10 +505,10 @@
 \begin{frame}[shrink=10]{B-READY/WBES Constraint Extension}
     \begin{itemize}
         \item The analysis uses the 16 questions marked \texttt{Priority = yes} in the reviewed B-READY workbook.
-        \item Cameroon WBES firms are mapped from four-digit ISIC Rev.4 main-product codes to reviewed NACAM sectors using the official INS bridge.
+        \item Cameroon WBES firms are grouped from their ISIC Rev.4 codes into the sections used for the Ecofin comparison, combining professional \& admin. support, and arts/recreation, other services \& household employers (division 97).
         \item The horizontal axis shows WBES-weighted sector constraints; the vertical axis shows administrative total-revenue employment elasticities.
-        \item Bubble area shows average annual total sector employment using fixed groups across indicators, not WBES precision.
-        \item Orange sectors exceed the published Cameroon constraint benchmark and have an employment elasticity of at least 0.20.
+        \item Three bubble sizes represent employment terciles based on average annual Ecofin group employment, held fixed across indicators.
+        \item Orange groups belong to revenue-elasticity deciles 7--10. The vertical benchmark line is independent of this highlighting rule.
         \item Labels identify opportunity sectors and the two largest-employment sectors with valid indicator responses.
         \item Results are descriptive, not causal; sectors without indicator responses are omitted from the corresponding chart.
         \item Fourteen indicators reproduce the national B-READY value within two points. The selected market-concentration item is unavailable in Cameroon microdata, and the VAT-refund denominator requires further review.
@@ -474,85 +517,85 @@
 
 \begin{frame}{Access to Land Constraints by Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_cmr_reg12_high_elasticity.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_isic4_section_cmr_reg12_high_elasticity.pdf}
     \cmrwbesfigsource
 \end{frame}
 
 \begin{frame}{Courts Constraints by Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_cmr_disp6_high_elasticity.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_isic4_section_cmr_disp6_high_elasticity.pdf}
     \cmrwbesfigsource
 \end{frame}
 
 \begin{frame}{Discouraged Loan Applicants by Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_cmr_fin26_high_elasticity.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_isic4_section_cmr_fin26_high_elasticity.pdf}
     \cmrwbesfigsource
 \end{frame}
 
 \begin{frame}{Loan Decision Time by Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_cmr_fin27_high_elasticity.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_isic4_section_cmr_fin27_high_elasticity.pdf}
     \cmrwbesfigsource
 \end{frame}
 
 \begin{frame}{Cost to Receive E-Payments by Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_cmr_fin30_high_elasticity.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_isic4_section_cmr_fin30_high_elasticity.pdf}
     \cmrwbesfigsource
 \end{frame}
 
 \begin{frame}{Access to Finance Constraints by Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_cmr_fin33_high_elasticity.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_isic4_section_cmr_fin33_high_elasticity.pdf}
     \cmrwbesfigsource
 \end{frame}
 
 \begin{frame}{Export Border-Compliance Time by Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_cmr_tr18_u_high_elasticity.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_isic4_section_cmr_tr18_u_high_elasticity.pdf}
     \cmrwbesfigsource
 \end{frame}
 
 \begin{frame}{Export Compliance Cost by Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_cmr_tr20_high_elasticity.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_isic4_section_cmr_tr20_high_elasticity.pdf}
     \cmrwbesfigsource
 \end{frame}
 
 \begin{frame}{Import Border-Compliance Time by Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_cmr_tr24_u_high_elasticity.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_isic4_section_cmr_tr24_u_high_elasticity.pdf}
     \cmrwbesfigsource
 \end{frame}
 
 \begin{frame}{Import Compliance Cost by Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_cmr_tr25_high_elasticity.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_isic4_section_cmr_tr25_high_elasticity.pdf}
     \cmrwbesfigsource
 \end{frame}
 
 \begin{frame}{Customs and Trade Constraints by Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_cmr_tr26_high_elasticity.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_isic4_section_cmr_tr26_high_elasticity.pdf}
     \cmrwbesfigsource
 \end{frame}
 
 \begin{frame}{Transport Constraints by Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_cmr_in23_high_elasticity.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_isic4_section_cmr_in23_high_elasticity.pdf}
     \cmrwbesfigsource
 \end{frame}
 
 \begin{frame}{Labor-Regulation Constraints by Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_cmr_wk28_high_elasticity.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_isic4_section_cmr_wk28_high_elasticity.pdf}
     \cmrwbesfigsource
 \end{frame}
 
 \begin{frame}{Electrical Outages by Sector}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_cmr_in2_high_elasticity.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/bready_wbes_isic4_section_cmr_in2_high_elasticity.pdf}
     \cmrwbesfigsource
 \end{frame}
 
@@ -563,7 +606,7 @@
         \item Phase 3 uses the latest available World Bank Enterprise Survey wave for CEMAC countries.
         \item The first step is a cleaning and availability audit for sales, employment, sector, export, import, and input-origin variables.
         \item Gabon is not retained in the main descriptive panels because its latest available WBES wave is 2009 and has no ISIC Rev.4 coverage.
-        \item The WBES formal-sector sampling frame covers non-agricultural private firms, so sector rows use eligible activity aggregates rather than agriculture.
+        \item The WBES formal-sector sampling frame covers non-agricultural private firms, so sector estimates cover the eligible non-agricultural divisions.
     \end{itemize}
 \end{frame}
 
@@ -719,33 +762,32 @@
     }
 \end{frame}
 
-\begin{frame}{Cameroon WBES Activity-Group Specification}
+\begin{frame}{Cameroon WBES Division Specification}
     \footnotesize
     \begin{equation}
         \ln(E_i) = \alpha_a + \beta_a \ln(R_i) + \gamma_a Exporter_i
         + \delta_a\left[\ln(R_i) \times Exporter_i\right]
-        + \theta_a Z_i + \lambda_{a q(i)} + \varepsilon_i,
+        + \theta_a Z_i + \varepsilon_i,
         \quad i \in a
     \end{equation}
 
     \begin{itemize}
-        \item $a$ indexes broad Cameroon WBES activity groups; the model is estimated separately within each group.
-        \item Groups combine ISIC Rev.4 sections: manufacturing; construction/utilities; trade/hospitality/transport; and other services.
+        \item $a$ indexes two-digit ISIC Rev.4 divisions; the model is estimated separately within each division.
         \item WBES is cross-sectional, so there are no firm fixed effects.
         \item $Z_i$ controls for log firm age, foreign ownership share, and government/state ownership share.
-        \item $\lambda_{a q(i)}$ are activity-specific ISIC Rev.4 section fixed effects where there is within-activity variation.
+        \item Each division belongs to one section, so section controls are absorbed by its intercept.
         \item Estimates use WBES weights and robust standard errors, not clustered standard errors.
-        \item Only two groups satisfy the display rule. The excluded groups are construction/utilities with 8 exporters and other services with 9, below the required 10 exporters.
+        \item Reported divisions require at least 30 usable firms, including 10 exporters and 10 non-exporters; excluded divisions remain in the sample audit.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Cameroon Activity Employment Responses to Revenue (Diagnostic)}
+\begin{frame}{Cameroon ISIC Division Employment Responses to Revenue (Diagnostic)}
     \centering
-    \IfFileExists{../output/figures/cemac_wbes_revenue_exporter_interaction_cameroon_activity.pdf}{
-    \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{../output/figures/cemac_wbes_revenue_exporter_interaction_cameroon_activity.pdf}
+    \IfFileExists{../output/figures/cemac_wbes_revenue_exporter_interaction_cameroon_isic4_division.pdf}{
+    \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{../output/figures/cemac_wbes_revenue_exporter_interaction_cameroon_isic4_division.pdf}
     \wbesfigsource
 
-    {\scriptsize Activity estimates are exploratory diagnostics; suppressed groups remain documented in the generated sample audit.}
+    {\scriptsize Division estimates are exploratory diagnostics; suppressed groups remain documented in the generated sample audit.}
     }{
     \vfill
     \large Diagnostic figure pending regeneration of the WBES interaction stage.
@@ -829,105 +871,160 @@
     \wbesfigsource
 \end{frame}
 
-\begin{frame}{Cameroon WBES Activity Estimates}
+\begin{frame}{Cameroon WBES Division Estimates}
     \vspace{-0.2cm}
     \centering
     \tiny
     \resizebox{0.96\textwidth}{!}{
         \begin{tabular}{lrrrrrrr}
-            \input{../output/tables/cemac_wbes_trade_elasticity_cameroon_activity.tex}
+            \input{../output/tables/cemac_wbes_trade_elasticity_cameroon_isic4_division.tex}
         \end{tabular}
     }
 
     \vspace{0.15cm}
-    {\scriptsize Activity groups use WBES-ISIC aggregates}
+    {\scriptsize Groups are two-digit ISIC Rev.4 divisions; short English labels adapted from INSEE NAF Rev.2.}
 \end{frame}
 
-\begin{frame}{Cameroon Activity Specification: All Firms}
+\begin{frame}{Cameroon ISIC Division Specification: All Firms}
     \small
     \begin{equation}
         \ln(E_i) = \alpha_a + \beta_a \ln(X_i^+) + \gamma_a Exporter_i
-        + \theta_a Z_i + \lambda_{a q(i)} + \varepsilon_i
+        + \theta_a Z_i + \varepsilon_i
     \end{equation}
 
     \begin{itemize}
-        \item Estimated within Cameroon WBES activity groups.
+        \item Estimated within Cameroon WBES divisions.
         \item This is a diagnostic adaptation of the elasticity idea to cross-sectional survey data.
         \item $Z_i$ controls for log firm age, foreign ownership share, and government/state ownership share.
-        \item $\lambda_{a q(i)}$ are activity-specific ISIC Rev.4 section fixed effects where there is within-activity variation.
-        \item Activity rows pass the all-firm sample threshold, but exporter-only rows may be suppressed.
+        \item Each division belongs to one section, so section controls are absorbed by its intercept.
+        \item Divisions must meet the support rules separately for the all-firm and exporter-only samples.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Cameroon Activity Associations: All Firms}
+\begin{frame}{Cameroon ISIC Division Associations: All Firms}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_cameroon_activity_all_firms.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_cameroon_isic4_division_all_firms.pdf}
     \wbesfigsource
 \end{frame}
 
-\begin{frame}{Cameroon Activity Specification: Exporters Only}
+\begin{frame}{Cameroon ISIC Division Specification: Exporters Only}
     \small
     \begin{equation}
         \ln(E_i) = \alpha_a + \beta_a \ln(X_i) + \theta_a Z_i
-        + \lambda_{a q(i)} + \varepsilon_i,\quad X_i > 0
+        + \varepsilon_i,\quad X_i > 0
     \end{equation}
 
     \begin{itemize}
-        \item Estimated among Cameroon exporters within WBES activity groups.
+        \item Estimated among Cameroon exporters within WBES divisions.
         \item $Z_i$ controls for log firm age, foreign ownership share, and government/state ownership share.
-        \item $\lambda_{a q(i)}$ are activity-specific ISIC Rev.4 section fixed effects where there is within-activity variation.
+        \item Each division belongs to one section, so section controls are absorbed by its intercept.
         \item Rows are shown only when at least 30 exporter observations are available.
         \item These results are best read as sample diagnostics for follow-up, not sector multipliers.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Cameroon Activity Associations: Exporters Only}
+\begin{frame}{Cameroon ISIC Division Associations: Exporters Only}
     \centering
-    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_cameroon_activity_exporters_only.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{../output/figures/cemac_wbes_trade_elasticity_cameroon_isic4_division_exporters_only.pdf}
     \wbesfigsource
 \end{frame}
 
 \appendix
+\section{Appendix: Classification Notes}
+\begin{frame}[label=app-ecofin-classification]{Ecofin Sector Classification Notes}
+    \small
+    \begin{itemize}
+        \item ISIC Rev.4 sections are based on the NACAM--ISIC Rev.4 crosswalk. Asterisks identify sections containing branches that span section boundaries, including combined sections.
+        \item Combined sections: professional \& admin. support; arts/recreation, other services \& household employers. Household employers cover division 97 only.
+        \item Mining includes branches 005 and 006, whose definitions also span manufacturing and, for 005, transport.
+        \item Agriculture includes branch 009 (cocoa, coffee, tea and sugar, including processing); manufacturing includes branch 021 (rubber and plastics, with agriculture references).
+        \item Electricity includes branch 029, which also spans manufacturing; real estate includes branch 037, which also spans construction.
+        \item These branch assignments retain the reviewed crosswalk decisions. Sector coverage may differ across Census, Ecofin and WBES because of the source classifications.
+    \end{itemize}
+\end{frame}
+
 \section{Appendix: Sector Scale in Levels}
 
-\begin{frame}[label=app-census-employment-levels]{Census Employment by Harmonized NACAM Sector, Levels}
+\begin{frame}[label=app-census-employment-levels]{Census Employment by ISIC Rev.4 Division, Levels (1/3)}
     \centering
-    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_employment_by_nacam_levels.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_employment_by_isic4_division_levels_part1.pdf}
     \mainfigurelink{main-census-employment-log}
     \censusfigsource
 \end{frame}
 
-\begin{frame}[label=app-bdf-employment-levels]{Ecofin Employment by Harmonized NACAM Sector, Levels}
+\begin{frame}[label=app-census-employment-levels-part2]{Census Employment by ISIC Rev.4 Division, Levels (2/3)}
     \centering
-    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_employment_by_nacam_levels.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_employment_by_isic4_division_levels_part2.pdf}
+    \mainfigurelink{main-census-employment-log-part2}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}[label=app-census-employment-levels-part3]{Census Employment by ISIC Rev.4 Division, Levels (3/3)}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_employment_by_isic4_division_levels_part3.pdf}
+    \mainfigurelink{main-census-employment-log-part3}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}[label=app-bdf-employment-levels]{Ecofin Employment by ISIC Rev.4 Section, Levels}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_employment_by_isic4_section_levels.pdf}
     \mainfigurelink{main-bdf-employment-log}
     \bdffigsource
 \end{frame}
 
-\begin{frame}[label=app-census-revenue-levels]{Census Revenue by Harmonized NACAM Sector, Levels}
+\begin{frame}[label=app-census-revenue-levels]{Census Revenue by ISIC Rev.4 Division, Levels (1/3)}
     \centering
-    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_revenue_by_nacam_levels.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_revenue_by_isic4_division_levels_part1.pdf}
     \mainfigurelink{main-census-revenue-log}
     \censusfigsource
 \end{frame}
 
-\begin{frame}[label=app-bdf-revenue-levels]{Ecofin Revenue by Harmonized NACAM Sector, Levels}
+\begin{frame}[label=app-census-revenue-levels-part2]{Census Revenue by ISIC Rev.4 Division, Levels (2/3)}
     \centering
-    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_revenue_by_nacam_levels.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_revenue_by_isic4_division_levels_part2.pdf}
+    \mainfigurelink{main-census-revenue-log-part2}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}[label=app-census-revenue-levels-part3]{Census Revenue by ISIC Rev.4 Division, Levels (3/3)}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_total_revenue_by_isic4_division_levels_part3.pdf}
+    \mainfigurelink{main-census-revenue-log-part3}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}[label=app-bdf-revenue-levels]{Ecofin Revenue by ISIC Rev.4 Section, Levels}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_total_revenue_by_isic4_section_levels.pdf}
     \mainfigurelink{main-bdf-revenue-log}
     \bdffigsource
 \end{frame}
 
-\begin{frame}[label=app-census-rpw-levels]{Census Revenue per Worker by Harmonized NACAM Sector, Levels}
+\begin{frame}[label=app-census-rpw-levels]{Census Revenue per Worker by ISIC Rev.4 Division, Levels (1/3)}
     \centering
-    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_per_worker_by_nacam_levels.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_per_worker_by_isic4_division_levels_part1.pdf}
     \mainfigurelink{main-census-rpw-log}
     \censusfigsource
 \end{frame}
 
-\begin{frame}[label=app-bdf-rpw-levels]{Ecofin Revenue per Worker by Harmonized NACAM Sector, Levels}
+\begin{frame}[label=app-census-rpw-levels-part2]{Census Revenue per Worker by ISIC Rev.4 Division, Levels (2/3)}
     \centering
-    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_revenue_per_worker_by_nacam_levels.pdf}
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_per_worker_by_isic4_division_levels_part2.pdf}
+    \mainfigurelink{main-census-rpw-log-part2}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}[label=app-census-rpw-levels-part3]{Census Revenue per Worker by ISIC Rev.4 Division, Levels (3/3)}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_census_turnover_per_worker_by_isic4_division_levels_part3.pdf}
+    \mainfigurelink{main-census-rpw-log-part3}
+    \censusfigsource
+\end{frame}
+
+\begin{frame}[label=app-bdf-rpw-levels]{Ecofin Revenue per Worker by ISIC Rev.4 Section, Levels}
+    \centering
+    \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{../output/figures/cmr_bdf_revenue_per_worker_by_isic4_section_levels.pdf}
     \mainfigurelink{main-bdf-rpw-log}
     \bdffigsource
 \end{frame}

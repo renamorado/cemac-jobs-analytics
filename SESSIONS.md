@@ -1,5 +1,166 @@
 # SESSIONS.md
 
+## Current tax classification — established 2026-09-29
+
+**The raw tax workbook's `CODEBRANCHE` and BDF's `nacam` use NACAM Rev.1 branch
+numbering.** This is the project classification for 2015–2022. INS ECOFIN 2019
+explicitly identifies the revision on p.79; all 37 source row counts match its
+table in both 2016 and 2017, and the top-ten employment rankings match in 2018
+and 2019 (shares within 0.34 percentage points). See
+[the evidence and scope](docs/cmr_tax_ecofin2019_comparison.md).
+
+Earlier entries below recording legacy numbering, the 27-unresolved result,
+or provisional revision choice are historical and superseded. Code 030 means
+water/sanitation/waste, 031 construction, and 032 trade/vehicle repair. The report
+covers 2015–2019; later-year continuity draws on the code-history and name audit.
+This identifies the numbering system, not every firm's activity or a complete
+ISIC mapping. Source duplicates, sample differences and ISIC boundaries remain.
+
+This documentation pass updated the root README, task list and handoff; tax
+inventory, workflow, sections, evidence and source notes; assessment/reference
+READMEs and initial findings; affected census/asset context and historical task
+notes. Existing source references were preserved and old findings marked as
+historical. Generated `revision_assumed` flags and provisional figure wording
+still describe the pre-verification stage; code/default routing, raw data,
+generated datasets, figures, slides and estimates were not changed in this pass.
+Checked relevant Markdown for remaining current claims of legacy tax numbering
+or an unresolved source-revision choice, and verified added local links.
+
+## 2026-09-29 - Components decisions saved and consumed by census cleaning
+
+- Roldan accepted plausible assignments for the two components firms with informative census names: cable manufacture to 27 (2731/2732 references) and a welding workshop to 25 (2592). Updated their existing rows in the private firm decision CSV as `assigned_reviewed_assumption`, preserving prior uncertainty and documenting the assumed manufacturing activity. No names or census IDs were added to version-controlled files.
+- These two decisions cover 86 headquarters jobs. Six components records remain unknown; the previously accepted 62 property assignments to 42 and two individual 68 assignments remain. The activity crosswalk is unchanged. Charcoal's proposed 02 has not been applied.
+- Connected `code/elasticity_cameroun/08_cmr_census_cleaning.do` to the existing census classification entrypoint so each cleaning run consumes current CSV decisions. The cleaned census receives `isic4_division`, `isic4_division_label`, `isic4_mapping_source`, `isic4_review_status` and `isic4_assigned`, with ID/branch/activity checks. Existing NACAM fields, outcome cleaning and regression specifications are retained.
+- Added `code/isic4_assessment/12_test_census_cleaning_isic4.do` to compare all five attached fields against the combined assessment. Updated the root README, census workflow, assessment README and Marina task note. A private scratch snapshot of the preceding cleaned file supports a before/after comparison; it is not a new raw input.
+- Ran the affected cleaning script, category/firm tests and cleaned-field checks successfully. All 438,893 records remain, and the classification merges reconcile. The combined result leaves 19 units and 189 headquarters jobs unclassified: 13 charcoal units and six components units. No regressions or slides were rerun.
+- The initial comparison to the old saved cleaned file failed on provenance, display labels, `data_export` and `plotted_sample`; its source was the older `CENSUS 2024 - Copy of BASE RGE 3 BANQUE MONDIALE - Copy.xlsx`. Economic measures and numeric NACAM codes matched. A control run of the pre-change cleaning code from Git HEAD with current inputs matched every legacy variable in the updated cleaned file exactly. Thus those historical differences come from regenerating existing cleaning with current inputs, not the added ISIC merge. Verified control marker in `logs/census_cleaning_legacy_control.log`; field checks in `logs/census_cleaning_isic4_tests.log`. The original failed historical comparison is retained transparently in `logs/census_component_cleaning_integration.log`.
+
+## 2026-09-29 - Implement separate provisional NACAM Rev.1 tax assessment
+
+- Reviewed all 37 codes using INS Rev.1 tables and explanatory notes plus UN ISIC4 definitions. Added `cmr_tax_nacam_rev1_isic4_decisions.csv` and its source note under `docs/reference/`. Result: 13 single, 15 combined, nine partial correspondences. The prior legacy assignments and 27-unresolved count are superseded, not a verified comparison benchmark.
+- User approved assuming Rev.1 across 2015-2022. Name review sampled up to four frequent strings per each of 37 branches; names support numbering checks only, never firm-level ISIC assignment. Every matched panel record carries an explicit revision-assumption flag. Code 13 beverages remains partial because official notes include milk-based drinks and ethanol despite table11.
+- Added `rev1_assessment` mode to tax entrypoint98 and optional Rev.1 routing in shared scripts19-21; added script22 for raw-workbook multiplicity checks, name-quality/availability, source conflicts, historical transitions and legacy/Rev.1 comparison. Production master, old decision CSV, raw data, cleaning, legacy generated outputs, census, WBES, models and slides remain unchanged by this assessment.
+- New output: `Data/Analysis/CMR_BDF_isic4_rev1_assessment.dta`, all 9,068 cleaned records retained. Of these, 1,485 have single divisions, 6,694 combined groups and 889 partial links. Single+combined coverage is 90.20% of records, 87.79% of nonnegative firm-year employment and 79.31% of nonnegative revenue. Strict-only coverage is 16.38%; compared with superseded strict assignments, 622 gain, 713 lose and 239 change division. Combined destinations do not imply exhaustive equivalence with another dataset's sectors.
+- Diagnostics are in `output/checks/tax_isic4_rev1/`, with two esttab LaTeX fragments in `output/tables/`. Workbook audit confirms 9,325 records, 62 conflicting firm-years and 979 firms with non-error names. Stata imports native Excel errors as missing; generated name counts explicitly refer to imported text (1,917 entries), not all 1,931 populated raw cells. No names or firm IDs enter version-controlled reports.
+- Added focused fixture and repeatability/preservation tests03/04 under `code/05_checks/`. Focused Rev.1 tests and existing legacy fixtures passed; two actual assessment runs matched all generated data/CSV/table outputs and preserved input/legacy/master checksums. Independent read-only correctness review found no actionable defects; simplification review removed one unused tempfile declaration.
+- Updated README, tax workflow and input inventory. Remaining limits: revision not certified by dictionary, bounded name review, nine explicit partial boundaries, and future cross-source comparison/production promotion outside this assessment.
+
+## 2026-09-29 - Reviewed property-development cases assigned to 42
+
+- Roldan selected division 42 for the remaining property-development cases. Updated 62 records in the private firm decision CSV, preserving prior explanations and explicitly recording the civil-engineering/serviced-land interpretation as a reviewed assumption. Retained the two prior firm-specific 68 assignments. The activity crosswalk remains unchanged because the category now has different firm-level outcomes.
+- Added `assigned_reviewed_assumption` alongside `assigned_census_evidence` to the firm validator/application/test checks; unknown/unclassified still requires a blank final code. Updated the census workflow note and assessment README.
+- Checked how the source uses `Autres industries manufacturières`: 59 activity descriptions, including paper, machinery and furniture, spanning many ISIC divisions. This label cannot justify assigning the truncated components category to 32. The eight components units remain unknown. Charcoal's proposed 02 was discussed but not applied in this update.
+- Regenerated the combined assessment and firm diagnostics from the current checked inventory; source/category data did not change. The update and firm tests completed successfully, with ten deliberate invalid-file rejections and all 18 reconciliation differences zero. Private review results now contain 62 reviewed-assumption assignments to 42, two evidence-based first-pass assignments to 68, and 21 unknown records (275 headquarters jobs). Every original census record and economic measure remains preserved.
+
+## 2026-09-29 - Census-only individual review after the activity crosswalk
+
+- Implemented Roldan's two-step classification: preserve the activity crosswalk, then review only its unresolved census units using census fields. Added scripts 08 (inventory with Feuil2 names/size), 09 (private decision validation), 10 (apply decisions), 11 (tests), and 98 (firm-only entrypoint) under `code/isic4_assessment/`; extended the census entrypoint to call 08-10 after the category assessment.
+- Exported all 85 unresolved units with string census IDs, activity/branch, both names, location, legal form, formality, size and economic measures. Manually reviewed each row and saved a separate required private input, `Data/Cameroon/Reference/cmr_census_firm_isic4_decisions.csv`. Inventory exports cannot overwrite decisions. IDs/names remain outside Git; replicate with the securely retained private CSV and census workbook.
+- Used only BASE and Feuil2 for firm evidence. Official ISIC definitions interpret wording. Employment/turnover prioritize review and measure coverage; they do not assign sectors. Two records with explicit property appraisal/expertise and management wording receive 68, with first-pass status, the branch conflict and the name-based interpretation recorded. All 13 charcoal and eight components units remain unknown; 62 property units also remain unknown. No human approval or independently verified principal activity is claimed.
+- Saved `Data/Analysis/cmr_census_isic4_firm_assessment.dta` with all original records, original category decisions and `mapping_source`. Generated private `census_firm_review_results.csv`, coverage/division CSVs and reconciliation checks. Unknown/unclassified has a blank final code; proposals never automatically fill it. Category-only Excel/coverage outputs retain their original purpose.
+- Firm-only execution and tests completed successfully in Stata 17. All 438,893 units and 430,011 headquarters remain. Two assignments cover four headquarters jobs; 83 units and 435 jobs remain unknown. All 18 before/after differences are zero; all original assessment variables except the four intended classification updates compare exactly. Ten invalid-file tests passed, covering duplicate/absent/missing IDs, changed evidence, invalid/class-inconsistent codes and unknown records carrying final codes.
+- Updated census workflow documentation, assessment README and Marina task note. Production analysis, regressions, slides, tax and WBES were not modified. Next step is optional review of the private firm decisions; incomplete census information may legitimately leave cases unclassified.
+
+## 2026-09-29 - SIGLE inspection challenges tax classification revision
+
+- Reopened the original tax workbook and inspected `SIGLE.x3`: company names/abbreviations, sometimes with damaged text or statement headings. Of 1,931 populated cells, 14 are Excel errors; 1,917 non-error records cover 979 firms. Only 2021-2022 have populated cells; 2015-2020 have none.
+- Several name/code patterns (beverages 13, wood 17, printing/paper 18, water 30) agree with the official NACAM Rev.1 numbering and contradict the legacy meanings used in the tax crosswalk. This is strong revision evidence, not firm-level ISIC verification. The dictionary says CODE NACAM without naming a revision; the BDF variable label also does not identify one.
+- Added prominent correction notes to the tax input inventory, crosswalk source note, and workflow documentation. Existing classification decisions, generated data, raw data, regressions and slides were not changed or rerun. The previous 27-unresolved count and coverage figures must not be treated as validated findings until all 37 codes and historical revision consistency are reassessed.
+- No firm names or identifiers were added to version-controlled documentation. Next step: audit the tax code meanings against Rev.1 before developing combined ISIC groups.
+
+## 2026-09-28 - Roldan reviewed six census classification exceptions
+
+- Recorded Roldan's decisions in `docs/reference/cmr_census_activity_isic4_crosswalk.csv`: beverage serving 56, wood joinery/miscellaneous wood products 16, imaging/precision/optical equipment 26, heritage institutions/sites 91, industrial-property licensing 77, and other extraction 08. Retained previous alternatives and review assumptions; the six rows are `assigned_reviewed`, and the other 264 assigned rows retain first-pass status.
+- Roldan supplied the expanded wood-products label. Recorded its user provenance without changing the raw truncated key or claiming independent recovery from the source. Official classes 1622/1629 support division 16. All 273 original matching keys remain unchanged.
+- Inspected the 85 units in the remaining three categories and linked all 85 to the workbook's `Feuil2` names/size fields. Charcoal names and the INS forestry definition support proposed 02 but leave the production process unknown. Property-company, construction and management names do not resolve 41/42/68. Components include a cable-engineering name accounting for 85 of 102 jobs, but other names vary and no expanded category label was recovered. No business names or IDs were added to version-controlled documentation.
+- Updated the census workflow note, assessment README and Marina task note. Fixed the existing invalid-proposal test to modify a known row instead of relying on an unresolved conflict still existing after human review.
+- Current decisions assign 270 of 273 pairs; three remain pending (charcoal, property development, components), covering 85 units and 439 headquarters jobs. Raw data, production classification, tax, WBES, regressions and slides are unchanged.
+- Regenerated the assessment dataset, diagnostics and Excel review copy in Stata 17. Both assessment and focused tests completed successfully (14:38 local time); all 18 reconciliation differences are zero. Checked Excel's 273 activity rows, six reviewed assignments, three blank final codes, and matching unit/employment totals. Coverage-sheet rendering remains readable.
+
+## 2026-09-28 - Census ISIC Rev. 4 division crosswalk: complete first pass
+
+- Reviewed all 273 census branch/activity pairs against the UN French Rev.4 class definitions and exclusions, with earlier INS/NACAM references as supporting information. Saved editable decisions in `docs/reference/cmr_census_activity_isic4_crosswalk.csv` and the official French manual in `docs/reference/isic_rev4_official_fr.pdf`; official English division labels come from the existing UN structure CSV.
+- Inspected the exports-enriched workbook's BASE fields, dictionary and ancillary sheet headers/field contents. No explicit four-digit activity code or expanded activity-description field was recovered. Ancillary firm names, taxpayer IDs and size groups do not settle every unit's activity within an ambiguous pair. Original 29 BASE columns are retained unchanged in the separate assessment dataset.
+- Added census-only Stata entrypoint `code/isic4_assessment/00_run_census_crosswalk.do`, validation (04), assessment (05), Excel review export (06), and focused tests (07). These scripts never overwrite the reviewed decision CSV. Outputs are `Data/Analysis/cmr_census_isic4_assessment.dta`, a validated intermediate crosswalk and `output/checks/census_isic4/` review/coverage files.
+- First pass: 264 assigned pairs and nine unresolved. Assigned shares are 95.46% of all units, 96.49% of valid headquarters employment, 99.24% of valid headquarters turnover and 99.10% of headquarters with reported positive exports. All 438,893 unique units and 430,011 headquarters remain. Missing headquarters employment (139 units) and turnover (seven units) stay visible; no invalid quantities were found.
+- The exceptions are ordered by headquarters employment and all-unit counts. Beverage outlets (description/branch conflict) and truncated joinery account for most unresolved employment. Other exceptions concern charcoal process, property development, components, medical/optical equipment, heritage, industrial-property rights and unspecified extraction. Final divisions remain blank for all exceptions.
+- Updated `docs/cmr_census_isic4_workflow.md`, the assessment README, project README and Marina task note with sources, field definitions, coverage denominators, regeneration and review instructions. Census production, tax, WBES, regressions and slides are outside this change. Existing concurrent tax work was preserved.
+- Next step: Roldan reviews the nine exceptions in the generated Excel copy; accepted decisions are recorded in the version-controlled CSV with supporting evidence and reviewer/date, then the census entrypoint is rerun. The first pass is complete; full mapping coverage is not assumed.
+- Validation: the census-only assessment finished successfully in Stata 17 with no uncaptured errors. All 18 before/after reconciliation differences are exactly zero. The focused Stata test suite completed successfully, including nine deliberately malformed crosswalks rejected with assertion/duplicate-key errors and checks on the complete merged unit/pair sets. Logs: `census_isic4_assessment.log` and `census_isic4_tests.log`.
+
+## 2026-09-28 - Reviewed tax-to-ISIC Rev. 4 crosswalk and merge
+
+- Reviewed all 37 tax NACAM definitions against the official INS RGE nomenclatures, NACAM Rev.1 old/new correspondence, and UN Rev.4 explanatory notes. Added `docs/reference/cmr_tax_isic4_decisions.csv`, source references with page numbers/checksums, and official PDFs/searchable text under `docs/reference/tax_isic4/`.
+- The reviewed result is 10 unique categories, 26 ambiguous categories, and one with insufficient information. Seven preliminary single-division assignments (NACAM 1, 8, 10, 11, 17, 20, 37) were withheld because of explicit boundary questions or conflicting definitions. This does not establish that any affected firm actually operates in another industry.
+- Inspected original tax workbook and ECOFIN inputs. Workbook identifier/year/NACAM records exactly match BDF; ECOFIN and `tax_data.dta` repeat or aggregate NACAM. No finer activity field supports firm-year refinements. See `docs/cmr_tax_isic4_input_inventory.md`.
+- Added Stata scripts 19 (validate/build), 20 (merge), 21 (coverage), and 98 (tax-only entrypoint) under `code/elasticity_cameroun/`, plus master calls after existing BDF cleaning. The default tax-only run uses the existing cleaned panel; `rebuild_clean` explicitly regenerates it with unchanged cleaning rules. README and `docs/cmr_tax_isic4_workflow.md` document inputs, fields, diagnostics, and rerun instructions.
+- Created separate `Data/Intermediate/cmr_tax_isic4_crosswalk.dta` and `Data/Analysis/CMR_BDF_isic4.dta`. Every source/cleaned row and original variable value is checked before saving. Optional private detail intake requires a verified same-year link and can resolve only an ambiguous category to a documented possible division; none is used with current inputs.
+- Cleaned coverage: 1,576 of 9,068 firm-years (17.38%), 13.49% of nonnegative reported employment, and 18.09% of nonnegative revenue. All 9,068 observations remain available. Compared with the preliminary bridge, 1,037 prior record assignments are withheld and none is newly assigned. Coverage is descriptive; employment across years is a firm-year total.
+- Added `code/05_checks/01_cmr_tax_isic4_tests.do`. Synthetic builder/merge tests and coverage tests passed, including invalid/duplicate/missing evidence, wrong-year or contradictory detail, numeric parse failures, negatives, no assignments, and zero/all-missing denominators. Default tax-only execution completed with success markers and no uncaptured errors. Independent scoped Stata review found no actionable defects; reuse/quality review required no changes, and the efficiency check was performed locally after an agent-capacity limit.
+- Remaining: finer activity evidence is needed to resolve the 27 unassigned categories, especially NACAM 8's worked-hide wording. New regressions, Rev.3 mapping, and slides are outside this change. Full master execution was not needed; validation targets the tax-only workflow. No raw input was edited.
+- The explicit `rebuild_clean` check also completed. Compared with the older saved snapshot, firm-year keys and all economic values are identical; only four English display-label fields refresh to wording already present in the existing cleaning code. Found and fixed aggregation-order sensitivity by sorting each coverage group deterministically before summing. The new classified panel is saved in firm/year order. Added `code/05_checks/02_cmr_tax_isic4_repeatability.do` for data-value and diagnostic-checksum comparisons across runs.
+- Final verification passed: synthetic tests, two successive tax-only runs, exact generated-data value comparisons, and matching checksums/sizes for all seven diagnostic CSVs and the LaTeX table. Default reruns leave source and cleaned-input checksums unchanged. Both production/repeatability logs reach their final success markers with no uncaptured Stata errors. Review of the final sorting and repeatability changes found no actionable defects.
+
+## 2026-09-28 - Verified intended census input and resumed crosswalk planning
+
+- Read the newly supplied exports-enriched raw workbook in Stata: 438,893 units with unique `S0Q01`, 430,011 headquarters, and 273 branch/activity pairs. Export turnover parses for every unit; 1,710 units have positive values and none have negative values.
+- Compared the 273 pairs with the baseline inventory: all pairs match, with identical record counts and broad activity groups. This verifies the aggregate activity inventory, not all fields or record-by-record equivalence between workbook versions.
+- The corrected temporary comparison completed successfully in `logs/census_current_input_check.log`. Production data and the existing baseline assessment outputs were not overwritten.
+- Roldan chose a complete first pass of proposed mappings with official references, followed by review of ambiguous/conflicting cases together. Whether to retain verified four-digit classes alongside two-digit divisions is the next pending planning choice.
+
+## 2026-09-28 - Received exports-enriched census workbook
+
+- Copied the user-supplied `CENSUS 2024 with exports BASE RGE 3 BANQUE MONDIALE exp.xlsx` from Downloads to `Data/Cameroon/Raw/`, the location expected by the census cleaning and assessment scripts.
+- Verified identical SHA-256 hashes for source and destination; preserved the Downloads copy. The previously missing input is now available locally.
+- No cleaning, mapping assessment, estimation, or slide scripts were rerun. The existing assessment results still describe the older baseline workbook and must be reconciled with this input.
+
+## 2026-09-28 - Set up and ran the first ISIC Rev. 4 inventory; WBES scope is CEMAC
+
+- Roldan authorized starting the first stage and clarified that WBES "all countries" means CEMAC, not the global extract. Updated the task's scope throughout; older entries describe superseded scope interpretations.
+- Added `code/isic4_assessment/00_run_assessment.do`, three source-specific inventory scripts, and run documentation. Added the official UN structure snapshot/source note, `docs/isic4_assessment_initial_findings.md`, and a README entry.
+- Ran the full initial inventory in explicit `baseline` census mode and reran affected WBES/BDF scripts after final checks. Logs completed with success markers and no uncaptured errors; 15 aggregate CSV outputs and one `esttab` LaTeX summary were produced. Source/production data, estimates, and slides were not modified.
+- All 1,468 firms in the five retained latest-wave CEMAC WBES samples have valid detailed Rev. 4 codes agreeing with their divisions. Gabon 2009's 179 records lack these fields and remain outside the current analysis sample.
+- Existing tax single-division assignments cover 17 of 37 categories, 28.8% of cleaned firm-years, and 38.4% of observed employment summed across firm-years. These assignments remain subject to definition review. The raw baseline census confirms 273 branch/activity pairs, 438,893 units, and 430,011 headquarters.
+- Full tax/census semantic mapping, within-firm variation/full model-support checks, and the supporting Rev. 3 assessment remain open. The exports-enriched census source is absent; the older workbook was explicitly selected and labelled, not substituted into production.
+- Used the installed `stata-reproducible-coding` skill: the obsolete `wb648862` skill path is absent on this machine. Retained Stata-first code, existing setup/package handling, and aggregate-only diagnostics.
+
+## 2026-09-28 - Extended first-stage Rev. 4 assessment to all sources and WBES countries
+
+- Updated `tasks/2026-09-28_marina_isic_rev3_employment_elasticities.md` following Roldan's clarification: first-stage mapping assessment covers Cameroon Tax/BDF, Cameroon Census/RGE, and WBES across countries.
+- Checked `code/WBES_trade/01_wbes_trade_clean_prep.do` and `05_wbes_elasticity_prep.do`: cleaning retains latest waves across economies; elasticity prep selects retained CEMAC excluding Gabon, SSA excluding CEMAC, and high-income benchmarks. Classification assessment will inventory country-waves and report these sample flags separately.
+- Added census description validation, WBES native-code and revision checks by country-wave, source-specific coverage/support diagnostics, and a cross-source comparison. Cameroon-specific WBES findings must not be generalized to all countries.
+- Broader mapping scope does not by itself replace existing models, section fixed effects, or country/wave inclusion. Updated objectives and completion criteria; documentation only, with no production code/data/slide changes.
+
+## 2026-09-28 - Preferred Rev. 4 subject to Tax/BDF feasibility
+
+- Updated `tasks/2026-09-28_marina_isic_rev3_employment_elasticities.md` after Roldan agreed to two-digit Rev. 4 as the preferred target and the tax-data assessment as the first stage.
+- First-stage deliverables are reviewed tax mappings, unresolved categories, coverage by firms/employment/revenue, outcome-specific sector-support checks, and a feasibility recommendation. No elasticities need to be estimated at this stage.
+- Retained the general Rev. 3/Rev. 4 and tax mapping comparisons as supporting evidence; additional Rev. 3 slide results depend on feasibility and other workstreams' needs.
+- Updated the objective, decision points, completion criteria, and current state consistently. Documentation only; no production code, data, estimates, or slides changed.
+
+## 2026-09-28 - Left ISIC revision open and put comparison first
+
+- Revised `tasks/2026-09-28_marina_isic_rev3_employment_elasticities.md` after Marina suggested Rev. 4 or both revisions and Roldan agreed to assess both before choosing.
+- Removed the provisional Rev. 3 target. First deliverable combines a general two-digit structural comparison with a Tax/BDF mapping and coverage assessment for both revisions.
+- Separate changes in sector boundaries from the economic weight affected in Cameroon and from changes in estimated elasticities. Official comparisons show substantial but uneven restructuring; they do not establish the effect on our estimates.
+- Later estimation, Census/WBES scope, and slide presentation remain conditional on the target decision. Updated revision-specific variable/output and validation wording consistently; retained the task filename.
+- Documentation only; reviewed official UN structures, correspondence, and manual. No production code, data, estimates, or slides changed. Full category-level mapping and coverage comparison remains to be done.
+
+## 2026-09-28 - Planned ISIC Rev. 3 classification and parallel slide reproduction
+
+- Replaced the broad-work checklist in `tasks/2026-09-28_marina_isic_rev3_employment_elasticities.md` with a phased implementation approach; updated the objective, working assumptions, and current state.
+- Working target is two-digit ISIC Rev. 3, pending confirmation against the comparison workstreams. Plan covers Cameroon sector-dependent BDF, census, and WBES outputs in a parallel deck.
+- Preserve detailed source information and official partial correspondence links; do not force every source through one Rev. 4 code or assign ambiguous cross-division categories arbitrarily.
+- Recorded missing local raw/derived inputs, stale local snapshots, and the outdated Stata-skill path as preparation issues. Reference-table extraction requires PDF checks.
+- Documentation only; no production analysis or slides changed. Classification feasibility, final target confirmation, and missing inputs remain unresolved.
+
+## 2026-09-28 - Recorded Marina's ISIC Rev. 3 elasticity request
+
+- Added `tasks/2026-09-28_marina_isic_rev3_employment_elasticities.md` in the existing `tasks/` folder and updated `SESSIONS.md`.
+- Recorded the request to produce Cameroon employment elasticities by ISIC Rev. 3 sector for comparison with other workstreams.
+- Left classification detail, dataset/model scope, mapping feasibility, and deliverables open for confirmation. The note records the task date, not the unknown original Slack message date.
+- Documentation only; no analysis code, data, or generated outputs changed or rerun.
+
 
 ## 2026-06-29 - Added clean elasticity prep datasets and model-spec workbook
 
@@ -3175,3 +3336,142 @@ Refactor the Census sector workflow so raw-data cleaning and NACAM harmonization
 ### Unresolved issues or next steps
 
 - If additional elasticity scripts start sharing the same inputs, they should be migrated to the corresponding prep datasets rather than duplicating variable construction again.
+
+## 2026-09-29 — Tax ISIC Rev.4 section crosswalk and descriptive preview
+
+- Created `docs/reference/cmr_tax_nacam_rev1_isic4_sections.csv` and `code/elasticity_cameroun/23_cmr_tax_isic4_sections.do`; added `section_assessment` to the existing tax-only runner. Added `docs/cmr_tax_isic4_sections.md` and links in README/tax workflow documentation.
+- All 37 NACAM branches reviewed at section level: 29 map within one section, 2 span supported combinations (M+N and R+S+T), and 6 retain separate NACAM exception groups (005, 006, 009, 021, 029, 037). Aggregation yields 19 tax groups: 11 standard sections, 2 combinations, 6 exceptions. Division 98 is not evidenced for the R+S+T group; T represents 97 only. No full reverse section equivalence is asserted.
+- Saved a separate `CMR_BDF_isic4_sections_assessment.dta` with all 9,068 cleaned firm-years and every original variable/value retained. Existing strict division fields and provisional revision flag are preserved. Census, WBES, production master and elasticity regressions are unchanged.
+- Generated pooled/yearly group/status shares, branch-level crosswalk with evidence and shares, exception CSV, three-outcome merge audit, esttab LaTeX fragment and a labelled PNG/PDF employment/revenue preview. Denominators exclude missing/negative values separately; pooled employment means firm-year employment totals. Exceptions account for 8.95% of valid employment and 12.11% of valid revenue.
+- `05_cmr_tax_sections_checks.do` passed the integrated run, classification examples, unique keys, denominator totals and repeated dataset/CSV/LaTeX comparisons. Input preservation checks passed; merge recorded 9,068 matches and zero unmatched/unused entries. Explicit sort order before collapse fixes summation-order differences in repeated CSVs. Figure inspected and label/note clipping corrected.
+- Remaining uncertainty: Rev.1 numbering is assumed provisionally for 2015–2022; six boundary exceptions are retained honestly rather than assigned to a full section union. Preview is descriptive, not an elasticity result. Re-estimation under the new groups remains later work.
+
+## 2026-09-29 — Side-by-side tax figures: slides versus section grouping
+
+- Added `code/elasticity_cameroun/24_cmr_tax_section_comparison.do` to recreate the employment/revenue statistics used by the Ecofin figures in `slides/slides_cemac.tex`, using `12_cmr_bdf_sector_scale_figures.do` definitions.
+- Four PNG/PDF comparisons show original 37 NACAM branches on the left and 19 section-based tax groups on the right: average annual sector employment/revenue totals and equal-year averages of firm employment/revenue means. Corresponding panels have common natural-log axes; ranks are independent. Left labels reproduce the slides, including their superseded legacy interpretation; right uses provisional Rev.1 section labels and marked combinations/exceptions.
+- Inputs are the same cleaned firm-years. Checks compare every original input value, verify eight contributing years per group, 37 versus 19 groups, and preservation of overall employment/revenue totals. Successful marker in `logs/24_cmr_tax_section_comparison.log`; all four images visually inspected after splitting the initially crowded four-panel layout into readable paired figures.
+- Figure data: `output/checks/tax_isic4_sections/slide_comparison.csv`. Figures: `output/figures/cmr_tax_sections_vs_slides_{employment,revenue}{,_firm_average}.{png,pdf}`. Slides, original figures, data, regressions, census and WBES are unchanged. No new elasticities estimated.
+
+- Follow-up clarification: added `cmr_tax_sections_new_employment` and `cmr_tax_sections_new_revenue` PNG/PDF figures with the original slides' two-panel total/firm-average layout, so they can be displayed beside the exact original slide images. Original images are read directly and remain unchanged; the earlier comparison had recreated the original statistics instead.
+
+## 2026-09-29 — Restore original slide styling for section figures
+
+- Updated only the new-figure rendering in `24_cmr_tax_section_comparison.do`: original two-panel dimensions, sans-serif text, dashed light gridlines, sector colors/marker shapes, short labels and two-line exception note. The original slide images are used unchanged in side-by-side comparisons. Mixed-boundary groups remain neutral grey with asterisks, so color does not imply a unique section assignment.
+- New PNG/PDF outputs retain `cmr_tax_sections_new_employment` and `cmr_tax_sections_new_revenue` filenames. No classification or analytical formula changed.
+
+## 2026-09-29 - Check tax numbering against official ECOFIN 2019 report
+
+- User supplied INS ECOFIN 2019. Its methodology on p.79 explicitly identifies DSF branches as compatible with NACAM Rev.1; annex A2 pp.80–81 lists the same 37 observed codes, including 030 water/waste, 031 construction and 032 trade/vehicle repair.
+- Extracted 185 branch-year counts into `docs/reference/cmr_ecofin2019_branch_counts.csv` with pdfplumber; inspected rendered pages and verified all five printed annual totals. Downloaded PDF/text retained under `docs/reference/tax_isic4/`.
+- Added `25_cmr_tax_ecofin2019_comparison.do`, a read-only source/cleaned comparison generating aggregate CSVs and an esttab LaTeX summary. All 37 source row counts match in both 2016 and 2017; 34/37 match in 2015, 35/37 in 2018, 19/37 in 2019. Source distinct-firm counts and cleaned counts are reported separately because of duplicates/conflicts.
+- Rev.1 is now substantially better supported by published methodology plus matching count profiles. Report sample differences, particularly 2019, remain unexplained; 2020–2022 lie outside the report period. No claim of identical firm membership or independently verified firm activities. Kept existing revision flags and all data/production outputs unchanged.
+- Added `docs/cmr_tax_ecofin2019_comparison.md` and linked the evidence from the Rev.1 source note. Final affected Stata run completed successfully with the success marker and no uncaptured error; no master, models or slides rerun.
+
+## 2026-09-29 - Apply Roldan's tax section grouping choices
+
+- Roldan approved analytical grouping of NACAM 006 in B (mining), 009 in A (agriculture), 021 in C (manufacturing), 029 in D (electricity/gas), and 037 in L (real estate). Branch 005 remains X005; M+N and R+S+T remain combined. Result: 17 analysis groups, replacing the earlier 19-group preview.
+- Updated the section decision CSV, script23, figure script24 and section checks05. The five rows carry `analytical_assignment` and dated approval notes; original division/section references remain, and strict `isic4_section`/division fields remain missing. Branch 009 includes processing normally associated with manufacturing; its placement in A is explicitly a broad analytical choice, not evidence that firms grow crops.
+- Fixed aggregation to pool whole analysis groups even when their branches have different correspondence statuses/reference sets. Agriculture includes branches 1/2/3/9; Manufacturing includes 18 branches with 021 added. Qualified groups carry an asterisk and explanatory footnotes. Added `analytical_assignments.csv` to diagnostics.
+- Updated current section documentation, README, workflow and Marina task note. Regenerated separate section panel, summary, employment/revenue previews and comparisons in the original slide style. New notes state NACAM Rev.1; the underlying division-panel revision flag remains historical. Original slide PNG/PDF hashes match before/after.
+- Integrated tax-only run and repeatability/preservation checks passed; all 9,068 firm-years and original values retained, groups unique, denominators preserved, no strict assignments created by overrides. Corrected a test's manufacturing branch-count expectation from 17 to 18, then reran successfully. Figure script passed its total-preservation checks; both new two-panel figures were visually inspected.
+- Assignment status: 6,835 strict single-section records; 1,491 combined; 638 analytically grouped (8.40% employment, 6.90% revenue); 104 remaining boundary records (0.54% employment, 5.21% revenue). Census, WBES, master routing, old figures, slides and elasticities were not changed.
+
+## 2026-09-29 - Preserve broad-sector labels, colors and symbols
+
+- User requested maintaining the original broad groups used for colors/symbols. Checked the original `02_nacam_data_export_mapping.do` and `12_cmr_bdf_sector_scale_figures.do`; retained all ten broad labels and exact RGB/marker combinations.
+- Added `docs/reference/cmr_tax_isic4_plot_groups.csv` and made script24 use it for new-group previews and the new side of comparison figures. Utilities covers D/E; Other services covers I/L/M+N/P/Q/R+S+T; X005 uses Mining's purple diamond while remaining a separate analysis group. Original legacy raw-code style assignments are not carried into corrected groups.
+- Updated section and reference documentation. Rebuilt employment/revenue figures successfully with the Stata success marker and no uncaptured errors. Every pre-existing summary field, numeric result and label matches the pre-change CSV; only four `tax_plot_*` metadata columns were added. Original slide-image hashes remain unchanged. Visually checked employment preview. No data, grouping decisions, regression or slide source changed.
+
+## 2026-09-29 - Use isic4_section as the tax analysis variable
+
+- Roldan required analysis to use `isic4_section`. Changed the section decision CSV and script23 so `isic4_section` / `isic4_section_label` contain all 17 agreed analysis groups. M+N, R+S+T, X005 and the five approved analytical choices remain explicitly documented as adaptations.
+- Preserved the official-only fields as `isic4_section_strict` / `isic4_section_strict_label`. They remain missing outside supported single-section correspondences. `tax_section_group` / `tax_section_label` remain exact compatibility aliases in the bridge and panel; summaries and script24 now read `isic4_section` directly.
+- Rebuilt the section panel and previews, updated section tests, README and workflow documentation. All 9,068 firm-years have the analysis variable, with exactly 17 values. Integrated repeatability/preservation checks passed, including unchanged original values and strict-field qualifications. Script24 passed; its complete comparison CSV is byte-identical to the previous grouping-variable version.
+- This is a variable-interface change, not a change to sector membership, statistics or broad-sector styling. Elasticities, census/WBES, production master and slide sources were not changed.
+
+### 2026-09-29 - Inspect NACAM 005 activity evidence
+
+- Checked the raw tax workbook's names and code histories for every firm ever recorded under 005, and the corresponding cleaned observations. Private exploratory scripts/logs are in ignored `scratch/tax005_inspect.*` and `scratch/tax005_coverage.*`; no names or identifiers are recorded here.
+- Cleaned 005 contains 104 firm-years and 21 firms. Four firms have a name observed under 005; two more have names only in later records under another code; 15 have no usable name. Named-linked firms account for 37 records, 45.37% of valid firm-year employment totals and 6.93% of valid revenue. Two employment values and one revenue value are excluded as missing or negative under the existing denominator rule.
+- Public activity descriptions for identifiable businesses mainly support petroleum extraction and oilfield services; one later trade record is consistent with fuel retail, and another company's activity remains unverified. Group-level public descriptions do not establish each subsidiary's principal activity in every historical year.
+- Evidence favors section B as a possible analytical treatment over section D, but does not establish the activity of all firms or the economic majority: unnamed firms account for 93.07% of valid revenue. The official 005 boundary still touches B+C+H. No crosswalk, analysis dataset, or figure was changed; X005 remains in place pending a classification decision.
+- Reference definitions: https://unstats.un.org/unsd/classifications/Econ/Detail/EN/27/B and https://unstats.un.org/unsd/classifications/Econ/Detail/EN/27/D. Both exploratory Stata runs reached their success markers without uncaptured errors.
+
+### 2026-09-29 - Approved NACAM 005 assignment to section B
+
+- Roldan explicitly approved B for branch 005 following the activity review. Updated `cmr_tax_nacam_rev1_isic4_sections.csv`: `isic4_section = B`, label Mining and quarrying, `section_status = analytical_assignment`. Retained B+C+H references, the evidence limitation, and missing strict section/division fields.
+- Updated scripts 23/24, section checks 05, plot-style lookup, README, tax section/workflow documentation, reference README, and the Marina task note. There are now 16 analysis groups: 14 section-labelled groups and two combinations. Six source branches use approved analytical assignments; X005 is retired from current outputs.
+- Regenerated the section panel, diagnostics, esttab summary, and employment/revenue previews and comparison figures. Section B pools 005 and 006: 165 firm-years, 0.7903% of valid firm-year employment totals and 5.3914% of valid revenue. Figure footnotes retain the boundary qualification and the original Mining style.
+- Validation: integrated tax-only section run and repeated section construction passed; original panel values and 9,068 unique firm-years preserved, repeated dataset/CSV/LaTeX outputs matched, and protected input/master/elasticity files were unchanged. Comparison script reached its final success marker without uncaptured errors. SHA-256 hashes confirm all four original employment/revenue slide figures are unchanged. No regressions or slide source files were changed.
+
+### 2026-09-29 - Generalize broad display labels to all ISIC Rev.4 codes
+
+- User requested the same ten broad labels for ISIC Rev.4 generally. Added `docs/reference/isic4_broad_groups.csv` covering all 21 sections with Agriculture, Mining, Manufacturing, Utilities, Construction, Trade, Transport, Information, Finance and Other services. Preserved existing colors/symbols; shortened broad G wording to Trade. These are project display groups, not an official ISIC level or a change to estimation groups.
+- Added `code/02_construct/01_isic4_broad_groups.do`: validates section keys and styles against the official local UN structure and creates mergeable `Data/Intermediate/isic4_broad_groups_sections.dta` and `isic4_broad_groups_codes.dta`. The latter covers 21 sections, 88 divisions, 238 groups and 419 classes with text codes preserving leading zeros.
+- Replaced the tax-only style CSV with the shared mapping. Script24 now checks every component of tax combinations against it; mixed broad-sector combinations fail explicitly. Current M+N and R+S+T both map to Other services. Updated README, reference README, tax section documentation and new `docs/isic4_broad_display_groups.md` with merge examples and scope.
+- Validation: `06_isic4_broad_groups_checks.do` passed two constructions with identical dataset contents. Tax comparison regeneration passed; all 53 comparison rows retain identical statistics, group membership, colors and symbols, with only the intended G broad-label change. Protected section panel, production master and original slide figures retain identical SHA-256 hashes. Census/WBES datasets, figures and estimates were not changed; the general lookup is ready for their reviewed Rev.4 codes.
+
+### 2026-09-29 - Save plan for ISIC Rev.4 slide regeneration
+
+- Saved the agreed approach in `docs/plans/2026-09-29-1806-isic4-slides-update-plan.md` after reviewing the current scripts and the "Check ISIC 4 tax crosswalk" discussion.
+- Main results will use Census/WBES two-digit divisions and the settled 16 Ecofin groups in `isic4_section`; the Census-Ecofin comparison and linked WBES/B-READY figures will use corresponding section groupings. Ecofin estimation retains firm-year observations and existing empirical methods.
+- Plan covers preparation, sector-dependent analysis, the existing figure designs and shared display mapping, master run order, output names, slide text, and verification. Group coverage and reportable estimates remain to be checked during implementation.
+- This change saves documentation only. No analysis scripts, datasets, figures or slides were edited or run; implementation has not started.
+
+### 2026-09-29 - Implement ISIC Rev.4 slide workflow
+
+- Implemented the saved plan in the existing master and Stata scripts. Census and Cameroon WBES results use two-digit divisions; Ecofin uses the agreed 16 `isic4_section` groups. Added tax preparation/display helper `code/02_construct/02_cmr_tax_section_fields.do`, compact Census label helper, and `code/05_checks/07_isic4_slide_checks.do`. Updated `code/elasticity_model_specs.do` to read the new prepared files.
+- Preserved original NACAM fields, economic values, tax firm-year observations, sector switching, estimators, weights, controls and support rules. Census section comparison coefficients are estimated directly from firms; linked WBES constraints use section-weighted means. M+N and R+S+T comparisons use the agreed combinations, with T limited to division 97. Tax crosswalk qualifications remain in data and figure notes.
+- Census retains 438,893 units, including 19 headquarters with unknown ISIC. Before support checks, the new sample has 429,846 firms versus 429,567 under the old NACAM-overlap rule: 292 enter and 13 with unknown ISIC leave. Main estimates cover 429,719 firms and 76 divisions; exporter estimates cover 30 divisions. Descriptive charts cover 84 divisions, divided across three pages with compact labels and explicit named-graph exports.
+- Tax estimates support 15 groups; E has only 28 usable firm-year observations and six firms in each outcome sample. Fifteen firms change section over time, retaining row-specific assignments. The Census–Ecofin comparison has 15 matched groups. WBES supports five all-firm trade divisions, three interaction divisions and no exporter-only trade divisions; unsupported estimates remain in audits. Fourteen validated B-READY indicators link to up to eight tax groups.
+- Edited `slides/slides_cemac.tex` in place with division/section output references, methods, titles, notes and supported claims. Dense Census charts use three-part figures, including appendix levels. Updated README and Census/tax workflow documents; added `docs/isic4_slides_workflow.md` with sample changes and reproduction details.
+- Affected scripts, the model workbook, and the final integrated master passed with success markers and no uncaptured Stata errors. Preservation checks retain all original tax, Census and WBES preparation fields; the full rebuilt Census file also matches its saved pre-change values, except the intended plotting-sample flag. An independent manufacturing access-to-land calculation reproduces the WBES mean (N=154; 39.078881256) within 1e-10. Code review completed across six lenses with no remaining actionable defects; existing disabled tax plot code was left alone.
+- Integrated visual inspection caught Stata exporting a previously active graph under a new filename. All production figure exports now explicitly select their graph; tax12's existing export helper takes the graph name. A targeted run with an unrelated named graph left open passed, a read-only review confirmed the names, and the final master passed with the repair. Standalone Census labels were slightly reduced to prevent two clipped division codes. Four tax cross-model scatter labels move left of their points to avoid overlaps; the affected script passed again after that display-only adjustment.
+- Final output checks confirm 82 refreshed slide inputs, 72 distinct figure PDFs, no legacy NACAM output references and 24 valid appendix links. Compiled and visually inspected all 107 pages, including appendix figures; final LaTeX log has no undefined references, missing characters, or overfull/underfull boxes. The built-in compiler failed to locate its platform directories, so the existing MiKTeX installation compiled the same source and PDF successfully. No LaTeX installation or alternate deck was created.
+- Local limitation: the B-READY priority workbook is absent. Its 16 reviewed definitions and benchmarks already exist in the script; workbook count validation runs when available, and national indicator validation remains compulsory. Existing May WBES country outputs predated the current source-code controls, so regenerated country results also reflect those already-existing controls. No country specification was changed for this migration.
+- Preserved pre-existing local changes. No commit or push.
+
+### 2026-09-29 - Review slide abbreviations against INSEE
+
+- Reviewed all 88 ISIC Rev.4 divisions against INSEE's NAF Rev.2 full, 65-character and 40-character French titles. Added `docs/reference/isic4_division_short_labels_insee.csv` with the source wording and English display adaptations. English wording is not an official INSEE translation; division codes and full official labels remain available.
+- Updated `_cmr_census_isic4_labels.do`, the five WBES division labels in scripts 03/04, and section display wording in `02_cmr_tax_section_fields.do`. Preserved classifications, combined tax groups, qualification markers, colors and symbols. Corrected literal ampersands in Census graph labels (scripts 13/16) while retaining LaTeX escaping in tables. Reduced script13's split-chart label size to avoid clipping longer division names.
+- Updated `slides/slides_cemac.tex` in place with INSEE attribution, plus `docs/reference/README.md` and `docs/isic4_slides_workflow.md`. Regenerated affected preparation, analysis, table and figure outputs using the existing production scripts in master order; final ISIC slide checks passed, with successful logs and no uncaptured Stata errors. The master itself was not rerun for this display-only change.
+- Two full Census raw-import attempts stopped with `r(693)` because temporary files exhausted disk space. Compressed and verified this and the earlier slide task's temporary validation backups. Applied the production label helper to the existing validated Census clean and division-diagnostic files, then ran the affected production scripts. The normal Census cleaning script already calls this helper, so future full regeneration uses the revised labels. No raw data were changed.
+- Compared 19 saved pre-edit datasets with regenerated versions, excluding only the two intended short-display fields. All 438,893 Census units and 9,068 tax firm-years retain identical non-display values. Estimate/summary comparisons pass with numerical-roundoff tolerance (absolute 1e-10, relative 1e-12); support, classifications and sample sizes are unchanged. Verified all 88 helper labels against the reference table and the five WBES labels against the same list.
+- Compiled and visually inspected the 107-page deck, including appendix figures; no LaTeX layout warnings or undefined references. All 84 descriptive Census division codes and 76 supported elasticity division codes remain visible across their three chart parts. The built-in compiler again failed to locate platform directories; the existing MiKTeX installation compiled the same source and PDF successfully.
+- Code review: skipped (mechanical diff). Changes are display strings, source attribution and graph-label formatting; empirical specifications and grouping logic are unchanged. Preserved pre-existing local changes; no commit or push.
+
+
+### 2026-09-29 - Standardize Ecofin section wording
+
+- Applied the agreed wording, "ISIC Rev.4 sections based on the NACAM�ISIC Rev.4 crosswalk," to Ecofin figure notes and slide text. Replaced letter-only combination descriptions with professional & admin. support, and arts/recreation, other services & household employers (division 97). Standardized relevant titles and model descriptions to "ISIC Rev.4 sections."
+- Updated existing production scripts 06, 09, 10, 11, 12, 13 and 15 in `code/elasticity_cameroun/`, plus `code/BREADY_wbes/03_bready_wbes_sector_constraints.do`. Updated the revenue-decile table slide note in `slides/slides_cemac.tex`; generated outputs remain code-produced. Classification fields, group membership, estimates, sample rules and display labels were not edited.
+- Retained the asterisks, explained them in compact notes, and added an Ecofin classification appendix slide recording the six cross-section branch assignments and combined sections. Cross-dataset notes retain the activity-coverage qualification. Updated `docs/isic4_slides_workflow.md`.
+- Ran script06 first, then the remaining affected scripts in master order and the final ISIC slide checks. All completed successfully with no uncaptured Stata errors. Fourteen saved result datasets match after regeneration within numerical roundoff (absolute 1e-10, relative 1e-12). No data preparation or full master rerun was needed.
+- Compiled the existing deck to 108 pages using installed MiKTeX after the built-in compiler reported its existing platform-directory error. No undefined references or layout warnings; visually inspected all 40 pages carrying the revised classification notes, including the appendix. Confirmed the compiled deck contains no "Adapted tax groups," letter-only combined-section labels, or "section-group" wording. Preserved pre-existing changes; no commit or push.
+
+### 2026-09-30 - Remove repeated INSEE attribution from Census figure notes
+
+- Removed the selected INSEE label-attribution sentence from the shared Census figure-source macro in `slides/slides_cemac.tex`, including page 11 and the other Census figure slides. Retained the data source and author-calculation note; other INSEE references and labels are unchanged.
+- Recompiled the existing 108-page PDF with installed MiKTeX after the built-in compiler's platform-directory error. No layout warnings or undefined references; verified the removed sentence is absent and page 11 retains its source note. No analysis or data changes.
+
+### 2026-09-30 - Plan separate NACAM versus ISIC results comparison
+
+- Saved `docs/plans/2026-09-30-nacam-isic4-results-comparison-plan.md`, organized separately for Ecofin, Census and WBES, with dataset-specific rankings and a final synthesis.
+- Plan separates grouping changes, corrected labels, sample eligibility and specification differences; requires uncertainty and support counts alongside sector priorities.
+- The complete numerical comparison remains pending, including verification of retained NACAM output dates and whether common-sample comparisons are needed.
+- Documentation only. No Stata runs, data changes or edits to `slides/slides_cemac.tex` or its PDF.
+
+### 2026-09-30 - Allow flexible tools for the classification diagnostic
+
+- Updated the separate comparison plan following the user's clarification: the diagnostic need not rely fully on Stata. Other tools may read existing results, compare memberships/rankings and create separate charts or a report.
+- Reserve Stata reruns for missing estimates or model checks; document any new estimation methods and keep diagnostic outputs separate from production results.
+- Documentation only; no analysis or slide changes.
+
+### 2026-10-14 - Save the current ISIC Rev.4 version to main
+
+- User requested committing and pushing the current working version to main.
+- Included classification scripts, reference crosswalks and public reports, analysis updates, generated tables/figures, slide source/PDF, and project notes. Private data, logs and temporary files remain excluded by the existing .gitignore.
+- Fetched origin and confirmed the working branch and origin/main shared the same starting commit. Git whitespace checks passed; no analysis code was changed or rerun for this save. Prior analysis and slide validation is recorded in the September entries above.
+- The separate NACAM versus ISIC numerical comparison remains pending as documented in its plan.
